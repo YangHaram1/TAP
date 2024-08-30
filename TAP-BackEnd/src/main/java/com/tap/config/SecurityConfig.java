@@ -37,10 +37,10 @@ public class SecurityConfig {
 		.formLogin(form->form.disable())// RESTFul 방식에선 불필요
 		.httpBasic(basic->basic.disable())// RESTFul 방식에선 불필요
 		.authorizeHttpRequests(request->{
-			request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
+			//request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
-			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
-			
+			//request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
+			request.anyRequest().permitAll();
 		}) 
 		.addFilterBefore(JwtFilter, UsernamePasswordAuthenticationFilter.class); //모든 경로는 필터를 거친다
 		return http.build();
