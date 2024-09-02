@@ -1,4 +1,25 @@
 .container{
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.menus{
+    display: flex;
+    background-color: aquamarine;
+
+   
+}
+.menu{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.menu:hover{
+    color: blueviolet;
 }
