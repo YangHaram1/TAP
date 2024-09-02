@@ -15,8 +15,8 @@ function App() {
       <Router>
         <div className={styles.container}>
           <Routes>
-            <Route path='/' element={<Login />} />
-            <Route path='/main'element={<Main/>}/>
+            <Route path='/login' element={<Login />} />
+            <Route path='/'element={<Main/>}/>
           </Routes>
         </div>
       </Router>
