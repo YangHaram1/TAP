@@ -1,11 +1,19 @@
 import styles from './Password.module.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { api } from '../../../../config/config';
+import { jwtDecode } from 'jwt-decode'
 
 const Password = ({ setCheckPw }) => {
     const [pw,setPw]= useState('');
+    const [user,setUser]= useState({});
+    useEffect(()=>{
+        const token=sessionStorage.getItem('token');
+        if(token!==null){
+            setUser(jwtDecode(token));
+        }
+    },[])
     
     const handleCancel = () => {
 
@@ -16,10 +24,14 @@ const Password = ({ setCheckPw }) => {
     }
 
     const handleConfirm = () => {
-        // api.post(`/auth/${pw}`).then((resp)=>{
-        //     setCheckPw(false);
-        // })
-        setCheckPw(false);
+        api.post(`/auth/${pw}`)
+        .then(resp => {
+            setCheckPw(false);
+        })
+        .catch(resp => {
+            alert('패스워드가 틀렸습니다 ')
+        })
+        
     }
 
     return (
@@ -49,7 +61,7 @@ const Password = ({ setCheckPw }) => {
                         아이디
                     </div>
                     <div>
-                        아이디값 불러와서 출력
+                       {user.sub}
                     </div>
                 </div>
                 <div className={styles.pw}>

@@ -1,5 +1,6 @@
 import styles from './Header.module.css';
 import { useNavigate } from "react-router-dom";
+import { api } from '../../config/config';
 
 const Header = () => {
     const navi =useNavigate();
@@ -7,7 +8,15 @@ const Header = () => {
         navi('/login')
     }
     const handleMypage=()=>{
-        navi('/mypage')
+        const token=sessionStorage.getItem('token');
+        if(token!==null){
+           
+            api.post(`/auth`).then((resp)=>{
+                navi('/mypage')
+            }).catch((resp)=>{
+                alert('인증되지 않은 사용자 입니다')
+            })
+        }
     }
     const handleHome=()=>{
         navi('/')
