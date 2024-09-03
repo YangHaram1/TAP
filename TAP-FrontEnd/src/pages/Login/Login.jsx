@@ -4,26 +4,38 @@ import img1 from '../../images/logo192.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faLock, faEye } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
+import { api } from '../../config/config'
+import { useAuthStore } from '../../store/store'
+import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const navi = useNavigate()
-    const [id, setId] = useState('')
+
+    const [user, setUser] = useState({ id: '', pw: '' })
+    const { login, isAuth } = useAuthStore()
+    const handleChange = e => {
+        const { name, value } = e.target
+        setUser(prev => {
+            return { ...prev, [name]: value }
+        })
+    }
+
     const [check, setCheck] = useState(false)
     const [idDiv, setIdDiv] = useState(true)
     const [pwDiv, setPwDiv] = useState(true)
     const idRef = useRef()
     const pwRef = useRef()
     const handleInput = () => {
-        // inputRef.current.value = ''
-        setId('')
+        setUser(prev => {
+            return {
+                id: '',
+                pw: prev.pw,
+            }
+        })
     }
+
     const handleCheck = () => {
         setCheck(prev => {
-            if (!prev) {
-                localStorage.setItem('loginId', id)
-            } else {
-                localStorage.removeItem('loginId')
-            }
             return !prev
         })
     }
@@ -31,10 +43,46 @@ const Login = () => {
     useEffect(() => {
         const loginId = localStorage.getItem('loginId')
         if (loginId != null) {
-            setId(loginId)
+            // setId(loginId)
+            setUser(prev => {
+                return {
+                    id: loginId,
+                    pw: prev.pw,
+                }
+            })
             setCheck(true)
         }
+        if (!isAuth) {
+            //isAuth false
+            const token = sessionStorage.getItem('token')
+            if (token != null && token != '') {
+                login(token)
+            }
+        }
     }, [])
+
+    const handleLogin = () => {
+        const id = user.id
+        const pw = user.pw
+        api.post(`/auth/${id}/${pw}`)
+            .then(resp => {
+                console.log(resp)
+                const token = resp.data
+                const decoded = jwtDecode(token)
+                console.log(decoded)
+
+                sessionStorage.setItem('token', token) // 인증 확인 용도
+                login(token)
+                if (check == true) {
+                    localStorage.setItem('loginId', decoded.sub)
+                } else {
+                    localStorage.removeItem('loginId')
+                }
+            })
+            .catch(resp => {
+                alert('아이디 또는 패스워드를 확인하세요. ')
+            })
+    }
     const handleContainer = e => {
         if (idRef.current && !idRef.current.contains(e.target)) {
             setIdDiv(true)
@@ -43,6 +91,7 @@ const Login = () => {
             setPwDiv(true)
         }
     }
+
     return (
         <div onClick={handleContainer}>
             <div className={styles.container}>
@@ -62,17 +111,16 @@ const Login = () => {
                         <input
                             type="text"
                             placeholder="아이디"
+                            name="id"
                             className={styles.id}
-                            value={id}
-                            onChange={e => {
-                                setId(e.target.value)
-                            }}
+                            value={user.id}
+                            onChange={handleChange}
                             onClick={() => {
                                 setIdDiv(false)
                                 setPwDiv(true)
                             }}
                         />
-                        {id === '' ? (
+                        {user.id === '' ? (
                             ''
                         ) : (
                             <button onClick={handleInput}>x</button>
@@ -89,11 +137,14 @@ const Login = () => {
                         <input
                             type="text"
                             placeholder="비밀번호"
+                            name="pw"
+                            value={user.pw}
                             className={styles.pw}
                             onClick={() => {
                                 setIdDiv(true)
                                 setPwDiv(false)
                             }}
+                            onChange={handleChange}
                         />
                         <FontAwesomeIcon icon={faEye} />
                     </div>
@@ -108,7 +159,9 @@ const Login = () => {
                     </div>
                 </div>
                 <div>
-                    <button className={styles.button}>로그인</button>
+                    <button onClick={handleLogin} className={styles.button}>
+                        로그인
+                    </button>
                 </div>
             </div>
         </div>
