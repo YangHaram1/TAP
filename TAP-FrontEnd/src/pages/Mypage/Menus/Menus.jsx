@@ -3,15 +3,20 @@ import styles from './Menus.module.css'
 import Password from './Password/Password';
 import Img from '../Home/Category/Img/Img';
 import Menu from './Menu/Menu';
+import { useNavigate } from 'react-router-dom';
 
 const Menus = () => {
     const [checkPw, setCheckPw] = useState(true);
-
+    const navi=useNavigate();
+    const handleNavi=(path)=>{
+        setCheckPw(true)
+        navi(path);
+    }
 
     return (
         <div className={styles.container}>
             <div className={styles.menus}>
-                <div className={styles.menu}>
+                <div className={styles.menu} onClick={()=>handleNavi('')}>
                     <div>
                         <Img img={'member'} />
                     </div>
@@ -19,7 +24,7 @@ const Menus = () => {
                         회원정보 수정
                     </div>
                 </div>
-                <div className={styles.menu}>
+                <div className={styles.menu}  onClick={()=>handleNavi('password')}>
                     <div>
                         <Img img={'password'} />
                     </div>
@@ -27,7 +32,7 @@ const Menus = () => {
                         비밀번호 변경
                     </div>
                 </div>
-                <div className={styles.menu}>
+                <div className={styles.menu} onClick={()=>handleNavi('delivery')}>
                     <div>
                         <Img img={'delivery'} />
                     </div>
@@ -35,7 +40,7 @@ const Menus = () => {
                         배송지 관리
                     </div>
                 </div>
-                <div className={styles.menu}>
+                <div className={styles.menu} onClick={()=>handleNavi('coupon')}>
                     <div>
                         <Img img={'coupon'} />
                     </div>
@@ -43,7 +48,7 @@ const Menus = () => {
                         쿠폰 관리
                     </div>
                 </div>
-                <div className={styles.menu}>
+                <div className={styles.menu} onClick={()=>handleNavi('board')}>
                     <div>
                         <Img img={'board'} />
                     </div>
@@ -51,7 +56,7 @@ const Menus = () => {
                         게시물 관리
                     </div>
                 </div>
-                <div className={styles.menu}>
+                <div className={styles.menu} onClick={()=>handleNavi('withdrawal')}>
                     <div>
                         <Img img={'withdrawal'} />
                     </div>
