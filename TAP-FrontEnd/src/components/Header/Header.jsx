@@ -10,7 +10,6 @@ const Header = () => {
     const handleMypage=()=>{
         const token=sessionStorage.getItem('token');
         if(token!==null){
-           
             api.post(`/auth`).then((resp)=>{
                 navi('/mypage')
             }).catch((resp)=>{
