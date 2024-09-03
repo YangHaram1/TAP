@@ -2,18 +2,26 @@ import styles from './Password.module.css';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { api } from '../../../../config/config';
+
 const Password = ({ setCheckPw }) => {
     const [pw,setPw]= useState('');
     
     const handleCancel = () => {
 
     }
-    const handleConfirm = () => {
-
-    }
+   
     const handlePw=(e)=>{
         setPw(e.target.value);
     }
+
+    const handleConfirm = () => {
+        // api.post(`/auth/${pw}`).then((resp)=>{
+        //     setCheckPw(false);
+        // })
+        setCheckPw(false);
+    }
+
     return (
         <React.Fragment>
             <div className={styles.title}>

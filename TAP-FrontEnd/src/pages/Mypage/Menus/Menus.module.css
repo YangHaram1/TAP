@@ -16,28 +16,7 @@
     border-radius: 30px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-}
-.body{
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 30px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-.title{
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-}
-.contents{
-    flex: 5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 10px;
 }
 
 .menu{
@@ -61,3 +40,14 @@
     font-size: 10px;
     flex: 2;
 }
+
+.body{
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 30px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+

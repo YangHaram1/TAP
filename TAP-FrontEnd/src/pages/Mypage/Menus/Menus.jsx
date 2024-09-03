@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import styles from './Menus.module.css'
 import Password from './Password/Password';
+import Img from '../Home/Category/Img/Img';
 
 const Menus = () => {
-    const [checkPw,setCheckPw]=useState(true);
-    
+    const [checkPw, setCheckPw] = useState(true);
+
+
     return (
         <div className={styles.container}>
             <div className={styles.menus}>
                 <div className={styles.menu}>
                     <div>
-                        img
+                        <Img img={'member'} />
                     </div>
                     <div>
                         회원정보 수정
@@ -18,7 +20,7 @@ const Menus = () => {
                 </div>
                 <div className={styles.menu}>
                     <div>
-                        img
+                        <Img img={'password'} />
                     </div>
                     <div>
                         비밀번호 변경
@@ -26,7 +28,7 @@ const Menus = () => {
                 </div>
                 <div className={styles.menu}>
                     <div>
-                        img
+                        <Img img={'delivery'} />
                     </div>
                     <div>
                         배송지 관리
@@ -34,7 +36,7 @@ const Menus = () => {
                 </div>
                 <div className={styles.menu}>
                     <div>
-                        img
+                        <Img img={'coupon'} />
                     </div>
                     <div>
                         쿠폰 관리
@@ -42,7 +44,7 @@ const Menus = () => {
                 </div>
                 <div className={styles.menu}>
                     <div>
-                        img
+                        <Img img={'board'} />
                     </div>
                     <div>
                         게시물 관리
@@ -50,7 +52,7 @@ const Menus = () => {
                 </div>
                 <div className={styles.menu}>
                     <div>
-                        img
+                        <Img img={'withdrawal'} />
                     </div>
                     <div>
                         회원탈퇴
@@ -58,8 +60,8 @@ const Menus = () => {
                 </div>
             </div>
             <div className={styles.body}>
-                {checkPw&&(<Password setCheckPw={setCheckPw}/>)}
-        
+                {checkPw && (<Password setCheckPw={setCheckPw} />)}
+
             </div>
         </div>
     )
