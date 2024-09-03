@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './Menus.module.css'
 import Password from './Password/Password';
 import Img from '../Home/Category/Img/Img';
+import Menu from './Menu/Menu';
 
 const Menus = () => {
     const [checkPw, setCheckPw] = useState(true);
@@ -61,7 +62,7 @@ const Menus = () => {
             </div>
             <div className={styles.body}>
                 {checkPw && (<Password setCheckPw={setCheckPw} />)}
-
+                {!checkPw&&(<Menu/>)}
             </div>
         </div>
     )
