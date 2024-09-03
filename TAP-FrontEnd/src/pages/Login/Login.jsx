@@ -153,7 +153,7 @@ const Login = () => {
                             type="checkbox"
                             className={styles.checkBox}
                             checked={check}
-                            onClick={handleCheck}
+                            onChange={handleCheck}
                         />
                         <span>아이디 저장</span>
                     </div>
