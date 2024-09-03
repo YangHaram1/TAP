@@ -17,6 +17,7 @@
     flex-direction: column;
     gap: 5px;
     background-color: white;
+    border-radius: 30px;
 }
 
 
@@ -38,13 +39,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
+
+.grade:hover{
+    background-color: #f8f8f8;
+    color: blue;
+}
+
 
 .menus {
     flex: 5;
     display: flex;
     flex-direction: column;
-    background-color: white;
+   
+    border-radius: 30px;
+    gap: 10px;
 }
 
 .menu {
@@ -54,6 +64,9 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px;
 }
 .menu:hover{
     background-color: #f8f8f8;
@@ -63,4 +76,5 @@
 .line {
     flex: 1;
     display: flex;
+    gap: 10px;
 }
