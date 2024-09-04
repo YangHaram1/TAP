@@ -35,5 +35,9 @@ public class MembersService implements UserDetailsService{
 		return dao.getPw(id);
 	}
 	
+	public MembersDTO selectById(String id) throws Exception{
+		return dao.selectById(id);
+	}
+	
 
 }
