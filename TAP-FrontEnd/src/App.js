@@ -11,9 +11,12 @@ import Main from './pages/Main/Main';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Mypage from './pages/Mypage/Mypage';
+
 import { useEffect } from 'react';
 import { api } from './config/config';
 import { jwtDecode } from 'jwt-decode'
+import { ABuiz } from './pages/ABusiness/ABuiz';
+
 
 function App() {
   const { setLoginID, login,isAuth } = useAuthStore();
@@ -35,10 +38,11 @@ function App() {
       <Router>
         <div className={styles.container}>
           <Header />
-          <Routes>
-            {!isAuth&&(<Route path='/login/*' element={<Login />} />)}
-            <Route path='/*' element={<Main />} />
-            <Route path='/mypage/*' element={<Mypage />} />
+          <Routes>  
+           {!isAuth&&(<Route path='/login/*' element={<Login />} />)}
+            <Route path='/*'element={<Main/>}/>
+            <Route path='/mypage/*'element={<Mypage/>}/>
+            <Route path='/buiz/*'element={<ABuiz/>}/>
           </Routes>
           <Footer />
         </div>
