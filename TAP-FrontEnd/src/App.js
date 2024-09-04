@@ -11,6 +11,7 @@ import Main from './pages/Main/Main';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Mypage from './pages/Mypage/Mypage';
+import {ABuiz} from './pages/ABusiness/ABuiz';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path='/login/*' element={<Login />} />
             <Route path='/*'element={<Main/>}/>
             <Route path='/mypage/*'element={<Mypage/>}/>
+            <Route path='/buiz/*'element={<ABuiz/>}/>
           </Routes>
           <Footer/>
         </div>
