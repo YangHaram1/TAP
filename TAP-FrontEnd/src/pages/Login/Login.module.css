@@ -1,8 +1,7 @@
-
 .container {
-    width: 500px;
+    width: 400px;
     height: 500px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -11,15 +10,16 @@
 
 .container div {
     flex: 1;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 /* title 영역 */
 .title {
-    background-color: rgb(184, 184, 184);
+    /* background-color: rgb(31, 24, 24); */
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: -50px;
     gap: 10px;
 }
 
@@ -31,6 +31,7 @@
 .tap {
     font-size: 30px;
     font-weight: bold;
+    color: #4e2c70;
 }
 
 .logoTitle {
@@ -41,25 +42,39 @@
 .form {
     display: flex;
     flex-direction: column;
+    border-radius: 20px;
+    gap: 10px;
+
 }
 
 .form div {
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+    border-radius: 10px;
+
 }
 
 .form div .icon {
     flex: 1;
-    color: rgba(103, 103, 103, 0.222);
-    /* border: 1px solid black; */
+    color: rgb(194, 194, 194)
+        /* border: 1px solid black; */
 }
 
 .form div .id {
     flex: 10;
     border: none;
+}
 
+.form div .id:focus {
+    outline: none;
+}
+
+.remove {
+    flex: 1;
+    color: rgb(194, 194, 194);
+    cursor: pointer;
 }
 
 .form div .pw {
@@ -67,20 +82,99 @@
     border: none;
 }
 
+.form div .pw:focus {
+    outline: none;
+}
+
+.eye {
+    flex: 1;
+    color: rgb(194, 194, 194);
+    cursor: pointer;
+}
+
+.notEye {
+    flex: 1;
+    color: rgb(194, 194, 194);
+    cursor: pointer;
+}
+
 .checkBox {
     border-radius: 20px;
 }
 
-.button {
-    width: 100%;
-    height: 100%;
+.saveId {
+    font-size: 12px;
 }
 
 
+
+/* 기본 체크박스 숨기기 */
+.checkBox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+}
+
+/* 체크박스가 선택되지 않은 경우 */
+.checkBox::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: white;
+    transition: background-color 0.2s;
+}
+
+/* 체크박스가 선택된 경우 */
+.checkBox:checked::before {
+    background-color: #2b2d42
+        /* 선택되었을 때의 배경색 */
+}
+
+/* 체크 표시 */
+.checkBox::after {
+    content: '';
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 체크박스가 선택된 경우 표시 */
+.checkBox:checked::after {
+    display: block;
+}
+
 .idDiv {
-    border: 2px solid blue !important;
+    border: 2px solid rgb(92, 92, 92) !important;
 }
 
 .idDivNot {
-    border: 2px solid black !important;
+    border: 2px solid rgb(194, 194, 194) !important;
+}
+
+.button {
+    width: 100%;
+    height: 30%;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    background-color: #2b2d42;
+    margin-top: 40px;
+    cursor: pointer;
 }

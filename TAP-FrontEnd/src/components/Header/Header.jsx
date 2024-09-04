@@ -1,10 +1,26 @@
 import styles from './Header.module.css';
 import { useNavigate } from "react-router-dom";
+import { api } from '../../config/config';
+import { useAuthStore } from './../../store/store';
+import SweetAlert from './../SweetAlert/SweetAlert';
 
 const Header = () => {
     const navi =useNavigate();
+    const {isAuth,logout}=useAuthStore();
+    
+    const handleLogout=()=>{
+        sessionStorage.removeItem('token');
+        logout();
+    }
+
     const handleLogin=()=>{
-        navi('/login')
+        if(isAuth){
+            SweetAlert('warning','로그아웃','로그아웃을 하시겠습니까',handleLogout);
+        }
+        else{
+            navi('/login')
+        }
+        
     }
     const handleMypage=()=>{
         navi('/mypage')
@@ -20,7 +36,7 @@ const Header = () => {
                 </div>
                 <div className={styles.headerMenus}>
                     <div className={styles.headerMenu} onClick={handleLogin}>
-                        로그인
+                        {isAuth?"로그아웃":"로그인"}
                     </div>
                     <div className={styles.headerMenu}>
                         회원가입

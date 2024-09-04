@@ -2,7 +2,13 @@ import styles from './Login.module.css'
 import { useNavigate } from 'react-router-dom'
 import img1 from '../../images/logo192.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faLock, faEye } from '@fortawesome/free-solid-svg-icons'
+import {
+    faUser,
+    faLock,
+    faEye,
+    faXmark,
+    faEyeSlash,
+} from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '../../config/config'
 import { useAuthStore } from '../../store/store'
@@ -10,9 +16,8 @@ import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const navi = useNavigate()
-
     const [user, setUser] = useState({ id: '', pw: '' })
-    const { login, isAuth } = useAuthStore()
+    const { login, isAuth,setLoginID } = useAuthStore()
     const handleChange = e => {
         const { name, value } = e.target
         setUser(prev => {
@@ -33,6 +38,11 @@ const Login = () => {
             }
         })
     }
+    const [showEye, setShowEye] = useState(false)
+
+    const handleToggleEye = () => {
+        setShowEye(prevShowEye => !prevShowEye)
+    }
 
     const handleCheck = () => {
         setCheck(prev => {
@@ -52,19 +62,19 @@ const Login = () => {
             })
             setCheck(true)
         }
-        if (!isAuth) {
-            //isAuth false
-            const token = sessionStorage.getItem('token')
-            if (token != null && token != '') {
-                login(token)
-            }
-        }
+        // if (!isAuth) {
+        //     //isAuth false
+        //     const token = sessionStorage.getItem('token')
+        //     if (token != null && token != '') {
+        //         login(token)
+        //     }
+        // }
     }, [])
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const id = user.id
         const pw = user.pw
-        api.post(`/auth/${id}/${pw}`)
+        await api.post(`/auth/${id}/${pw}`)
             .then(resp => {
                 console.log(resp)
                 const token = resp.data
@@ -72,16 +82,19 @@ const Login = () => {
                 console.log(decoded)
 
                 sessionStorage.setItem('token', token) // 인증 확인 용도
-                login(token)
+                 login(token)
                 if (check == true) {
                     localStorage.setItem('loginId', decoded.sub)
                 } else {
                     localStorage.removeItem('loginId')
                 }
+                setLoginID(decoded.sub);
+                
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
             })
+           
     }
     const handleContainer = e => {
         if (idRef.current && !idRef.current.contains(e.target)) {
@@ -123,7 +136,11 @@ const Login = () => {
                         {user.id === '' ? (
                             ''
                         ) : (
-                            <button onClick={handleInput}>x</button>
+                            <FontAwesomeIcon
+                                icon={faXmark}
+                                onClick={handleInput}
+                                className={styles.remove}
+                            />
                         )}
                     </div>
                     <div
@@ -135,7 +152,7 @@ const Login = () => {
                             className={styles.icon}
                         />
                         <input
-                            type="text"
+                            type={showEye ? 'text' : 'password'}
                             placeholder="비밀번호"
                             name="pw"
                             value={user.pw}
@@ -146,16 +163,27 @@ const Login = () => {
                             }}
                             onChange={handleChange}
                         />
-                        <FontAwesomeIcon icon={faEye} />
+
+                        <FontAwesomeIcon
+                            icon={showEye ? faEye : faEyeSlash}
+                            className={styles.eye}
+                            onClick={handleToggleEye}
+                        />
+
+                        {/* <FontAwesomeIcon
+                            icon={faEyeSlash}
+                            className={styles.notEye}
+                            onClick={handleToggleEye}
+                        /> */}
                     </div>
                     <div>
                         <input
                             type="checkbox"
                             className={styles.checkBox}
                             checked={check}
-                            onClick={handleCheck}
+                            onChange={handleCheck}
                         />
-                        <span>아이디 저장</span>
+                        <span className={styles.saveId}>아이디 저장</span>
                     </div>
                 </div>
                 <div>
