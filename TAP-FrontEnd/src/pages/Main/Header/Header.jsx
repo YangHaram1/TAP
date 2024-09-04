@@ -5,10 +5,10 @@ const Header = () => {
     const navi = useNavigate();
     return (
         <React.Fragment>
-            <div className={styles.menu} >
+            <div className={styles.menu} onClick={() => { navi('/concert')}}>
                 콘서트
             </div>
-            <div className={styles.menu} onClick={() => { navi('musical') }}>
+            <div className={styles.menu} onClick={() => { navi('/musical') }}>
                 뮤지컬
             </div>
             <div className={styles.menu} onClick={() => { navi('sports') }}>
