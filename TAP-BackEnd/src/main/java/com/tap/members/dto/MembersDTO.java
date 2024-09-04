@@ -1,4 +1,4 @@
-package com.tap.dto;
+package com.tap.members.dto;
 
 import java.sql.Timestamp;
 

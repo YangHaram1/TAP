@@ -1,4 +1,4 @@
-package com.tap.controllers;
+package com.tap.admin.controller;
 
 import java.security.Principal;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tap.services.MembersService;
-import com.tap.utils.JwtUtil;
+import com.tap.members.service.MembersService;
+import com.tap.z_utils.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 

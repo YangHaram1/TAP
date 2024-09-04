@@ -1,4 +1,4 @@
-package com.tap.filters;
+package com.tap.z_filters;
 
 import java.io.IOException;
 
@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tap.services.MembersService;
-import com.tap.utils.JwtUtil;
+import com.tap.members.service.MembersService;
+import com.tap.z_utils.JwtUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
