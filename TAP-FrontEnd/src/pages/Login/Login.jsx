@@ -63,19 +63,19 @@ const Login = () => {
             })
             setCheck(true)
         }
-        if (!isAuth) {
-            //isAuth false
-            const token = sessionStorage.getItem('token')
-            if (token != null && token != '') {
-                login(token)
-            }
-        }
+        // if (!isAuth) {
+        //     //isAuth false
+        //     const token = sessionStorage.getItem('token')
+        //     if (token != null && token != '') {
+        //         login(token)
+        //     }
+        // }
     }, [])
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const id = user.id
         const pw = user.pw
-        api.post(`/auth/${id}/${pw}`)
+        await api.post(`/auth/${id}/${pw}`)
             .then(resp => {
                 console.log(resp)
                 const token = resp.data
@@ -83,16 +83,20 @@ const Login = () => {
                 console.log(decoded)
 
                 sessionStorage.setItem('token', token) // 인증 확인 용도
-                login(token)
+                 login(token)
                 if (check == true) {
                     localStorage.setItem('loginId', decoded.sub)
                 } else {
                     localStorage.removeItem('loginId')
                 }
+                
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
             })
+            if(isAuth){
+                navi.goBack();
+            }
     }
     const handleContainer = e => {
         if (idRef.current && !idRef.current.contains(e.target)) {

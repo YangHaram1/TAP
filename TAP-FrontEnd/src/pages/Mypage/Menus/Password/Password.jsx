@@ -4,16 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { api } from '../../../../config/config';
 import { jwtDecode } from 'jwt-decode'
+import { useAuthStore } from './../../../../store/store';
 
 const Password = ({ setCheckPw }) => {
     const [pw,setPw]= useState('');
-    const [user,setUser]= useState({});
-    useEffect(()=>{
-        const token=sessionStorage.getItem('token');
-        if(token!==null){
-            setUser(jwtDecode(token));
-        }
-    },[])
+    const {loginID} =useAuthStore();
     
     const handleCancel = () => {
 
@@ -61,7 +56,7 @@ const Password = ({ setCheckPw }) => {
                         아이디
                     </div>
                     <div>
-                       {user.sub}
+                       {loginID}
                     </div>
                 </div>
                 <div className={styles.pw}>
