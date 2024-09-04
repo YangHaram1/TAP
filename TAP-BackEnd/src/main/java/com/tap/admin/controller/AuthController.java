@@ -5,7 +5,6 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tap.members.dto.MembersDTO;
 import com.tap.members.service.MembersService;
 import com.tap.z_utils.JwtUtil;
 
@@ -35,11 +35,13 @@ public class AuthController {
 	public ResponseEntity<String> login(@PathVariable String id, @PathVariable String pw) throws Exception {
 		// 사용자가 입력한 비밀번호
 		// 데이터베이스에서 가져온 암호화된 비밀번호
-		String storedEncodedPassword = mserv.getPw(id); // 데이터베이스에서 조회한 암호화된 비밀번호
+		MembersDTO dto = mserv.getPw(id); // 데이터베이스에서 조회한 암호화된 비밀번호
+		
+		
 		// 비밀번호 검증
-		boolean check = pe.matches(pw, storedEncodedPassword);
+		boolean check = pe.matches(pw, dto.getPw());
 		if (check) {
-			String token = jwt.createToken(id);
+			String token = jwt.createToken(id,dto.getRole());
 			jwt.verify(token);
 			return ResponseEntity.ok(token);
 		} else {

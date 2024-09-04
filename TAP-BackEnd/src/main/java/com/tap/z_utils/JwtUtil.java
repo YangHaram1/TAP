@@ -1,8 +1,11 @@
 package com.tap.z_utils;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
@@ -25,9 +28,14 @@ public class JwtUtil {
 		this.verifier=JWT.require(algo).build();
 	}
 	
-	public String createToken(String id) {	
+	public String createToken(String id,String role) {	
+//		 String roleString = role.stream()
+//                 .map(GrantedAuthority::getAuthority) // 권한 이름을 문자열로 변환
+//                 .collect(Collectors.joining(","));   // 콤마로 구분된 문자열로 연결
+//		 
 		return 	JWT.create().
 				withSubject(id).
+				withClaim("role", role).
 				withIssuedAt(new Date()).
 				withExpiresAt(new Date(System.currentTimeMillis()+expriation*1000)).
 				sign(this.algo);

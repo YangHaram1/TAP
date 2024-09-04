@@ -3,8 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Members">
-	<select id="getPw" resultType="String">
-		select pw from members where id=#{id}
+	<select id="getPw" resultType="com.tap.members.dto.MembersDTO">
+		select pw,role from members where id=#{id}
 	</select>
 	<select id="selectById" resultType="com.tap.members.dto.MembersDTO">
 		select * from members where id=#{id}

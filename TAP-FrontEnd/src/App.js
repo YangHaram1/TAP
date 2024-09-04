@@ -16,14 +16,16 @@ import { api } from './config/config';
 import { jwtDecode } from 'jwt-decode'
 
 function App() {
-  const { setLoginID, login,isAuth } = useAuthStore();
+  const { setLoginID, login,isAuth ,setRole} = useAuthStore();
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token != null) {
       api.post(`/auth`).then((resp) => {
+        const decoded =jwtDecode(token);
         login(token);
-        setLoginID(jwtDecode(token).sub);
+        setLoginID(decoded.sub);
+        setRole(decoded.role);
       }).catch((resp) => {
         alert('인증되지 않은 사용자 입니다')
       })
