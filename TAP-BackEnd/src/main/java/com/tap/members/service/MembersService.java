@@ -24,6 +24,7 @@ public class MembersService implements UserDetailsService{
 		User user=null;
 		try {
 			MembersDTO dto =dao.selectById(id);
+			if(dto.getEnabled()==1)
 			user =new User(dto.getId(),dto.getPw(), AuthorityUtils.createAuthorityList(dto.getRole()));
 			
 		} catch (Exception e) {
