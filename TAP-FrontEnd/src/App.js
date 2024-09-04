@@ -15,11 +15,13 @@ import Mypage from './pages/Mypage/Mypage';
 import { useEffect } from 'react';
 import { api } from './config/config';
 import { jwtDecode } from 'jwt-decode'
-import { ABuiz } from './pages/ABusiness/ABuiz';
+import { AdminHeader } from './components/Header/AdminHeader';
+import { Biz } from './pages/ABusiness/Biz';
+import { Admin } from './pages/Admin/Admin';
 
 
 function App() {
-  const { login,isAuth ,setAuth} = useAuthStore();
+  const { login,isAuth ,setAuth, role} = useAuthStore();
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -27,8 +29,7 @@ function App() {
       api.post(`/auth`).then((resp) => {
         const decoded =jwtDecode(token);
         login(token);
-        setLoginID(decoded.sub);
-        setRole(decoded.role);
+        setAuth(decoded);
       }).catch((resp) => {
         alert('인증되지 않은 사용자 입니다')
       })
@@ -39,13 +40,47 @@ function App() {
     <ChatsProvider>
       <Router>
         <div className={styles.container}>
-          <Header />
+          {!isAuth ? (
+            <>
+              <Header />
+              <Routes>
+                <Route path='/*' element={<Main />} />
+                <Route path='/login/*' element={<Login />} />
+              </Routes>
+            </>
+          ) : isAuth && role === 'ROLE_ADMIN' ? (
+            <>
+              <AdminHeader/>
+              <Routes>
+                <Route path='/admin/*' element={<Admin/>} />
+              </Routes>
+            </>
+          ) : isAuth && role === 'ROLE_BIZ' ? (
+            <>
+              <AdminHeader/>
+              <Routes>
+                <Route path='/biz/*' element={<Biz/>} />
+              </Routes>
+            </>
+          ) : (
+            isAuth &&
+            role === 'ROLE_USER' && (
+              <>
+                <Header />
+                <Routes>
+                  <Route path='/*' element={<Main />} />
+                  <Route path='/mypage/*' element={<Mypage />} />
+                </Routes>
+              </>
+            )
+          )}
+          {/* <Header />
           <Routes>  
            {!isAuth&&(<Route path='/login/*' element={<Login />} />)}
             <Route path='/*'element={<Main/>}/>
             <Route path='/mypage/*'element={<Mypage/>}/>
             <Route path='/buiz/*'element={<ABuiz/>}/>
-          </Routes>
+          </Routes> */}
           <Footer />
         </div>
       </Router>

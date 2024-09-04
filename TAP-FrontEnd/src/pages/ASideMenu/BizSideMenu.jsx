@@ -1,6 +1,6 @@
-import styles from './AdminSideMenu.module.css'
+import styles from './BizSideMenu.module.css';
 
-export const BuizSideMenu =()=>{
+export const BizSideMenu =()=>{
 
     return(
         <div className={styles.container}>
