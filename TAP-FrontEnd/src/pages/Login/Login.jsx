@@ -16,9 +16,8 @@ import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const navi = useNavigate()
-
     const [user, setUser] = useState({ id: '', pw: '' })
-    const { login, isAuth } = useAuthStore()
+    const { login, isAuth,setLoginID } = useAuthStore()
     const handleChange = e => {
         const { name, value } = e.target
         setUser(prev => {
@@ -89,14 +88,13 @@ const Login = () => {
                 } else {
                     localStorage.removeItem('loginId')
                 }
+                setLoginID(decoded.sub);
                 
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
             })
-            if(isAuth){
-                navi.goBack();
-            }
+           
     }
     const handleContainer = e => {
         if (idRef.current && !idRef.current.contains(e.target)) {

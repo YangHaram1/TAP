@@ -23,14 +23,7 @@ const Header = () => {
         
     }
     const handleMypage=()=>{
-        const token=sessionStorage.getItem('token');
-        if(token!==null){
-            api.post(`/auth`).then((resp)=>{
-                navi('/mypage')
-            }).catch((resp)=>{
-                alert('인증되지 않은 사용자 입니다')
-            })
-        }
+        navi('/mypage')
     }
     const handleHome=()=>{
         navi('/')
