@@ -27,7 +27,8 @@ function App() {
       api.post(`/auth`).then((resp) => {
         const decoded =jwtDecode(token);
         login(token);
-        setAuth(decoded);
+        setLoginID(decoded.sub);
+        setRole(decoded.role);
       }).catch((resp) => {
         alert('인증되지 않은 사용자 입니다')
       })
