@@ -1,33 +1,21 @@
+import Header from './Header/Header';
 import styles from './Main.module.css';
-import { useNavigate } from "react-router-dom";
+import { Routes, useNavigate, Route } from "react-router-dom";
 
 
 const Main = () => {
-    const navi = useNavigate();
-
-
-
+   
     return (
         <div className={styles.container}>
             <div className={styles.menus}>
-                <div className={styles.menu}>
-                    콘서트
-                </div>
-                <div className={styles.menu}>
-                    뮤지컬
-                </div>
-                <div className={styles.menu}>
-                    스포츠
-                </div>
-                <div className={styles.menu}>
-                    고객센터
-                </div>
-                <div className={styles.menu}>
-                    공지사항
-                </div>
+                <Header></Header>
             </div>
             <div className={styles.body}>
-
+                <Routes>
+                    <Route path='' element={<div>main</div>} />
+                    <Route path='musical' element={<div>musical</div>} />
+                    <Route path='sports' element={<div>sports</div>} />
+                </Routes>
             </div>
         </div>
     )

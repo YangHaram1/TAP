@@ -1,4 +1,4 @@
-package com.tap.utils;
+package com.tap.z_utils;
 
 import java.util.Date;
 
@@ -9,6 +9,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class JwtUtil {
@@ -47,6 +49,14 @@ public class JwtUtil {
 	
 	public String getSubject(String token) {
 		return this.verifier.verify(token).getSubject(); //id 값 가저오기 
+	}
+	
+	public String extractToken(HttpServletRequest request) {
+		String auth=request.getHeader("Authorization");
+		if(auth!=null &&auth.startsWith("Bearer")) {
+			return auth.substring(7); //토큰 반환
+		}
+		return null;
 	}
 	
 }

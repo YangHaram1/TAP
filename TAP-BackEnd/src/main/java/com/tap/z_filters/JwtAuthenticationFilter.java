@@ -1,4 +1,4 @@
-package com.tap.filters;
+package com.tap.z_filters;
 
 import java.io.IOException;
 
@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tap.services.MembersService;
-import com.tap.utils.JwtUtil;
+import com.tap.members.service.MembersService;
+import com.tap.z_utils.JwtUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,25 +25,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	@Autowired
 	private MembersService mserv;
 	
-	private String extractToken(HttpServletRequest request) {
-		String auth=request.getHeader("Authorization");
-		if(auth!=null &&auth.startsWith("Bearer")) {
-			return auth.substring(7); //토큰 반환
-		}
-		return null;
-	}
+
 	
 	//SecurityContextHolder 에 Authentcation 객체 존재 여부로 인증을 판단
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String token=extractToken(request);
+		String token=jwt.extractToken(request);
 		if(token!=null &&jwt.isVerified(token)) {//토큰 인증
 			String id=jwt.getSubject(token);
 			UserDetails user=mserv.loadUserByUsername(id);
+			
 			if(user!=null) {
+				System.out.println(user);
 				Authentication auth= new UsernamePasswordAuthenticationToken(user.getUsername(),null,user.getAuthorities());// Authentication 객체를 상속받은 객체
 				SecurityContextHolder.getContext().setAuthentication(auth);
+				System.out.println(SecurityContextHolder.getContext().getAuthentication());
 			}
 			
 		}

@@ -1,4 +1,4 @@
-package com.tap.config;
+package com.tap.z_config;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.tap.filters.JwtAuthenticationFilter;
+import com.tap.z_filters.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -37,10 +37,9 @@ public class SecurityConfig {
 		.formLogin(form->form.disable())// RESTFul 방식에선 불필요
 		.httpBasic(basic->basic.disable())// RESTFul 방식에선 불필요
 		.authorizeHttpRequests(request->{
-			//request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
+			request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
-			//request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
-			request.anyRequest().permitAll();
+			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
 		}) 
 		.addFilterBefore(JwtFilter, UsernamePasswordAuthenticationFilter.class); //모든 경로는 필터를 거친다
 		return http.build();

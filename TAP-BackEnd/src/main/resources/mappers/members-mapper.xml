@@ -6,7 +6,7 @@
 	<select id="getPw" resultType="String">
 		select pw from members where id=#{id}
 	</select>
-	<select id="selectById" resultType="com.tap.dto.MembersDTO">
+	<select id="selectById" resultType="com.tap.members.dto.MembersDTO">
 		select * from members where id=#{id}
 	</select>
 </mapper>

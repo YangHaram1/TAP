@@ -11,21 +11,40 @@ import Main from './pages/Main/Main';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Mypage from './pages/Mypage/Mypage';
-import {ABuiz} from './pages/ABusiness/ABuiz';
+
+import { useEffect } from 'react';
+import { api } from './config/config';
+import { jwtDecode } from 'jwt-decode'
+import { ABuiz } from './pages/ABusiness/ABuiz';
+
 
 function App() {
+  const { setLoginID, login,isAuth } = useAuthStore();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token != null) {
+      api.post(`/auth`).then((resp) => {
+        login(token);
+        setLoginID(jwtDecode(token).sub);
+      }).catch((resp) => {
+        alert('인증되지 않은 사용자 입니다')
+      })
+      
+    }
+  }, [])
   return (
     <ChatsProvider>
       <Router>
         <div className={styles.container}>
-          <Header/>
-          <Routes>
-            <Route path='/login/*' element={<Login />} />
+          <Header />
+          <Routes>  
+           {!isAuth&&(<Route path='/login/*' element={<Login />} />)}
             <Route path='/*'element={<Main/>}/>
             <Route path='/mypage/*'element={<Mypage/>}/>
             <Route path='/buiz/*'element={<ABuiz/>}/>
           </Routes>
-          <Footer/>
+          <Footer />
         </div>
       </Router>
     </ChatsProvider>

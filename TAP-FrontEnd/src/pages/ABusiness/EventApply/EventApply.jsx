@@ -98,9 +98,9 @@ export const EventApply =()=>{
                     <td>
                         <select>
                             <option>선택</option>
-                            <option>전연령</option>
+                            <option>ALL</option>
                             <option>8세</option>
-                            <option>15세</option>
+                            <option>12세</option>
                             <option>18세</option>
                         </select>
                     </td>

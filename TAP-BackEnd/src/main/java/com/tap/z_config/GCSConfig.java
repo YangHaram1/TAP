@@ -1,4 +1,4 @@
-package com.tap.config;
+package com.tap.z_config;
 
 import java.io.IOException;
 
