@@ -60,9 +60,9 @@ public class AuthController {
 		String username = principal.getName();
 		UserDetails user = mserv.loadUserByUsername(username);
 		
-		String storedEncodedPassword = mserv.getPw(user.getUsername()); // 데이터베이스에서 조회한 암호화된 비밀번호
+		MembersDTO dto  = mserv.getPw(user.getUsername()); // 데이터베이스에서 조회한 암호화된 비밀번호
 		// 비밀번호 검증
-		boolean check = pe.matches(pw, storedEncodedPassword);
+		boolean check = pe.matches(pw, dto.getPw());
 		if (check) {
 			return ResponseEntity.ok().build();
 		} else {
