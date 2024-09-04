@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tap.members.dao.MembersDAO;
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersGradeDTO;
 
 @Service
 public class MembersService implements UserDetailsService{
@@ -31,8 +32,8 @@ public class MembersService implements UserDetailsService{
 		return user;
 	}
 	
-	public MembersDTO getPw(String id) throws Exception{
-		return dao.getPw(id);
+	public MembersGradeDTO getMemberInfo(String id) throws Exception{
+		return dao.getMemberInfo(id);
 	}
 	
 	public MembersDTO selectById(String id) throws Exception{

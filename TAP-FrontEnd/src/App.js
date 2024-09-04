@@ -19,7 +19,7 @@ import { ABuiz } from './pages/ABusiness/ABuiz';
 
 
 function App() {
-  const { setLoginID, login,isAuth ,setRole} = useAuthStore();
+  const { login,isAuth ,setAuth} = useAuthStore();
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -27,8 +27,7 @@ function App() {
       api.post(`/auth`).then((resp) => {
         const decoded =jwtDecode(token);
         login(token);
-        setLoginID(decoded.sub);
-        setRole(decoded.role);
+        setAuth(decoded);
       }).catch((resp) => {
         alert('인증되지 않은 사용자 입니다')
       })
