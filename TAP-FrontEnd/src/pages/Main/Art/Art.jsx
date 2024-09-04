@@ -1,8 +1,11 @@
+import { useState } from 'react';
+import { Caroucel } from '../Caroucel/Caroucel';
 import styles from './Art.module.css'
 
 export const Art = ({category})=>{
 
     console.log(category);
+    const [images, setImages] = useState([]);
 
     if(category === "musical"){
         console.log("뮤지컬 정보 불러오기");
@@ -14,7 +17,9 @@ export const Art = ({category})=>{
 
     return (
         <div className={styles.container}>
-            {category}
+            <div className={styles.caroucel}>
+                <Caroucel images={images} category={"sport"}/>
+            </div>
         </div>
     );
 
