@@ -1,4 +1,4 @@
-package com.tap.dto;
+package com.tap.delivery.dto;
 
 public class DeliveryDTO {
 	private Long seq;

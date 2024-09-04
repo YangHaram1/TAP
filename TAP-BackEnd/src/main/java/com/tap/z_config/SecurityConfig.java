@@ -1,4 +1,4 @@
-package com.tap.config;
+package com.tap.z_config;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.tap.filters.JwtAuthenticationFilter;
+import com.tap.z_filters.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

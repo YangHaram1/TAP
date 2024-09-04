@@ -1,4 +1,4 @@
-package com.tap.dao;
+package com.tap.members.dao;
 
 import java.util.Map;
 
@@ -6,7 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.tap.dto.MembersDTO;
+import com.tap.members.dto.MembersDTO;
 
 @Repository
 public class MembersDAO {

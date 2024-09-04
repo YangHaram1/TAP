@@ -1,4 +1,4 @@
-package com.tap.services;
+package com.tap.members.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.tap.dao.MembersDAO;
-import com.tap.dto.MembersDTO;
+import com.tap.members.dao.MembersDAO;
+import com.tap.members.dto.MembersDTO;
 
 @Service
 public class MembersService implements UserDetailsService{
