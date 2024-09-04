@@ -1,4 +1,4 @@
-
+import Header from './Header/Header';
 import styles from './Main.module.css';
 import { Routes, useNavigate, Route } from "react-router-dom";
 
