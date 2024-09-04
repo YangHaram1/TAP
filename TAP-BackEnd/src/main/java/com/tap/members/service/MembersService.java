@@ -31,7 +31,7 @@ public class MembersService implements UserDetailsService{
 		return user;
 	}
 	
-	public String getPw(String id) throws Exception{
+	public MembersDTO getPw(String id) throws Exception{
 		return dao.getPw(id);
 	}
 	

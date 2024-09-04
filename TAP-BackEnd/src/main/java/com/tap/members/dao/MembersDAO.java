@@ -18,7 +18,7 @@ public class MembersDAO {
 		return mybatis.selectOne("Members.selectById",id);
 	}
 	
-	public String getPw(String id) throws Exception{
+	public MembersDTO getPw(String id) throws Exception{
 		return mybatis.selectOne("Members.getPw",id);
 	}
 
