@@ -1,11 +1,12 @@
-import {styles} from './Admin.module.css'
+import { AdminHeader } from '../../components/Header/AdminHeader'
+import styles from './Admin.module.css'
 
 export const Admin=()=>{
 
     return(
         <div className={styles.container}>
-            <Header/>
-            <AdminContent/>
+            <AdminHeader/>
+            {/* <AdminContent/> */}
         </div>
     )
 }
