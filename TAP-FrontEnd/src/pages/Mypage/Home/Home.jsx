@@ -1,8 +1,10 @@
+import { useAuthStore } from '../../../store/store';
 import Category from './Category/Category';
 import styles from './Home.module.css';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 const Home = () => {
     const navi = useNavigate();
+    const {name,grade} =useAuthStore();
     const handleGrade = () => {
         navi('grade')
     }
@@ -13,7 +15,7 @@ const Home = () => {
         <div className={styles.container}>
             <div className={styles.header}>
                 <div className={styles.title}>
-                    양하람님은 현재<p> WELCOME </p> 등급입니다.
+                    {name}님은 현재<p> {grade} </p> 등급입니다.
                 </div>
                 <div className={styles.grade} onClick={handleGrade}>
                     등급별 혜택 보기

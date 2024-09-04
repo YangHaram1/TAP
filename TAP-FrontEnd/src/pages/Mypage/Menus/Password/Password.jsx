@@ -3,30 +3,33 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { api } from '../../../../config/config';
-import { jwtDecode } from 'jwt-decode'
 import { useAuthStore } from './../../../../store/store';
 
-const Password = ({ setCheckPw }) => {
-    const [pw,setPw]= useState('');
-    const {loginID} =useAuthStore();
-    
-    const handleCancel = () => {
+import Mybutton from '../MyButton/Mybutton';
+import { useNavigate } from 'react-router-dom';
 
-    }
-   
-    const handlePw=(e)=>{
+const Password = ({ setCheckPw }) => {
+    const [pw, setPw] = useState('');
+    const { loginID } = useAuthStore();
+    const navi = useNavigate();
+
+    const handlePw = (e) => {
         setPw(e.target.value);
     }
 
+   
+    const handleCancel = () => {
+        navi('/mypage');
+    }
     const handleConfirm = () => {
         api.post(`/auth/${pw}`)
-        .then(resp => {
-            setCheckPw(false);
-        })
-        .catch(resp => {
-            alert('패스워드가 틀렸습니다 ')
-        })
-        
+            .then(resp => {
+                setCheckPw(false);
+            })
+            .catch(resp => {
+                alert('패스워드가 틀렸습니다 ')
+            })
+
     }
 
     return (
@@ -56,7 +59,7 @@ const Password = ({ setCheckPw }) => {
                         아이디
                     </div>
                     <div>
-                       {loginID}
+                        {loginID}
                     </div>
                 </div>
                 <div className={styles.pw}>
@@ -64,20 +67,13 @@ const Password = ({ setCheckPw }) => {
                         비밀번호
                     </div>
                     <div>
-                        <input type="password" placeholder='비밀번호 입력' name='pw' value={pw} onChange={handlePw}/>
+                        <input type="password" placeholder='비밀번호 입력' name='pw' value={pw} onChange={handlePw} />
                     </div>
-                  {pw===''?'':(<button className={styles.pwCancel} onClick={()=>{setPw('')}}>X</button>)}
+                    {pw === '' ? '' : (<button className={styles.pwCancel} onClick={() => { setPw('') }}>X</button>)}
                 </div>
-               {pw!==''?'':(<div className={styles.pwDetail}>비밀번호를 입력해주세요</div>)}
+                {pw !== '' ? '' : (<div className={styles.pwDetail}>비밀번호를 입력해주세요</div>)}
             </div>
-            <div className={styles.buttonDiv}>
-                <div className={styles.cancel}>
-                    <button onClick={handleCancel}>취소</button>
-                </div>
-                <div className={styles.confirm}>
-                    <button onClick={handleConfirm}>확인</button>
-                </div>
-            </div>
+            <Mybutton handleCancel={handleCancel} handleConfirm={handleConfirm}/>
         </React.Fragment>
     )
 }
