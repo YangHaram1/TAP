@@ -1,11 +1,9 @@
+
 import styles from './Main.module.css';
 import { useNavigate } from "react-router-dom";
 
-
 const Main = () => {
     const navi = useNavigate();
-
-
 
     return (
         <div className={styles.container}>
@@ -27,7 +25,7 @@ const Main = () => {
                 </div>
             </div>
             <div className={styles.body}>
-
+                
             </div>
         </div>
     )
