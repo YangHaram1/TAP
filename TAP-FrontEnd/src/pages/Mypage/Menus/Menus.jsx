@@ -1,15 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Menus.module.css'
 import Password from './Password/Password';
 import Img from '../Home/Category/Img/Img';
 import Menu from './Menu/Menu';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation  } from 'react-router-dom';
 
 const Menus = () => {
     const [checkPw, setCheckPw] = useState(true);
     const defaultColor={member:false,password:false,delivery:false,coupon:false,board:false,withdrawal:false};
     const [color,setColor]=useState(defaultColor);
     const navi=useNavigate();
+    const location = useLocation();
+
+    useEffect(()=>{
+        const split=location.pathname.split('/');
+        let name;
+        if(split[3]===''){
+            name='member'
+        }
+        else{
+            name=split[3];
+        }
+        setColor((prev)=>{
+            return {defaultColor,[name]:true}
+        }) 
+    },[])
     const handleNavi=(path)=>{
         setCheckPw(true)
         navi(path);
