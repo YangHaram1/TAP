@@ -18,7 +18,13 @@ export const Art = ({category})=>{
     return (
         <div className={styles.container}>
             <div className={styles.caroucel}>
-                <Caroucel images={images} category={"sport"}/>
+                <Caroucel images={images} category={"art"}/>
+            </div>
+            <div className={styles.event}>
+                <button></button>
+            </div>
+            <div className={styles.event}>
+                
             </div>
         </div>
     );
