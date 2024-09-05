@@ -91,7 +91,7 @@ function App() {
                         isAuth &&
                         role === 'ROLE_USER' && (
                             <>
-                                <Header />
+                                <Header hasScrolled={hasScrolled}/>
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
                                     <Route
