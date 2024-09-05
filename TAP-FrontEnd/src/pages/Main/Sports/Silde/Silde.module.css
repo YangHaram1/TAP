@@ -1,0 +1,9 @@
+/* Silde.module.css */
+.silderContainer {
+    display: flex; /* 수평으로 배치 */
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    width: 100%; /* 전체 너비를 사용 */
+    height: 100%; /* 전체 높이를 사용 */
+  }
+  

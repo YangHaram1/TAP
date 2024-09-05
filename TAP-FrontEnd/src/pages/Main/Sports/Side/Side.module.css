@@ -1,0 +1,55 @@
+.side {
+    width: 250px; /* 사이드바의 너비 */
+    background-color: #f4f4f4;
+    padding: 20px;
+    
+    height: 40%;
+    overflow-y: auto;
+    margin-left: 200px;
+  }
+  
+  .menuWrap {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menuList {
+    margin-bottom: 10px;
+  }
+  
+  .childBtn {
+    cursor: pointer;
+  }
+  
+  .last {
+    margin-bottom: 0;
+  }
+  
+  .subMenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+  }
+  
+  .subMenu.open {
+    display: block;
+  }
+  
+  .listBtn {
+    margin-left: 5px;
+  }
+  
+  .rightArrow {
+    background-color: #eee;
+  }
+  
+  .rightArrow a {
+    text-decoration: none;
+  }
+  
+  .rightArrow p {
+    margin: 0;
+  }
+  

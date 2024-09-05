@@ -2,6 +2,7 @@ import { Art } from './Art/Art';
 import Header from './Header/Header';
 import styles from './Main.module.css';
 import { Routes, useNavigate, Route } from "react-router-dom";
+import { Sports } from './Sports/Sports';
 
 const Main = () => {
     const navi = useNavigate();
@@ -16,7 +17,7 @@ const Main = () => {
                     <Route path='/' element={<div>main</div>} />
                     <Route path='/musical' element={<Art category={"musical"}/>}/>
                     <Route path='/concert' element={<Art category={"concert"}/>}/>
-                    <Route path='sports' element={<div>sports</div>} />
+                    <Route path='sports' element={<Sports/>} />
                 </Routes>
             </div>
         </div>
