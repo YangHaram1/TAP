@@ -3,7 +3,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    /* gap: 50px; */
 }
 
 .menus {
@@ -13,6 +13,7 @@
     padding: 0 20px;
     font-weight: bold;
     /* justify-content: space-evenly; */
+    margin-bottom: 10px;
 
 }
 

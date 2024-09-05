@@ -1,8 +1,15 @@
+// src/components/Side/Side.jsx
 import React, { useState } from 'react';
 import styles from './Side.module.css'; // CSS 모듈 임포트
 
-export const Side = () => {
+export const Side = ({ navigate }) => {
   const [openMenu, setOpenMenu] = useState(null);
+
+  const handleTeamClick = (teamName, teamLogo, homeGround) => {
+    navigate('/teamPage', {
+      state: { teamName, teamLogo, homeGround }
+    });
+  };
 
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);
@@ -27,8 +34,22 @@ export const Side = () => {
             </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'baseball' ? styles.open : ''}`} onClick={preventPropagation}>
-            <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07001&amp;TeamCode=PB004">두산베어스</a></li>
-            <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07001&amp;TeamCode=PB003">키움히어로즈</a></li>
+            <li>
+              <a
+                href="javascript:;"
+                onClick={() => handleTeamClick('두산베어스', '/path/to/doosan-logo.png', '잠실야구장')}
+              >
+                두산베어스
+              </a>
+            </li>
+            <li>
+              <a
+                href="javascript:;"
+                onClick={() => handleTeamClick('키움히어로즈', '/path/to/kiwoom-logo.png', '고척스카이돔')}
+              >
+                키움히어로즈
+              </a>
+            </li>
           </ul>
         </li>
 
@@ -40,9 +61,30 @@ export const Side = () => {
             </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'soccer' ? styles.open : ''}`} onClick={preventPropagation}>
-            <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07002&amp;TeamCode=PS006">천안시티FC</a></li>
-            <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07002&amp;TeamCode=PS196">안산그리너스FC</a></li>
-            <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07002&amp;TeamCode=PS011">전남 드래곤즈</a></li>
+            <li>
+              <a
+                href="javascript:;"
+                onClick={() => handleTeamClick('천안시티FC', '/path/to/cheonan-logo.png', '천안종합운동장')}
+              >
+                천안시티FC
+              </a>
+            </li>
+            <li>
+              <a
+                href="javascript:;"
+                onClick={() => handleTeamClick('안산그리너스FC', '/path/to/ansan-logo.png', '안산와스타디움')}
+              >
+                안산그리너스FC
+              </a>
+            </li>
+            <li>
+              <a
+                href="javascript:;"
+                onClick={() => handleTeamClick('전남 드래곤즈', '/path/to/jeonnam-logo.png', '광양축구전용구장')}
+              >
+                전남 드래곤즈
+              </a>
+            </li>
           </ul>
         </li>
 

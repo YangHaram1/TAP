@@ -25,7 +25,8 @@
 
 .menuCenter,
 .menuNotice {
-    color: #9c43f8
+    color: #9c43f8;
+    gap: 6px;
 }
 
 .menuLine {

@@ -5,8 +5,9 @@ import { Silde } from './Silde/Silde';
 import { MatchList } from './MatchList/MatchList';
 import { Side } from './Side/Side';
 import styles from './Sports.module.css'; // CSS 모듈 임포트
-
+import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
 export const Sports = () => {
+  const navigate = useNavigate();
   return (
     <div className={styles.container}>
       <div className={styles.sliderContainer}>
@@ -20,7 +21,7 @@ export const Sports = () => {
       </div>
       <div className={styles.contentContainer}>
         <div className={styles.sideWrapper}>
-          <Side />
+        <Side navigate={navigate} /> {/* navigate 전달 */}
         </div>
         <div className={styles.matchListWrapper}>
           <MatchList />
