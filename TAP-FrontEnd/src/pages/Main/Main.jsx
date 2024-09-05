@@ -1,10 +1,11 @@
-import { Art } from './Art/Art';
-import Header from './Header/Header';
-import styles from './Main.module.css';
-import { Routes, useNavigate, Route } from "react-router-dom";
+import { Art } from './Art/Art'
+import Header from './Header/Header'
+import Home from './Home/Home'
+import styles from './Main.module.css'
+import { Routes, useNavigate, Route } from 'react-router-dom'
 
 const Main = () => {
-    const navi = useNavigate();
+    const navi = useNavigate()
 
     return (
         <div className={styles.container}>
@@ -13,13 +14,19 @@ const Main = () => {
             </div>
             <div className={styles.body}>
                 <Routes>
-                    <Route path='/' element={<div>main</div>} />
-                    <Route path='/musical' element={<Art category={"musical"}/>}/>
-                    <Route path='/concert' element={<Art category={"concert"}/>}/>
-                    <Route path='sports' element={<div>sports</div>} />
+                    <Route path="/" element={<Home></Home>} />
+                    <Route
+                        path="/musical"
+                        element={<Art category={'musical'} />}
+                    />
+                    <Route
+                        path="/concert"
+                        element={<Art category={'concert'} />}
+                    />
+                    <Route path="sports" element={<div>sports</div>} />
                 </Routes>
             </div>
         </div>
     )
 }
-export default Main;
+export default Main
