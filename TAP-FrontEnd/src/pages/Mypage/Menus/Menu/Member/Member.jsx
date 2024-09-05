@@ -1,17 +1,19 @@
 import styles from './Member.module.css';
 import { useAuthStore } from './../../../../../store/store';
-import { useEffect, useState ,useRef} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { api } from '../../../../../config/config'
 import Mybutton from '../../MyButton/Mybutton';
 
 
+
 const Member = () => {
     const { loginID } = useAuthStore();
-    const [user, setUser] = useState({email:'',phone:''});
+    const [user, setUser] = useState({ email: '', phone: '' });
     const [genderCheck, setGenderCheck] = useState(false);
     const [updateCheck, setUpdateCheck] = useState({ email: true, phone: true });
-    const emailRef=useRef();
-    const phoneRef=useRef();
+    const [data, setData] = useState({ email: '', phone: '' });
+    const emailRef = useRef();
+    const phoneRef = useRef();
     useEffect(() => {
         const id = loginID;
         api.get(`/members/${id}`).then((resp) => {
@@ -21,13 +23,11 @@ const Member = () => {
             } else {
                 setGenderCheck(false);
             }
+            setData({ email: resp.data.email, phone: resp.data.phone });
         });
     }, [])
 
 
-    const handleCancel = () => {
-
-    }
 
     const handleConfirm = () => {
 
@@ -36,6 +36,30 @@ const Member = () => {
         const name = ref.current.name;
         setUpdateCheck((prev) => {
             return { ...prev, [name]: false }
+        })
+       
+    }
+    const handleUpdateCancel=(ref)=>{
+        const name = ref.current.name;
+        setUpdateCheck((prev) => {
+            return { ...prev, [name]: true }
+        })
+        let value;
+        if(name==='email'){
+            value=user.email;
+        }
+        else{
+            value=user.phone;
+        }
+        setData((prev)=>{
+            return{...prev,[name]:value}
+        })
+    }
+
+    const handelData = (e) => {
+        const { name, value } = e.target;
+        setData((prev) => {
+            return { ...prev, [name]: value };
         })
     }
 
@@ -79,12 +103,14 @@ const Member = () => {
                         {user.name}
                     </div>
                     <div className={styles.update}>
-                        <input type="text" value={user.phone} disabled={updateCheck.phone} ref={phoneRef} name='phone'/>
-                        <button  onClick={()=>handleUpdateCheck(phoneRef)}>수정</button>
+                        <input type="text" value={data.phone} disabled={updateCheck.phone} onChange={handelData} ref={phoneRef} name='phone' />
+                        {updateCheck.phone && (<button onClick={() => handleUpdateCheck(phoneRef)}>수정</button>)}
+                        {!updateCheck.phone && (<button onClick={() => handleUpdateCancel(phoneRef)}>취소</button>)}
                     </div>
                     <div className={styles.update}>
-                        <input type="text" value={user.email} disabled={updateCheck.email}  ref={emailRef} name='email'/>
-                        <button onClick={()=>handleUpdateCheck(emailRef)}> 수정</button>
+                        <input type="text" value={data.email} disabled={updateCheck.email} onChange={handelData} ref={emailRef} name='email' />
+                        {updateCheck.email && (<button onClick={() => handleUpdateCheck(emailRef)}>수정</button>)}
+                        {!updateCheck.email && (<button onClick={() => handleUpdateCancel(emailRef)}>취소</button>)}
                     </div>
                     <div>
                         {user.birth}
@@ -99,7 +125,7 @@ const Member = () => {
                 </div>
 
             </div>
-            <Mybutton handleCancel={handleCancel} handleConfirm={handleConfirm} />
+            <Mybutton handleConfirm={handleConfirm} />
         </div>
     )
 }

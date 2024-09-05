@@ -1,5 +1,5 @@
 import styles from './Login.module.css'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import img1 from '../../images/logo192.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -16,8 +16,10 @@ import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const navi = useNavigate()
+    const location = useLocation()
+    const previousPath = location.state?.from?.pathname || '/'
     const [user, setUser] = useState({ id: '', pw: '' })
-    const { login, isAuth,setAuth } = useAuthStore()
+    const { login, isAuth, setAuth } = useAuthStore()
     const handleChange = e => {
         const { name, value } = e.target
         setUser(prev => {
@@ -74,7 +76,8 @@ const Login = () => {
     const handleLogin = async () => {
         const id = user.id
         const pw = user.pw
-        await api.post(`/auth/${id}/${pw}`)
+        await api
+            .post(`/auth/${id}/${pw}`)
             .then(resp => {
                 console.log(resp)
                 const token = resp.data
@@ -82,19 +85,18 @@ const Login = () => {
                 console.log(decoded)
 
                 sessionStorage.setItem('token', token) // 인증 확인 용도
-                 login(token)
+                login(token)
                 if (check == true) {
                     localStorage.setItem('loginId', decoded.sub)
                 } else {
                     localStorage.removeItem('loginId')
                 }
-                setAuth(decoded);
-                
+                setAuth(decoded)
+                navi(-1)
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
             })
-           
     }
     const handleContainer = e => {
         if (idRef.current && !idRef.current.contains(e.target)) {
@@ -106,7 +108,7 @@ const Login = () => {
     }
 
     return (
-        <div onClick={handleContainer}>
+        <div className={styles.container} onClick={handleContainer}>
             <div className={styles.container}>
                 <div className={styles.title}>
                     <img src={img1} alt="logo" className={styles.logo} />
