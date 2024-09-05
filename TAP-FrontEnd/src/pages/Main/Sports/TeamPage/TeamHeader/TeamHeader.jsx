@@ -1,6 +1,6 @@
 // src/pages/TeamPage/TeamHeader.jsx
 import React from 'react';
-import styles from './TeamPage.module.css'; // CSS 모듈 임포트
+import styles from './TeamHeader.module.css'
 
 export const TeamHeader = ({ teamName, teamLogo, homeGround }) => {
   return (

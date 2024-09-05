@@ -1,9 +1,11 @@
 // src/components/Side/Side.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Side.module.css'; // CSS 모듈 임포트
 
-export const Side = ({ navigate }) => {
+export const Side = () => {
   const [openMenu, setOpenMenu] = useState(null);
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   const handleTeamClick = (teamName, teamLogo, homeGround) => {
     navigate('/teamPage', {

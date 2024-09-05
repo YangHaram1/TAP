@@ -1,9 +1,9 @@
 // src/pages/TeamPage/TeamPage.jsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { TeamHeader } from './TeamHeader';
-import { TeamMain } from './TeamMain';
-import styles from './TeamPage.module.css'; // CSS 모듈 임포트
+import { TeamHeader } from './TeamHeader/TeamHeader';
+import { TeamMain } from './TeamMain/TeamMain';
+import styles from './TeamPage.module.css'
 
 export const TeamPage = () => {
   const { state } = useLocation();
