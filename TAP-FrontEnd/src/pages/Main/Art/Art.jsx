@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Caroucel } from '../Caroucel/Caroucel';
+import { Caroucel } from '../../../components/Caroucel/Caroucel';
 import styles from './Art.module.css'
 
 export const Art = ({category})=>{
