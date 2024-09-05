@@ -3,13 +3,17 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    /* gap: 50px; */
 }
 
 .menus {
     display: flex;
-    background-color: aquamarine;
-
+    /* background-color: aquamarine; */
+    gap: 60px;
+    padding: 0 20px;
+    font-weight: bold;
+    /* justify-content: space-evenly; */
+    margin-bottom: 10px;
 
 }
 

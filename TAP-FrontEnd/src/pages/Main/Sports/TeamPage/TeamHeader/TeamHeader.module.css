@@ -1,0 +1,27 @@
+.teamHeader {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .logo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  
+  .info {
+    margin-left: 20px;
+  }
+  
+  .teamName {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .ground {
+    font-size: 18px;
+  }
+  

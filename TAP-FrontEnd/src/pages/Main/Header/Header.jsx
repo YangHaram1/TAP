@@ -1,27 +1,51 @@
-import React from "react";
+import React from 'react'
 import styles from './Header.module.css'
-import { Routes, useNavigate, Route } from "react-router-dom";
+import { Routes, useNavigate, Route } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faComments,
+    faCircleInfo,
+    faBullhorn,
+} from '@fortawesome/free-solid-svg-icons'
 const Header = () => {
-    const navi = useNavigate();
+    const navi = useNavigate()
     return (
         <React.Fragment>
-            <div className={styles.menu} onClick={() => { navi('/concert')}}>
+            <div
+                className={styles.menu}
+                onClick={() => {
+                    navi('/concert')
+                }}
+            >
                 콘서트
             </div>
-            <div className={styles.menu} onClick={() => { navi('/musical') }}>
+            <div
+                className={styles.menu}
+                onClick={() => {
+                    navi('/musical')
+                }}
+            >
                 뮤지컬
             </div>
-            <div className={styles.menu} onClick={() => { navi('sports') }}>
+            <div
+                className={styles.menu}
+                onClick={() => {
+                    navi('sports')
+                }}
+            >
                 스포츠
             </div>
-            <div className={styles.menu}>
+            <span className={styles.menuLine}>|</span>
+            <div className={styles.menuCenter}>
+                <FontAwesomeIcon icon={faComments} />
                 고객센터
             </div>
-            <div className={styles.menu}>
+            <div className={styles.menuNotice}>
+                {/* <FontAwesomeIcon icon={faCircleInfo} /> */}
+                <FontAwesomeIcon icon={faBullhorn} />
                 공지사항
             </div>
         </React.Fragment>
-
     )
 }
-export default Header;
+export default Header

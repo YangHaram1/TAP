@@ -1,5 +1,8 @@
 package com.tap.members.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -39,6 +42,17 @@ public class MembersService implements UserDetailsService{
 	
 	public MembersDTO selectById(String id) throws Exception{
 		return dao.selectById(id);
+	}
+	
+	public int updateMember(MembersDTO dto) throws Exception{
+		return dao.updateMember(dto);
+	}
+	
+	public int updateByPw(String id,String pw) throws Exception{
+		Map<String , String> map=new HashMap<>();
+		map.put("id", id);
+		map.put("pw", pw);
+		return dao.updateByPw(map);
 	}
 	
 

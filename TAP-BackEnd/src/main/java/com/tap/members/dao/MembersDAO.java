@@ -1,5 +1,7 @@
 package com.tap.members.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,14 @@ public class MembersDAO {
 	
 	public MembersGradeDTO getMemberInfo(String id) throws Exception{
 		return mybatis.selectOne("Members.getMemberInfo",id);
+	}
+	
+	public int updateMember(MembersDTO dto) throws Exception{
+		return mybatis.update("Members.updateMember",dto);
+	}
+	
+	public int updateByPw(Map<String , String> map) throws Exception{
+		return mybatis.update("Members.updateByPw",map);
 	}
 
 }
