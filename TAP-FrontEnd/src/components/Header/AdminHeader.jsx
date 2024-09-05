@@ -1,14 +1,31 @@
 import styles from './Header.module.css';
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from './../../store/store';
+import SweetAlert from './../SweetAlert/SweetAlert';
 
 export const AdminHeader = () => {
     const navi =useNavigate();
-    const hadnleLogout=()=>{
-        navi('/login')
-    }
+    const {isAuth,logout}=useAuthStore();
     
+    const handleLogout=()=>{
+        sessionStorage.removeItem('token');
+        logout();
+    }
+
+    const handleLogin=()=>{
+        if(isAuth){
+            SweetAlert('warning','로그아웃','로그아웃을 하시겠습니까',handleLogout);
+        }
+        else{
+            navi('/login')
+        }
+        
+    }
+    const handleMypage=()=>{
+        navi('/mypage')
+    }
     const handleHome=()=>{
-        // navi('/')
+        navi('/')
     }
     return (
         <div className={styles.container}>
@@ -17,14 +34,16 @@ export const AdminHeader = () => {
                     TAP
                 </div>
                 <div className={styles.headerMenus}>
-                    <div className={styles.headerMenu} >
+                    <div className={styles.headerMenu}>
                         거래처 및 관리자 이름
                     </div>
-                    <div className={styles.headerMenu} onClick={hadnleLogout}>
-                        로그아웃
+                    <div className={styles.headerMenu} onClick={handleLogin}>
+                        {isAuth?"로그아웃":"로그인"}
                     </div>
                 </div>
             </div>
         </div>
     )
 }
+
+//////////////////////////////////////////////////////////////////

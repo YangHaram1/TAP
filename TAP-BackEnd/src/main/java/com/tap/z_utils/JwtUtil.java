@@ -28,7 +28,7 @@ public class JwtUtil {
 		this.verifier=JWT.require(algo).build();
 	}
 	
-	public String createToken(String id,String role) {	
+	public String createToken(String id,String role,String name,String grade) {	
 //		 String roleString = role.stream()
 //                 .map(GrantedAuthority::getAuthority) // 권한 이름을 문자열로 변환
 //                 .collect(Collectors.joining(","));   // 콤마로 구분된 문자열로 연결
@@ -36,6 +36,8 @@ public class JwtUtil {
 		return 	JWT.create().
 				withSubject(id).
 				withClaim("role", role).
+				withClaim("name",name).
+				withClaim("grade",grade).
 				withIssuedAt(new Date()).
 				withExpiresAt(new Date(System.currentTimeMillis()+expriation*1000)).
 				sign(this.algo);

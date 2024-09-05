@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersGradeDTO;
 import com.tap.members.service.MembersService;
 import com.tap.z_utils.JwtUtil;
 
@@ -35,13 +36,13 @@ public class AuthController {
 	public ResponseEntity<String> login(@PathVariable String id, @PathVariable String pw) throws Exception {
 		// 사용자가 입력한 비밀번호
 		// 데이터베이스에서 가져온 암호화된 비밀번호
-		MembersDTO dto = mserv.getPw(id); // 데이터베이스에서 조회한 암호화된 비밀번호
+		MembersGradeDTO dto = mserv.getMemberInfo(id); // 데이터베이스에서 조회한 암호화된 비밀번호
 		
 		
 		// 비밀번호 검증
 		boolean check = pe.matches(pw, dto.getPw());
 		if (check) {
-			String token = jwt.createToken(id,dto.getRole());
+			String token = jwt.createToken(id,dto.getRole(),dto.getName(),dto.getGrade());
 			jwt.verify(token);
 			return ResponseEntity.ok(token);
 		} else {
@@ -60,7 +61,7 @@ public class AuthController {
 		String username = principal.getName();
 		UserDetails user = mserv.loadUserByUsername(username);
 		
-		MembersDTO dto  = mserv.getPw(user.getUsername()); // 데이터베이스에서 조회한 암호화된 비밀번호
+		MembersGradeDTO dto  = mserv.getMemberInfo(user.getUsername()); // 데이터베이스에서 조회한 암호화된 비밀번호
 		// 비밀번호 검증
 		boolean check = pe.matches(pw, dto.getPw());
 		if (check) {

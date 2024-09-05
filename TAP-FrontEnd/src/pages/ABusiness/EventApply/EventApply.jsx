@@ -13,9 +13,7 @@ export const EventApply =()=>{
     const [location, setLocation] = useState();
     const [category, setCategory] = useState();
 
-    useEffect(()=>{
-
-    })
+   
     const handleCategory =(e)=>{
         setCategory(e.target.value)
     }
@@ -24,6 +22,9 @@ export const EventApply =()=>{
         SetFormData=({...formData, [name]:value})
     }
     const handleAddSchedule=()=>{
+
+    }
+    const handleAddException=()=>{
 
     }
 
@@ -125,7 +126,7 @@ export const EventApply =()=>{
                     </td>
                 </tr>
                 <tr>
-                    <td>공연일자</td>
+                    <td>일자</td>  {/* 일자는 무조건 기입 */}
                     <td>
                         시작일: <input type="date"></input>
                         종료일: <input type="date"></input>
@@ -146,9 +147,62 @@ export const EventApply =()=>{
                         </select>
                         시간: <input type="time"></input>
                         <button onClick={handleAddSchedule}>추가</button>
+                        <br></br>
+                        제외일: <input type="date"></input>
+                        <button onClick={handleAddException}>추가</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>러닝타임</td>
+                    <td>
+                        <input type="radio"/>러닝타임(인터미션 포함) <input type="text"></input> 분  인터미션 <input type="text"></input>분
+                        <br></br>
+                        <input type="radio"/>러닝타임없음
+                    </td>
+                </tr>
+                <tr>
+                    <td>티켓 오픈 희망일</td>
+                    <td>
+                        <input type="date"/>
+                        <input type="time"/>
+                    </td>
+                </tr>
+             
+            </table>
+
+            <h2>상세 정보 입력</h2>
+            <table>
+                <tr>
+                    <td>공지사항</td>
+                    <td> 글자 색상 변경만 되고 텍스트만 입려되게</td>
+                </tr>
+                <tr>
+                    <td>메인 포스터</td>
+                    <td><input type="file" placeholder="메인포스터 1하나만 "></input></td>
+                </tr>
+                <tr>
+                    <td>상세페이지</td>
+                    <td>
+                        에디터 적용 - 미리보기 플러그인도 추가
+                    </td>
+                </tr>
+
+                {/* 공연일 경우 나타나게 */}
+                <tr>
+                    <td>캐스팅 이미지</td>
+                    <td>
+                        <input type="file"/>
+                        <input type="text" placeholder="배우 이름"/>
+                        <input type="text" placeholder="역할"/>
+                        <button>추가버튼</button>
                     </td>
                 </tr>
             </table>
+
+            <button>신청</button>
+            <button>임시저장</button>
+            <button>취소</button>
+
         </div>
     )
 }

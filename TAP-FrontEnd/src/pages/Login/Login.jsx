@@ -17,7 +17,7 @@ import { jwtDecode } from 'jwt-decode'
 const Login = () => {
     const navi = useNavigate()
     const [user, setUser] = useState({ id: '', pw: '' })
-    const { login, isAuth,setLoginID,setRole } = useAuthStore()
+    const { login, isAuth,setAuth } = useAuthStore()
     const handleChange = e => {
         const { name, value } = e.target
         setUser(prev => {
@@ -88,8 +88,7 @@ const Login = () => {
                 } else {
                     localStorage.removeItem('loginId')
                 }
-                setLoginID(decoded.sub);
-                setRole(decoded.role);
+                setAuth(decoded);
                 
             })
             .catch(resp => {
