@@ -80,6 +80,7 @@ export const Caroucel = ({category, images})=>{
           );
 
     }else if(category === "sport"){
+        
         return (
             <div style={{ padding: `0 ${chevronWidth}px` }}>
               <ItemsCarousel

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Silder.module.css'
+import styles from './Silder.module.css';
 
 export const RightSilder = ({ images, interval, onImageClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -15,13 +15,17 @@ export const RightSilder = ({ images, interval, onImageClick }) => {
   }, [currentIndex, images.length, interval]);
 
   return (
-    <div className="slider-container-right">
-      <img src={images[currentIndex]} alt={`Slide ${currentIndex + 1}`} className="slide" />
-      <div className="indicator-container">
+    <div className={styles.sliderContainerRight}>
+      <img 
+        src={images[currentIndex]} 
+        alt={`Slide ${currentIndex + 1}`} 
+        className={styles.slide} 
+      />
+      <div className={styles.leftButtonContainer}>
         {images.map((_, index) => (
           <span
             key={index}
-            className={`indicator ${currentIndex === index ? 'active' : ''}`}
+            className={`${styles.leftButton} ${currentIndex === index ? styles.active : ''}`}
             onClick={() => onImageClick(index)}
           >
             ●
@@ -31,5 +35,3 @@ export const RightSilder = ({ images, interval, onImageClick }) => {
     </div>
   );
 };
-
-

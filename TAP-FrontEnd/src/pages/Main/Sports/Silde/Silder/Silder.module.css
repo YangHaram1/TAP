@@ -47,4 +47,9 @@
   .left-button.active, .indicator.active {
     background-color: #000;
   }
-  
+  .slide {
+    width: 100%;       /* 슬라이드 너비를 부모 요소에 맞춤 */
+    height: 300px;     /* 슬라이드 높이를 고정 */
+    object-fit: cover; /* 이미지를 요소에 맞게 자르거나 확대 */
+    
+  }

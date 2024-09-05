@@ -1,0 +1,36 @@
+/* src/components/Sports/Sports.module.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .sliderContainer {
+    display: flex;
+    height: 35vh;
+  }
+  
+  .sliderWrapper {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .contentContainer {
+    display: flex;
+    flex: 1;
+  }
+  
+  .sideWrapper {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .matchListWrapper {
+    flex: 3;
+    overflow-y: auto;
+  }
+  
