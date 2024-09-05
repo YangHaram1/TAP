@@ -12,7 +12,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Mypage from './pages/Mypage/Mypage';
 
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { api } from './config/config';
 import { jwtDecode } from 'jwt-decode'
 import { AdminHeader } from './components/Header/AdminHeader';
@@ -22,7 +22,7 @@ import { Admin } from './pages/Admin/Admin';
 
 function App() {
   const { login,isAuth ,setAuth, role} = useAuthStore();
-
+  const [hasScrolled, setHasScrolled] = useState(false);
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token != null) {
@@ -36,7 +36,7 @@ function App() {
       
     }
   }, [])
-  const [hasScrolled, setHasScrolled] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
