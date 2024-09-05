@@ -28,4 +28,7 @@ public class BizService {
 	public List<HashMap<String, Object>> getAllTeam(){
 		return bizdao.getAllTeam();
 	}
+	public List<HashMap<String, Object>> getAllTeamLocation(){
+		return bizdao.getAllTeamLocation();
+	}
 }

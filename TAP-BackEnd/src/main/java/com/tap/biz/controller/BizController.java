@@ -37,5 +37,8 @@ public class BizController {
 	public ResponseEntity<List<HashMap<String, Object>>> getAllTeam(){
 		return ResponseEntity.ok(bizServ.getAllTeam());
 	}
-	
+	@GetMapping("/teamlocation")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllTeamLocation(){
+		return ResponseEntity.ok(bizServ.getAllTeamLocation());
+	}
 }

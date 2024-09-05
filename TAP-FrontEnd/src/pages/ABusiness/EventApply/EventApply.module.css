@@ -5,9 +5,24 @@
     border:1px solid black;
     background-color: beige;
 }
+.header{
+    padding: 30px 50px 10px 50px;
+}
+.title{
+    padding: 0px 50px;
+}
 
-.container>table{
+.table{
     width:100%;
-    border:1px solid black;
+    /* border:1px solid black; */
     padding-left: 100px;
+}
+.table td{
+    border-bottom: 1px solid #555;
+    padding: 15px 5px;
+}
+.table td:nth-child(1){
+    background-color: pink;
+    width:20%;
+    padding: 15px 20px;
 }

@@ -92,7 +92,7 @@ export const BizSideMenu =()=>{
                         key={j} 
                         className={styles.submenuItem} 
                         onClick={() => handleMenuClick(submenu.link, submenu.name)}
-                        style={{ color: selectedMenu === submenu.name ? 'orange' : 'white' }}
+                        style={{ color: selectedMenu === submenu.name ? 'orange' : 'gray' }}
                       >
                         {submenu.name}
                       </div>

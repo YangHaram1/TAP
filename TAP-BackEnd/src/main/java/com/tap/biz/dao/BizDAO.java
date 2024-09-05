@@ -27,4 +27,7 @@ public class BizDAO {
 	public List<HashMap<String, Object>> getAllTeam(){
 		return mybatis.selectList("Biz.getAllTeam");
 	}
+	public List<HashMap<String, Object>> getAllTeamLocation(){
+		return mybatis.selectList("Biz.getAllTeamLocation");
+	}
 }
