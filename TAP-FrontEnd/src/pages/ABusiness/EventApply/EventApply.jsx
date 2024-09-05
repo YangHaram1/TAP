@@ -1,31 +1,64 @@
 import { useEffect, useState } from "react"
 import styles from './EventApply.module.css'
+import { api } from "../../../config/config";
 
 
 export const EventApply =()=>{
-    const [genre, setGenre] = useState('perform', 'sport');
     const [age, setAge] = useState();   // '전연령', '8세', '15세'
 
     const [formData, SetFormData] = 
     useState({business_id:'', eventName:'', sub_category:'',place:'',age_limit:'', start_date:'', end_date:'', running_existed:'', running_time:'', intermission_time:'', expected_open_date:'', max_ticket:'', away_tem:'' })
 
     // db에서 location, category 테이블 정보 받아와서 setLocation, setCategory해주기 - location에 map 으로 select option값 넣기 . 
-    const [location, setLocation] = useState();
+    const [locations, setLocations] = useState();
+    const [categories, setCategories] = useState();
     const [category, setCategory] = useState();
+    const [subCategories, setSubCategories] = useState();
+    const [genres, setGenres] = useState();
+    const [teams, setTeams] = useState();
 
+    useEffect(()=>{
+        // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
+        // api.get(`/biz/category`).then((resp) => {
+        //     console.log(resp);
+        //   }).catch((resp) => {
+        //     alert("이상 오류")
+        //   })
+        // api.get(`/biz/subcategory`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+        // api.get(`/biz/location`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+        // api.get(`/biz/genre`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+        // api.get(`/biz/team`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+    })
    
     const handleCategory =(e)=>{
-        setCategory(e.target.value)
+        setCategory(e.target.value);
     }
     const handleChange=(e)=>{
         const {name, value} = e.target;
-        SetFormData=({...formData, [name]:value})
+        SetFormData=({...formData, [name]:value});
+        console.log(formData)
     }
     const handleAddSchedule=()=>{
-
+        console.log();
     }
     const handleAddException=()=>{
-
+        console.log();
     }
 
      // 카테고리에 따라 2차 옵션을 결정
@@ -54,16 +87,14 @@ export const EventApply =()=>{
     // 여기에 점주고객 category가 공연, 스포츠인지에 따라 form 양식 달라짐으로 가는거 어떨??
     return(
         <div className={styles.container}>
-            <div>
-                <input type="text" placeholder="공연 검색"></input>
-            </div>
-            <div>
+        
+            <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
             </div>
-            <div>
+            <div className={styles.title}>
                 <p>기초 정보 입력</p>
             </div>
-            <table>
+            <table >
                 <tr>
                     <td>상품장르</td>
                     <td>
@@ -88,7 +119,6 @@ export const EventApply =()=>{
                     </td>
                 </tr>
                 <tr>
-                 
                     <td>상품명</td>
                     <td>
                         <input type="text" placeholder="상품명 입력" name="eventName" value={formData.eventName}></input>
@@ -167,7 +197,6 @@ export const EventApply =()=>{
                         <input type="time"/>
                     </td>
                 </tr>
-             
             </table>
 
             <h2>상세 정보 입력</h2>
@@ -186,7 +215,6 @@ export const EventApply =()=>{
                         에디터 적용 - 미리보기 플러그인도 추가
                     </td>
                 </tr>
-
                 {/* 공연일 경우 나타나게 */}
                 <tr>
                     <td>캐스팅 이미지</td>

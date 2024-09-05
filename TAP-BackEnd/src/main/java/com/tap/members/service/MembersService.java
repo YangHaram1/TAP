@@ -41,5 +41,9 @@ public class MembersService implements UserDetailsService{
 		return dao.selectById(id);
 	}
 	
+	public int updateMember(MembersDTO dto) throws Exception{
+		return dao.updateMember(dto);
+	}
+	
 
 }

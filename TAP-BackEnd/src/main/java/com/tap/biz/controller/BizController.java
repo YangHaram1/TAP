@@ -1,0 +1,33 @@
+package com.tap.biz.controller;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tap.biz.services.BizService;
+
+@RestController
+@RequestMapping("/biz")
+public class BizController {
+	@Autowired
+	private BizService bizServ;
+	
+	@GetMapping("/categories")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllCategory(){
+		return ResponseEntity.ok(bizServ.getAllCategory());
+	}
+	@GetMapping("/sub_categories")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllSubCategory(){
+		return ResponseEntity.ok(bizServ.getAllSubCategory());
+	}
+	@GetMapping("/location")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllLocation(){
+		return ResponseEntity.ok(bizServ.getAllLocation());
+	}
+	
+}

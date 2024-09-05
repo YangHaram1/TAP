@@ -1,6 +1,6 @@
 import styles from './Mybutton.module.css';
 import { useNavigate } from 'react-router-dom';
-const Mybutton=({handleConfirm})=>{
+const Mybutton=({handleConfirm,check})=>{
     const navi=useNavigate();
     const handleCancel = () => {
         navi('/mypage');
