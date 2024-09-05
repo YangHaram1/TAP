@@ -12,4 +12,10 @@
 	<select id="getAllLocation" resultType="java.util.HashMap">
 		select * from place
 	</select>
+	<select id="getAllGenre" resultType="java.util.HashMap">
+		select * from genre
+	</select>
+	<select id="getAllTeam" resultType="java.util.HashMap">
+		select * from team
+	</select>
 </mapper>

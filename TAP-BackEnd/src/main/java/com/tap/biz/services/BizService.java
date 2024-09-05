@@ -22,4 +22,10 @@ public class BizService {
 	public List<HashMap<String, Object>> getAllLocation(){
 		return bizdao.getAllLocation();
 	}
+	public List<HashMap<String, Object>> getAllGenre(){
+		return bizdao.getAllGenre();
+	}
+	public List<HashMap<String, Object>> getAllTeam(){
+		return bizdao.getAllTeam();
+	}
 }

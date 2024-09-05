@@ -29,5 +29,13 @@ public class BizController {
 	public ResponseEntity<List<HashMap<String, Object>>> getAllLocation(){
 		return ResponseEntity.ok(bizServ.getAllLocation());
 	}
+	@GetMapping("/genre")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllGenre(){
+		return ResponseEntity.ok(bizServ.getAllGenre());
+	}
+	@GetMapping("/team")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllTeam(){
+		return ResponseEntity.ok(bizServ.getAllTeam());
+	}
 	
 }

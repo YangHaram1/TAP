@@ -20,32 +20,30 @@ export const EventApply =()=>{
     useEffect(()=>{
         // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
         api.get(`/biz/category`).then((resp) => {
-            console.log(resp);
             setCategories(resp.data);
           }).catch((resp) => {
             alert("이상 오류")
           })
         api.get(`/biz/subcategory`).then((resp) => {
-            console.log(resp);
             setSubCategories(resp.data);
             }).catch((resp) => {
             alert("이상 오류")
             })
-        // api.get(`/biz/location`).then((resp) => {
-        //     console.log(resp);
-        //     }).catch((resp) => {
-        //     alert("이상 오류")
-        //     })
-        // api.get(`/biz/genre`).then((resp) => {
-        //     console.log(resp);
-        //     }).catch((resp) => {
-        //     alert("이상 오류")
-        //     })
-        // api.get(`/biz/team`).then((resp) => {
-        //     console.log(resp);
-        //     }).catch((resp) => {
-        //     alert("이상 오류")
-        //     })
+        api.get(`/biz/location`).then((resp) => {
+            setLocations(resp.data);
+            }).catch((resp) => {
+            alert("이상 오류")
+            })
+        api.get(`/biz/genre`).then((resp) => {
+            setGenres(resp.data);
+            }).catch((resp) => {
+            alert("이상 오류")
+            })
+        api.get(`/biz/team`).then((resp) => {
+            setTeams(resp.data);
+            }).catch((resp) => {
+            alert("이상 오류")
+            })
     },[])
    
     const handleCategory =(e)=>{
@@ -71,15 +69,12 @@ export const EventApply =()=>{
       // 공연일 때
       return (
         <>
-        {/* {subCategories.map(cate =>(
-                <option key={cate.SUB_CATEGORY_SEQ} value={cate.SUB_CATEGORY_SEQ}>{cate.SUB_CATEGORY_NAME}</option>
-            ))} */}
-          <option value="musical">뮤지컬</option>
-          <option value="concert">콘서트</option>
+        {subCategories.map(cate =>(
+            <option key={cate.SUB_CATEGORY_SEQ} value={cate.SUB_CATEGORY_SEQ}>{cate.SUB_CATEGORY_NAME}</option>
+        ))}
         </>
       );
     } else if (categories === "2") {
-      // 스포츠일 때
       return (
         <>
           <option value="baseball">야구</option>
@@ -129,7 +124,7 @@ export const EventApply =()=>{
                     </td>
                 </tr>
                 <tr>
-                    <td>관람등급</td>       {/* 얘는 하드코딩...? 그냥 하드코딩 갑시다... */}
+                    <td>관람등급</td>  
                     <td>
                         <select>
                             <option>선택</option>
@@ -145,19 +140,19 @@ export const EventApply =()=>{
                     <td>
                         <select>
                             <option>선택</option>
-                            {/* {location.map(place =>(
+                            {locations.map(place =>(
                                 <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>{place.PLACE_NAME}</option>
-                            ))} */}
+                            ))}
                         </select>
                     </td>
                 </tr>
-                {/* 스포츠 선택시 - 장소 클릭하면  경기 팀 ㄴ입력할수 있는 tr 나타나게 하기 */}
+                {/* 스포츠 선택시 - 장소 클릭하면  경기 팀 입력할수 있는 tr 나타나게 하기 */}
+                {category === "2" && 
                 <tr>
                     <td> 경기 팀</td>
                     <td> "홈팀" VS <input type="text" placeholder="원정팀명 입력"/></td>
                 </tr>
-                
-                
+                }
                 <tr>
                     <td>좌석 등급 및 가격</td>
                     <td>
