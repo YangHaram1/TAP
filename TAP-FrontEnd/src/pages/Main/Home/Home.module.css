@@ -1,0 +1,27 @@
+.container {}
+
+.banner {
+    background-color: rgb(245, 232, 255);
+    height: 600px;
+    border-radius: 20px;
+}
+
+.ranking {
+    height: 800px;
+    background-color: aliceblue;
+}
+
+.tOpen {
+    height: 800px;
+    background-color: bisque;
+}
+
+.sale {
+    height: 600px;
+    background-color: rgb(212, 255, 245);
+}
+
+.review {
+    height: 600px;
+    background-color: rgb(255, 232, 191);
+}
