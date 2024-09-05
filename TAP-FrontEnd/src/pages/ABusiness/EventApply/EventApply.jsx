@@ -10,25 +10,27 @@ export const EventApply =()=>{
     useState({business_id:'', eventName:'', sub_category:'',place:'',age_limit:'', start_date:'', end_date:'', running_existed:'', running_time:'', intermission_time:'', expected_open_date:'', max_ticket:'', away_tem:'' })
 
     // db에서 location, category 테이블 정보 받아와서 setLocation, setCategory해주기 - location에 map 으로 select option값 넣기 . 
-    const [locations, setLocations] = useState();
-    const [categories, setCategories] = useState();
-    const [category, setCategory] = useState();
-    const [subCategories, setSubCategories] = useState();
-    const [genres, setGenres] = useState();
-    const [teams, setTeams] = useState();
+    const [locations, setLocations] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [subCategories, setSubCategories] = useState([]);
+    const [genres, setGenres] = useState([]);
+    const [teams, setTeams] = useState([]);
 
     useEffect(()=>{
         // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
-        // api.get(`/biz/category`).then((resp) => {
-        //     console.log(resp);
-        //   }).catch((resp) => {
-        //     alert("이상 오류")
-        //   })
-        // api.get(`/biz/subcategory`).then((resp) => {
-        //     console.log(resp);
-        //     }).catch((resp) => {
-        //     alert("이상 오류")
-        //     })
+        api.get(`/biz/category`).then((resp) => {
+            console.log(resp);
+            setCategories(resp.data);
+          }).catch((resp) => {
+            alert("이상 오류")
+          })
+        api.get(`/biz/subcategory`).then((resp) => {
+            console.log(resp);
+            setSubCategories(resp.data);
+            }).catch((resp) => {
+            alert("이상 오류")
+            })
         // api.get(`/biz/location`).then((resp) => {
         //     console.log(resp);
         //     }).catch((resp) => {
@@ -44,7 +46,7 @@ export const EventApply =()=>{
         //     }).catch((resp) => {
         //     alert("이상 오류")
         //     })
-    })
+    },[])
    
     const handleCategory =(e)=>{
         setCategory(e.target.value);
@@ -63,15 +65,20 @@ export const EventApply =()=>{
 
      // 카테고리에 따라 2차 옵션을 결정
   const getSubCategoryOptions = () => {
-    if (category === "1") {
+    // 여기서도 map으로 돌려야함. category_seq(1,2,--- )에 따라 filter로 category_seq가 같은것만 뽑아서 map으로 돌려야함. 
+  
+    if (categories === "1") {
       // 공연일 때
       return (
         <>
+        {/* {subCategories.map(cate =>(
+                <option key={cate.SUB_CATEGORY_SEQ} value={cate.SUB_CATEGORY_SEQ}>{cate.SUB_CATEGORY_NAME}</option>
+            ))} */}
           <option value="musical">뮤지컬</option>
           <option value="concert">콘서트</option>
         </>
       );
-    } else if (category === "2") {
+    } else if (categories === "2") {
       // 스포츠일 때
       return (
         <>
@@ -96,17 +103,14 @@ export const EventApply =()=>{
             </div>
             <table >
                 <tr>
-                    <td>상품장르</td>
+                    <td>상품 카테고리</td>
                     <td>
                         1차: 
-                        <select name="category" onChange={handleCategory}>
+                        <select name="categories" onChange={handleCategory}>
                             <option>선택</option>
-                            {/* 하드코딩 말고 map으르 가져오는 걸로 db완성 후 변경하기 - 우와... 이러면 여기도 1차카테고리하려면 JOIN 카테고리 & 세부카테고리 해야하네... */}
-                            {/* {category.map(cate =>(
+                            {categories.map(cate =>(
                                 <option key={cate.CATEGORY_SEQ} value={cate.CATEGORY_SEQ}>{cate.CATEGORY_NAME}</option>
-                            ))} */}
-                            <option value="1">공연</option>             
-                            <option value="2"> 스포츠</option>
+                            ))}
                         </select>
                         2차: {/* 1차 카테고리에 따라 option 이름 다름. */}
                         <select
@@ -141,20 +145,26 @@ export const EventApply =()=>{
                     <td>
                         <select>
                             <option>선택</option>
-                            {/* db에서 장소테이블 가져오기 - 공연, 스포츠에 따라 option 변경 */}
                             {/* {location.map(place =>(
                                 <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>{place.PLACE_NAME}</option>
                             ))} */}
                         </select>
                     </td>
                 </tr>
+                {/* 스포츠 선택시 - 장소 클릭하면  경기 팀 ㄴ입력할수 있는 tr 나타나게 하기 */}
                 <tr>
-                    <td>좌성 등급 및 가격</td>
+                    <td> 경기 팀</td>
+                    <td> "홈팀" VS <input type="text" placeholder="원정팀명 입력"/></td>
+                </tr>
+                
+                
+                <tr>
+                    <td>좌석 등급 및 가격</td>
                     <td>
                         {/* 장소 선택 시 자동 설정되게 */}
 
                     </td>
-                </tr>
+                </tr>              
                 <tr>
                     <td>일자</td>  {/* 일자는 무조건 기입 */}
                     <td>

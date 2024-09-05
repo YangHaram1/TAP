@@ -17,11 +17,11 @@ public class BizController {
 	@Autowired
 	private BizService bizServ;
 	
-	@GetMapping("/categories")
+	@GetMapping("/category")
 	public ResponseEntity<List<HashMap<String, Object>>> getAllCategory(){
 		return ResponseEntity.ok(bizServ.getAllCategory());
 	}
-	@GetMapping("/sub_categories")
+	@GetMapping("/subcategory")
 	public ResponseEntity<List<HashMap<String, Object>>> getAllSubCategory(){
 		return ResponseEntity.ok(bizServ.getAllSubCategory());
 	}

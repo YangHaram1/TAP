@@ -1,6 +1,13 @@
 .container{
-    width:80%;
-    padding-left: 100px;
+    width:100%;
+    height:100%;
+    /* padding: 0px 100px; */
     border:1px solid black;
     background-color: beige;
+}
+
+.container>table{
+    width:100%;
+    border:1px solid black;
+    padding-left: 100px;
 }
