@@ -1,6 +1,10 @@
 import styles from './Mybutton.module.css';
-
-const Mybutton=({handleCancel,handleConfirm})=>{
+import { useNavigate } from 'react-router-dom';
+const Mybutton=({handleConfirm})=>{
+    const navi=useNavigate();
+    const handleCancel = () => {
+        navi('/mypage');
+    }
     return(
         <div className={styles.buttonDiv}>
         <div className={styles.cancel}>

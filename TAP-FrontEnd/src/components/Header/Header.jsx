@@ -1,6 +1,5 @@
 import styles from './Header.module.css';
 import { useNavigate } from "react-router-dom";
-import { api } from '../../config/config';
 import { useAuthStore } from './../../store/store';
 import SweetAlert from './../SweetAlert/SweetAlert';
 
@@ -11,6 +10,7 @@ const Header = () => {
     const handleLogout=()=>{
         sessionStorage.removeItem('token');
         logout();
+        navi('/');
     }
 
     const handleLogin=()=>{

@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2'
 import './SweetAlert.css'
 
-function SweetAlert(icon, title, text, myfunction) { //여기서 icon 은 success/error/warning/info/question
+function SweetAlert(icon, title, text, myfunction,cancelfuction) { //여기서 icon 은 success/error/warning/info/question
     //title은 제목 입력하고 text 하고싶은말 입력
     //myfunction은 확인눌렀을떄 실행할 함수 예를 들어 axios 같은걸 함수안에 넣고 그 함수를 넣으면됌
     Swal.fire({
@@ -36,6 +36,9 @@ function SweetAlert(icon, title, text, myfunction) { //여기서 icon 은 succes
               
             ).then((result) => {
                     //취소후 로직 
+                    if(cancelfuction!==null){
+                        cancelfuction();
+                    }
             });
 
         }

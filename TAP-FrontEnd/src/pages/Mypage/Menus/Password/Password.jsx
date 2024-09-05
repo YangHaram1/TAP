@@ -6,21 +6,15 @@ import { api } from '../../../../config/config';
 import { useAuthStore } from './../../../../store/store';
 
 import Mybutton from '../MyButton/Mybutton';
-import { useNavigate } from 'react-router-dom';
 
 const Password = ({ setCheckPw }) => {
     const [pw, setPw] = useState('');
     const { loginID } = useAuthStore();
-    const navi = useNavigate();
 
     const handlePw = (e) => {
         setPw(e.target.value);
     }
 
-   
-    const handleCancel = () => {
-        navi('/mypage');
-    }
     const handleConfirm = () => {
         api.post(`/auth/${pw}`)
             .then(resp => {
@@ -73,7 +67,7 @@ const Password = ({ setCheckPw }) => {
                 </div>
                 {pw !== '' ? '' : (<div className={styles.pwDetail}>비밀번호를 입력해주세요</div>)}
             </div>
-            <Mybutton handleCancel={handleCancel} handleConfirm={handleConfirm}/>
+            <Mybutton handleConfirm={handleConfirm}/>
         </React.Fragment>
     )
 }

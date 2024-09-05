@@ -46,6 +46,7 @@ function App() {
               <Routes>
                 <Route path='/*' element={<Main />} />
                 <Route path='/login/*' element={<Login />} />
+                <Route path='/mypage/*' element={<Mypage />} />
               </Routes>
             </>
           ) : isAuth && role === 'ROLE_ADMIN' ? (
