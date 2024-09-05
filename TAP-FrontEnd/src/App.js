@@ -36,6 +36,29 @@ function App() {
       
     }
   }, [])
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // 현재 스크롤 위치 (Y축)
+      const scrollPosition = window.scrollY;
+
+      // 특정 스크롤 위치에 도달하면 함수 실행 (예: 200px)
+      if (scrollPosition > 200 && !hasScrolled) {
+        setHasScrolled(true);
+        ; // 실행할 함수 호출
+      }
+    };
+
+    // 스크롤 이벤트 리스너 추가
+    window.addEventListener('scroll', handleScroll);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hasScrolled]);
+
   return (
     <ChatsProvider>
       <Router>
