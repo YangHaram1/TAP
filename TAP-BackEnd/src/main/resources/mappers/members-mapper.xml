@@ -11,4 +11,8 @@
 	<select id="selectById" resultType="com.tap.members.dto.MembersDTO">
 		select * from members where id=#{id}
 	</select>
+	
+	<update id="updateMember">
+		update members set email=#{email},phone=#{phone} where id=#{id}
+	</update>
 </mapper>
