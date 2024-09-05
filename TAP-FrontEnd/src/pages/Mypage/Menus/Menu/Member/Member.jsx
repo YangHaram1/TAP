@@ -5,11 +5,13 @@ import { api } from '../../../../../config/config'
 import Mybutton from '../../MyButton/Mybutton';
 
 
+
 const Member = () => {
     const { loginID } = useAuthStore();
     const [user, setUser] = useState({email:'',phone:''});
     const [genderCheck, setGenderCheck] = useState(false);
     const [updateCheck, setUpdateCheck] = useState({ email: true, phone: true });
+
     const emailRef=useRef();
     const phoneRef=useRef();
     useEffect(() => {
@@ -25,9 +27,6 @@ const Member = () => {
     }, [])
 
 
-    const handleCancel = () => {
-
-    }
 
     const handleConfirm = () => {
 
@@ -99,7 +98,7 @@ const Member = () => {
                 </div>
 
             </div>
-            <Mybutton handleCancel={handleCancel} handleConfirm={handleConfirm} />
+            <Mybutton handleConfirm={handleConfirm} />
         </div>
     )
 }

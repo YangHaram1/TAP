@@ -1,5 +1,5 @@
 import styles from './Login.module.css'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useLocation } from 'react-router-dom'
 import img1 from '../../images/logo192.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -16,6 +16,8 @@ import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const navi = useNavigate()
+    const location =useLocation()
+    const previousPath = location.state?.from?.pathname || '/';
     const [user, setUser] = useState({ id: '', pw: '' })
     const { login, isAuth,setAuth } = useAuthStore()
     const handleChange = e => {
@@ -89,7 +91,7 @@ const Login = () => {
                     localStorage.removeItem('loginId')
                 }
                 setAuth(decoded);
-                
+                navi(-1)
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
