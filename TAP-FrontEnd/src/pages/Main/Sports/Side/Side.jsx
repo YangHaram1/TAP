@@ -15,12 +15,11 @@ export const Side = () => {
   return (
     <div className={styles.side}>
       <ul className={styles.menuWrap}>
-        <li className={`${styles.menuList} ${styles.childBtn} ${styles.last}`}>
+        <li className={`${styles.menuList} ${styles.childBtn}`}>
           {/* No content */}
         </li>
 
-
-        <li className={`${styles.menuList} ${styles.childBtn} ${styles.last}`}>
+        <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
             <a href="javascript:;" onClick={() => toggleMenu('baseball')}>
               야구
@@ -28,13 +27,12 @@ export const Side = () => {
             </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'baseball' ? styles.open : ''}`} onClick={preventPropagation}>
-            
             <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07001&amp;TeamCode=PB004">두산베어스</a></li>
             <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07001&amp;TeamCode=PB003">키움히어로즈</a></li>
           </ul>
         </li>
 
-        <li className={`${styles.menuList} ${styles.childBtn} ${styles.last}`}>
+        <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
             <a href="javascript:;" onClick={() => toggleMenu('soccer')}>
               축구
@@ -42,18 +40,13 @@ export const Side = () => {
             </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'soccer' ? styles.open : ''}`} onClick={preventPropagation}>
-            
             <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07002&amp;TeamCode=PS006">천안시티FC</a></li>
             <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07002&amp;TeamCode=PS196">안산그리너스FC</a></li>
             <li><a href="https://ticket.interpark.com/Contents/Sports/GoodsInfo?SportsCode=07002&amp;TeamCode=PS011">전남 드래곤즈</a></li>
           </ul>
         </li>
 
-
-
-
-
-        <li className={`${styles.menuList} ${styles.childBtn} ${styles.last}`}>
+        <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
             <a href="javascript:;" onClick={() => toggleMenu('store')}>
               스토어
@@ -66,9 +59,6 @@ export const Side = () => {
             <li><a href="https://interparkmdshop.com/category/LG%ED%8A%B8%EC%9C%88%EC%8A%A4/31/">LG트윈스샵</a></li>
           </ul>
         </li>
-
-
-       
       </ul>
     </div>
   );
