@@ -21,28 +21,28 @@ export const EventApply =()=>{
     const [selectedTeam ,setSelectedTeam] = useState([]);
     useEffect(()=>{
         // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
-        api.get(`/biz/category`).then((resp) => {
+        api.get(`/biz/application/category`).then((resp) => {
             setCategories(resp.data);
           }).catch((resp) => {
             alert("이상 오류")
           })
-        api.get(`/biz/subcategory`).then((resp) => {
+        api.get(`/biz/application/subcategory`).then((resp) => {
             setSubCategories(resp.data);
             }).catch((resp) => {
             alert("이상 오류")
             })
-        api.get(`/biz/genre`).then((resp) => {
+        api.get(`/biz/application/genre`).then((resp) => {
             setGenres(resp.data);
             }).catch((resp) => {
             alert("이상 오류")
             })
-        api.get(`/biz/location`).then((resp) => {
+        api.get(`/biz/application/location`).then((resp) => {
             setArtLocations(resp.data);
             console.log(resp.data)
             }).catch((resp) => {
             alert("이상 오류")
             })
-        api.get(`/biz/teamlocation`).then((resp) => {
+        api.get(`/biz/application/teamlocation`).then((resp) => {
             setTeamLocations(resp.data);
             console.log(resp.data)
             }).catch((resp) => {
@@ -108,121 +108,121 @@ export const EventApply =()=>{
             <div className={styles.title}>
                 <p>기초 정보 입력</p>
             </div>
-            <table className={styles.table}>
-                <tr>
-                    <td>상품 카테고리</td>
-                    <td>
-                        1차: 
-                        <select name="categories" onChange={handleCategory}>
-                            <option>선택</option>
-                            {categories.map(cate =>(
-                                <option key={cate.CATEGORY_SEQ} value={cate.CATEGORY_SEQ}>{cate.CATEGORY_NAME}</option>
-                            ))}
-                        </select>
-                        2차: {/* 1차 카테고리에 따라 option 이름 다름. */}
-                        <select name="sub_category" value={formData.sub_category} onChange={handleChange}>
-                            {getSubCategoryOptions()}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>상품명</td>
-                    <td>
-                        <input type="text" placeholder="상품명 입력" name="eventName" ></input>
-                    </td>
-                </tr>
-                <tr>
-                    <td>관람등급</td>  
-                    <td>
-                        <select>
-                            <option>선택</option>
-                            <option>ALL</option>
-                            <option>8세</option>
-                            <option>12세</option>
-                            <option>18세</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>장소</td>
-                    <td>
-                        {category === "2" ? 
-                            <select onChange={handleSelectPlace}>
+            <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                    <tbody>
+                    <tr>
+                        <td>상품 카테고리</td>
+                        <td>
+                            1차: 
+                            <select name="categories" onChange={handleCategory}>
                                 <option>선택</option>
-                                {teamLocations.map(place =>(
-                                    <option key={place.PLACE_SEQ} value={place.PLACE_SEQ} >{place.PLACE_NAME}</option>
+                                {categories.map(cate =>(
+                                    <option key={cate.CATEGORY_SEQ} value={cate.CATEGORY_SEQ}>{cate.CATEGORY_NAME}</option>
                                 ))}
                             </select>
-                            : <select onChange={handleSelectPlace}>
-                                <option>선택</option>
-                                {artLocations.map(place =>(
-                                    <option key={place.PLACE_SEQ} value={place.PLACE_SEQ} >{place.PLACE_NAME}</option>
-                                ))}
+                            2차: {/* 1차 카테고리에 따라 option 이름 다름. */}
+                            <select name="sub_category" value={formData.sub_category} onChange={handleChange}>
+                                {getSubCategoryOptions()}
                             </select>
-                        }
-                    </td>
-                </tr>
-                {/* 스포츠 경기장 선택한거 표나도록 */}
-                {category === "2"  && 
-                <tr>
-                    <td> 경기 팀</td>
-                    {selectedPlace === "" ? 
-                        <td> <input type="text"/> VS <input type="text" placeholder="원정팀명 입력"/></td>
-                         : 
-                        <td> {selectedTeam || <input type="text" placeholder="장소 선택시 출력됩니다" disabled/>} VS <input type="text" placeholder="원정팀"/></td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>상품명</td>
+                        <td>
+                            <input type="text" placeholder="상품명 입력" name="eventName" ></input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>관람등급</td>  
+                        <td>
+                            <select>
+                                <option>선택</option>
+                                <option>ALL</option>
+                                <option>8세</option>
+                                <option>12세</option>
+                                <option>18세</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>장소</td>
+                        <td>
+                            {category === "2" ? 
+                                <select onChange={handleSelectPlace}>
+                                    <option value="">선택</option>
+                                    {teamLocations.map(place =>(
+                                        <option key={place.PLACE_SEQ} value={place.PLACE_SEQ} >{place.PLACE_NAME}</option>
+                                    ))}
+                                </select>
+                                : <select onChange={handleSelectPlace}>
+                                    <option>선택</option>
+                                    {artLocations.map(place =>(
+                                        <option key={place.PLACE_SEQ} value={place.PLACE_SEQ} >{place.PLACE_NAME}</option>
+                                    ))}
+                                </select>
+                            }
+                        </td>
+                    </tr>
+                    {/* 스포츠 경기장 선택한거 표나도록 */}
+                    {category === "2"  && 
+                    <tr>
+                        <td> 경기 팀</td>
+                        <td> {!selectedTeam ? selectedTeam : <input type="text" placeholder="장소 선택시 출력됩니다" disabled/>} VS <input type="text" placeholder="원정팀"/></td>
+                    </tr>
                     }
-                </tr>
-                }
-                <tr>
-                    <td>좌석 등급 및 가격</td>
-                    <td>
-                        {/* 장소 선택 시 자동 설정되게 */}
-                    </td>
-                </tr>              
-                <tr>
-                    <td>일자</td>  {/* 일자는 무조건 기입 */}
-                    <td>
-                        시작일: <input type="date"></input>
-                        종료일: <input type="date"></input>
-                    </td>
-                </tr>
-                <tr>
-                    <td>시작시간</td>
-                    <td>
-                        <select>
-                            <option>요일</option>
-                            <option>월</option>
-                            <option>화</option>
-                            <option>수</option>
-                            <option>목</option>
-                            <option>금</option>
-                            <option>토</option>
-                            <option>일</option>
-                        </select>
-                        {/* 시간: <input type="time" step="300" required></input> */}
-                        시간:  <input type="time" name="appt-time" step={300} />
-                        <button onClick={handleAddSchedule}>추가</button>
-                        <br></br>
-                        제외일: <input type="date"></input>
-                        <button onClick={handleAddException}>추가</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>러닝타임</td>
-                    <td>
-                        <input type="radio" name="running" value="yes"/>러닝타임(인터미션 포함) : <input type="text" style={{width:"50px"}}/>분  <span style={{fontSize:"13px"}}>(인터미션 :<input type="text" style={{width:"50px"}} />분)</span>
-                        <br></br>
-                        <input type="radio" name="running" value="no" />러닝타임없음
-                    </td>
-                </tr>
-                <tr>
-                    <td>티켓 오픈 희망일</td>
-                    <td>
-                        <input type="date"/>
-                        <input type="time"/>
-                    </td>
-                </tr>
-            </table>
+                    <tr>
+                        <td>좌석 등급 및 가격</td>
+                        <td>
+                            {/* 장소 선택 시 자동 설정되게 */}
+                        </td>
+                    </tr>              
+                    <tr>
+                        <td>일자</td>  {/* 일자는 무조건 기입 */}
+                        <td>
+                            시작일: <input type="date"></input>
+                            종료일: <input type="date"></input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>시작시간</td>
+                        <td>
+                            <select>
+                                <option>요일</option>
+                                <option>월</option>
+                                <option>화</option>
+                                <option>수</option>
+                                <option>목</option>
+                                <option>금</option>
+                                <option>토</option>
+                                <option>일</option>
+                            </select>
+                            {/* 시간: <input type="time" step="300" required></input> */}
+                            시간:  <input type="time" name="appt-time" step={300} />
+                            <button onClick={handleAddSchedule}>추가</button>
+                            <br></br>
+                            제외일: <input type="date"></input>
+                            <button onClick={handleAddException}>추가</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>러닝타임</td>
+                        <td>
+                            <input type="radio" name="running" value="yes"/>러닝타임(인터미션 포함) : <input type="text" style={{width:"50px"}}/>분  <span style={{fontSize:"13px"}}>(인터미션 :<input type="text" style={{width:"50px"}} />분)</span>
+                            <br></br>
+                            <input type="radio" name="running" value="no" />러닝타임없음
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>티켓 오픈 희망일</td>
+                        <td>
+                            <input type="date"/>
+                            <input type="time"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div className={styles.title}>
                 <p>상세 정보 입력</p>

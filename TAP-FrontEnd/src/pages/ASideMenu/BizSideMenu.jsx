@@ -15,7 +15,7 @@ export const BizSideMenu =()=>{
           name: "상품신청", link: "/application", type: "productApplication", 
           submenus: [
             { name: "상품등록신청", link: "/application/registration" },
-            { name: "상품세일신청", link: "/biz/application/sale" }
+            { name: "상품세일신청", link: "/application/sale" }
           ]
         }
     ];

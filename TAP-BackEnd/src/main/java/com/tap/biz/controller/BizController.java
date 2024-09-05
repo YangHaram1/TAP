@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tap.biz.services.BizService;
 
 @RestController
-@RequestMapping("/biz")
+@RequestMapping("/biz/application")
 public class BizController {
 	@Autowired
 	private BizService bizServ;

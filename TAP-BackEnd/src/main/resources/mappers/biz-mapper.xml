@@ -27,4 +27,8 @@
 		from place
 		join team on place.place_seq = team.place_seq
 	</select>
+	
+	<select id="getAllProduct" resultType="java.util.HashMap">
+		select * from apply where status = 'approved'
+	</select>
 </mapper>
