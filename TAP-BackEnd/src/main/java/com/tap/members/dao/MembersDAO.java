@@ -20,5 +20,9 @@ public class MembersDAO {
 	public MembersGradeDTO getMemberInfo(String id) throws Exception{
 		return mybatis.selectOne("Members.getMemberInfo",id);
 	}
+	
+	public int updateMember(MembersDTO dto) throws Exception{
+		return mybatis.update("Members.updateMember",dto);
+	}
 
 }

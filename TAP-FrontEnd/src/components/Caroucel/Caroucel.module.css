@@ -1,9 +1,3 @@
-
-.cards{
-    display: flex;
-    flex-direction: row;
-}
-
 .card{
     display: flex;
     flex-direction: column;
