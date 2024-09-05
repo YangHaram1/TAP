@@ -1,4 +1,4 @@
-.container{
+.container {
     width: 100%;
     height: 100%;
     display: flex;
@@ -6,20 +6,38 @@
     gap: 50px;
 }
 
-.menus{
+.menus {
     display: flex;
-    background-color: aquamarine;
-
-   
 }
-.menu{
-    flex: 1;
+
+.menu,
+.menuCenter,
+.menuNotice,
+.menuLine {
+
+    /* flex: 1; */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    height: 40px;
 }
 
-.menu:hover{
-    color: blueviolet;
+.menuCenter,
+.menuNotice {
+    color: #9c43f8;
+    gap: 6px;
+}
+
+.menuLine {
+    color: #e7e7e7;
+}
+
+.menu:hover {
+    border-bottom: 2px solid rgb(114, 114, 114);
+}
+
+.menuCenter:hover,
+.menuNotice:hover {
+    border-bottom: 2px solid #9c43f8;
 }

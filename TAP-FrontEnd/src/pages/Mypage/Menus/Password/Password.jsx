@@ -29,7 +29,7 @@ const Password = ({ setCheckPw }) => {
     return (
         <React.Fragment>
             <div className={styles.title}>
-                제목
+                비밀번호 인증
             </div>
             <div className={styles.contents}>
                 <div className={styles.content}>
