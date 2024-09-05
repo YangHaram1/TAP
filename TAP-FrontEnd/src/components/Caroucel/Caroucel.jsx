@@ -3,15 +3,30 @@ import ItemsCarousel from 'react-items-carousel';
 import styles from './Caroucel.module.css';
 
 export const Caroucel = ({category, images})=>{
+
     const [activeItemIndex, setActiveItemIndex] = useState(0);
-    const chevronWidth = 50; // 버튼과 컨텐츠 간 간격
-    const numberOfCards = 5; // 한 번에 보여줄 카드 수
+    const [chevronWidth, setChevronWidth] = useState(0); // 버튼과 컨텐츠 간 간격
+    const [numberOfCards, setNumberOfCards] = useState(0); // 한 번에 보여줄 카드 수
+    const [height, setHeight] = useState(0); //카드 높이
+
+    //setting
+    useEffect(() => {
+        if (category === "art") {
+          setChevronWidth(50);
+          setNumberOfCards(5);
+          setHeight(350);
+        } else if (category === "sport") {
+          setChevronWidth(50);
+          setNumberOfCards(5);
+          setHeight(300);
+        }
+      }, [category]); // category가 바뀔 때만 상태 업데이트
 
     useEffect(() => {
         const interval = setInterval(() => {
         //   setActiveItemIndex((prevIndex) => (prevIndex + 1) % images.length);
           setActiveItemIndex((prevIndex) => (prevIndex + 1) % 7);
-        }, 1000); // 1초마다 슬라이드 전환
+        }, 3000); // 1초마다 슬라이드 전환
     
         return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 제거
     }, [images.length]);
@@ -34,42 +49,42 @@ export const Caroucel = ({category, images})=>{
               >
       
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
@@ -97,42 +112,42 @@ export const Caroucel = ({category, images})=>{
               >
       
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
               </a>
               <a href='#'>
-              <div style={{ height: 300, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div style={{ height: height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>

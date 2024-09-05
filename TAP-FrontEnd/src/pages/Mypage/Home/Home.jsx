@@ -26,21 +26,21 @@ const Home = () => {
                     <div className={styles.menu} onClick={()=>{handleMenu('')}}>
                         <Category img={'member'} title={'회원정보 수정'} contents={'본인인증 ,휴대폰번호 등 내정보를 수정하세요.'} />
                     </div>
-                    <div className={styles.menu} onClick={()=>{handleMenu('')}}>
+                    <div className={styles.menu} onClick={()=>{handleMenu('password')}}>
                         <Category img={'password'} title={'비밀번호 변경'} contents={'주기적인 변경으로 내정보를 보호하세요.'} />
                     </div>
-                    <div className={styles.menu} onClick={()=>{handleMenu('')}}>
+                    <div className={styles.menu} onClick={()=>{handleMenu('delivery')}}>
                         <Category img={'delivery'} title={'배송지 관리'} contents={'기본주소 및 배송지를 관리하세요.'} />
                     </div>
                 </div>
                 <div className={styles.line}>
-                    <div className={styles.menu} onClick={()=>{handleMenu('')}}>
+                    <div className={styles.menu} onClick={()=>{handleMenu('coupon')}}>
                         <Category img={'coupon'} title={'쿠폰 및 예매 관리'} contents={'쿠폰 및 예매/취소 관리하세요.'} />                       
                     </div>
-                    <div className={styles.menu} onClick={()=>{handleMenu('')}}>
+                    <div className={styles.menu} onClick={()=>{handleMenu('board')}}>
                         <Category img={'board'} title={'게시물 관리'} contents={'내 게시물을 관리하세요.'} />
                     </div>
-                    <div className={styles.menu} onClick={()=>{handleMenu('')}}>
+                    <div className={styles.menu} onClick={()=>{handleMenu('withdrawal')}}>
                         <Category img={'withdrawal'} title={'회원탈퇴'} contents={'회원탈퇴를 하시겠습니까?'} />
                     </div>
                 </div>
