@@ -22,10 +22,10 @@ export const EventApply =()=>{
         SetFormData=({...formData, [name]:value})
     }
     const handleAddSchedule=()=>{
-
+        console.log();
     }
     const handleAddException=()=>{
-
+        console.log();
     }
 
      // 카테고리에 따라 2차 옵션을 결정
@@ -54,16 +54,14 @@ export const EventApply =()=>{
     // 여기에 점주고객 category가 공연, 스포츠인지에 따라 form 양식 달라짐으로 가는거 어떨??
     return(
         <div className={styles.container}>
-            <div>
-                <input type="text" placeholder="공연 검색"></input>
-            </div>
-            <div>
+        
+            <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
             </div>
-            <div>
+            <div className={styles.title}>
                 <p>기초 정보 입력</p>
             </div>
-            <table>
+            <table >
                 <tr>
                     <td>상품장르</td>
                     <td>
@@ -88,7 +86,6 @@ export const EventApply =()=>{
                     </td>
                 </tr>
                 <tr>
-                 
                     <td>상품명</td>
                     <td>
                         <input type="text" placeholder="상품명 입력" name="eventName" value={formData.eventName}></input>
@@ -167,7 +164,6 @@ export const EventApply =()=>{
                         <input type="time"/>
                     </td>
                 </tr>
-             
             </table>
 
             <h2>상세 정보 입력</h2>
@@ -186,7 +182,6 @@ export const EventApply =()=>{
                         에디터 적용 - 미리보기 플러그인도 추가
                     </td>
                 </tr>
-
                 {/* 공연일 경우 나타나게 */}
                 <tr>
                     <td>캐스팅 이미지</td>

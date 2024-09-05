@@ -51,16 +51,18 @@ function App() {
           ) : isAuth && role === 'ROLE_ADMIN' ? (
             <>
               <AdminHeader/>
-              <Routes>
+              <Admin/>
+              {/* <Routes>
                 <Route path='/admin/*' element={<Admin/>} />
-              </Routes>
+              </Routes> */}
             </>
           ) : isAuth && role === 'ROLE_BIZ' ? (
             <>
               <AdminHeader/>
-              <Routes>
+              <Biz/>
+              {/* <Routes>
                 <Route path='/biz/*' element={<Biz/>} />
-              </Routes>
+              </Routes> */}
             </>
           ) : (
             isAuth &&
