@@ -5,10 +5,14 @@ import { useAuthStore } from '../../../../../store/store';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import Mybutton from '../../MyButton/Mybutton';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
 const Password = () => {
     const [pw, setPw] = useState('');
     const [newPw, setNewPw] = useState('');
     const { loginID } = useAuthStore();
+    const navi=useNavigate();
 
     const handlePw = (e) => {
         setPw(e.target.value);
@@ -18,7 +22,29 @@ const Password = () => {
     }
 
     const handleConfirm = () => {
-
+        if(pw===''){
+            Swal.fire({
+                icon:'error',
+                title:'비밀번호',
+                text:'비밀번호를 입력하세요.'
+            });
+        } //여기에 유효성 검사까지 넣어야함
+        else if(pw===newPw){
+            api.put(`/members/${pw}`).then((resp)=>{
+                Swal.fire({
+                    title:'비밀번호',
+                    text:'비밀번호가 변경되었습니다.'
+                })
+                navi('/mypage')
+            })
+        }else{
+            Swal.fire({
+                icon:'error',
+                title:'비밀번호',
+                text:'비밀번호가 일치하지 않습니다.'
+            });
+        }
+  
     }
 
     return (
