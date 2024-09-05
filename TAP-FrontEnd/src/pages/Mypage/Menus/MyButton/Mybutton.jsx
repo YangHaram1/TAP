@@ -1,9 +1,15 @@
 import styles from './Mybutton.module.css';
 import { useNavigate } from 'react-router-dom';
-const Mybutton=({handleConfirm,check})=>{
+const Mybutton=({handleConfirm,setcheck})=>{
     const navi=useNavigate();
     const handleCancel = () => {
-        navi('/mypage');
+        if(setcheck!=null){
+            setcheck(false);
+        }
+        else{
+            navi('/mypage');
+        }
+    
     }
     return(
         <div className={styles.buttonDiv}>

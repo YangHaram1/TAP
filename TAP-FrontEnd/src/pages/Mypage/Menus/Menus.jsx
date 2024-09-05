@@ -7,16 +7,28 @@ import { useNavigate } from 'react-router-dom';
 
 const Menus = () => {
     const [checkPw, setCheckPw] = useState(true);
+    const defaultColor={member:false,password:false,delivery:false,coupon:false,board:false,withdrawal:false};
+    const [color,setColor]=useState(defaultColor);
     const navi=useNavigate();
     const handleNavi=(path)=>{
         setCheckPw(true)
         navi(path);
+        let value;
+        if(path===''){
+            value='member'
+        }
+        else{
+            value=path;
+        }
+        setColor((prev)=>{
+            return {defaultColor,[value]:true}
+        })
     }
 
     return (
         <div className={styles.container}>
             <div className={styles.menus}>
-                <div className={styles.menu} onClick={()=>handleNavi('')}>
+                <div className={color.member?styles.color:styles.menu} onClick={()=>handleNavi('')}>
                     <div>
                         <Img img={'member'} />
                     </div>
@@ -24,7 +36,7 @@ const Menus = () => {
                         회원정보 수정
                     </div>
                 </div>
-                <div className={styles.menu}  onClick={()=>handleNavi('password')}>
+                <div className={color.password?styles.color:styles.menu}  onClick={()=>handleNavi('password')}>
                     <div>
                         <Img img={'password'} />
                     </div>
@@ -32,7 +44,7 @@ const Menus = () => {
                         비밀번호 변경
                     </div>
                 </div>
-                <div className={styles.menu} onClick={()=>handleNavi('delivery')}>
+                <div className={color.delivery?styles.color:styles.menu} onClick={()=>handleNavi('delivery')}>
                     <div>
                         <Img img={'delivery'} />
                     </div>
@@ -40,7 +52,7 @@ const Menus = () => {
                         배송지 관리
                     </div>
                 </div>
-                <div className={styles.menu} onClick={()=>handleNavi('coupon')}>
+                <div className={color.coupon?styles.color:styles.menu} onClick={()=>handleNavi('coupon')}>
                     <div>
                         <Img img={'coupon'} />
                     </div>
@@ -48,7 +60,7 @@ const Menus = () => {
                         쿠폰 관리
                     </div>
                 </div>
-                <div className={styles.menu} onClick={()=>handleNavi('board')}>
+                <div className={color.board?styles.color:styles.menu} onClick={()=>handleNavi('board')}>
                     <div>
                         <Img img={'board'} />
                     </div>
@@ -56,7 +68,7 @@ const Menus = () => {
                         게시물 관리
                     </div>
                 </div>
-                <div className={styles.menu} onClick={()=>handleNavi('withdrawal')}>
+                <div className={color.withdrawal?styles.color:styles.menu} onClick={()=>handleNavi('withdrawal')}>
                     <div>
                         <Img img={'withdrawal'} />
                     </div>

@@ -112,7 +112,7 @@ const Password = () => {
             <div className={styles.pwWarning}>
             비밀번호는 8~12자 이내로 영문(대,소문자), 숫자, 특수문자 3가지 조합 중 2가지 이상을 조합하셔서 만드시면 됩니다.
             </div>
-            <Mybutton handleConfirm={handleConfirm} />
+            <Mybutton handleConfirm={handleConfirm} setcheck={null}/>
         </div>
     )
 }
