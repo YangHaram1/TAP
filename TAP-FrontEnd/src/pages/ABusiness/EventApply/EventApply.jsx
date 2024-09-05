@@ -1,25 +1,58 @@
 import { useEffect, useState } from "react"
 import styles from './EventApply.module.css'
+import { api } from "../../../config/config";
 
 
 export const EventApply =()=>{
-    const [genre, setGenre] = useState('perform', 'sport');
     const [age, setAge] = useState();   // '전연령', '8세', '15세'
 
     const [formData, SetFormData] = 
     useState({business_id:'', eventName:'', sub_category:'',place:'',age_limit:'', start_date:'', end_date:'', running_existed:'', running_time:'', intermission_time:'', expected_open_date:'', max_ticket:'', away_tem:'' })
 
     // db에서 location, category 테이블 정보 받아와서 setLocation, setCategory해주기 - location에 map 으로 select option값 넣기 . 
-    const [location, setLocation] = useState();
+    const [locations, setLocations] = useState();
+    const [categories, setCategories] = useState();
     const [category, setCategory] = useState();
+    const [subCategories, setSubCategories] = useState();
+    const [genres, setGenres] = useState();
+    const [teams, setTeams] = useState();
 
+    useEffect(()=>{
+        // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
+        // api.get(`/biz/category`).then((resp) => {
+        //     console.log(resp);
+        //   }).catch((resp) => {
+        //     alert("이상 오류")
+        //   })
+        // api.get(`/biz/subcategory`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+        // api.get(`/biz/location`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+        // api.get(`/biz/genre`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+        // api.get(`/biz/team`).then((resp) => {
+        //     console.log(resp);
+        //     }).catch((resp) => {
+        //     alert("이상 오류")
+        //     })
+    })
    
     const handleCategory =(e)=>{
-        setCategory(e.target.value)
+        setCategory(e.target.value);
     }
     const handleChange=(e)=>{
         const {name, value} = e.target;
-        SetFormData=({...formData, [name]:value})
+        SetFormData=({...formData, [name]:value});
+        console.log(formData)
     }
     const handleAddSchedule=()=>{
         console.log();
