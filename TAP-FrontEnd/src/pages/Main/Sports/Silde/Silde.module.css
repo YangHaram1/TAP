@@ -1,0 +1,46 @@
+/* src/components/Silde/Silde.module.css */
+
+/* 슬라이더 컨테이너 스타일 */
+.silderContainer {
+  display: flex;
+  flex-direction: column; /* 수직 배치 */
+  height: 100%;
+  width: 100%;
+}
+
+/* 슬라이더와 Side 컴포넌트를 포함하는 상위 컨테이너 */
+.sliderWrapper {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+/* LeftSilder와 RightSilder 각각의 컨테이너 */
+.leftSilderContainer {
+  flex: 3;
+  margin-left: 250px; /* LeftSilder에 왼쪽 여백 */
+}
+
+.rightSilderContainer {
+  flex: 7;
+  margin-right: 200px; /* RightSilder에 오른쪽 여백 */
+}
+
+/* 하단의 Side 컴포넌트를 포함하는 컨테이너 */
+.sideContainer {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  width: 200px;
+  margin-left: 300px;
+  
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+}
+
+/* Side 컴포넌트 스타일 */
+.side {
+  width: 50%; /* Side 컴포넌트의 너비를 부모 컨테이너의 50%로 설정 */
+  height: 100%; /* Side 컴포넌트의 높이를 부모 컨테이너의 100%로 설정 */
+}

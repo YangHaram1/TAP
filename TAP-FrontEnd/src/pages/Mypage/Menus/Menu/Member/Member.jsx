@@ -137,8 +137,8 @@ const Member = () => {
                         {user.birth}
                     </div>
                     <div className={styles.gender}>
-                        <input type="checkbox" checked={genderCheck} className={styles.checkBox} disabled />남자
-                        <input type="checkbox" checked={!genderCheck} className={styles.checkBox} disabled />여자
+                        <input type="checkbox" checked={!genderCheck} className={styles.checkBox} disabled />남자
+                        <input type="checkbox" checked={genderCheck} className={styles.checkBox} disabled />여자
                     </div>
                     <div>
                         일단 이부분 고민중
@@ -146,7 +146,7 @@ const Member = () => {
                 </div>
 
             </div>
-            <Mybutton handleConfirm={handleConfirm} />
+            <Mybutton handleConfirm={handleConfirm} setcheck={null}/>
         </div>
     )
 }
