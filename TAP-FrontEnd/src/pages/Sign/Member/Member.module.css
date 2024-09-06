@@ -1,0 +1,109 @@
+.container {
+    width: 600px;
+    height: 800px;
+    /* border: 1px solid black; */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.title img {
+    width: 100px;
+    height: 40px;
+}
+
+.signConts {
+    flex: 8;
+    /* background-color: beige; */
+    display: flex;
+    flex-direction: column;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.signCont {
+    flex: 1;
+    border-bottom: 3px solid rgb(235, 235, 235);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+
+}
+
+.subTitle {
+    /* flex: 1; */
+}
+
+.inputTxt {
+    flex: 5;
+    background-color: aqua;
+    height: 80%;
+    border-radius: 10px;
+
+}
+
+.inputTxt input {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: none;
+    padding-left: 10px;
+}
+
+input:focus {
+    outline: none;
+    border: none;
+    /* 필요 시 추가 */
+}
+
+.agree {
+    flex: 1;
+    /* background-color: azure; */
+    padding-left: 40px;
+    padding-right: 40px;
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.agree div {
+    flex: 1;
+}
+
+
+.btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn button {
+    width: 70%;
+    height: 70%;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+    color: white;
+    background-color: #2b2d42;
+    cursor: pointer;
+}
+
+.emailBtn {
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    border: none;
+
+}

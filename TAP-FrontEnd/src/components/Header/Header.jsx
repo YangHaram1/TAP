@@ -30,6 +30,9 @@ const Header = ({ hasScrolled }) => {
     const handleMypage = () => {
         navi('/mypage')
     }
+    const handleSign = () => {
+        navi('/sign')
+    }
     const handleHome = () => {
         navi('/')
     }
@@ -56,7 +59,9 @@ const Header = ({ hasScrolled }) => {
                     <div className={styles.headerMenu} onClick={handleLogin}>
                         {isAuth ? '로그아웃' : '로그인'}
                     </div>
-                    <div className={styles.headerMenu}>회원가입</div>
+                    <div className={styles.headerMenu} onClick={handleSign}>
+                        회원가입
+                    </div>
                     <div className={styles.headerMenu} onClick={handleMypage}>
                         마이페이지
                     </div>
