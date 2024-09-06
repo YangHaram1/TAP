@@ -5,14 +5,14 @@
 .container{
     display: flex;
     width: 100%;
-    height: 2000px; /*임시값*/
+    height: 100%; /*임시값*/
 }
 
 /*===========왼쪽 부분========*/
 .left{
     flex:7;
     height: 100%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     padding-left: 10px;
 }
 
@@ -66,11 +66,42 @@
     margin-bottom: 5px;
 }
 
+.btns{
+    margin-top: 30px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-around;
+    width: 60%;
+}
+
+.btns button{
+    border: 0px;
+    border-bottom: solid rgba(0, 0, 0, 0);
+    color: purple;
+    background-color: rgba(250, 235, 215, 0);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.btns button:hover{
+    border: 0px;
+    border-bottom: solid purple;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.detail_page{
+    /* border: 1px solid black; */
+    margin-left: 15px;
+    width: 95%;
+}
+
+
 
 /*===========오른쪽 부분========*/
 .right{
     flex:3;
-    height: 100%;
+    min-height: 100vh;
     border: 1px solid black;
     display: flex;
     flex-direction: column;

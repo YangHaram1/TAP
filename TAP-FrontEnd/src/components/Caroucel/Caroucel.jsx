@@ -6,6 +6,7 @@ import {
     faChevronRight,faChevronLeft 
 } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom';
+import { url } from '../../config/config';
 
 export const Caroucel = ({category, images})=>{
 
@@ -158,7 +159,7 @@ export const Caroucel = ({category, images})=>{
     
             <div style={{ height: settings.height, marginTop:"20px"}} className={styles.card}>
                 <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
+                  <img src={`${url}/musical/a52ee2d8-7191-435a-acb6-8d9e23e28c0d`}></img>
                 </div>
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p style={{marginBottom:"0"}}>캐러셀2-1</p>
@@ -186,7 +187,7 @@ export const Caroucel = ({category, images})=>{
     
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
+                  <img src={`${url}/31d8a1ec-913e-4808-8004-091734d77744`}></img>
                 </div>
                 <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
