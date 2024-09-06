@@ -1,0 +1,32 @@
+.container{
+    width: 100%;
+    height: 100%;
+}
+.title {
+    display: flex;
+    padding: 10px;
+    border-bottom: 2px solid black;
+}
+
+.header{
+    display: flex;
+    padding-top: 10px;
+    justify-content: space-evenly;
+    font-size: 12px;
+   
+}
+.detail{
+    color: rgba(128, 128, 128, 0.341);
+}
+.detailCheck{
+  color: red;
+  border-bottom: 1px solid red;
+}
+
+.contentsTitle{
+    display: flex;
+    padding: 10px;
+    padding-top: 20px;
+    border-bottom: 1px solid gray;
+   
+}

@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import styles from './Withdrawal.module.css';
-const Withdrawal =()=>{
+import Guide from './Guide/Guide';
+const Withdrawal = () => {
+    const [checkDetail, setCheckDetail] = useState([true, false, false]);
+
     return (
         <div className={styles.container}>
-            회원탈퇴
+           <Guide checkDetail={checkDetail} setCheckDetail={setCheckDetail}/>
         </div>
     )
 }
