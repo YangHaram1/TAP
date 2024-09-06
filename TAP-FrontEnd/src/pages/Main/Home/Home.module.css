@@ -6,9 +6,49 @@
     border-radius: 20px;
 }
 
+
+
 .ranking {
     height: 800px;
     background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+}
+
+.rankingTxt {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+.rTitle {
+    font-size: 2.8rem;
+    font-weight: bold;
+}
+
+.rSubTitle {
+    font-size: 22px;
+    color: rgb(147, 147, 147);
+}
+
+.rankingCategory {
+    /* flex: 1; */
+    height: 80px;
+    display: flex;
+    background-color: rgb(185, 185, 185);
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.sort {
+    border: 1px solid black;
+}
+
+.rankingImgs {
+    flex: 4;
 }
 
 .tOpen {
