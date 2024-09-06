@@ -23,7 +23,7 @@
 }
 
 .rTitle {
-    font-size: 2.8rem;
+    font-size: 2.5rem;
     font-weight: bold;
     /* background-color: red; */
     height: 100%;
@@ -36,7 +36,6 @@
 .rSubTitle {
     font-size: 26px;
     color: rgb(147, 147, 147);
-    /* background-color: beige; */
 }
 
 .rankingCategory {
@@ -57,7 +56,7 @@
 
 .sort:hover {
     background-color: #9c43f8;
-    border: none;
+    border: 2px solid #9c43f8;
     color: white;
 }
 
@@ -80,6 +79,7 @@
 
 .rankImg {
     flex: 6;
+    cursor: pointer;
     background-color: beige;
 
 }
@@ -120,17 +120,128 @@
     font-weight: bold;
 }
 
+/* 티켓오픈 */
 .tOpen {
-    height: 800px;
-    background-color: bisque;
+    height: 600px;
+    /* background-color: bisque; */
+    display: flex;
+    flex-direction: column;
+}
+
+.oTitle {
+    flex: 1;
+    font-size: 2.5rem;
+    font-weight: bold;
+    /* background-color: red; */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.oConts {
+    flex: 4;
 }
 
 .sale {
     height: 600px;
-    background-color: rgb(212, 255, 245);
+    /* background-color: rgb(212, 255, 245); */
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
 }
 
+.sTitle {
+    flex: 1;
+    font-size: 2.5rem;
+    font-weight: bold;
+    /* background-color: red; */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sConts {
+    flex: 4;
+}
+
+/* 베스트 관람 후기 */
 .review {
-    height: 600px;
-    background-color: rgb(255, 232, 191);
+    /* height: 800px; */
+    /* background-color: rgb(255, 232, 191); */
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 150px;
+}
+
+.rTitle {
+    flex: 1;
+    font-size: 2.5rem;
+    font-weight: bold;
+    /* background-color: red; */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rConts {
+    flex: 4;
+    /* background-color: rgb(209, 209, 209); */
+}
+
+.rTap {
+    display: flex;
+    /* border: 1px solid black; */
+    height: 200px;
+    padding: 20px;
+    gap: 20px;
+}
+
+.cTap {
+    flex: 1;
+    /* border: 1px solid rgb(237, 27, 27); */
+    display: flex;
+
+}
+
+.tapTxt {
+    flex: 7;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.tapSubTxt {
+    flex: 1;
+    color: #8c8c8c;
+
+}
+
+.tapTitle {
+    flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tapExplain {
+    flex: 3;
+}
+
+.userInfo {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+}
+
+.faStar {
+    color: #fdba39
+}
+
+.tapImg {
+    flex: 3;
+    background-color: rgb(179, 212, 246);
 }
