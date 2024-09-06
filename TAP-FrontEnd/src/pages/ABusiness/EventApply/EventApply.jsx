@@ -7,7 +7,7 @@ import MyEditor from "../../../components/MyEditor/MyEditor";
 export const EventApply = () => {
     const { login, loginID, setAuth, role } = useAuthStore();
     const editorRef = useRef();
-    const [age, setAge] = useState(); // '전연령', '8세', '15세'
+    const [age, setAge] = useState(); 
     const [category, setCategory] = useState()
     const [formData, SetFormData] = useState({
         id: loginID, 
@@ -32,7 +32,7 @@ export const EventApply = () => {
     const [genres, setGenres] = useState([]);
     const [filteredGenres, setFilteredGenres] = useState([]);
     const [teams, setTeams] = useState([]);
-    const [artLocations, setArtLocations] = useState([]);
+    const [allLocations, setAllLocations] = useState([]);
     const [teamLocations, setTeamLocations] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [selectedTeamType, setSelectedTeamType] = useState([]);
@@ -71,7 +71,7 @@ export const EventApply = () => {
         });
 
         api.get(`/biz/application/location`).then((resp) => {
-            setArtLocations(resp.data);
+            setAllLocations(resp.data);
         }).catch(() => {
             alert("이상 오류");
         });
@@ -95,6 +95,9 @@ export const EventApply = () => {
         setCategory(selectedValue);
         SetFormData({ ...formData, sub_category_seq: "", genre_seq: "", away_team_seq:"" });
 
+        setSelectedPlace("");
+        setSelectedTeam("");
+        setSelectedTeamType("")
         setFilteredGenres([]);
     };
 
@@ -158,19 +161,25 @@ export const EventApply = () => {
     };
 
     const getLocationOptions = () => {
-        if (category === "2") {
-            return teamLocations.map(place => (
+        if (category && formData.sub_category_seq) {
+           if (category === "2") {
+            // team_type이랑 sub_category_seq랑 같은 거 filter
+            const filteredTeamLocations = teamLocations.filter(place => place.TEAM_TYPE === formData.sub_category_seq);
+            return filteredTeamLocations.map(place => (
                 <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
                     {place.PLACE_NAME}
                 </option>
             ));
-        } else if (category === "1") {
-            return artLocations.map(place => (
-                <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
-                    {place.PLACE_NAME}
-                </option>
-            ));
+            } else if (category === "1") {
+                return allLocations.map(place => (
+                    <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
+                        {place.PLACE_NAME}
+                    </option>
+                ));
+            }
         }
+        // 카테고리 2개 선택안하면 디폴트 '선택'으로
+        return <option value="">선택</option>;
     };
 
     const getAwayTeams = () => {
@@ -203,6 +212,7 @@ export const EventApply = () => {
     return (
         <div className={styles.container}>
             <div className={styles.imgContent}>
+                {/* db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨 */}
                 <div dangerouslySetInnerHTML={{ __html: content }} />
             </div>
             <div className={styles.header}>
@@ -274,9 +284,10 @@ export const EventApply = () => {
                             <tr>
                                 <td> 경기 팀</td>
                                 <td>
-                                    {selectedPlace === ""
-                                        ? <input type="text" placeholder="장소 선택시 출력됩니다" disabled />
-                                        : selectedTeam
+                                    {selectedPlace 
+                                        ? selectedTeam 
+                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />
+                                        
                                     }
                                     <span className={styles.Gap}></span>
                                     VS

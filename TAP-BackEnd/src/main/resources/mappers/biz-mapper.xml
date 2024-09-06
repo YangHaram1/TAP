@@ -19,7 +19,6 @@
 		select place.*, team.*
 		from place
 		left join team on place.place_seq = team.place_seq
-		where team.place_seq is null
 		order by place.place_seq desc
 	</select>
 	<select id="getAllTeamLocation" resultType="java.util.HashMap">
