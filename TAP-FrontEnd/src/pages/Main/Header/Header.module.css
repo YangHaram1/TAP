@@ -27,6 +27,7 @@
 .menuNotice {
     color: #9c43f8;
     gap: 6px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0);
 }
 
 .menuLine {
