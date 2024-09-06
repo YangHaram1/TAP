@@ -3,23 +3,28 @@ import styles from './Detail.module.css'
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'; // solid 아이콘
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { url } from '../../../../config/config';
+import { useState } from 'react';
+import { Notice } from './Notice/Notice';
+import { ProductData } from './ProductData/ProductData';
+import { Casting } from './Casting/Casting';
+import { Review } from './Review/Review';
+import { Excite } from './Excite/Excite';
 
 
 export const Detail = ()=>{
 
     const location = useLocation();
     const { seq } = location.state || {};  // 전달된 state가 있으면 가져옴
+    const [tap, setTap] = useState(0);
 
     return(
         <div className={styles.container}>
-            {/* <h1>Detail Page</h1>
-            <p>Sequence: {seq}</p> */}
             <div className={styles.left}>
-                {/* <h2>상품명</h2> */}
                 <h2>상품명</h2>
                 <div className={styles.header_data}>
                     <div className={styles.header_data_left}>
-                        <img src='/logo192.png'></img>
+                        <img src={`${url}/31d8a1ec-913e-4808-8004-091734d77744`}></img>
                         <div className={styles.likes}>
                             {
                                 'like' === 'like' 
@@ -58,7 +63,29 @@ export const Detail = ()=>{
                     </div>
                 </div>
 
+            <div className={styles.btns}>
+                <button onClick={()=>{setTap(0)}}>공지사항</button>
+                <button onClick={()=>{setTap(1)}}>캐스팅정보</button>
+                <button onClick={()=>{setTap(2)}}>판매정보</button>
+                <button onClick={()=>{setTap(3)}}>관람후기 (0)</button>
+                <button onClick={()=>{setTap(4)}}>기대평 (0)</button>
             </div>
+
+            <div className={styles.detail_page}>
+                {
+                    tap === 1 ? <Casting/> :
+                    tap === 2 ? <ProductData/> : 
+                    tap === 3 ? <Review/> : 
+                    tap === 4 ? <Excite/> : 
+                    <Notice/>
+
+                }
+            </div>
+
+            </div>
+
+
+            {/* 예매 섹션 */}
             <div className={styles.right}>
                 <div className={styles.bubble}>
                     <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 1</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
@@ -67,7 +94,6 @@ export const Detail = ()=>{
                     <div className={styles.seats}>잔여석</div>                
                 </div>
             </div>
-
         </div>
     );
 

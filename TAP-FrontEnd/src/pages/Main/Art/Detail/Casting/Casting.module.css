@@ -1,0 +1,58 @@
+.container{
+    height: 100%;
+    width: 100%;
+}
+
+.container hr{
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.box{
+    display: flex;
+}
+
+.box_title{
+    flex:1.5;
+}
+
+.box_content{
+    flex:8.5;
+}
+
+.box button{
+    background-color: rgba(0, 0, 0, 0);
+    width: 80px;
+    height: 30px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.box button:hover{
+    cursor: pointer;
+}
+
+.casting_btns button{
+    margin-bottom: 15px;
+}
+
+/* 캐스팅 테이블 css */
+.casting_table table{
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.casting_table thead{
+    height: 40px;
+    background-color: lightgray;
+}
+
+.casting_table tr{
+    height: 40px;
+    text-align: center;
+}
+
+
+
