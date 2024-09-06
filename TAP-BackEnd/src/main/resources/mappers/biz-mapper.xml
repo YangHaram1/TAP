@@ -31,4 +31,7 @@
 	<select id="getAllProduct" resultType="java.util.HashMap">
 		select * from apply where status = 'approved'
 	</select>
+	<select id="getContent" resultType="com.tap.biz.dto.TestClobDTO">
+		select * from description where description_seq=1
+	</select>
 </mapper>

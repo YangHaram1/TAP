@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from './EventApply.module.css'
 import { api } from "../../../config/config";
 import { useAuthStore } from '../../../store/store'
@@ -8,6 +8,7 @@ import MyEditor from "../../../components/MyEditor/MyEditor";
 
 export const EventApply =()=>{
     const { login, loginID, setAuth, role } = useAuthStore();
+    const editorRef = useRef();
     const [age, setAge] = useState();   // '전연령', '8세', '15세'
 
     const [formData, SetFormData] = useState({
@@ -47,6 +48,7 @@ export const EventApply =()=>{
     const [selectedExceptDay, setSelectedExceptDay] = useState("");
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
 
+    const [content, setContent] = useState('');
 
     useEffect(()=>{
         // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
@@ -78,6 +80,14 @@ export const EventApply =()=>{
             })
         api.get(`/biz/application/teamlocation`).then((resp) => {
             setTeamLocations(resp.data);
+            }).catch((resp) => {
+            alert("이상 오류")
+            })
+
+        // description 테이블에서 가져오는 작품 상세 내용
+        api.get(`/biz/application/description`).then((resp) => {
+            console.log(resp.data)
+            setContent(resp.data[0].description_content)
             }).catch((resp) => {
             alert("이상 오류")
             })
@@ -168,6 +178,9 @@ export const EventApply =()=>{
     }
     return(
         <div className={styles.container}>
+           <div className={styles.imgContent}>
+           <div dangerouslySetInnerHTML={{ __html: content }} />
+           </div>
             <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
             </div>
@@ -195,6 +208,12 @@ export const EventApply =()=>{
                             </select>
                         </td>
                     </tr>
+                    {category === "1"  && 
+                    <tr>
+                        <td>장르</td>
+                        <td>장르 테이블 뽑기 </td>
+                    </tr>
+                    }
                     <tr>
                         <td>상품명</td>
                         <td>
@@ -319,9 +338,11 @@ export const EventApply =()=>{
                 <tbody>
                 <tr>
                     <td>공지사항</td>
-                    <td> 글자 색상 변경만 되고 텍스트만 입려되게</td>
+                    <td> 글자 색상 변경만 되고 텍스트만 입려되게
+                    <MyEditor editorRef={editorRef} />
+                    </td>
                     <td> 
-                        <MyEditor/>
+                       
                     </td>
                 </tr>
                 <tr>

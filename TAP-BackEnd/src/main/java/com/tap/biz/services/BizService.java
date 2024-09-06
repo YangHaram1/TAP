@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.tap.biz.dao.BizDAO;
+import com.tap.biz.dto.TestClobDTO;
 
 
 @Service
@@ -31,4 +33,8 @@ public class BizService {
 	public List<HashMap<String, Object>> getAllTeamLocation(){
 		return bizdao.getAllTeamLocation();
 	}
+	public List<TestClobDTO> getContent(){
+		return bizdao.getContent();
+	}
+	
 }

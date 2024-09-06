@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.dto.BizApplyDTO;
+import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.services.BizService;
 
 @RestController
@@ -45,7 +46,10 @@ public class BizApplyController {
 	public ResponseEntity<List<HashMap<String, Object>>> getAllTeamLocation(){
 		return ResponseEntity.ok(bizServ.getAllTeamLocation());
 	}
-	
+	@GetMapping("/description")
+	public ResponseEntity<List<TestClobDTO>> getContent(){
+		return ResponseEntity.ok(bizServ.getContent());
+	}
 	// 상품 테이블에 insert POST
 	@PostMapping
 	public ResponseEntity<Void> insertEvent(@RequestBody BizApplyDTO dto){
