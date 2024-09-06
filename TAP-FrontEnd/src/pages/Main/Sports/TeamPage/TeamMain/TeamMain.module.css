@@ -1,0 +1,22 @@
+.teamMain {
+    padding: 20px;
+  }
+  
+  .scheduleList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .matchItem {
+    margin-bottom: 10px;
+  }
+  
+  .matchDate {
+    font-weight: bold;
+  }
+  
+  .matchDetails {
+    margin-left: 10px;
+  }
+  

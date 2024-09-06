@@ -1,9 +1,23 @@
+.caroucel{
+    background-color: rgba(197, 9, 172, 0.696);
+    color: rgb(255, 255, 255);
+    /* border: 1px solid black; */
+    height: 42px;
+    width: 42px;
+    border-radius: 100px;
+    border: 0px;
+}
+
+.caroucel:hover{
+    cursor: pointer;
+
+}
+
 .card{
     display: flex;
     flex-direction: column;
-    width: 230px;
-    height: 300px;
-    border: 1px solid black;
+    /* width: 100%; */
+    /* border: 1px solid black;  */
     justify-content: end;
     padding: 13px;
     border-radius: 5px;
@@ -13,16 +27,32 @@
     margin: 5px;
 }
 
-a{
+.card:hover{
+    cursor: pointer;
+}
+
+/* a{
+    margin-left: 10px;
     color: black;
+    width: 95%;
     text-decoration: none;
     display: inline-block;
-    transition: transform 0.3s ease; /* 애니메이션 부드럽게 */
+    border-radius: 5px;
 }
 
 a:hover{
     cursor: pointer;
-    border: 1px solid black;
-    font-weight: 700;
     border-radius: 5px;
+} */
+
+.poster{
+    width: 100%;
+    height: 70%;
+    margin-bottom: 5px;
+}
+
+.poster img{
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
 }

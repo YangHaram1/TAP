@@ -1,7 +1,7 @@
 .container {
     width: 250px;
-    background-color: #333;
-    color: #fff;
+    /* background-color: #333; */
+    /* color: #fff; */
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -34,7 +34,7 @@
   
   .submenuContainer {
     padding-left: 20px;
-    background-color: #444;
+    /* background-color: #444; */
   }
   
   .submenuItem {
