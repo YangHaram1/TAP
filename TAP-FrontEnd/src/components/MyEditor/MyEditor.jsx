@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { debounce } from 'lodash';
 import styles from './MyEditor.module.css';
-import './MyEditor.css';
+// import './MyEditor.css';
 import  Swal  from 'sweetalert2';
 import { api,tinymce } from '../../config/config';
 

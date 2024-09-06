@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import styles from './EventApply.module.css'
 import { api } from "../../../config/config";
 import { useAuthStore } from '../../../store/store'
+import MyEditor from "../../../components/MyEditor/MyEditor";
 // import MyEditor from "../../../components/MyEditor/MyEditor";
 
 
@@ -136,6 +137,7 @@ export const EventApply =()=>{
      // 장소 선택 옵션 생성
     const getLocationOptions = () => {
         if (category === "2") {
+            // return teamLocations.filter(team => team.TEAM_TYPE === )
             return teamLocations.map(place => (
                 <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
                     {place.PLACE_NAME}
@@ -319,7 +321,7 @@ export const EventApply =()=>{
                     <td>공지사항</td>
                     <td> 글자 색상 변경만 되고 텍스트만 입려되게</td>
                     <td> 
-                        {/* <MyEditor/> */}
+                        <MyEditor/>
                     </td>
                 </tr>
                 <tr>

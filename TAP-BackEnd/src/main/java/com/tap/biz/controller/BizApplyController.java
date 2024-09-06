@@ -53,8 +53,11 @@ public class BizApplyController {
 		int sub_category = dto.getSub_category_seq();
 		String age_limit = dto.getAge_limit();
 		Timestamp start_date = dto.getStart_date();
+		int awayteam = dto.getAway_team_seq();
+		
 		System.out.println("id는? "+id +"카테고리: "+sub_category + "age_limit: "+ age_limit);
 		System.out.println("시작날짜: "+ start_date);
+		System.out.println("원정팀 : "+ awayteam);
 //		bizServ.insertEvent(dto);
 		return ResponseEntity.ok().build();
 	}
