@@ -40,3 +40,17 @@
     background-color: white;
 }
 
+
+.cancle_background{
+    padding: 10px;
+    background-color: lightgray;
+    border-radius: 5px;
+}
+
+.info_background{
+    padding: 10px;
+    background-color: lightgray;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 50px;
+}
