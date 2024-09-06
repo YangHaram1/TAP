@@ -1,0 +1,65 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.casting{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+.casting button{
+    width: 100%;
+    height: 50px;
+}
+
+.casting_circle{
+    display: flex;
+    flex-wrap: wrap;
+    height: 180px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.active{
+    height: 100%;
+}
+
+.circle{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    margin: 20px;
+    margin-bottom: 60px;
+}
+
+.circle img{
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+}
+
+.circle_text{
+    width: 100%;
+    height: 100%;
+}
+
+.circle_text p{
+    margin: 0px;
+    text-align: center;
+}
+
+.notice{
+    height: 100%;
+    width: 100%;
+}
+
+.notice img{
+    height: 100%;
+    width: 100%;
+}
+
