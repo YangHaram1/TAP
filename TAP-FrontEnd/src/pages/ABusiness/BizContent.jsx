@@ -8,9 +8,9 @@ export const BizContent=()=>{
     return(
         <div className={styles.container}>
             <Routes>
-                <Route path="/" element={<BizManage/>}/>
-                <Route path="/application/registration" element={<EventApply/>}/>
-                <Route path="/application/sale" element={<SaleApply/>}/>
+                <Route path="/*" element={<BizManage/>}/>
+                <Route path="/application/registration/*" element={<EventApply/>}/>
+                <Route path="/application/sale/*" element={<SaleApply/>}/>
             </Routes>
         </div>
     );
