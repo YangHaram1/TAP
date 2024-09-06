@@ -112,7 +112,6 @@ const Login = () => {
             <div className={styles.container}>
                 <div className={styles.title}>
                     <img src={img1} alt="logo" className={styles.logo} />
-                    <span className={styles.tap}>TAP</span>
                 </div>
                 <div className={styles.form}>
                     <div

@@ -10,7 +10,7 @@ import Main from './pages/Main/Main'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Mypage from './pages/Mypage/Mypage'
-
+import Sign from './pages/Sign/Sign'
 import { useEffect, useState } from 'react'
 import { api } from './config/config'
 import { jwtDecode } from 'jwt-decode'
@@ -70,30 +70,32 @@ function App() {
                             <Routes>
                                 <Route path="/*" element={<Main />} />
                                 <Route path="/login/*" element={<Login />} />
+                                <Route path="/sign/*" element={<Sign />} />
                                 <Route path="/mypage/*" element={<Mypage />} />
                             </Routes>
                         </>
                     ) : isAuth && role === 'ROLE_ADMIN' ? (
                         <>
-                            <AdminHeader hasScrolled={hasScrolled}/>
-                            <Admin/>
+                            <AdminHeader hasScrolled={hasScrolled} />
+                            <Admin />
                         </>
                     ) : isAuth && role === 'ROLE_BIZ' ? (
                         <>
-                            <AdminHeader hasScrolled={hasScrolled}/>
-                            <Biz/>
+                            <AdminHeader hasScrolled={hasScrolled} />
+                            <Biz />
                         </>
                     ) : (
                         isAuth &&
                         role === 'ROLE_USER' && (
                             <>
-                                <Header hasScrolled={hasScrolled}/>
+                                <Header hasScrolled={hasScrolled} />
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
                                     <Route
                                         path="/mypage/*"
                                         element={<Mypage />}
                                     />
+                                    <Route path="/sign/*" element={<Sign />} />
                                 </Routes>
                             </>
                         )
