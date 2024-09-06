@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ItemsCarousel from 'react-items-carousel';
 import styles from './Caroucel.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faChevronRight,faChevronLeft 
+} from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom';
 
 export const Caroucel = ({category, images})=>{
+
+    const navi = useNavigate();
 
     const [activeItemIndex, setActiveItemIndex] = useState(0);
     const [settings, setSettings] = useState({
@@ -53,6 +60,11 @@ export const Caroucel = ({category, images})=>{
       }
     }, [autoPlay/*, images.length*/]);
 
+    // 클릭 시 세부 페이지 이동 => 상품 번호만 보내주면 됨.
+    const handleMove = (seq)=>{
+      navi("/detail", { state: { seq } });
+    }
+
     if(category === "art1"){
 
         return (
@@ -62,50 +74,44 @@ export const Caroucel = ({category, images})=>{
                 activeItemIndex={activeItemIndex}
                 numberOfCards={settings.numberOfCards} // 출력할 카드 수
                 gutter={5} // 카드 간 간격
-                leftChevron={<button>{'<'}</button>} // 왼쪽 버튼 
-                rightChevron={<button>{'>'}</button>} //오른쪽 버튼
-                outsideChevron={true}
+                leftChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronLeft}/></button>} // 왼쪽 버튼 
+                rightChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronRight}/></button>} //오른쪽 버튼
+                outsideChevron={false}
                 chevronWidth={settings.chevronWidth}
                 infiniteLoop={true} // 무제한 반복
               //   disableSwipe={true} // 스와이프 가능 유무
               >
       
-              <a href='#'>
-              <div style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
-              </a>
-              <a href='#'>
-              <div style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
-              </a>
-              <a href='#'>
-              <div style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
-              </a>
-              <a href='#'>
-              <div style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
-              </a>
-              <a href='#'>
-              <div style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
                   <h2>상품명</h2>
                   <p>세종대학교 대양홀</p>
                   <p>2024.09.04 - 2024.09.27</p>
               </div>
-              </a>
-              
+              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
+                  <h2>상품명</h2>
+                  <p>세종대학교 대양홀</p>
+                  <p>2024.09.04 - 2024.09.27</p>
+              </div>
               </ItemsCarousel>
             </div>
           );
@@ -118,21 +124,19 @@ export const Caroucel = ({category, images})=>{
             activeItemIndex={activeItemIndex}
             numberOfCards={settings.numberOfCards} // 출력할 카드 수
             gutter={5} // 카드 간 간격
-            leftChevron={<button>{'<'}</button>} // 왼쪽 버튼 
-            rightChevron={<button>{'>'}</button>} //오른쪽 버튼
+            leftChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronLeft}/></button>} // 왼쪽 버튼 
+            rightChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronRight}/></button>} //오른쪽 버튼
             outsideChevron
             chevronWidth={settings.chevronWidth}
             infiniteLoop={true} // 무제한 반복
           //   disableSwipe={true} // 스와이프 가능 유무
           >
   
-          <a href='#'>
           <div style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
               <h2>상품명</h2>
               <p>세종대학교 대양홀</p>
               <p>2024.09.04 - 2024.09.27</p>
           </div>
-          </a>
 
           </ItemsCarousel>
         </div>
@@ -145,15 +149,14 @@ export const Caroucel = ({category, images})=>{
               activeItemIndex={activeItemIndex}
               numberOfCards={settings.numberOfCards} // 출력할 카드 수
               gutter={5} // 카드 간 간격
-              leftChevron={<button>{'<'}</button>} // 왼쪽 버튼 
-              rightChevron={<button>{'>'}</button>} //오른쪽 버튼
+              leftChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronLeft}/></button>} // 왼쪽 버튼 
+                rightChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronRight}/></button>} //오른쪽 버튼
               outsideChevron
               chevronWidth={settings.chevronWidth}
               infiniteLoop={false} // 무제한 반복
             >
     
-            <a href='#'>
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
+            <div style={{ height: settings.height, marginTop:"20px"}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
                 </div>
@@ -162,7 +165,6 @@ export const Caroucel = ({category, images})=>{
                 <p style={{marginTop:"0"}}>2024.09.04 - 2024.09.27</p>
                 <p><span style={{color:"red", fontWeight:"600"}}>25% </span><span style={{fontWeight:"600"}}>52,500원</span></p>
             </div>
-            </a>
             </ItemsCarousel>
           </div>
         );
@@ -175,14 +177,13 @@ export const Caroucel = ({category, images})=>{
               activeItemIndex={activeItemIndex}
               numberOfCards={settings.numberOfCards} // 출력할 카드 수
               gutter={5} // 카드 간 간격
-              leftChevron={<button>{'<'}</button>} // 왼쪽 버튼 
-              rightChevron={<button>{'>'}</button>} //오른쪽 버튼
+              leftChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronLeft}/></button>} // 왼쪽 버튼 
+                rightChevron={<button className={styles.caroucel}><FontAwesomeIcon icon={faChevronRight}/></button>} //오른쪽 버튼
               outsideChevron
               chevronWidth={settings.chevronWidth}
               infiniteLoop={false} // 무제한 반복
             >
     
-            <a href='#'>
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
@@ -191,8 +192,6 @@ export const Caroucel = ({category, images})=>{
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p>캐러셀2-1</p>
             </div>
-            </a>
-            <a href='#'>
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
@@ -201,8 +200,6 @@ export const Caroucel = ({category, images})=>{
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p>캐러셀2-1</p>
             </div>
-            </a>
-            <a href='#'>
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
@@ -211,8 +208,6 @@ export const Caroucel = ({category, images})=>{
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p>캐러셀2-1</p>
             </div>
-            </a>
-            <a href='#'>
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
@@ -221,8 +216,6 @@ export const Caroucel = ({category, images})=>{
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p>캐러셀2-1</p>
             </div>
-            </a>
-            <a href='#'>
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
@@ -231,8 +224,6 @@ export const Caroucel = ({category, images})=>{
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p>캐러셀2-1</p>
             </div>
-            </a>
-            <a href='#'>
             <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
                 <div className={styles.poster}>
                   <img src='/logo192.png'></img>
@@ -241,7 +232,8 @@ export const Caroucel = ({category, images})=>{
                 <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
                 <p>캐러셀2-1</p>
             </div>
-            </a>
+
+           
             </ItemsCarousel>
           </div>
         );

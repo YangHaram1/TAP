@@ -13,7 +13,7 @@ import com.google.cloud.storage.StorageOptions;
 
 @Configuration
 public class GCSConfig {
-	/*
+	
 	@Value("${gcp.credentials.location}")
 	private Resource credentialLoacation;
 	
@@ -25,5 +25,5 @@ public class GCSConfig {
 		 GoogleCredentials cred =GoogleCredentials.fromStream(credentialLoacation.getInputStream());
 		 return StorageOptions.newBuilder().setCredentials(cred).setProjectId(projectId).build().getService();
 	}
-	*/
+	
 }
