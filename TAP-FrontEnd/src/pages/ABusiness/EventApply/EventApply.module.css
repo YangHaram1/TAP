@@ -1,4 +1,3 @@
-/* 기본 컨테이너 스타일 */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -9,7 +8,6 @@
     border-radius: 8px;
 }
 
-/* 헤더 스타일 */
 .header {
     padding: 20px;
     border-bottom: 2px solid #ddd;
@@ -23,7 +21,6 @@
     color: #333;
 }
 
-/* 제목 스타일 */
 .title {
     padding: 15px 20px;
     border-bottom: 1px solid #ddd;
@@ -37,7 +34,7 @@
     color: #555;
 }
 
-/* 테이블 스타일 */
+
 .tableWrapper {
     padding: 20px;
     background-color: #fff;
@@ -67,7 +64,7 @@
 }
 
 .shortInput {
-    width: 20% !important; /* 너비를 10%로 설정 */
+    width: 20% !important;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -76,9 +73,9 @@
 }
 .Gap {
     display: inline-block;
-    width: 20px; /* 원하는 간격의 너비를 설정 */
+    width: 20px; 
 }
-/* 폼 요소 스타일 */
+
 
 .container input[type="text"], 
 .container input[type="date"], 
@@ -112,7 +109,8 @@
     background-color: #0056b3;
 }
 
-/* 추가 스타일 */
+/* ============================================== */
+
 .container input[type="radio"] {
     margin-right: 5px;
 }
@@ -128,7 +126,7 @@
 
 
 /* 반응형 디자인 */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .container {
         padding: 10px;
     }
@@ -141,4 +139,4 @@
         font-size: 14px;
         padding: 8px 10px;
     }
-}
+} */

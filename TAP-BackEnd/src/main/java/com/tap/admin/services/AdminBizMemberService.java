@@ -6,13 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tap.admin.dao.BizMemDAO;
+import com.tap.admin.dao.AdminBizMemberDAO;
 
 @Service
-public class BizMemService {
+public class AdminBizMemberService {
 	@Autowired
-	private BizMemDAO bizMemdao;
+	private AdminBizMemberDAO adminbizMemdao;
+	
 	public List<HashMap<String, Object>> getAllBizMem(){
-		return bizMemdao.getAllBizMem();
+		return adminbizMemdao.getAllBizMem();
 	}
 }

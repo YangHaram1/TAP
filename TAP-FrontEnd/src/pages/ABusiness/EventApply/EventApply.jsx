@@ -1,14 +1,28 @@
 import { useEffect, useState } from "react"
 import styles from './EventApply.module.css'
 import { api } from "../../../config/config";
+import { useAuthStore } from '../../../store/store'
+// import MyEditor from "../../../components/MyEditor/MyEditor";
 
 
 export const EventApply =()=>{
+    const { login, loginID, setAuth, role } = useAuthStore();
     const [age, setAge] = useState();   // '전연령', '8세', '15세'
 
     const [formData, SetFormData] = useState({
-        business_id: '', eventName: '', sub_category: '', place: '', age_limit: '', start_date: '', end_date: '',
-        running_existed: '', running_time: '', intermission_time: '', expected_open_date: '',expected_open_time: '', max_ticket: '', away_tem: ''
+        id: loginID, 
+        name: '', 
+        place_seq: '', 
+        sub_category_seq: '', 
+        genre_seq:'',
+        age_limit: '', 
+        start_date: '', 
+        end_date: '', 
+        running_time: '', 
+        running_intertime: '', 
+        open_date: '', // 여기서 날짜랑 시간 합쳐서 SPRING BOOT , timestamp 형태로 보내기 
+        max_ticket: '', 
+        away_team_seq: ''
       });
 
     // db에서 location, category 테이블 정보 받아와서 setLocation, setCategory해주기 - location에 map 으로 select option값 넣기 . 
@@ -22,11 +36,16 @@ export const EventApply =()=>{
     const [artLocations, setArtLocations] = useState([]);
     const [teamLocations, setTeamLocations] = useState([]);
     const [selectedTeam ,setSelectedTeam] = useState([]);
+    const [selectedTeamType ,setSelectedTeamType] = useState([]);
 
     // 스케쥴 변수
     const [selectedDay, setSelectedDay] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const [scheduleList, setScheduleList] = useState([]);
+    // 예외 스케쥴 변수
+    const [selectedExceptDay, setSelectedExceptDay] = useState("");
+    const [scheduleExceptList, setScheduleExceptList] = useState([]);
+
 
     useEffect(()=>{
         // // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
@@ -38,6 +57,11 @@ export const EventApply =()=>{
         api.get(`/biz/application/subcategory`).then((resp) => {
             setSubCategories(resp.data);
             console.log(resp.data)
+            }).catch((resp) => {
+            alert("이상 오류")
+            })
+        api.get(`/biz/application/team`).then((resp) => {
+            setTeams(resp.data);
             }).catch((resp) => {
             alert("이상 오류")
             })
@@ -77,8 +101,9 @@ export const EventApply =()=>{
 
         const selectedPlaceData = teamLocations.find((location) => location.PLACE_SEQ.toString() === selectedValue);
         setSelectedTeam(selectedPlaceData ? selectedPlaceData.TEAM_NAME : '')
+        setSelectedTeamType(selectedPlaceData ? selectedPlaceData.TEAM_TYPE : '');
     }
-     const handleAddSchedule = () => {
+    const handleAddSchedule = () => {
         if (selectedDay && selectedTime) {
             setScheduleList([...scheduleList, { day: selectedDay, time: selectedTime }]);
             setSelectedDay(""); // 초기화
@@ -88,7 +113,12 @@ export const EventApply =()=>{
         }
     };
     const handleAddException=()=>{
-        console.log();
+        if(selectedExceptDay){
+            setScheduleExceptList([...scheduleExceptList, {day: selectedExceptDay}]);
+            setSelectedExceptDay(""); // 초기화
+        }else {
+            alert("제외일을 선택해주세요.");
+        }
     }
 
      // 2차 카테고리 옵션 생성
@@ -104,7 +134,7 @@ export const EventApply =()=>{
         ));
     };
      // 장소 선택 옵션 생성
-     const getLocationOptions = () => {
+    const getLocationOptions = () => {
         if (category === "2") {
             return teamLocations.map(place => (
                 <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
@@ -119,7 +149,21 @@ export const EventApply =()=>{
             ));
         } 
     }
+    // 원정팀 선택 옵션 생성
+    const getAwayTeams=()=>{
+        return teams.filter((team) =>  team.TEAM_TYPE === selectedTeamType && team.TEAM_NAME !== selectedTeam)
+                    .map(team =>(
+                        <option key={team.TEAM_SEQ} value={team.TEAM_SEQ}>{team.TEAM_NAME}</option>
+                    ))
+    }
 
+    const handleSubmit=()=>{
+        api.post(`/biz/application`, formData).then((resp)=>{
+
+        }).catch((resp)=>{
+            alert("잘못됨")
+        })
+    }
     return(
         <div className={styles.container}>
             <div className={styles.header}>
@@ -143,7 +187,7 @@ export const EventApply =()=>{
                                 ))}
                             </select>
                             <span className={styles.Gap}></span>
-                             2차: <select name="sub_category" value={formData.sub_category} onChange={handleChange}>
+                             2차: <select name="sub_category_seq" value={formData.sub_category_seq} onChange={handleChange}>
                                 <option value="">선택</option>
                                 {getSubCategoryOptions()}
                             </select>
@@ -187,7 +231,10 @@ export const EventApply =()=>{
                             <span className={styles.Gap}></span>
                             VS 
                             <span className={styles.Gap}></span>
-                            <input type="text" placeholder="원정팀" />
+                            <select name="away_team_seq" value={formData.away_team_seq} onChange={handleChange}>
+                                <option value="">원정팀 선택</option>
+                                {getAwayTeams()}
+                            </select>
                         </td>    
                     </tr>
                     }
@@ -206,7 +253,7 @@ export const EventApply =()=>{
                         </td>
                     </tr>
                     <tr>
-                        <td>시작시간</td>
+                        <td>시작시간( 스케쥴 테이블에 )</td>
                         <td>
                             <select className={styles.shortInput} value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
                                 <option value="">요일</option>
@@ -225,13 +272,22 @@ export const EventApply =()=>{
                             <br></br>
                             <ul>
                                 {scheduleList.map((schedule, index) => (
-                                    <li key={index}>{schedule.day} - {schedule.time}</li>
+                                    <li key={index}>{schedule.day} - {schedule.time} <button>x</button></li> 
                                 ))}
                             </ul>
                             <br></br>
-                            제외일: <input type="date"></input>
+                            제외일: <input type="date" value={selectedExceptDay} onChange={(e)=> setSelectedExceptDay(e.target.value)}></input>
                             <span className={styles.Gap}></span>
                             <button onClick={handleAddException}>추가</button>
+                            <br></br>
+                            <ul>
+                                {scheduleExceptList.map((schedule, index) => (
+                                    <li key={index} style={{color:"red"}} > 
+                                        {schedule.day}
+                                        <button>x</button> 
+                                    </li> 
+                                ))}
+                            </ul>
                         </td>
                     </tr>
                     <tr>
@@ -262,6 +318,9 @@ export const EventApply =()=>{
                 <tr>
                     <td>공지사항</td>
                     <td> 글자 색상 변경만 되고 텍스트만 입려되게</td>
+                    <td> 
+                        {/* <MyEditor/> */}
+                    </td>
                 </tr>
                 <tr>
                     <td>메인 포스터</td>
@@ -288,7 +347,7 @@ export const EventApply =()=>{
                 </tbody>
             </table>
 
-            <button>신청</button>
+            <button onClick={handleSubmit}>신청</button>
             <button>임시저장</button>
             <button>취소</button>
 

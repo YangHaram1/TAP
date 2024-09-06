@@ -9,16 +9,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tap.admin.services.BizMemService;
+import com.tap.admin.services.AdminBizMemberService;
 
 @RestController
 @RequestMapping("/admin/bizmem")
 public class AdminBizMemberController {
 
 	@Autowired
-	private BizMemService bizMemServ;
+	private AdminBizMemberService adminbizMemServ;
+	
 	@GetMapping
 	public ResponseEntity<List<HashMap<String, Object>>> getAllBizMem(){
-		return ResponseEntity.ok(bizMemServ.getAllBizMem());
+		return ResponseEntity.ok(adminbizMemServ.getAllBizMem());
 	}
 }
+ 

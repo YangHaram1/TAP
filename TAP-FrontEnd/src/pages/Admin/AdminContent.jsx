@@ -8,9 +8,9 @@ export const AdminContent =()=>{
     return(
         <div className={styles.container}>
             <Routes>
-                <Route path="/" element={<Dash/>}/>
-                <Route path="/members/user" element={<UserMem/>}/>
-                <Route path="/members/biz" element={<BizMem/>}/>
+                <Route path="/*" element={<Dash/>}/>
+                <Route path="/members/user/*" element={<UserMem/>}/>
+                <Route path="/members/biz/*" element={<BizMem/>}/>
             </Routes>
         </div>
     );

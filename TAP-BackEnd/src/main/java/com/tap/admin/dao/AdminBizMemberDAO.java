@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BizMemDAO {
+public class AdminBizMemberDAO {
 	@Autowired
 	private SqlSession mybatis;
 	
 	public List<HashMap<String, Object>> getAllBizMem(){
-		return mybatis.selectList("BizMem.getAllBizMem");
+		return mybatis.selectList("AdminBizMem.getAllBizMem");
 	}
 }

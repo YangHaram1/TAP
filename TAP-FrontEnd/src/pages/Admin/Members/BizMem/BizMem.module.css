@@ -1,0 +1,13 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    /* background-color: #f9f9f9; */
+    background-color: beige;
+    border-radius: 8px;
+}
+.table{
+    background-color: pink;
+}
