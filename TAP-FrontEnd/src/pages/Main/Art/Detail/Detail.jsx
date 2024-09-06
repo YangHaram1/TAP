@@ -20,10 +20,7 @@ export const Detail = ()=>{
 
     return(
         <div className={styles.container}>
-            {/* <h1>Detail Page</h1>
-            <p>Sequence: {seq}</p> */}
             <div className={styles.left}>
-                {/* <h2>상품명</h2> */}
                 <h2>상품명</h2>
                 <div className={styles.header_data}>
                     <div className={styles.header_data_left}>
@@ -85,8 +82,10 @@ export const Detail = ()=>{
                 }
             </div>
 
-
             </div>
+
+
+            {/* 예매 섹션 */}
             <div className={styles.right}>
                 <div className={styles.bubble}>
                     <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 1</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
