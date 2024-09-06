@@ -4,6 +4,7 @@ import styles from './Main.module.css';
 import { Routes, useNavigate, Route } from "react-router-dom";
 import { Sports } from './Sports/Sports';
 import { TeamPage } from './Sports/TeamPage/TeamPage';
+import { Detail } from './Art/Detail/Detail';
 
 const Main = () => {
     const navi = useNavigate();
@@ -18,6 +19,7 @@ const Main = () => {
                     <Route path='/' element={<div>main</div>} />
                     <Route path='/musical' element={<Art category={"musical"}/>}/>
                     <Route path='/concert' element={<Art category={"concert"}/>}/>
+                    <Route path='/detail' element={<Detail/>}/>
                     <Route path='sports' element={<Sports/>} />
                     <Route path='/teamPage' element={<TeamPage />} />
                 </Routes>

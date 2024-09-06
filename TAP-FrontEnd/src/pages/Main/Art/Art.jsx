@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom';
 import { List } from './List/List';
 
 export const Art = ({category})=>{
@@ -50,6 +49,11 @@ export const Art = ({category})=>{
             }
 
             {/* 이벤트 -> 할까 말까*/}
+            <div className={styles.event_box}>
+                <div className={styles.event}>이벤트</div>
+                <div className={styles.event}>넣을까</div>
+                <div className={styles.event}>말까</div>
+            </div>
 
             {/* 할인 정보 -> 뮤지컬 일 때만 출력 */}
             {category === "musical"?
