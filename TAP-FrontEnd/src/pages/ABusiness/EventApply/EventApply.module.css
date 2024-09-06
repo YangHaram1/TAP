@@ -1,28 +1,142 @@
-.container{
-    width:100%;
-    height:100%;
-    /* padding: 0px 100px; */
-    border:1px solid black;
-    background-color: beige;
-}
-.header{
-    padding: 30px 50px 10px 50px;
-}
-.title{
-    padding: 0px 50px;
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 8px;
 }
 
-.table{
-    width:100%;
-    /* border:1px solid black; */
-    padding-left: 100px;
+.header {
+    padding: 20px;
+    border-bottom: 2px solid #ddd;
+    background-color: #fff;
+    border-radius: 8px 8px 0 0;
 }
-.table td{
-    border-bottom: 1px solid #555;
-    padding: 15px 5px;
+
+.header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
 }
-.table td:nth-child(1){
-    background-color: pink;
-    width:20%;
+
+.title {
     padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fafafa;
+    border-radius: 0 0 8px 8px;
 }
+
+.title p {
+    margin: 0;
+    font-size: 18px;
+    color: #555;
+}
+
+
+.tableWrapper {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.table td:nth-child(1) {
+    background-color: #f2f2f2;
+    width: 25%;
+    font-weight: bold;
+}
+
+.table td:nth-child(2) {
+    background-color: #fff;
+}
+
+.shortInput {
+    width: 20% !important;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.Gap {
+    display: inline-block;
+    width: 20px; 
+}
+
+
+.container input[type="text"], 
+.container input[type="date"], 
+.container input[type="time"], 
+.container select {
+    width: 30%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.container input[type="file"] {
+    border: none;
+    padding: 0;
+}
+
+.container button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.container button:hover {
+    background-color: #0056b3;
+}
+
+/* ============================================== */
+
+.container input[type="radio"] {
+    margin-right: 5px;
+}
+
+.container span {
+    color: #666;
+}
+
+.container input[disabled] {
+    background-color: #e9ecef;
+}
+
+
+
+/* 반응형 디자인 */
+/* @media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .header, .title {
+        padding: 15px;
+    }
+
+    .table td {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+} */

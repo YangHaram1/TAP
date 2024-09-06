@@ -1,12 +1,13 @@
-import { AdminHeader } from '../../components/Header/AdminHeader'
+import { AdminSideMenu } from '../ASideMenu/AdminSideMenu'
 import styles from './Admin.module.css'
+import { AdminContent } from './AdminContent'
 
 export const Admin=()=>{
 
     return(
         <div className={styles.container}>
-            <AdminHeader/>
-            {/* <AdminContent/> */}
+            <AdminSideMenu/>
+            <AdminContent/>
         </div>
     )
 }
