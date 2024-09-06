@@ -1,6 +1,28 @@
 import styles from './Guide.module.css';
+import Mybutton from './../../../MyButton/Mybutton';
+import { useState } from 'react';
+import  Swal  from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
-const Guide = ({ checkDetail, setCheckDetail }) => {
+const Guide = ({ checkDetail, handleCheck }) => {
+    const [check,setCheck]=useState(false);
+    const navi =useNavigate();
+
+    const handleConfirm=()=>{
+        if(!check){
+            Swal.fire({
+                icon:'error',
+                title:'회원 탈퇴 안내',
+                text:'회원 탈퇴 안내사항 확인을 선택해주세요'
+            })
+        }
+    }
+    const handleUpdate=()=>{
+        navi('/mypage/menus');
+    }
+    const handlePassword=()=>{
+        navi('/mypage/menus/password');
+    }
     return (
         <div className={styles.container}>
             <div className={styles.title}>
@@ -19,15 +41,16 @@ const Guide = ({ checkDetail, setCheckDetail }) => {
             </div>
             <div className={styles.info}>
                 <div className={styles.infoTitle}>
-                    <p><span>TAP(Ticket And Place)</span>의 서비스를 이용하시는데 불편함이 있으셨나요?</p>
+                    <p><span>TAP(Ticket And Place)</span>의 서비스를 이용하시는데</p>
+                    <p>불편함이 있으셨나요?</p>
                 </div>
                 <div className={styles.infoDetail}>
-                    개인정보 및 메일 수신에 대해 불편을 느끼셨다면,
-                    아래의 방법을 통해 회원님의 불편을 해결 하실 수 있습니다.
+                    <p>개인정보 및 메일 수신에 대해 불편을 느끼셨다면,</p>
+                    <p>아래의 방법을 통해 회원님의 불편을 해결 하실 수 있습니다.</p>
                 </div>
                 <div className={styles.infoBtn}>
-                    <button>회원정보 수정</button>
-                    <button>비밀번호 변경</button>
+                    <button onClick={handleUpdate}>회원정보 수정</button>
+                    <button onClick={handlePassword}>비밀번호 변경</button>
                 </div>
             </div>
             <div className={styles.contents}>
@@ -72,14 +95,15 @@ const Guide = ({ checkDetail, setCheckDetail }) => {
                     </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <input type="checkbox" /> 상기 사항을 모두 확인하였습니다.
+            <div className={styles.footer}>
+                <div className={styles.check}>
+                    <input type="checkbox" checked={check} onChange={(e)=>{setCheck(e.target.checked)}}/> 상기 사항을 모두 확인하였습니다.
                 </div>
-                <div>
-                    회원 탈퇴 시 적립금 및 지급된 혜택은 소멸되어 재가입에 따른 복구가 불가하며 5년간 기존 아이디의 재사용 불가 및 7일이내 동일명의의 본인인증 불가 에 대한 사항에 동의 합니다.
+                <div className={styles.footerDetail}>
+                   <p> 회원 탈퇴 시 적립금 및 지급된 혜택은 소멸되어 재가입에 따른 복구가 불가하며 5년간 기존 아이디의 재사용 불가 및 <span>7일이내 동일명의의 본인인증 불가</span> 에 대한 사항에 동의 합니다.</p>
                 </div>
             </div>
+            <Mybutton handleConfirm={handleConfirm} setcheck={null}/>
         </div>
     )
 }
