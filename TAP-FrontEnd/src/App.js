@@ -75,12 +75,12 @@ function App() {
                         </>
                     ) : isAuth && role === 'ROLE_ADMIN' ? (
                         <>
-                            <AdminHeader/>
+                            <AdminHeader hasScrolled={hasScrolled}/>
                             <Admin/>
                         </>
                     ) : isAuth && role === 'ROLE_BIZ' ? (
                         <>
-                            <AdminHeader/>
+                            <AdminHeader hasScrolled={hasScrolled}/>
                             <Biz/>
                         </>
                     ) : (
