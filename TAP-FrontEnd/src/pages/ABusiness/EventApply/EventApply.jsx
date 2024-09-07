@@ -7,7 +7,6 @@ import MyEditor from "../../../components/MyEditor/MyEditor";
 export const EventApply = () => {
     const { login, loginID, setAuth, role } = useAuthStore();
     const editorRef = useRef();
-    const [age, setAge] = useState(); 
     const [category, setCategory] = useState()
     const [formData, SetFormData] = useState({
         id: loginID, 
@@ -118,9 +117,56 @@ export const EventApply = () => {
         console.log("Updated formData:", formData);
     }, [formData]);
 
+    //=======================================================
+    // 요일 배열
+    const [weekdays, setWeekdays] = useState([]);
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+    // 두 날짜 사이의 요일 구하기
+    const getDaysBetweenDates = (start, end) => {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        let currentDate = new Date(startDate);
+        const daySet = new Set();
+
+        // 시작일부터 종료일까지의 날짜 계산
+        while (currentDate <= endDate) {
+            daySet.add(currentDate.getDay());
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        // 요일을 배열로 변환하여 반환
+        return Array.from(daySet).sort();
+    };
+    //=======================================================
     const handleChange = (e) => {
         const { name, value } = e.target;
+        
+        // 시작일과 종료일에 대한 유효성 검사
+        if (name === 'start_date' && formData.end_date && value > formData.end_date) {
+            alert('시작일은 종료일보다 이후일 수 없습니다.');
+            return;
+        }
+        if (name === 'end_date' && formData.start_date && value < formData.start_date) {
+            alert('종료일은 시작일보다 이전일 수 없습니다.');
+            return;
+        }
+
         SetFormData({ ...formData, [name]: value });
+
+        //===============================
+        // 요일 계산
+        if (name === 'start_date' && formData.end_date) {
+            const weekdays = getDaysBetweenDates(value, formData.end_date);
+            setWeekdays(weekdays);
+            // 스케줄 초기화
+            setScheduleList([]);
+            setScheduleExceptList([]);
+        } else if (name === 'end_date' && formData.start_date) {
+            const weekdays = getDaysBetweenDates(formData.start_date, value);
+            setWeekdays(weekdays);
+            // 스케줄 초기화
+            setScheduleList([]);
+            setScheduleExceptList([]);
+        }
     };
 
     const handleSelectPlace = (e) => {
@@ -141,6 +187,10 @@ export const EventApply = () => {
             alert("요일과 시간을 모두 선택해주세요.");
         }
     };
+    // 스케쥴 리스트에 있는거 삭제하기
+    const handleRemoveSchedule =(indexToRemove)=>{
+        setScheduleList(scheduleList.filter((_, index) => index !== indexToRemove));
+    }
 
     const handleAddException = () => {
         if (selectedExceptDay) {
@@ -248,7 +298,6 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
-
                         <tr>
                             <td>장르</td>
                             <td>
@@ -258,7 +307,6 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
-
                         <tr>
                             <td>상품명</td>
                             <td>
@@ -292,8 +340,7 @@ export const EventApply = () => {
                                 <td>
                                     {selectedPlace 
                                         ? selectedTeam 
-                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />
-                                        
+                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />  
                                     }
                                     <span className={styles.Gap}></span>
                                     VS
@@ -324,13 +371,11 @@ export const EventApply = () => {
                             <td>
                                 <select className={styles.shortInput} value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
                                     <option value="">요일</option>
-                                    <option value="월">월</option>
-                                    <option value="화">화</option>
-                                    <option value="수">수</option>
-                                    <option value="목">목</option>
-                                    <option value="금">금</option>
-                                    <option value="토">토</option>
-                                    <option value="일">일</option>
+                                    {weekdays.map(day => (
+                                        <option key={day} value={daysOfWeek[day]}>
+                                            {daysOfWeek[day]}
+                                        </option>
+                                    ))}
                                 </select>
                                 <span className={styles.Gap}></span>
                                 시간: <input type="time" step="300" required className={styles.shortInput} value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}></input>
@@ -339,7 +384,10 @@ export const EventApply = () => {
                                 <br></br>
                                 <ul>
                                     {scheduleList.map((schedule, index) => (
-                                        <li key={index}>{schedule.day} - {schedule.time} <button>x</button></li>
+                                        <li key={index}>
+                                            {schedule.day} - {schedule.time} 
+                                            <button onClick={() => handleRemoveSchedule(index)}>x</button>
+                                        </li>
                                     ))}
                                 </ul>
                                 <br></br>
