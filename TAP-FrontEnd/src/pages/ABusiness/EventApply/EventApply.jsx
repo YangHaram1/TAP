@@ -192,6 +192,25 @@ export const EventApply = () => {
         setScheduleList(scheduleList.filter((_, index) => index !== indexToRemove));
     }
 
+    // 제외일 변경 함수: 시작일과 종료일 사이인지 확인
+    const handleExceptDateChange = (e) => {
+        const selectedDate = e.target.value;
+        const startDate = new Date(formData.start_date);
+        const endDate = new Date(formData.end_date);
+        const currentDate = new Date(selectedDate);
+
+        // 시작일과 종료일 사이의 날짜인지 확인
+        if (currentDate < startDate || currentDate > endDate) {
+            alert('제외일은 시작일과 종료일 사이에 있어야 합니다.');
+            return;
+        }
+        setSelectedExceptDay(selectedDate);
+    };
+
+    // 제외일 삭제 함수
+    const handleRemoveException = (indexToRemove) => {
+        setScheduleExceptList(scheduleExceptList.filter((_, index) => index !== indexToRemove));
+    };
     const handleAddException = () => {
         if (selectedExceptDay) {
             setScheduleExceptList([...scheduleExceptList, { day: selectedExceptDay }]);
@@ -391,7 +410,7 @@ export const EventApply = () => {
                                     ))}
                                 </ul>
                                 <br></br>
-                                제외일: <input type="date" value={selectedExceptDay} onChange={(e) => setSelectedExceptDay(e.target.value)}></input>
+                                제외일: <input type="date" value={selectedExceptDay} onChange={handleExceptDateChange}></input>
                                 <span className={styles.Gap}></span>
                                 <button onClick={handleAddException}>추가</button>
                                 <br></br>
@@ -399,7 +418,7 @@ export const EventApply = () => {
                                     {scheduleExceptList.map((schedule, index) => (
                                         <li key={index} style={{ color: "red" }}>
                                             {schedule.day}
-                                            <button>x</button>
+                                            <button onClick={() => handleRemoveException(index)}>x</button>
                                         </li>
                                     ))}
                                 </ul>
