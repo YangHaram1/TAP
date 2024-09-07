@@ -8,6 +8,8 @@ export const EventApply = () => {
     const { login, loginID, setAuth, role } = useAuthStore();
     const editorRef = useRef();
     const [category, setCategory] = useState()
+    const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
+   
     const [formData, SetFormData] = useState({
         id: loginID, 
         name: '', 
@@ -19,7 +21,9 @@ export const EventApply = () => {
         end_date: '', 
         running_time: '', 
         running_intertime: '', 
-        open_date: '', // 여기서 날짜랑 시간 합쳐서 SPRING BOOT , timestamp 형태로 보내기 
+        expected_open_date:'',
+        expected_open_time:'',
+       // open_date: '', // 여기서 날짜랑 시간 합쳐서 SPRING BOOT , timestamp 형태로 보내기 
         max_ticket: '', 
         away_team_seq: ''
     });
@@ -43,7 +47,7 @@ export const EventApply = () => {
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
     const [content, setContent] = useState('');
     const [content2, setContent2] = useState('');
-
+    const contentRef = useRef(null);
     useEffect(() => {
         api.get(`/biz/application/category`).then((resp) => {
             setCategories(resp.data);
@@ -90,7 +94,7 @@ export const EventApply = () => {
             alert("이상 오류");
         });
     }, []);
-    const contentRef = useRef(null);
+    
     const handleCategory = (e) => {
         const selectedValue = e.target.value;
         setSelectedCategory(selectedValue);
@@ -134,7 +138,8 @@ export const EventApply = () => {
             currentDate.setDate(currentDate.getDate() + 1);
         }
         // 요일을 배열로 변환하여 반환
-        return Array.from(daySet).sort();
+        const weekdaysArray = Array.from(daySet).sort();
+        return ["전체", ...weekdaysArray];
     };
     //=======================================================
     const handleChange = (e) => {
@@ -173,23 +178,71 @@ export const EventApply = () => {
         const selectedValue = e.target.value;
         setSelectedPlace(selectedValue);
 
+        SetFormData({ ...formData, place_seq: selectedValue});
+        
         const selectedPlaceData = teamLocations.find((location) => location.PLACE_SEQ.toString() === selectedValue);
         setSelectedTeam(selectedPlaceData ? selectedPlaceData.TEAM_NAME : '');
         setSelectedTeamType(selectedPlaceData ? selectedPlaceData.TEAM_TYPE : '');
     };
 
+
+    // 요일 선택 옵션 비활성화를 위한 상태 추가
+    const [isDisabled, setIsDisabled] = useState(false);
     const handleAddSchedule = () => {
-        if (selectedDay && selectedTime) {
-            setScheduleList([...scheduleList, { day: selectedDay, time: selectedTime }]);
-            setSelectedDay(""); // 초기화
-            setSelectedTime(""); // 초기화
-        } else {
-            alert("요일과 시간을 모두 선택해주세요.");
-        }
+        if (selectedDay === "전체") {
+            // "전체"가 선택되었고, scheduleList가 비어있지 않을 경우
+            if (scheduleList.length > 0) {
+              const confirmClear = window.confirm(
+                "'전체'를 선택하면 기존 스케줄이 초기화됩니다. 계속하시겠습니까?"
+              );
+              if (confirmClear) {
+                // 확인을 누르면 리스트를 초기화하고 "전체" 추가
+                setScheduleList([{ day: "전체", time: selectedTime }]);
+                setIsDisabled(true); // 다른 요일 옵션 비활성화
+                setSelectedDay(""); // 요일 초기화
+                setSelectedTime(""); // 시간 초기화
+              }
+            } else {
+              // "전체"만 추가
+              setScheduleList([{ day: "전체", time: selectedTime }]);
+              setIsDisabled(true); // 다른 요일 옵션 비활성화
+              setSelectedDay(""); // 요일 초기화
+              setSelectedTime(""); // 시간 초기화
+            }
+          } else {
+            // "전체"가 아닌 경우
+            if (!scheduleList.find((item) => item.day === "전체")) {
+              // "전체"가 리스트에 없을 때만 추가
+              setScheduleList([...scheduleList, { day: selectedDay, time: selectedTime }]);
+              setSelectedDay(""); // 초기화
+              setSelectedTime(""); // 초기화
+            } else {
+              alert("이미 '전체'가 선택되어 다른 요일을 추가할 수 없습니다.");
+            }
+          }
+        
+          // 스케줄 리스트가 비어있으면 다시 옵션 활성화
+          if (scheduleList.length === 0) {
+            setIsDisabled(false);
+          }
+        // if (selectedDay && selectedTime) {
+        //     setScheduleList([...scheduleList, { day: selectedDay, time: selectedTime }]);
+        //     setSelectedDay(""); // 초기화
+        //     setSelectedTime(""); // 초기화
+        // } else {
+        //     alert("요일과 시간을 모두 선택해주세요.");
+        // }
     };
     // 스케쥴 리스트에 있는거 삭제하기
     const handleRemoveSchedule =(indexToRemove)=>{
-        setScheduleList(scheduleList.filter((_, index) => index !== indexToRemove));
+        // setScheduleList(scheduleList.filter((_, index) => index !== indexToRemove));
+        const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove);
+        setScheduleList(updatedScheduleList);
+
+        // 스케줄 리스트가 비어 있으면 옵션 활성화
+        if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.day === "전체")) {
+            setIsDisabled(false);
+        }
     }
 
     // 제외일 변경 함수: 시작일과 종료일 사이인지 확인
@@ -272,6 +325,10 @@ export const EventApply = () => {
             return <option value="">선택</option>;
         }
     };
+    // Handle radio button change to enable or disable running time inputs
+    const handleRunningTimeChange = (e) => {
+        setIsRunningTimeEnabled(e.target.value === "yes");
+    };
 
     const handleSubmit = () => {
         api.post(`/biz/application`, formData).then((resp) => {
@@ -329,7 +386,7 @@ export const EventApply = () => {
                         <tr>
                             <td>상품명</td>
                             <td>
-                                <input type="text" placeholder="상품명 입력" name="eventName" value={formData.eventName} onChange={handleChange}></input>
+                                <input type="text" placeholder="상품명 입력" name="name" value={formData.name} onChange={handleChange}></input>
                             </td>
                         </tr>
                         <tr>
@@ -388,12 +445,17 @@ export const EventApply = () => {
                         <tr>
                             <td>시작시간( 스케쥴 테이블에 )</td>
                             <td>
-                                <select className={styles.shortInput} value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
+                                <select className={styles.shortInput} value={selectedDay} 
+                                onChange={(e) => setSelectedDay(e.target.value)}
+                                disabled={isDisabled && selectedDay !== "전체"} 
+                                >
                                     <option value="">요일</option>
-                                    {weekdays.map(day => (
-                                        <option key={day} value={daysOfWeek[day]}>
-                                            {daysOfWeek[day]}
-                                        </option>
+                                    {weekdays.map((day, index) => (
+                                    <option key={index} value={day === "전체" ? "전체" : daysOfWeek[day]}
+                                    disabled={isDisabled && day !== "전체"} 
+                                    >
+                                        {day === "전체" ? "전체" : daysOfWeek[day]}
+                                    </option>
                                     ))}
                                 </select>
                                 <span className={styles.Gap}></span>
@@ -427,9 +489,42 @@ export const EventApply = () => {
                         <tr>
                             <td>러닝타임</td>
                             <td>
-                                <input type="radio" name="running" value="yes" />러닝타임(인터미션 포함) : <input type="text" style={{ width: "50px" }} />분 <span style={{ fontSize: "13px" }}>(인터미션 :<input type="text" style={{ width: "50px" }} />분)</span>
+                                <input type="radio"  name="running"  value="yes"  onChange={handleRunningTimeChange} />
+                                러닝타임(인터미션 포함) : 
+                                <input 
+                                    type="text" 
+                                    name="running_time" 
+                                    value={formData.running_time} 
+                                    onChange={handleChange} 
+                                    style={{ width: "50px" }} 
+                                    disabled={!isRunningTimeEnabled} // Disable based on state
+                                /> 분
+                                <span style={{ fontSize: "13px" }}>
+                                (인터미션: 
+                                <input 
+                                    type="text" 
+                                    name="running_intertime" 
+                                    value={formData.running_intertime} 
+                                    onChange={handleChange} 
+                                    style={{ width: "50px" }} 
+                                    disabled={!isRunningTimeEnabled} // Disable based on state
+                                /> 분)
+                                </span>
                                 <br></br>
-                                <input type="radio" name="running" value="no" />러닝타임없음
+                                <input type="radio" name="running" value="no"
+                                 onChange={() => SetFormData({ ...formData, running_time: '0', running_intertime: '0' })} />러닝타임없음
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>최대 티켓 수량</td>
+                            <td>
+                                <select name="max_ticket"
+                                    value={formData.max_ticket}
+                                    onChange={handleChange}>
+                                 {[...Array(20).keys()].map(i => (
+                                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                    ))}
+                                </select>
                             </td>
                         </tr>
                         <tr>
