@@ -15,6 +15,8 @@ const Guide = ({ checkDetail, handleCheck }) => {
                 title:'회원 탈퇴 안내',
                 text:'회원 탈퇴 안내사항 확인을 선택해주세요'
             })
+        }else{
+            handleCheck(1);
         }
     }
     const handleUpdate=()=>{
