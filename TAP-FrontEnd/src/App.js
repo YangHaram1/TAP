@@ -17,6 +17,7 @@ import { jwtDecode } from 'jwt-decode'
 import { AdminHeader } from './components/Header/AdminHeader'
 import { Biz } from './pages/ABusiness/Biz'
 import { Admin } from './pages/Admin/Admin'
+import Grade from './pages/Grade/Grade'
 
 function App() {
     const { login, isAuth, setAuth, role } = useAuthStore()
@@ -96,6 +97,7 @@ function App() {
                                         element={<Mypage />}
                                     />
                                     <Route path="/sign/*" element={<Sign />} />
+                                    <Route path='/grade/*' element={<Grade/>}/>
                                 </Routes>
                             </>
                         )

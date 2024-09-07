@@ -35,8 +35,8 @@ function SweetAlert(icon, title, text, myfunction,cancelfuction) { //여기서 i
             }
               
             ).then((result) => {
-                    //취소후 로직 
-                    if(cancelfuction!==null){
+                    //취소후 로직
+                    if(cancelfuction!=null){
                         cancelfuction();
                     }
             });
