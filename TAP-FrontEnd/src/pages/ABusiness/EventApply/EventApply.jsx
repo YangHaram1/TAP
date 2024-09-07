@@ -141,38 +141,46 @@ export const EventApply = () => {
         const weekdaysArray = Array.from(daySet).sort();
         return ["전체", ...weekdaysArray];
     };
-    //=======================================================
+   
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
-        // 시작일과 종료일에 대한 유효성 검사
-        if (name === 'start_date' && formData.end_date && value > formData.end_date) {
-            alert('시작일은 종료일보다 이후일 수 없습니다.');
-            return;
-        }
-        if (name === 'end_date' && formData.start_date && value < formData.start_date) {
-            alert('종료일은 시작일보다 이전일 수 없습니다.');
-            return;
-        }
 
-        SetFormData({ ...formData, [name]: value });
+        SetFormData(prevData => {
+            const updatedData = { ...prevData, [name]: value };
 
-        //===============================
-        // 요일 계산
-        if (name === 'start_date' && formData.end_date) {
-            const weekdays = getDaysBetweenDates(value, formData.end_date);
-            setWeekdays(weekdays);
-            // 스케줄 초기화
-            setScheduleList([]);
-            setScheduleExceptList([]);
-        } else if (name === 'end_date' && formData.start_date) {
-            const weekdays = getDaysBetweenDates(formData.start_date, value);
-            setWeekdays(weekdays);
-            // 스케줄 초기화
-            setScheduleList([]);
-            setScheduleExceptList([]);
-        }
+            // 티켓 오픈 날짜와 시간 통합
+            if (name === 'expected_open_date' || name === 'expected_open_time') {
+                const combinedDateTime = `${updatedData.expected_open_date}T${updatedData.expected_open_time}`;
+                updatedData.open_date = combinedDateTime;
+            }
+
+            // 시작일과 종료일 유효성 검사
+            if (name === 'start_date' && updatedData.end_date && value > updatedData.end_date) {
+                alert('시작일은 종료일보다 이후일 수 없습니다.');
+                return prevData;
+            }
+            if (name === 'end_date' && updatedData.start_date && value < updatedData.start_date) {
+                alert('종료일은 시작일보다 이전일 수 없습니다.');
+                return prevData;
+            }
+
+            // 요일 계산
+            if (name === 'start_date' && updatedData.end_date) {
+                const weekdays = getDaysBetweenDates(value, updatedData.end_date);
+                setWeekdays(weekdays);
+                setScheduleList([]);
+                setScheduleExceptList([]);
+            } else if (name === 'end_date' && updatedData.start_date) {
+                const weekdays = getDaysBetweenDates(updatedData.start_date, value);
+                setWeekdays(weekdays);
+                setScheduleList([]);
+                setScheduleExceptList([]);
+            }
+
+            return updatedData;
+        });
     };
+
 
     const handleSelectPlace = (e) => {
         const selectedValue = e.target.value;
