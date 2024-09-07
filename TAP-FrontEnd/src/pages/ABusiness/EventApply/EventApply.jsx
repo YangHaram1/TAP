@@ -43,6 +43,7 @@ export const EventApply = () => {
     const [selectedExceptDay, setSelectedExceptDay] = useState("");
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
     const [content, setContent] = useState('');
+    const [content2, setContent2] = useState('');
 
     useEffect(() => {
         api.get(`/biz/application/category`).then((resp) => {
@@ -83,12 +84,14 @@ export const EventApply = () => {
         });
 
         api.get(`/biz/application/description`).then((resp) => {
-            setContent(resp.data[2].description_content);
+            setContent(resp.data[1].description_content);
+            setContent2(resp.data[2].description_content);
+            contentRef.current.innerHTML = resp.data[1].description_content;
         }).catch(() => {
             alert("이상 오류");
         });
     }, []);
-
+    const contentRef = useRef(null);
     const handleCategory = (e) => {
         const selectedValue = e.target.value;
         setSelectedCategory(selectedValue);
@@ -212,8 +215,11 @@ export const EventApply = () => {
     return (
         <div className={styles.container}>
             <div className={styles.imgContent}>
+            <div className={styles.viewCont} ref={contentRef}></div>
+            <p>abc하이abc</p>
                 {/* db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨 */}
                 <div dangerouslySetInnerHTML={{ __html: content }} />
+                <div dangerouslySetInnerHTML={{ __html: content2 }} />
             </div>
             <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
@@ -380,7 +386,7 @@ export const EventApply = () => {
                         <td>공지사항</td>
                         <td>
                             글자 색상 변경만 되고 텍스트만 입려되게
-                            <MyEditor editorRef={editorRef} />
+                            {/* <MyEditor editorRef={editorRef} /> */}
                         </td>
                         <td>
 
