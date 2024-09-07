@@ -10,11 +10,11 @@ export const BizManage=()=>{
 
     useEffect(()=>{
         // 장소, 카테고리, 세부카테고리, 장르, 팀 db에서 가져오기. 
-        api.get(`/biz/registration`).then((resp) => {
-            console.log(resp.data);
-          }).catch((resp) => {
-            alert("이상 오류")
-          })
+        // api.get(`/biz/registration`).then((resp) => {
+        //     console.log(resp.data);
+        //   }).catch((resp) => {
+        //     alert("이상 오류")
+        //   })
     })
 
     return(
