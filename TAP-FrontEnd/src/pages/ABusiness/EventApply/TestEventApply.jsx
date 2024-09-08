@@ -3,11 +3,9 @@ import styles from './EventApply.module.css';
 import { api } from "../../../config/config";
 import { useAuthStore } from '../../../store/store';
 import MyEditor from "../../../components/MyEditor/MyEditor";
-import MyEditorOnlyText from "../../../components/MyEditor/MyEditorOnlyText";
-import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
 
 export const EventApply = () => {
-    const { login, loginID, setAuth} = useAuthStore();
+    const { login, loginID, setAuth, role } = useAuthStore();
     const editorRef = useRef();
     const [category, setCategory] = useState()
     const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
@@ -88,13 +86,13 @@ export const EventApply = () => {
             alert("이상 오류");
         });
 
-        // api.get(`/biz/application/description`).then((resp) => {
-        //     setContent(resp.data[1].description_content);
-        //     setContent2(resp.data[2].description_content);
-        //     contentRef.current.innerHTML = resp.data[1].description_content;
-        // }).catch(() => {
-        //     alert("이상 오류");
-        // });
+        api.get(`/biz/application/description`).then((resp) => {
+            setContent(resp.data[1].description_content);
+            setContent2(resp.data[2].description_content);
+            contentRef.current.innerHTML = resp.data[1].description_content;
+        }).catch(() => {
+            alert("이상 오류");
+        });
     }, []);
     
     const handleCategory = (e) => {
@@ -109,10 +107,8 @@ export const EventApply = () => {
         setFilteredGenres([]);
     };
 
-    const [subCategory, setSubCategory] = useState("");
     const handleSubCategoryChange = (e) => {
         const selectedSubCategory = e.target.value;
-        setSubCategory(selectedSubCategory);
         SetFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
 
         const filteredGenres = genres.filter(
@@ -184,19 +180,6 @@ export const EventApply = () => {
             return updatedData;
         });
     };
-
-
-    const handleSelectPlace = (e) => {
-        const selectedValue = e.target.value;
-        setSelectedPlace(selectedValue);
-
-        SetFormData({ ...formData, place_seq: selectedValue});
-        
-        const selectedPlaceData = teamLocations.find((location) => location.PLACE_SEQ.toString() === selectedValue);
-        setSelectedTeam(selectedPlaceData ? selectedPlaceData.TEAM_NAME : '');
-        setSelectedTeamType(selectedPlaceData ? selectedPlaceData.TEAM_TYPE : '');
-    };
-
 
     // 요일 선택 옵션 비활성화를 위한 상태 추가
     const [isDisabled, setIsDisabled] = useState(false);
@@ -290,35 +273,8 @@ export const EventApply = () => {
         ));
     };
 
-    const getLocationOptions = () => {
-        if (category && formData.sub_category_seq) {
-           if (category === "2") {
-            // team_type이랑 sub_category_seq랑 같은 거 filter
-            const filteredTeamLocations = teamLocations.filter(place => place.TEAM_TYPE === formData.sub_category_seq);
-            return filteredTeamLocations.map(place => (
-                <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
-                    {place.PLACE_NAME}
-                </option>
-            ));
-            } else if (category === "1") {
-                return allLocations.map(place => (
-                    <option key={place.PLACE_SEQ} value={place.PLACE_SEQ}>
-                        {place.PLACE_NAME}
-                    </option>
-                ));
-            }
-        }
-        // 카테고리 2개 선택안하면 디폴트 '선택'으로
-        return <option value="">선택</option>;
-    };
 
-    const getAwayTeams = () => {
-        return teams.filter((team) => team.TEAM_TYPE === selectedTeamType && team.TEAM_NAME !== selectedTeam)
-            .map(team => (
-                <option key={team.TEAM_SEQ} value={team.TEAM_SEQ}>{team.TEAM_NAME}</option>
-            ));
-    };
-
+    
     const getGenres = () => {
          if (category && formData.sub_category_seq) {
             return filteredGenres.map((genre) => (
@@ -330,133 +286,28 @@ export const EventApply = () => {
             return <option value="">선택</option>;
         }
     };
+    // Handle radio button change to enable or disable running time inputs
     const handleRunningTimeChange = (e) => {
         setIsRunningTimeEnabled(e.target.value === "yes");
     };
 
-    // 캐스팅 상태
-    const [castingImage, setCastingImage] = useState(null);
-    const [actorName, setActorName] = useState('');
-    const [role, setRole] = useState('');
-    const [castingList, setCastingList] = useState([]);
-    const fileInputRef = useRef(null);
-
-    const handleCastingImageChange = (event) => {
-        setCastingImage(event.target.files[0]);
-    };
-    const handleActorNameChange = (event) => {
-        setActorName(event.target.value);
-    };
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
-    };
-
-    const handleAddCasting = () => {
-        if (actorName && role && castingImage) {
-            setCastingList([...castingList, { image: castingImage, name: actorName, role }]);
-            setCastingImage(null);
-            setActorName('');
-            setRole('');
-            fileInputRef.current.value = null;
-        } else {
-            alert('모든 필드를 입력해 주세요.');
-        }
-    };
-    const handleRemoveCasting = (indexToRemove) => {
-        setCastingList(castingList.filter((_, index) => index !== indexToRemove));
-    };
-    
-    // 메인 포스터 업로드 핸들러
-    const [eventPoster, setEventPoster] = useState(null);
-
-    const handleMainPosterChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        setEventPoster(file); // 선택된 파일을 eventPoster 상태로 설정
-      }
-    };
-    //
     const handleSubmit = () => {
-        // 입력값 검증 함수
-        const validateForm = () => {
-            // 필수 항목들이 비어있는지 확인
-            if (!formData.sub_category_seq) {
-                alert("카테고리를 선택해 주세요.");
-                return false;
-            }
-            if (!formData.genre_seq) {
-                alert("장르를 선택해 주세요.");
-                return false;
-            }
-            if (!formData.name) {
-                alert("상품명을 입력해 주세요.");
-                return false;
-            }
-            if (!formData.age_limit) {
-                alert("관람등급을 선택해 주세요.");
-                return false;
-            }
-            if (!formData.start_date || !formData.end_date) {
-                alert("시작일과 종료일을 입력해 주세요.");
-                return false;
-            }
-            if (formData.start_date > formData.end_date) {
-                alert("시작일이 종료일보다 늦을 수 없습니다.");
-                return false;
-            }
-            if (!formData.max_ticket) {
-                alert("최대 티켓 수량을 선택해 주세요.");
-                return false;
-            }
-            if (formData.category === "2" && (!formData.away_team_seq || !selectedTeam)) {
-                alert("경기 팀을 선택해 주세요.");
-                return false;
-            }
-            if (!formData.expected_open_date || !formData.expected_open_time){ 
-                alert("오픈날짜 선택"); 
-                return false;
-            }
-            if(!formData.running_time ){
-                alert("러닝타임 선택");
-                return false;
-            }
-            if(scheduleList.length==0){
-                alert("시작시간 설정해라");
-                return false;
-            }
-            // 필요한 다른 검증을 여기에 추가할 수 있습니다.
-    
-            return true;
-        };
-    
-        // 유효성 검사 통과 시에만 서버로 요청
-        if (validateForm()) {
-            api.post(`/biz/application`, formData)
-                .then((resp) => {
-                    // 요청 성공 시 추가 작업
-                })
-                .catch(() => {
-                    alert("잘못됨");
-                });
-        }
-    };
-    // const handleSubmit = () => {
-    //     api.post(`/biz/application`, formData).then((resp) => {
+        api.post(`/biz/application`, formData).then((resp) => {
 
-    //     }).catch(() => {
-    //         alert("잘못됨");
-    //     });
-    // };
+        }).catch(() => {
+            alert("잘못됨");
+        });
+    };
 
     return (
         <div className={styles.container}>
-            {/* <div className={styles.imgContent}>
+            <div className={styles.imgContent}>
             <div className={styles.viewCont} ref={contentRef}></div>
-            <p>abc하이abc</p> */}
+            <p>abc하이abc</p>
                 {/* db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨 */}
-                {/* <div dangerouslySetInnerHTML={{ __html: content }} />
+                <div dangerouslySetInnerHTML={{ __html: content }} />
                 <div dangerouslySetInnerHTML={{ __html: content2 }} />
-            </div> */}
+            </div>
             <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
             </div>
@@ -493,51 +344,7 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
-                        <tr>
-                            <td>상품명</td>
-                            <td>
-                                <input type="text" placeholder="상품명 입력" name="name" value={formData.name} onChange={handleChange}></input>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>관람등급</td>
-                            <td>
-                                <select name="age_limit" value={formData.age_limit} onChange={handleChange}>
-                                    <option value="">선택</option>
-                                    <option value="ALL">ALL</option>
-                                    <option value="8세">8세</option>
-                                    <option value="12세">12세</option>
-                                    <option value="18세">18세</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>장소</td>
-                            <td>
-                                <select onChange={handleSelectPlace}>
-                                    <option value="">선택</option>
-                                    {getLocationOptions()}
-                                </select>
-                            </td>
-                        </tr>
-                        {category === "2" &&
-                            <tr>
-                                <td> 경기 팀</td>
-                                <td>
-                                    {selectedPlace 
-                                        ? selectedTeam 
-                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />  
-                                    }
-                                    <span className={styles.Gap}></span>
-                                    VS
-                                    <span className={styles.Gap}></span>
-                                    <select name="away_team_seq" value={formData.away_team_seq} onChange={handleChange}>
-                                        <option value="">원정팀 선택</option>
-                                        {getAwayTeams()}
-                                    </select>
-                                </td>
-                            </tr>
-                        }
+                   
                         <tr>
                             <td>좌석 등급 및 가격</td>
                             <td>
@@ -631,7 +438,6 @@ export const EventApply = () => {
                                 <select name="max_ticket"
                                     value={formData.max_ticket}
                                     onChange={handleChange}>
-                                        <option value="">수량 선택</option>
                                  {[...Array(20).keys()].map(i => (
                                     <option key={i + 1} value={i + 1}>{i + 1}</option>
                                     ))}
@@ -656,11 +462,10 @@ export const EventApply = () => {
             <table className={styles.table}>
                 <tbody>
                     <tr>
-                        <td>공지사항 </td>
+                        <td>공지사항</td>
                         <td>
-                            <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
-                            {/* <MyEditorOnlyText editorRef={editorRef} /> */}
-                            <textarea name="eventNotice"></textarea>
+                            글자 색상 변경만 되고 텍스트만 입려되게
+                            {/* <MyEditor editorRef={editorRef} /> */}
                         </td>
                         <td>
 
@@ -668,53 +473,25 @@ export const EventApply = () => {
                     </tr>
                     <tr>
                         <td>메인 포스터</td>
-                        <td>
-                            <input
-                                type="file"
-                                placeholder="메인포스터 하나만"
-                                onChange={handleMainPosterChange}
-                                />
-                                <p style={{ color: "red", fontSize: "13px" }}>
-                                * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
-                                </p>
-                                {eventPoster && ( // 파일이 존재할 때만 이미지 렌더링
-                                <img
-                                    src={URL.createObjectURL(eventPoster)}
-                                    alt="Main Poster"
-                                    style={{ width: "100px", height: "100px" }}
-                                />
-                                )}
-                        </td>
+                        <td><input type="file" placeholder="메인포스터 1하나만 "></input></td>
                     </tr>
                     <tr>
-                        <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
+                        <td>상세페이지</td>
                         <td>
-                            <MyEditorOnlyAdmin editorRef={editorRef} height="500px" />
+                            에디터 적용 - 미리보기 플러그인도 추가
                         </td>
                     </tr>
-                    { category == "1" && subCategory === "1" &&
                     <tr>
                         <td>캐스팅 이미지</td>
                         <td>
-                            <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
-                            <input type="text" placeholder="배우 이름" value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
+                            <input type="file" />
+                            <input type="text" placeholder="배우 이름" className={styles.shortInput} />
                             <span className={styles.Gap}></span>
-                            <input type="text" placeholder="역할" value={role} onChange={handleRoleChange} className={styles.shortInput} />
+                            <input type="text" placeholder="역할" className={styles.shortInput} />
                             <span className={styles.Gap}></span>
-                            <button onClick={handleAddCasting}>추가버튼</button>
-                            <br></br>
-                            <ul>
-                                {castingList.map((casting, index) => (
-                                    <li key={index}>
-                                        {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
-                                        <span>{casting.name} - {casting.role}</span>
-                                        <button onClick={() => handleRemoveCasting(index)}>x</button>
-                                    </li>
-                                ))}
-                            </ul>
+                            <button>추가버튼</button>
                         </td>
                     </tr>
-                } 
                 </tbody>
             </table>
 
