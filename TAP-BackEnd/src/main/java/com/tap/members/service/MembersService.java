@@ -48,11 +48,11 @@ public class MembersService implements UserDetailsService{
 		return dao.updateMember(dto);
 	}
 	
-	public int updateByPw(String id,String pw) throws Exception{
+	public int updatePwById(String id,String pw) throws Exception{
 		Map<String , String> map=new HashMap<>();
 		map.put("id", id);
 		map.put("pw", pw);
-		return dao.updateByPw(map);
+		return dao.updatePwById(map);
 	}
 	
 
