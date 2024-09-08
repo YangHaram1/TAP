@@ -29,6 +29,7 @@
     display: flex;
     flex: 2;
     margin-top: 5px;
+    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 .logo{
     flex: 1;
@@ -50,6 +51,7 @@
     align-items: flex-start;
     gap: 10px;
     font-size: 12px;
+    
 }
 .infoTitle{
     font-size: 14px;
@@ -98,7 +100,7 @@
     flex-direction: column;
     border: 1px solid gray;
     background-image: url('C:\project\TAP\TAP-FrontEnd\src\images\background.jpg');
-   
+    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 .contents div:nth-child(1){
     display: flex;
@@ -181,6 +183,7 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 20PX;
+    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 .gDetail{
     font-size: 12px;
@@ -196,6 +199,7 @@
     border-left: 1px solid gray;
     border-top: 1px solid gray;
     min-height: 200px;
+    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 .footer span{
     color: gray;
