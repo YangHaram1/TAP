@@ -13,3 +13,19 @@ export const useAuthStore = create((set) => ({
     setAuth:(decoded)=>set({loginID:decoded.sub,role:decoded.role,name:decoded.name,grade:decoded.grade})
 
 }));
+
+/*하람*/
+export const useCheckList = create((set) => ({
+    webSocketCheck:false,
+    chatSeq:0,
+    onMessage:false,
+    emoticonDisplay: false,
+    searchDisplay: true,
+    chatController:false,
+    setEmoticonDisplay: ()=>set((state) => ({ emoticonDisplay: !state.emoticonDisplay })),
+    setSearchDisplay: (search) => set({ searchDisplay: search }),
+    setChatSeq:(seq)=>set({chatSeq:seq}),
+    setOnmessage:() => set((state) => ({ onMessage: !state.onMessage  })),
+    setWebSocketCheck:() => set((state) => ({ webSocketCheck: !state.webSocketCheck})),
+    setChatController:()=>set((state) => ({ chatController: !state.chatController}))
+}));

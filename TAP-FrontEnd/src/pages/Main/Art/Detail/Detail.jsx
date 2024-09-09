@@ -8,8 +8,9 @@ import { useState } from 'react';
 import { Notice } from './Notice/Notice';
 import { ProductData } from './ProductData/ProductData';
 import { Casting } from './Casting/Casting';
-import { Review } from './Review/Review';
-import { Excite } from './Excite/Excite';
+// import { Review } from './Review/Review';
+// import { Excite } from './Excite/Excite';
+import { Write } from './Write/Write';
 
 
 export const Detail = ()=>{
@@ -75,8 +76,8 @@ export const Detail = ()=>{
                 {
                     tap === 1 ? <Casting/> :
                     tap === 2 ? <ProductData/> : 
-                    tap === 3 ? <Review/> : 
-                    tap === 4 ? <Excite/> : 
+                    tap === 3 ? <Write category="review"/> : 
+                    tap === 4 ? <Write category="excite"/> : 
                     <Notice/>
 
                 }
