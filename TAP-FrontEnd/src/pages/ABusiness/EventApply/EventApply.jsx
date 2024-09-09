@@ -88,13 +88,13 @@ export const EventApply = () => {
             alert("이상 오류");
         });
 
-        // api.get(`/biz/application/description`).then((resp) => {
-        //     setContent(resp.data[1].description_content);
-        //     setContent2(resp.data[2].description_content);
-        //     contentRef.current.innerHTML = resp.data[1].description_content;
-        // }).catch(() => {
-        //     alert("이상 오류");
-        // });
+        api.get(`/biz/application/description`).then((resp) => {
+            setContent(resp.data[1].description_content);
+            setContent2(resp.data[2].description_content);
+            contentRef.current.innerHTML = resp.data[1].description_content;
+        }).catch(() => {
+            alert("이상 오류");
+        });
     }, []);
     
     const handleCategory = (e) => {
@@ -450,13 +450,13 @@ export const EventApply = () => {
 
     return (
         <div className={styles.container}>
-            {/* <div className={styles.imgContent}>
+            <div className={styles.imgContent}>
             <div className={styles.viewCont} ref={contentRef}></div>
-            <p>abc하이abc</p> */}
-                {/* db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨 */}
-                {/* <div dangerouslySetInnerHTML={{ __html: content }} />
+            <p>abc하이abc</p>
+                db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨
+                <div dangerouslySetInnerHTML={{ __html: content }} />
                 <div dangerouslySetInnerHTML={{ __html: content2 }} />
-            </div> */}
+            </div>
             <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
             </div>
