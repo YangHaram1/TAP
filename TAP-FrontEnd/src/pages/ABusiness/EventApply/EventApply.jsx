@@ -5,6 +5,7 @@ import { useAuthStore } from '../../../store/store';
 import MyEditor from "../../../components/MyEditor/MyEditor";
 import MyEditorOnlyText from "../../../components/MyEditor/MyEditorOnlyText";
 import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
+import {eachDayOfInterval, format, getDay} from 'date-fns';
 
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
@@ -12,7 +13,7 @@ export const EventApply = () => {
     const [category, setCategory] = useState()
     const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
    
-    const [formData, SetFormData] = useState({
+    const [formData, setFormData] = useState({
         id: loginID, 
         name: '', 
         place_seq: '', 
@@ -25,7 +26,7 @@ export const EventApply = () => {
         running_intertime: '', 
         expected_open_date:'',
         expected_open_time:'',
-       // open_date: '', // 여기서 날짜랑 시간 합쳐서 SPRING BOOT , timestamp 형태로 보내기 
+        open_date: '', // 여기서 날짜랑 시간 합쳐서 SPRING BOOT , timestamp 형태로 보내기 
         max_ticket: '', 
         away_team_seq: ''
     });
@@ -88,20 +89,20 @@ export const EventApply = () => {
             alert("이상 오류");
         });
 
-        api.get(`/biz/application/description`).then((resp) => {
-            setContent(resp.data[1].description_content);
-            setContent2(resp.data[2].description_content);
-            contentRef.current.innerHTML = resp.data[1].description_content;
-        }).catch(() => {
-            alert("이상 오류");
-        });
+        // api.get(`/biz/application/description`).then((resp) => {
+        //     setContent(resp.data[1].description_content);
+        //     setContent2(resp.data[2].description_content);
+        //     contentRef.current.innerHTML = resp.data[1].description_content;
+        // }).catch(() => {
+        //     alert("이상 오류");
+        // });
     }, []);
     
     const handleCategory = (e) => {
         const selectedValue = e.target.value;
         setSelectedCategory(selectedValue);
         setCategory(selectedValue);
-        SetFormData({ ...formData, sub_category_seq: "", genre_seq: "", away_team_seq:"" });
+        setFormData({ ...formData, sub_category_seq: "", genre_seq: "", away_team_seq:"" });
 
         setSelectedPlace("");
         setSelectedTeam("");
@@ -113,7 +114,7 @@ export const EventApply = () => {
     const handleSubCategoryChange = (e) => {
         const selectedSubCategory = e.target.value;
         setSubCategory(selectedSubCategory);
-        SetFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
+        setFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
 
         const filteredGenres = genres.filter(
             (genre) => genre.SUB_CATEGORY_SEQ.toString() === selectedSubCategory
@@ -125,6 +126,7 @@ export const EventApply = () => {
         console.log("Updated formData:", formData);
     }, [formData]);
 
+   
     //=======================================================
     // 요일 배열
     const [weekdays, setWeekdays] = useState([]);
@@ -149,7 +151,7 @@ export const EventApply = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        SetFormData(prevData => {
+        setFormData(prevData => {
             const updatedData = { ...prevData, [name]: value };
 
             // 티켓 오픈 날짜와 시간 통합
@@ -190,7 +192,7 @@ export const EventApply = () => {
         const selectedValue = e.target.value;
         setSelectedPlace(selectedValue);
 
-        SetFormData({ ...formData, place_seq: selectedValue});
+        setFormData({ ...formData, place_seq: selectedValue});
         
         const selectedPlaceData = teamLocations.find((location) => location.PLACE_SEQ.toString() === selectedValue);
         setSelectedTeam(selectedPlaceData ? selectedPlaceData.TEAM_NAME : '');
@@ -198,9 +200,18 @@ export const EventApply = () => {
     };
 
 
-    // 요일 선택 옵션 비활성화를 위한 상태 추가
+// 스케쥴 추가하기
+    const [totalSchedule, setTotalSchedule] = useState([]);
     const [isDisabled, setIsDisabled] = useState(false);
     const handleAddSchedule = () => {
+        if(!selectedDay || !selectedTime){
+            return false;
+        }
+        const startDate = new Date(formData.start_date);
+        const endDate = new Date(formData.end_date);
+      
+        const allDates = eachDayOfInterval({start:startDate, end:endDate});
+      
         if (selectedDay === "전체") {
             // "전체"가 선택되었고, scheduleList가 비어있지 않을 경우
             if (scheduleList.length > 0) {
@@ -209,23 +220,50 @@ export const EventApply = () => {
               );
               if (confirmClear) {
                 // 확인을 누르면 리스트를 초기화하고 "전체" 추가
-                setScheduleList([{ day: "전체", time: selectedTime }]);
+                setTotalSchedule(
+                    allDates.map((date) => ({
+                        schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
+                        schedule_time: selectedTime,
+                      }))
+                );
+                setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime  }]);
                 setIsDisabled(true); // 다른 요일 옵션 비활성화
                 setSelectedDay(""); // 요일 초기화
                 setSelectedTime(""); // 시간 초기화
               }
-            } else {
+            } 
+            else {
               // "전체"만 추가
-              setScheduleList([{ day: "전체", time: selectedTime }]);
+              setTotalSchedule(
+                allDates.map((date) => ({
+                    schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
+                    schedule_time: selectedTime,
+                  }))
+                );
+              setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime }]);
               setIsDisabled(true); // 다른 요일 옵션 비활성화
               setSelectedDay(""); // 요일 초기화
               setSelectedTime(""); // 시간 초기화
             }
-          } else {
+          } 
+        else {
             // "전체"가 아닌 경우
+            // "전체"가 리스트에 없을 때만 추가
             if (!scheduleList.find((item) => item.day === "전체")) {
-              // "전체"가 리스트에 없을 때만 추가
-              setScheduleList([...scheduleList, { day: selectedDay, time: selectedTime }]);
+
+                const matchingDates = allDates.filter(
+                    (date) => getDay(date) === selectedDay
+                  );
+            
+                setTotalSchedule([
+                    ...totalSchedule,
+                    ...matchingDates.map((date) => ({
+                        schedule_day: format(date, "yyyy-MM-dd"),
+                        schedule_time: selectedTime,
+                      })), 
+
+                ])
+              setScheduleList([...scheduleList, { schedule_day: selectedDay, schedule_time: selectedTime }]);
               setSelectedDay(""); // 초기화
               setSelectedTime(""); // 초기화
             } else {
@@ -233,19 +271,28 @@ export const EventApply = () => {
             }
           }
         
-          // 스케줄 리스트가 비어있으면 다시 옵션 활성화
-          if (scheduleList.length === 0) {
-            setIsDisabled(false);
-          }
+        //   // 스케줄 리스트가 비어있으면 다시 옵션 활성화
+        //   if (scheduleList.length === 0) {
+        //     setIsDisabled(false);
+        //   }
     };
+// 상태 업데이트 후 옵션 비활성화 체크
+useEffect(() => {
+    if (scheduleList.some(item => item.schedule_day === "전체")) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [scheduleList]);
+
+   
     // 스케쥴 리스트에 있는거 삭제하기
     const handleRemoveSchedule =(indexToRemove)=>{
-        // setScheduleList(scheduleList.filter((_, index) => index !== indexToRemove));
         const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove);
         setScheduleList(updatedScheduleList);
 
         // 스케줄 리스트가 비어 있으면 옵션 활성화
-        if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.day === "전체")) {
+        if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.schedule_day === "전체")) {
             setIsDisabled(false);
         }
     }
@@ -277,6 +324,12 @@ export const EventApply = () => {
             alert("제외일을 선택해주세요.");
         }
     };
+
+    const [scheduleCastingList, setScheduleCastingList] = useState([]);
+    useEffect(()=>{
+        setScheduleCastingList(scheduleList)
+        setFormData(prev=>({...prev, scheduleData:scheduleList}));
+    },[scheduleList])
 
     const getSubCategoryOptions = () => {
         const filteredSubCategories = subCategories.filter(
@@ -353,7 +406,7 @@ export const EventApply = () => {
 
     const handleAddCasting = () => {
         if (actorName && role && castingImage) {
-            setCastingList([...castingList, { image: castingImage, name: actorName, role }]);
+            setCastingList([...castingList, { image: castingImage, name: actorName, role:role}]);
             setCastingImage(null);
             setActorName('');
             setRole('');
@@ -366,13 +419,12 @@ export const EventApply = () => {
         setCastingList(castingList.filter((_, index) => index !== indexToRemove));
     };
     
-    // 메인 포스터 업로드 핸들러
-    const [eventPoster, setEventPoster] = useState(null);
-
+    // 메인 포스터 업로드
+    const [mainPoster, setMainPoster] = useState(null);
     const handleMainPosterChange = (event) => {
       const file = event.target.files[0];
       if (file) {
-        setEventPoster(file); // 선택된 파일을 eventPoster 상태로 설정
+        setMainPoster(file); // 선택된 파일을 mainPoster 상태로 설정
       }
     };
     //
@@ -424,38 +476,38 @@ export const EventApply = () => {
                 alert("시작시간 설정해라");
                 return false;
             }
-            // 필요한 다른 검증을 여기에 추가할 수 있습니다.
     
             return true;
         };
     
         // 유효성 검사 통과 시에만 서버로 요청
         if (validateForm()) {
+            // const data = {
+            //     formData: formData, 
+            //     // scheduleList: scheduleList
+            // }
+
+
+            console.log(scheduleList);
+            console.log(formData.open_date);
+            console.log(scheduleList.schedule_time);
+
+            setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule}));
+
             api.post(`/biz/application`, formData)
                 .then((resp) => {
-                    // 요청 성공 시 추가 작업
+                    console.log(resp.data)
                 })
                 .catch(() => {
-                    alert("잘못됨");
+                    alert("서버에 안 보내짐. 잘못됨");
                 });
         }
     };
-    // const handleSubmit = () => {
-    //     api.post(`/biz/application`, formData).then((resp) => {
-
-    //     }).catch(() => {
-    //         alert("잘못됨");
-    //     });
-    // };
 
     return (
         <div className={styles.container}>
             <div className={styles.imgContent}>
-            <div className={styles.viewCont} ref={contentRef}></div>
-            <p>abc하이abc</p>
-                db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨
-                <div dangerouslySetInnerHTML={{ __html: content }} />
-                <div dangerouslySetInnerHTML={{ __html: content2 }} />
+            {/* <div className={styles.viewCont} ref={contentRef}></div> */}
             </div>
             <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
@@ -557,11 +609,12 @@ export const EventApply = () => {
                             <td>
                                 <select className={styles.shortInput} value={selectedDay} 
                                 onChange={(e) => setSelectedDay(e.target.value)}
-                                disabled={isDisabled && selectedDay !== "전체"} 
+                                // disabled={isDisabled && selectedDay !== "전체"} 
+                                disabled={isDisabled}
                                 >
                                     <option value="">요일</option>
                                     {weekdays.map((day, index) => (
-                                    <option key={index} value={day === "전체" ? "전체" : daysOfWeek[day]}
+                                    <option key={index} value={day === "전체" ? "전체" : day}
                                     disabled={isDisabled && day !== "전체"} 
                                     >
                                         {day === "전체" ? "전체" : daysOfWeek[day]}
@@ -576,7 +629,7 @@ export const EventApply = () => {
                                 <ul>
                                     {scheduleList.map((schedule, index) => (
                                         <li key={index}>
-                                            {schedule.day} - {schedule.time} 
+                                            {daysOfWeek[schedule.schedule_day]}- {schedule.schedule_time} 
                                             <button onClick={() => handleRemoveSchedule(index)}>x</button>
                                         </li>
                                     ))}
@@ -589,13 +642,46 @@ export const EventApply = () => {
                                 <ul>
                                     {scheduleExceptList.map((schedule, index) => (
                                         <li key={index} style={{ color: "red" }}>
-                                            {schedule.day}
+                                            {schedule.schedule_day}
                                             <button onClick={() => handleRemoveException(index)}>x</button>
                                         </li>
                                     ))}
                                 </ul>
                             </td>
                         </tr>
+                        {/* { category == "1" && subCategory === "1" &&  
+                            <tr>
+                                <td>캐스팅 이미지</td>
+                                <td>
+                                    {scheduleCastingList.map((schedule, index)=>(
+                                    <ul>
+                                        <li key={index}>
+                                            {schedule.schedule_day} - {schedule.schedule_time}
+                                            <br></br>
+                                            <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
+                                            <input type="text" placeholder="배우 이름" value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
+                                            <span className={styles.Gap}></span>
+                                            <input type="text" placeholder="역할" value={role} onChange={handleRoleChange} className={styles.shortInput} />
+                                            <span className={styles.Gap}></span>
+                                            <button onClick={handleAddCasting()}>추가버튼</button>
+
+                                            <br></br>
+                                            <ul>
+                                                {castingList.map((casting, index) => (
+                                                    <li key={index}>
+                                                        {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
+                                                        <span>{casting.name} - {casting.role}</span>
+                                                        <button onClick={() => handleRemoveCasting(index)}>x</button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </li> 
+                                    </ul>
+                                    ))}
+                                    
+                                </td>
+                            </tr>
+                        }  */}
                         <tr>
                             <td>러닝타임</td>
                             <td>
@@ -622,7 +708,7 @@ export const EventApply = () => {
                                 </span>
                                 <br></br>
                                 <input type="radio" name="running" value="no"
-                                 onChange={() => SetFormData({ ...formData, running_time: '0', running_intertime: '0' })} />러닝타임없음
+                                 onChange={() => setFormData({ ...formData, running_time: '0', running_intertime: '0' })} />러닝타임없음
                             </td>
                         </tr>
                         <tr>
@@ -659,8 +745,8 @@ export const EventApply = () => {
                         <td>공지사항 </td>
                         <td>
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
-                            {/* <MyEditorOnlyText editorRef={editorRef} /> */}
-                            <textarea name="eventNotice"></textarea>
+                            <MyEditorOnlyText editorRef={editorRef} />
+                            {/* <textarea name="eventNotice"></textarea> */}
                         </td>
                         <td>
 
@@ -677,9 +763,9 @@ export const EventApply = () => {
                                 <p style={{ color: "red", fontSize: "13px" }}>
                                 * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
                                 </p>
-                                {eventPoster && ( // 파일이 존재할 때만 이미지 렌더링
+                                {mainPoster && ( // 파일이 존재할 때만 이미지 렌더링
                                 <img
-                                    src={URL.createObjectURL(eventPoster)}
+                                    src={URL.createObjectURL(mainPoster)}
                                     alt="Main Poster"
                                     style={{ width: "100px", height: "100px" }}
                                 />
@@ -692,29 +778,7 @@ export const EventApply = () => {
                             <MyEditorOnlyAdmin editorRef={editorRef} height="500px" />
                         </td>
                     </tr>
-                    { category == "1" && subCategory === "1" &&
-                    <tr>
-                        <td>캐스팅 이미지</td>
-                        <td>
-                            <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
-                            <input type="text" placeholder="배우 이름" value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
-                            <span className={styles.Gap}></span>
-                            <input type="text" placeholder="역할" value={role} onChange={handleRoleChange} className={styles.shortInput} />
-                            <span className={styles.Gap}></span>
-                            <button onClick={handleAddCasting}>추가버튼</button>
-                            <br></br>
-                            <ul>
-                                {castingList.map((casting, index) => (
-                                    <li key={index}>
-                                        {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
-                                        <span>{casting.name} - {casting.role}</span>
-                                        <button onClick={() => handleRemoveCasting(index)}>x</button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </td>
-                    </tr>
-                } 
+                   
                 </tbody>
             </table>
 

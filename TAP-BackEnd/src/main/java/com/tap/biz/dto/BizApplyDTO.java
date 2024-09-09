@@ -1,6 +1,7 @@
 package com.tap.biz.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class BizApplyDTO {
 	private int application_seq;
@@ -20,6 +21,7 @@ public class BizApplyDTO {
 	private Timestamp updated_at;
 	private int max_ticket;
 	private int away_team_seq;
+	private List<ScheduleDateDTO> scheduleDate;
 	public int getApplication_seq() {
 		return application_seq;
 	}
@@ -122,10 +124,16 @@ public class BizApplyDTO {
 	public void setAway_team_seq(int away_team_seq) {
 		this.away_team_seq = away_team_seq;
 	}
+	public List<ScheduleDateDTO> getScheduleDate() {
+		return scheduleDate;
+	}
+	public void setScheduleDate(List<ScheduleDateDTO> scheduleDate) {
+		this.scheduleDate = scheduleDate;
+	}
 	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
 			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
 			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
-			int away_team_seq) {
+			int away_team_seq, List<ScheduleDateDTO> scheduleDate) {
 		super();
 		this.application_seq = application_seq;
 		this.id = id;
@@ -144,8 +152,10 @@ public class BizApplyDTO {
 		this.updated_at = updated_at;
 		this.max_ticket = max_ticket;
 		this.away_team_seq = away_team_seq;
+		this.scheduleDate = scheduleDate;
 	}
 	public BizApplyDTO() {
+		super();
 	}
 	
 	

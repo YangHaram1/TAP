@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.dto.BizApplyDTO;
+import com.tap.biz.dto.ScheduleDateDTO;
 import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.services.BizService;
 
@@ -50,18 +51,26 @@ public class BizApplyController {
 	public ResponseEntity<List<TestClobDTO>> getContent(){
 		return ResponseEntity.ok(bizServ.getContent());
 	}
+
 	// 상품 테이블에 insert POST
 	@PostMapping
-	public ResponseEntity<Void> insertEvent(@RequestBody BizApplyDTO dto){
-		String id = dto.getId();
-		int sub_category = dto.getSub_category_seq();
-		String age_limit = dto.getAge_limit();
-		Timestamp start_date = dto.getStart_date();
-		int awayteam = dto.getAway_team_seq();
+	public ResponseEntity<Void> insertEvent(@RequestBody BizApplyDTO formData
+			){
+		String id = formData.getId();
+		Timestamp start_date = formData.getStart_date();
+		int running_time = formData.getRunning_time();
+		Timestamp open_date = formData.getOpen_date();
+//		System.out.println(formData.getScheduleDate().get(0).getSchedule_date());
+//		System.out.println(id);
+//		System.out.println(start_date);
+//		System.out.println(open_date);
+		int away_team_seq = formData.getAway_team_seq();
+		System.out.println("원정팀:" + away_team_seq);
+
+		List<ScheduleDateDTO> list = formData.getScheduleDate();
+		System.out.println(list.get(0).getSchedule_date());
 		
-		System.out.println("id는? "+id +"카테고리: "+sub_category + "age_limit: "+ age_limit);
-		System.out.println("시작날짜: "+ start_date);
-		System.out.println("원정팀 : "+ awayteam);
+		
 //		bizServ.insertEvent(dto);
 		return ResponseEntity.ok().build();
 	}
