@@ -9,7 +9,7 @@ import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Mypage from './pages/Mypage/Mypage'
 import Sign from './pages/Sign/Sign'
-import { useEffect, useState,useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { api } from './config/config'
 import { jwtDecode } from 'jwt-decode'
 import { AdminHeader } from './components/Header/AdminHeader'
@@ -29,6 +29,7 @@ function App() {
     const websocketRef = useRef(null);
     const draggableRef = useRef(null);
     const [disabled, setDisabled] = useState(true);
+    const [chat, setChat] = useState();
 
     useEffect(() => {
         const token = sessionStorage.getItem('token')
@@ -44,6 +45,8 @@ function App() {
                 })
         }
     }, [])
+
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -66,12 +69,30 @@ function App() {
         }
     }, [hasScrolled])
 
-    const chatApp = isAuth ? (
-        <Chat websocketRef={websocketRef} draggableRef={draggableRef} setDisabled={setDisabled} />
-      ) : (
-        <div></div>
-      );
-    
+    //채팅 
+    useEffect(() => {
+        if (isAuth) {
+            setChat(() => {
+                return (
+                    <Draggable nodeRef={draggableRef} disabled={disabled}>
+                        <div className={styles.chatContainer} ref={draggableRef}>
+                            <ResizableBox
+                                width={500}
+                                height={600}
+                                minConstraints={[500, 600]}
+                                maxConstraints={[800, 700]}
+                                axis="both"
+                                handleSize={[30, 30]}
+                                resizeHandles={['se']}
+                            >
+                                <Chat websocketRef={websocketRef} draggableRef={draggableRef} setDisabled={setDisabled} />
+                            </ResizableBox>
+                        </div>
+                    </Draggable>
+                )
+            })
+        }
+    }, [isAuth])
     return (
         <ChatsProvider>
             <Router>
@@ -121,22 +142,7 @@ function App() {
             <Route path='/buiz/*'element={<ABuiz/>}/>
           </Routes> */}
                     <Footer />
-                    <Draggable nodeRef={draggableRef} disabled={disabled}>
-                        <div className={styles.chatContainer} ref={draggableRef}>
-                            <ResizableBox
-                                width={350}
-                                height={500}
-                                minConstraints={[350, 500]}
-                                maxConstraints={[600, 650]}
-                                axis="both"
-                                handleSize={[30, 30]}
-                                resizeHandles={['se']}
-                            >
-                                {chatApp}
-                            </ResizableBox>
-                        </div>
-
-                    </Draggable>
+                    {chat}
                 </div>
                 <ToastContainer
                     position="top-right"

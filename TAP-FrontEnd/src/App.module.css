@@ -6,13 +6,13 @@
 }
 
 .chatContainer {
-    background: white;
     position: absolute;
-    display: none;
-    z-index: 100;
+    z-index: 999;
+    display: flex;
+    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
     top: 100px;
     right: 100px;
-    flex-direction: column;
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-  }
+    visibility: hidden;
+    background-color: white;
+}
