@@ -73,8 +73,7 @@ const soccerMatchData = [
 // 구단 목록 (야구 및 축구 구단 리스트)
 const baseballTeamList = [
   { name: '두산 베어스', logo: 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png', homeGround: '잠실야구장' },
-  { name: '키움 히어로즈', logo: 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB003.png', homeGround: '고척스카이돔' },
-  { name: 'NC 다이노스', logo: 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB009.png', homeGround: '창원NC파크' }
+  { name: '키움 히어로즈', logo: 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB003.png', homeGround: '고척스카이돔' }
 ];
 
 const soccerTeamList = [
