@@ -9,7 +9,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -25,6 +26,7 @@ import com.tap.chat.dto.ChatDTO;
 import com.tap.chat.service.ChatService;
 import com.tap.groupmember.dto.GroupMemberDTO;
 import com.tap.groupmember.service.GroupMemberSerivce;
+import com.tap.members.service.MembersService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -38,39 +40,35 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 	private ChatService chatService;
 	@Autowired
 	private GroupMemberSerivce memberService;
-
+	@Autowired
+	private MembersService mserv;
+	
+	private UserDetails user;
+	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		clients.add(session);
-		System.out.println("웹소켓 연결");
-		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = ((SecurityContext)session.getAttributes().get("SPRING_SECURITY_CONTEXT")).getAuthentication();
 		if (authentication != null && authentication.isAuthenticated()) {
 			String userId = authentication.getName(); // 인증된 사용자 ID
-			System.out.println("Connected user ID: " + userId);
+			System.out.println("웹소켓 연결 : user ID: " + userId);
+			user = mserv.loadUserByUsername(userId);
 		} else {
-			System.out.println("User is not authenticated");
+			System.out.println("웹소켓 연결 실패 : User is not authenticated");
 		}
 	}
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
-		HttpSession httpSession = (HttpSession) session.getAttributes().get("HTTPSESSIONID");
-		Object attribute = httpSession.getAttribute("group_seq");
+		
 		int group_seq = 0;
-		if (attribute != null) {
-			group_seq = (int) httpSession.getAttribute("group_seq");
-		}
-		String sender = (String) httpSession.getAttribute("loginID");
+		String sender =user.getUsername();
 		List<GroupMemberDTO> list = memberService.members(group_seq);
-		boolean jsonValidate = validateJson(message.getPayload());
-
-		if (message.getPayload().equals("updateMember")) {
-			broadcastMessage("updateMember", list);
-		} else if (message.getPayload().equals("chatController")) {
+		//boolean jsonValidate = validateJson(message.getPayload());
+		
+		if (message.getPayload().equals("chatController")) {
 			broadcastMessage("chatController", list);
-		} else if (!jsonValidate) {
+		} else{
 			boolean listCheck = false;
 			for (GroupMemberDTO dto : list) { // 만약 방나갓는데 채팅 보낼라고하면 막기
 				if (dto.getMember_id().equals(sender)) {
@@ -87,22 +85,23 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 				System.out.println(list.get(1).getMember_id());
 				System.out.println("메세지보냄");
 			}
-		} else {
-			System.out.println("파일업로드 웹소켓");
-			String jsonString = message.getPayload();
-			Type mapType = new TypeToken<Map<String, Object>>() {
-			}.getType();
-			Map<String, Object> map = gson.fromJson(jsonString, mapType);
-			String fileMessage = map.get("oriname") + "*" + map.get("sysname") + "*" + map.get("code");
-			ChatDTO dto = null;
-			if (map.get("dto") != null) {
-				// dto 필드 자체가 LinkedTreeMap으로 변환되어 있으므로, 이를 다시 JSON 문자열로 변환한 후, ChatDTO로 변환
-				String dtoJson = gson.toJson(map.get("dto"));
-				dto = gson.fromJson(dtoJson, ChatDTO.class);
-			}
-			String json = gson.toJson(dto);
-			broadcastMessage(json, list);
-		}
+		} 
+
+//			System.out.println("파일업로드 웹소켓");
+//			String jsonString = message.getPayload();
+//			Type mapType = new TypeToken<Map<String, Object>>() {
+//			}.getType();
+//			Map<String, Object> map = gson.fromJson(jsonString, mapType);
+//			String fileMessage = map.get("oriname") + "*" + map.get("sysname") + "*" + map.get("code");
+//			ChatDTO dto = null;
+//			if (map.get("dto") != null) {
+//				// dto 필드 자체가 LinkedTreeMap으로 변환되어 있으므로, 이를 다시 JSON 문자열로 변환한 후, ChatDTO로 변환
+//				String dtoJson = gson.toJson(map.get("dto"));
+//				dto = gson.fromJson(dtoJson, ChatDTO.class);
+//			}
+//			String json = gson.toJson(dto);
+//			broadcastMessage(json, list);
+
 
 	}
 
@@ -126,15 +125,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 		synchronized (clients) {
 			for (WebSocketSession client : clients) {
 				try {
-					String member_id = (String) ((HttpSession) client.getAttributes().get("HTTPSESSIONID"))
-							.getAttribute("loginID");
+					String member_id = user.getUsername();
 					for (GroupMemberDTO dto : list) {
 						if (dto.getMember_id().equals(member_id)) {
 							client.sendMessage(new TextMessage(message));
 							break;
 						}
 					}
-
 				} catch (Exception e) {
 					System.out.println("Error sending message: " + e.getMessage());
 				}

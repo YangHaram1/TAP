@@ -31,7 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String token=jwt.extractToken(request);
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+	    String tokenWebsocket = httpRequest.getParameter("token");
+	    System.out.println(tokenWebsocket);
+	    String token=null;
+	    if(tokenWebsocket!=null) {
+	    	token=tokenWebsocket;
+	    }
+	    else {
+	    	token=jwt.extractToken(request);
+	    }
+	 
+		
 		if(token!=null &&jwt.isVerified(token)) {//토큰 인증
 			String id=jwt.getSubject(token);
 			UserDetails user=mserv.loadUserByUsername(id);

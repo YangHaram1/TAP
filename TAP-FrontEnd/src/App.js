@@ -24,7 +24,7 @@ import Chat from './pages/Chat/Chat'
 import { host } from './config/config'
 
 function App() {
-    const { login, isAuth, setAuth, role } = useAuthStore()
+    const { login, isAuth, setAuth, role,token } = useAuthStore()
     const [hasScrolled, setHasScrolled] = useState(false)
     const {webSocketCheck} =useCheckList();
     const websocketRef = useRef(null);
@@ -33,12 +33,12 @@ function App() {
     const [chat, setChat] = useState();
 
     useEffect(() => {
-        const token = sessionStorage.getItem('token')
-        if (token != null) {
+        const stoken = sessionStorage.getItem('token')
+        if (stoken != null) {
             api.post(`/auth`)
                 .then(resp => {
-                    const decoded = jwtDecode(token)
-                    login(token)
+                    const decoded = jwtDecode(stoken)
+                    login(stoken)
                     setAuth(decoded)
                 })
                 .catch(resp => {
@@ -101,7 +101,7 @@ function App() {
       //웹소켓 전체 관리
   useEffect(() => {
     if (isAuth) {
-      websocketRef.current = new WebSocket(`${host}/chatWebsocket`);
+      websocketRef.current = new WebSocket(`${host}/chatWebsocket?token=${token}`);
     }
     if (websocketRef.current != null) {
       websocketRef.current.onopen = () => {
