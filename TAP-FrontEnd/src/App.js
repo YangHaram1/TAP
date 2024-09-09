@@ -1,7 +1,7 @@
 import './App.css'
 import styles from './App.module.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { useAuthStore } from './store/store'
+import { useAuthStore, useCheckList } from './store/store'
 import { ChatsProvider } from './context/ChatsContext'
 import Login from './pages/Login/Login'
 import Main from './pages/Main/Main'
@@ -21,11 +21,12 @@ import 'react-resizable/css/styles.css'
 import Draggable from 'react-draggable';
 import { Slide, ToastContainer } from 'react-toastify';
 import Chat from './pages/Chat/Chat'
+import { host } from './config/config'
 
 function App() {
     const { login, isAuth, setAuth, role } = useAuthStore()
     const [hasScrolled, setHasScrolled] = useState(false)
-
+    const {webSocketCheck} =useCheckList();
     const websocketRef = useRef(null);
     const draggableRef = useRef(null);
     const [disabled, setDisabled] = useState(true);
@@ -92,7 +93,29 @@ function App() {
                 )
             })
         }
-    }, [isAuth])
+        else{
+            setChat(null);
+        }
+    }, [isAuth,disabled])
+
+      //웹소켓 전체 관리
+  useEffect(() => {
+    if (isAuth) {
+      websocketRef.current = new WebSocket(`${host}/chatWebsocket`);
+    }
+    if (websocketRef.current != null) {
+      websocketRef.current.onopen = () => {
+        console.log('Connected to WebSocket');
+      }
+    }
+
+
+    return () => {
+      if (websocketRef.current != null) {
+        websocketRef.current.close();
+      }
+    };
+  }, [isAuth, webSocketCheck]);
     return (
         <ChatsProvider>
             <Router>
