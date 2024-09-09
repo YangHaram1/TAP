@@ -204,91 +204,84 @@ export const EventApply = () => {
     const [totalSchedule, setTotalSchedule] = useState([]);
     const [isDisabled, setIsDisabled] = useState(false);
     const handleAddSchedule = () => {
-        if(!selectedDay || !selectedTime){
+        if (!selectedDay || !selectedTime) {
             return false;
         }
+    
         const startDate = new Date(formData.start_date);
         const endDate = new Date(formData.end_date);
-      
-        const allDates = eachDayOfInterval({start:startDate, end:endDate});
-      
+        const allDates = eachDayOfInterval({ start: startDate, end: endDate });
+        const selectedDayIndex = parseInt(selectedDay, 10); // `selectedDay`를 숫자로 변환
+    
         if (selectedDay === "전체") {
             // "전체"가 선택되었고, scheduleList가 비어있지 않을 경우
             if (scheduleList.length > 0) {
-              const confirmClear = window.confirm(
-                "'전체'를 선택하면 기존 스케줄이 초기화됩니다. 계속하시겠습니까?"
-              );
-              if (confirmClear) {
-                // 확인을 누르면 리스트를 초기화하고 "전체" 추가
-                setTotalSchedule(
-                    allDates.map((date) => ({
+                const confirmClear = window.confirm(
+                    "'전체'를 선택하면 기존 스케줄이 초기화됩니다. 계속하시겠습니까?"
+                );
+                if (confirmClear) {
+                    const allDatesFormatted = allDates.map((date) => ({
                         schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
                         schedule_time: selectedTime,
-                      }))
-                );
-                setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime  }]);
+                    }));
+    
+                    setTotalSchedule(allDatesFormatted);
+                    setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime }]);
+                    setIsDisabled(true); // 다른 요일 옵션 비활성화
+                    setSelectedDay(""); // 요일 초기화
+                    setSelectedTime(""); // 시간 초기화
+                }
+            } else {
+                const allDatesFormatted = allDates.map((date) => ({
+                    schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
+                    schedule_time: selectedTime,
+                }));
+    
+                setTotalSchedule(allDatesFormatted);
+                setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime }]);
                 setIsDisabled(true); // 다른 요일 옵션 비활성화
                 setSelectedDay(""); // 요일 초기화
                 setSelectedTime(""); // 시간 초기화
-              }
-            } 
-            else {
-              // "전체"만 추가
-              setTotalSchedule(
-                allDates.map((date) => ({
-                    schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
-                    schedule_time: selectedTime,
-                  }))
-                );
-              setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime }]);
-              setIsDisabled(true); // 다른 요일 옵션 비활성화
-              setSelectedDay(""); // 요일 초기화
-              setSelectedTime(""); // 시간 초기화
             }
-          } 
-        else {
+        } else {
             // "전체"가 아닌 경우
-            // "전체"가 리스트에 없을 때만 추가
-            if (!scheduleList.find((item) => item.day === "전체")) {
-
+            if (!scheduleList.some((item) => item.schedule_day === "전체")) {
+                // 선택된 요일과 매칭되는 날짜들 필터링
                 const matchingDates = allDates.filter(
-                    (date) => getDay(date) === selectedDay
-                  );
-            
-                setTotalSchedule([
-                    ...totalSchedule,
+                    (date) => getDay(date) === selectedDayIndex
+                );
+    
+                // 이전의 totalSchedule 상태를 유지하면서 새로운 값을 추가
+                setTotalSchedule((prevTotalSchedule) => [
+                    ...prevTotalSchedule,
                     ...matchingDates.map((date) => ({
                         schedule_day: format(date, "yyyy-MM-dd"),
                         schedule_time: selectedTime,
-                      })), 
-
-                ])
-              setScheduleList([...scheduleList, { schedule_day: selectedDay, schedule_time: selectedTime }]);
-              setSelectedDay(""); // 초기화
-              setSelectedTime(""); // 초기화
+                    })),
+                ]);
+    
+                setScheduleList([...scheduleList, { schedule_day: selectedDay, schedule_time: selectedTime }]);
+                setSelectedDay(""); // 초기화
+                setSelectedTime(""); // 초기화
             } else {
-              alert("이미 '전체'가 선택되어 다른 요일을 추가할 수 없습니다.");
+                alert("이미 '전체'가 선택되어 다른 요일을 추가할 수 없습니다.");
             }
-          }
-        
-        //   // 스케줄 리스트가 비어있으면 다시 옵션 활성화
-        //   if (scheduleList.length === 0) {
-        //     setIsDisabled(false);
-        //   }
+        }
     };
+    
 // 상태 업데이트 후 옵션 비활성화 체크
 useEffect(() => {
     if (scheduleList.some(item => item.schedule_day === "전체")) {
-      setIsDisabled(true);
+        setIsDisabled(true);
     } else {
-      setIsDisabled(false);
+        setIsDisabled(false);
     }
-  }, [scheduleList]);
+}, [scheduleList]);
 
    
     // 스케쥴 리스트에 있는거 삭제하기
     const handleRemoveSchedule =(indexToRemove)=>{
-        const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove);
+        const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove); 
         setScheduleList(updatedScheduleList);
 
         // 스케줄 리스트가 비어 있으면 옵션 활성화
@@ -328,8 +321,8 @@ useEffect(() => {
     const [scheduleCastingList, setScheduleCastingList] = useState([]);
     useEffect(()=>{
         setScheduleCastingList(scheduleList)
-        setFormData(prev=>({...prev, scheduleData:scheduleList}));
-    },[scheduleList])
+        setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule}));
+    },[scheduleList, totalSchedule])
 
     const getSubCategoryOptions = () => {
         const filteredSubCategories = subCategories.filter(
