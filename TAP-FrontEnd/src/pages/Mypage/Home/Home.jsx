@@ -6,7 +6,7 @@ const Home = () => {
     const navi = useNavigate();
     const {name,grade} =useAuthStore();
     const handleGrade = () => {
-        navi('grade')
+        navi('/grade')
     }
     const handleMenu=(menu)=>{
         navi(`menus/${menu}`)

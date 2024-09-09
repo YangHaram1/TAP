@@ -27,8 +27,8 @@ public class MembersDAO {
 		return mybatis.update("Members.updateMember",dto);
 	}
 	
-	public int updateByPw(Map<String , String> map) throws Exception{
-		return mybatis.update("Members.updateByPw",map);
+	public int updatePwById(Map<String , String> map) throws Exception{
+		return mybatis.update("Members.updatePwById",map);
 	}
 
 }

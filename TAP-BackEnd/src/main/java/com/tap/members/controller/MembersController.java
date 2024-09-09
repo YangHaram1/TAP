@@ -56,7 +56,7 @@ public class MembersController {
 		
 		String encode=pe.encode(pw);
 		
-		int check=mserv.updateByPw(user.getUsername(),encode);
+		int check=mserv.updatePwById(user.getUsername(),encode);
 		if(check>0) {
 			return ResponseEntity.ok().build();
 		}

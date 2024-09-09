@@ -36,7 +36,7 @@ const Header = () => {
                 스포츠
             </div>
             <span className={styles.menuLine}>|</span>
-            <div className={styles.menuCenter}>
+            <div className={styles.menuCenter} onClick={()=>{navi('/support')}}>
                 <FontAwesomeIcon icon={faComments} />
                 고객센터
             </div>

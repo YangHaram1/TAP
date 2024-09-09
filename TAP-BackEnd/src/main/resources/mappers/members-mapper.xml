@@ -3,23 +3,29 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Members">
-	<select id="getMemberInfo"
-		resultType="com.tap.members.dto.MembersGradeDTO">
+	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
 		select pw,role,m.name as name, g.name as grade from members
 		m
 		join grade g on g.seq=m.grade_seq
 		where id=#{id}
 	</select>
-	<select id="selectById"
-		resultType="com.tap.members.dto.MembersDTO">
+	
+	<select id="selectById" resultType="com.tap.members.dto.MembersDTO">
 		select * from members where id=#{id}
 	</select>
+	
+	<select id="">
+	
+	</select>
+	
+	
 
 	<update id="updateMember">
 		update members set email=#{email},phone=#{phone}
 		where id=#{id}
 	</update>
-	<update id="updateByPw">
+	
+	<update id="updatePwById">
 		update members set pw=#{pw} where id=#{id}
 	</update>
 </mapper>

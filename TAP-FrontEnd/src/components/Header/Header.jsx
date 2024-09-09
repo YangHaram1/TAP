@@ -21,7 +21,7 @@ const Header = ({ hasScrolled }) => {
                 'warning',
                 '로그아웃',
                 '로그아웃을 하시겠습니까',
-                handleLogout
+                handleLogout,null
             )
         } else {
             navi('/login')

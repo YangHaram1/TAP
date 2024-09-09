@@ -15,6 +15,8 @@ const Guide = ({ checkDetail, handleCheck }) => {
                 title:'회원 탈퇴 안내',
                 text:'회원 탈퇴 안내사항 확인을 선택해주세요'
             })
+        }else{
+            handleCheck(1);
         }
     }
     const handleUpdate=()=>{
@@ -41,11 +43,12 @@ const Guide = ({ checkDetail, handleCheck }) => {
             </div>
             <div className={styles.info}>
                 <div className={styles.infoTitle}>
-                    <p><span>TAP(Ticket And Place)</span>의 서비스를 이용하시는데</p>
-                    <p>불편함이 있으셨나요?</p>
+                    <p><span>TAP(Ticket And Place)</span></p>
+                    <p>서비스를 이용하시는데</p>
+                    <p><span style={{color:"red"}}>불편함</span>이 있으셨나요?</p>
                 </div>
                 <div className={styles.infoDetail}>
-                    <p>개인정보 및 메일 수신에 대해 불편을 느끼셨다면,</p>
+                    <p>개인정보에 대해 불편을 느끼셨다면,</p>
                     <p>아래의 방법을 통해 회원님의 불편을 해결 하실 수 있습니다.</p>
                 </div>
                 <div className={styles.infoBtn}>
@@ -103,7 +106,7 @@ const Guide = ({ checkDetail, handleCheck }) => {
                    <p> 회원 탈퇴 시 적립금 및 지급된 혜택은 소멸되어 재가입에 따른 복구가 불가하며 5년간 기존 아이디의 재사용 불가 및 <span>7일이내 동일명의의 본인인증 불가</span> 에 대한 사항에 동의 합니다.</p>
                 </div>
             </div>
-            <Mybutton handleConfirm={handleConfirm} setcheck={null}/>
+            <Mybutton handleConfirm={handleConfirm} setcheck={null} title={'동의'}/>
         </div>
     )
 }

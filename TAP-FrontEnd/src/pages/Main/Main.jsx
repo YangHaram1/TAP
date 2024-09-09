@@ -6,6 +6,7 @@ import { Sports } from './Sports/Sports'
 import { TeamPage } from './Sports/TeamPage/TeamPage'
 import { Detail } from './Art/Detail/Detail'
 import Home from './Home/Home'
+import Support from '../Support/Support'
 
 const Main = () => {
     const navi = useNavigate()
@@ -29,6 +30,7 @@ const Main = () => {
                     <Route path="/detail" element={<Detail />} />
                     <Route path="sports" element={<Sports />} />
                     <Route path="/teamPage" element={<TeamPage />} />
+                    <Route path='/support' element={<Support/>}/>
                 </Routes>
             </div>
         </div>

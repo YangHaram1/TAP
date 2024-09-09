@@ -17,10 +17,12 @@ import { jwtDecode } from 'jwt-decode'
 import { AdminHeader } from './components/Header/AdminHeader'
 import { Biz } from './pages/ABusiness/Biz'
 import { Admin } from './pages/Admin/Admin'
+import Grade from './pages/Grade/Grade'
 
 function App() {
     const { login, isAuth, setAuth, role } = useAuthStore()
     const [hasScrolled, setHasScrolled] = useState(false)
+ 
     useEffect(() => {
         const token = sessionStorage.getItem('token')
         if (token != null) {
@@ -40,13 +42,10 @@ function App() {
         const handleScroll = () => {
             // 현재 스크롤 위치 (Y축)
             const scrollPosition = window.scrollY
-
             // 스크롤이 10px 이상 내려갔을 때 상태 변경
             if (scrollPosition > 10 && !hasScrolled) {
                 setHasScrolled(true) // 스크롤이 내려갔을 때 실행할 함수
-                console.log('스크롤이 내려갔습니다!')
-            } else if (scrollPosition <= 10 && hasScrolled) {
-                console.log('스크롤이 올라감!')
+            } else if (scrollPosition <= 10 && hasScrolled) {    
                 setHasScrolled(false) // 스크롤이 다시 위로 올라갔을 때 상태 변경
             }
         }
@@ -59,6 +58,7 @@ function App() {
             window.removeEventListener('scroll', handleScroll)
         }
     }, [hasScrolled])
+
 
     return (
         <ChatsProvider>
@@ -96,6 +96,7 @@ function App() {
                                         element={<Mypage />}
                                     />
                                     <Route path="/sign/*" element={<Sign />} />
+                                    <Route path='/grade/*' element={<Grade/>}/>
                                 </Routes>
                             </>
                         )
