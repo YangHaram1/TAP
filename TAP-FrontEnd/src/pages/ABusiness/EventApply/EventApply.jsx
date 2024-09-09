@@ -126,7 +126,8 @@ export const EventApply = () => {
     //=======================================================
     // 요일 배열
     const [weekdays, setWeekdays] = useState([]);
-    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토",];
+
     // 두 날짜 사이의 요일 구하기
     const getDaysBetweenDates = (start, end) => {
         const startDate = new Date(start);
@@ -415,10 +416,12 @@ export const EventApply = () => {
     };
 
     // 캐스팅 상태
+    const [castingData, setCastingData] = useState({});
+    const [currentSchedule, setCurrentSchedule] = useState(null);
+
     const [castingImage, setCastingImage] = useState(null);
     const [actorName, setActorName] = useState('');
     const [role, setRole] = useState('');
-    const [castingList, setCastingList] = useState([]);
     const fileInputRef = useRef(null);
 
     const handleCastingImageChange = (event) => {
@@ -431,9 +434,16 @@ export const EventApply = () => {
         setRole(event.target.value);
     };
 
-    const handleAddCasting = () => {
-        if (actorName && role && castingImage) {
-            setCastingList([...castingList, { image: castingImage, name: actorName, role:role}]);
+    const handleAddCasting = (scheduleDay, scheduleTime) => {
+        if (actorName && role && castingImage ) {
+            const key = `${scheduleDay}_${scheduleTime}`;
+            setCastingData(prev => ({
+                ...prev,
+                [key]: [
+                    ...(prev[key] || []),
+                    { image: castingImage, name: actorName, role: role }
+                ]
+            })); 
             setCastingImage(null);
             setActorName('');
             setRole('');
@@ -442,10 +452,16 @@ export const EventApply = () => {
             alert('모든 필드를 입력해 주세요.');
         }
     };
-    const handleRemoveCasting = (indexToRemove) => {
-        setCastingList(castingList.filter((_, index) => index !== indexToRemove));
+    // const handleRemoveCasting = (indexToRemove) => {
+    //     setCastingList(castingList.filter((_, index) => index !== indexToRemove));
+    // };
+    const handleRemoveCasting = (scheduleDay, scheduleTime, indexToRemove) => {
+        const key = `${scheduleDay}_${scheduleTime}`;
+        setCastingData(prev => {
+            const updatedCastings = prev[key].filter((_, index) => index !== indexToRemove);
+            return { ...prev, [key]: updatedCastings };
+        });
     };
-    
     // 메인 포스터 업로드
     const [mainPoster, setMainPoster] = useState(null);
     const handleMainPosterChange = (event) => {
@@ -668,7 +684,11 @@ const filteredTotalSchedule = totalSchedule.filter(
                                 <ul>
                                     {scheduleList.map((schedule, index) => (
                                         <li key={index}>
-                                            {daysOfWeek[schedule.schedule_day]}- {schedule.schedule_time} 
+                                            {schedule.schedule_day === "전체"
+                                                ? "전체"
+                                                : daysOfWeek[schedule.schedule_day]}{" "}
+                                            - {schedule.schedule_time}
+                                            {/* {daysOfWeek[schedule.schedule_day]}- {schedule.schedule_time}  */}
                                             <button onClick={() => handleRemoveSchedule(index)}>x</button>
                                         </li>
                                     ))}
@@ -688,31 +708,31 @@ const filteredTotalSchedule = totalSchedule.filter(
                                 </ul>
                             </td>
                         </tr>
-                        {/* { category == "1" && subCategory === "1" &&  
+                        { category == "1" && subCategory === "1" &&  
                             <tr>
                                 <td>캐스팅 이미지</td>
                                 <td>
                                     {scheduleCastingList.map((schedule, index)=>(
                                     <ul>
                                         <li key={index}>
-                                            {schedule.schedule_day} - {schedule.schedule_time}
+                                            {daysOfWeek[schedule.schedule_day]} - {schedule.schedule_time}
                                             <br></br>
                                             <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
                                             <input type="text" placeholder="배우 이름" value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
                                             <span className={styles.Gap}></span>
                                             <input type="text" placeholder="역할" value={role} onChange={handleRoleChange} className={styles.shortInput} />
                                             <span className={styles.Gap}></span>
-                                            <button onClick={handleAddCasting()}>추가버튼</button>
+                                            <button onClick={() => handleAddCasting(schedule.schedule_day, schedule.schedule_time)}>추가버튼</button>
 
                                             <br></br>
                                             <ul>
-                                                {castingList.map((casting, index) => (
-                                                    <li key={index}>
-                                                        {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
-                                                        <span>{casting.name} - {casting.role}</span>
-                                                        <button onClick={() => handleRemoveCasting(index)}>x</button>
-                                                    </li>
-                                                ))}
+                                            {(castingData[`${schedule.schedule_day}_${schedule.schedule_time}`] || []).map((casting, index) => (
+                                                <li key={index}>
+                                                    {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
+                                                    <span>{casting.name} - {casting.role}</span>
+                                                    <button onClick={() => handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, index)}>x</button>
+                                                </li>
+                                            ))}
                                             </ul>
                                         </li> 
                                     </ul>
@@ -720,7 +740,7 @@ const filteredTotalSchedule = totalSchedule.filter(
                                     
                                 </td>
                             </tr>
-                        }  */}
+                        } 
                         <tr>
                             <td>러닝타임</td>
                             <td>

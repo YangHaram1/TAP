@@ -6,7 +6,14 @@ public class ScheduleDateDTO {
 	private int schedule_seq;
 	private int application_seq;
 	private Timestamp schedule_date;
+	private Timestamp schedule_time;
 	
+	public Timestamp getSchedule_time() {
+		return schedule_time;
+	}
+	public void setSchedule_time(Timestamp schedule_time) {
+		this.schedule_time = schedule_time;
+	}
 	public int getSchedule_seq() {
 		return schedule_seq;
 	}
@@ -29,12 +36,14 @@ public class ScheduleDateDTO {
 	public ScheduleDateDTO() {
 		super();
 	}
-	public ScheduleDateDTO(int schedule_seq, int application_seq, Timestamp schedule_date) {
+	public ScheduleDateDTO(int schedule_seq, int application_seq, Timestamp schedule_date, Timestamp schedule_time) {
 		super();
 		this.schedule_seq = schedule_seq;
 		this.application_seq = application_seq;
 		this.schedule_date = schedule_date;
+		this.schedule_time = schedule_time;
 	}
+	
 	
 	
 }
