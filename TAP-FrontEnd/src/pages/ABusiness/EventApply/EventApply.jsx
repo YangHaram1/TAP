@@ -24,8 +24,6 @@ export const EventApply = () => {
         end_date: '', 
         running_time: '', 
         running_intertime: '', 
-        expected_open_date:'',
-        expected_open_time:'',
         open_date: '', // 여기서 날짜랑 시간 합쳐서 SPRING BOOT , timestamp 형태로 보내기 
         max_ticket: '', 
         away_team_seq: ''
@@ -122,9 +120,7 @@ export const EventApply = () => {
         setFilteredGenres(filteredGenres);
     };
 
-    useEffect(() => {
-        console.log("Updated formData:", formData);
-    }, [formData]);
+
 
    
     //=======================================================
@@ -155,10 +151,10 @@ export const EventApply = () => {
             const updatedData = { ...prevData, [name]: value };
 
             // 티켓 오픈 날짜와 시간 통합
-            if (name === 'expected_open_date' || name === 'expected_open_time') {
-                const combinedDateTime = `${updatedData.expected_open_date}T${updatedData.expected_open_time}`;
-                updatedData.open_date = combinedDateTime;
-            }
+            // if (name === 'expected_open_date' || name === 'expected_open_time') {
+            //     const combinedDateTime = `${updatedData.expected_open_date}T${updatedData.expected_open_time}`;
+            //     updatedData.open_date = combinedDateTime;
+            // }
             // 시작일과 종료일 유효성 검사
             if (name === 'start_date' && updatedData.end_date && value > updatedData.end_date) {
                 alert('시작일은 종료일보다 이후일 수 없습니다.');
@@ -202,6 +198,7 @@ export const EventApply = () => {
 // 스케쥴 추가하기
     const [totalSchedule, setTotalSchedule] = useState([]);
     const [isDisabled, setIsDisabled] = useState(false);
+
     const handleAddSchedule = () => {
         if (!selectedDay || !selectedTime) {
             return false;
@@ -276,29 +273,10 @@ export const EventApply = () => {
             setIsDisabled(false);
         }
     }, [scheduleList]);
-
+    useEffect(() => {
+        console.log("Updated formData:", formData);
+    }, [formData, totalSchedule, scheduleExceptList]);
    
-    // 스케쥴 리스트에 있는거 삭제하기      ++ totalSchedule에 있는 것도 삭제해야함. 
-    // const handleRemoveSchedule =(indexToRemove)=>{
-    //     const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove); 
-    //     setScheduleList(updatedScheduleList);
-
-    //     // // Find the schedule item to remove
-    //     const scheduleToRemove = scheduleList[indexToRemove];
-        
-    //     // Remove the matching item from totalSchedule
-    //     const updatedTotalSchedule = totalSchedule.filter(
-    //         schedule => 
-    //             !(getDay(schedule.schedule_day) === scheduleToRemove.schedule_day && schedule.schedule_time === scheduleToRemove.schedule_time)
-    //     );                                 
-
-    //     setTotalSchedule(updatedTotalSchedule);
-
-    //     // 스케줄 리스트가 비어 있으면 옵션 활성화
-    //     if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.schedule_day === "전체")) {
-    //         setIsDisabled(false);
-    //     }
-    // }
    
     const handleRemoveSchedule = (indexToRemove) => {
         // scheduleList에서 항목 제거
@@ -360,10 +338,10 @@ export const EventApply = () => {
         if (selectedExceptDay) {
             setScheduleExceptList([...scheduleExceptList, { day: selectedExceptDay }]);
             
-            const updatedTotalSchedule = totalSchedule.filter(schedule => {
-                return schedule.schedule_day !== selectedExceptDay;
-            })
-            setTotalSchedule(updatedTotalSchedule);
+            // const updatedTotalSchedule = totalSchedule.filter(schedule => {
+            //     return schedule.schedule_day !== selectedExceptDay;
+            // })
+            // setTotalSchedule(updatedTotalSchedule);
             setSelectedExceptDay(""); // 초기화
         } else {
             alert("제외일을 선택해주세요.");
@@ -378,7 +356,7 @@ export const EventApply = () => {
     useEffect(()=>{
         setScheduleCastingList(scheduleList)
         setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule, scheduleExceptList:scheduleExceptList}));
-    },[scheduleList, totalSchedule, scheduleExceptList])
+    },[scheduleList])
 
     const getSubCategoryOptions = () => {
         const filteredSubCategories = subCategories.filter(
@@ -513,7 +491,7 @@ export const EventApply = () => {
                 alert("경기 팀을 선택해 주세요.");
                 return false;
             }
-            if (!formData.expected_open_date || !formData.expected_open_time){ 
+            if (!formData.open_date){ 
                 alert("오픈날짜 선택"); 
                 return false;
             }
@@ -536,17 +514,26 @@ export const EventApply = () => {
             //     // scheduleList: scheduleList
             // }
 
-
+// 제외일을 기준으로 totalSchedule을 필터링
+const filteredTotalSchedule = totalSchedule.filter(
+    (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
+);
             console.log(scheduleList);
             console.log(formData.open_date);
             console.log(scheduleList.schedule_time);
 
-            setFormData(prev=>({
-                ...prev, scheduleData:scheduleList, totalSchedule:totalSchedule, scheduleExceptList: scheduleExceptList
-            }));
+            // setFormData(prev=>({
+            //     ...prev, scheduleData:scheduleList, totalSchedule:filteredTotalSchedule, scheduleExceptList: scheduleExceptList
+            // }));
+            const updatedFormData = {
+                ...formData,
+                scheduleData: scheduleList,
+                totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
+                scheduleExceptList: scheduleExceptList,
+            };
            
 
-            api.post(`/biz/application`, formData)
+            api.post(`/biz/application`, updatedFormData)
                 .then((resp) => {
                     console.log(resp.data)
                 })
@@ -779,9 +766,10 @@ export const EventApply = () => {
                         <tr>
                             <td>티켓 오픈 희망일</td>
                             <td>
-                                <input type="date" name="expected_open_date" value={formData.expected_open_date} onChange={handleChange} />
+                                <input type="datetime-local" name="open_date" value={formData.open_date} onChange={handleChange}/>
+                                {/* <input type="date" name="expected_open_date" value={formData.expected_open_date} onChange={handleChange} />
                                 <span className={styles.Gap}></span>
-                                <input type="time" name="expected_open_time" value={formData.expected_open_time} onChange={handleChange} />
+                                <input type="time" name="expected_open_time" value={formData.expected_open_time} onChange={handleChange} /> */}
                             </td>
                         </tr>
                     </tbody>
