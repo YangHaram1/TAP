@@ -7,13 +7,15 @@
 .total_stars{
     display: flex;
     align-items: center;
-    height: 60px;
+    height: 35px;
 }
 
 .review_header{
+    margin-top: 30px;
     display:flex;
     width: 100%;
-    height: 30px;
+    height: 100%;
+    /* height: 30px; */
     text-indent: 10px;
 }
 
@@ -65,7 +67,8 @@
 
 .review_write_box{
     background-color: rgb(204, 166, 204);
-    height: 230px;
+    border-radius: 10px;
+    height: 100%;
     padding: 20px;
 }
 
@@ -103,7 +106,45 @@
     border-radius: 10px;
     margin-top: 20px;
     height: 150px;
-    width: 100%;
+    width: 97%;
     background-color: lightcoral;
+    padding: 15px;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
+.review_box{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 30px;
+}
+
+.content{
+    width: 100%;
+    height: 100%;
+}
+
+.review_output_title{
+    height: 30px;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+
+.review_output_content{
+    height: 110px;
+    overflow-y: auto;
+}
+
+/* 스크롤 숨기는 옵션 */
+.review_output_content::-webkit-scrollbar {
+    display: none;
+  }
+
+.review_output_content p{
+    margin: 0px;
+}
+
+.empty{height: 60px; width: 100px;}
