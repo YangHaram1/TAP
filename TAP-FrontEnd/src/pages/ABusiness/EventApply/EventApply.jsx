@@ -159,7 +159,6 @@ export const EventApply = () => {
                 const combinedDateTime = `${updatedData.expected_open_date}T${updatedData.expected_open_time}`;
                 updatedData.open_date = combinedDateTime;
             }
-
             // 시작일과 종료일 유효성 검사
             if (name === 'start_date' && updatedData.end_date && value > updatedData.end_date) {
                 alert('시작일은 종료일보다 이후일 수 없습니다.');
@@ -268,28 +267,79 @@ export const EventApply = () => {
             }
         }
     };
-    
-// 상태 업데이트 후 옵션 비활성화 체크
-useEffect(() => {
-    if (scheduleList.some(item => item.schedule_day === "전체")) {
-        setIsDisabled(true);
-    } else {
-        setIsDisabled(false);
-    }
-}, [scheduleList]);
+        
+    // 상태 업데이트 후 옵션 비활성화 체크
+    useEffect(() => {
+        if (scheduleList.some(item => item.schedule_day === "전체")) {
+            setIsDisabled(true);
+        } else {
+            setIsDisabled(false);
+        }
+    }, [scheduleList]);
 
    
-    // 스케쥴 리스트에 있는거 삭제하기
-    const handleRemoveSchedule =(indexToRemove)=>{
-        const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove); 
-        setScheduleList(updatedScheduleList);
+    // 스케쥴 리스트에 있는거 삭제하기      ++ totalSchedule에 있는 것도 삭제해야함. 
+    // const handleRemoveSchedule =(indexToRemove)=>{
+    //     const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove); 
+    //     setScheduleList(updatedScheduleList);
 
+    //     // // Find the schedule item to remove
+    //     const scheduleToRemove = scheduleList[indexToRemove];
+        
+    //     // Remove the matching item from totalSchedule
+    //     const updatedTotalSchedule = totalSchedule.filter(
+    //         schedule => 
+    //             !(getDay(schedule.schedule_day) === scheduleToRemove.schedule_day && schedule.schedule_time === scheduleToRemove.schedule_time)
+    //     );                                 
+
+    //     setTotalSchedule(updatedTotalSchedule);
+
+    //     // 스케줄 리스트가 비어 있으면 옵션 활성화
+    //     if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.schedule_day === "전체")) {
+    //         setIsDisabled(false);
+    //     }
+    // }
+   
+    const handleRemoveSchedule = (indexToRemove) => {
+        // scheduleList에서 항목 제거
+        const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove);
+        setScheduleList(updatedScheduleList);
+    
+        // 시작일과 종료일을 가져옴
+        const startDate = new Date(formData.start_date);
+        const endDate = new Date(formData.end_date);
+        const allDates = eachDayOfInterval({ start: startDate, end: endDate });
+    
+        // 삭제된 항목에 대한 정보 추출
+        const removedSchedule = scheduleList[indexToRemove];
+    
+        // totalSchedule 업데이트
+        const updatedTotalSchedule = totalSchedule.filter(schedule => {
+            // 현재 schedule이 삭제된 항목과 매칭되는지 확인
+            const scheduleDate = new Date(schedule.schedule_day);
+            return !(scheduleDate.getDay() === parseInt(removedSchedule.schedule_day, 10) && schedule.schedule_time === removedSchedule.schedule_time);
+        });
+    
+        // 삭제된 항목의 요일과 시간을 기반으로 새로운 날짜들 필터링
+        const updatedMatchingDates = allDates.filter(date => {
+            return updatedScheduleList.some(schedule => {
+                const scheduleDayIndex = parseInt(schedule.schedule_day, 10);
+                return getDay(date) === scheduleDayIndex && schedule.schedule_time === schedule.schedule_time;
+            });
+        }).map(date => ({
+            schedule_day: format(date, "yyyy-MM-dd"),
+            schedule_time: date.schedule_time,
+        }));
+    
+        // 새로운 totalSchedule 설정
+        setTotalSchedule([...updatedTotalSchedule, ...updatedMatchingDates]);
+    
         // 스케줄 리스트가 비어 있으면 옵션 활성화
         if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.schedule_day === "전체")) {
             setIsDisabled(false);
         }
-    }
-
+    };
+     
     // 제외일 변경 함수: 시작일과 종료일 사이인지 확인
     const handleExceptDateChange = (e) => {
         const selectedDate = e.target.value;
@@ -485,7 +535,10 @@ useEffect(() => {
             console.log(formData.open_date);
             console.log(scheduleList.schedule_time);
 
-            setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule}));
+            setFormData(prev=>({
+                ...prev, scheduleData:scheduleList, totalSchedule:totalSchedule
+            }));
+           
 
             api.post(`/biz/application`, formData)
                 .then((resp) => {
