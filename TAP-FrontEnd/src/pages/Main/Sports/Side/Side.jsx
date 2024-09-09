@@ -34,6 +34,12 @@ export const Side = () => {
   const handleTeamClick = (teamName, teamLogo, homeGround) => {
     const matches = teamMatches[teamName] || [];
     
+    // 로그 추가
+    console.log('팀 이름:', teamName);
+    console.log('팀 로고:', teamLogo);
+    console.log('홈 구장:', homeGround);
+    console.log('경기 일정:', matches);
+  
     navigate('/teamPage', {
       state: { teamName, teamLogo, homeGround, matches },
     });
