@@ -43,7 +43,7 @@ const Header = ({ hasScrolled }) => {
             <div className={styles.header}>
                 <div className={styles.leftConts}>
                     <div className={styles.title} onClick={handleHome}>
-                        <img src={img1} className={styles.logo} />
+                        <img src={img1} className={styles.logo} alt=''/>
                     </div>
                     <div className={styles.search}>
                         <input
