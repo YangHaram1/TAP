@@ -355,24 +355,29 @@ export const EventApply = () => {
         setSelectedExceptDay(selectedDate);
     };
 
-    // 제외일 삭제 함수
-    const handleRemoveException = (indexToRemove) => {
-        setScheduleExceptList(scheduleExceptList.filter((_, index) => index !== indexToRemove));
-    };
     const handleAddException = () => {
         if (selectedExceptDay) {
             setScheduleExceptList([...scheduleExceptList, { day: selectedExceptDay }]);
+            
+            const updatedTotalSchedule = totalSchedule.filter(schedule => {
+                return schedule.schedule_day !== selectedExceptDay;
+            })
+            setTotalSchedule(updatedTotalSchedule);
             setSelectedExceptDay(""); // 초기화
         } else {
             alert("제외일을 선택해주세요.");
         }
     };
+      // 제외일 삭제 함수
+      const handleRemoveException = (indexToRemove) => {
+        setScheduleExceptList(scheduleExceptList.filter((_, index) => index !== indexToRemove));
+    };
 
     const [scheduleCastingList, setScheduleCastingList] = useState([]);
     useEffect(()=>{
         setScheduleCastingList(scheduleList)
-        setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule}));
-    },[scheduleList, totalSchedule])
+        setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule, scheduleExceptList:scheduleExceptList}));
+    },[scheduleList, totalSchedule, scheduleExceptList])
 
     const getSubCategoryOptions = () => {
         const filteredSubCategories = subCategories.filter(
@@ -536,7 +541,7 @@ export const EventApply = () => {
             console.log(scheduleList.schedule_time);
 
             setFormData(prev=>({
-                ...prev, scheduleData:scheduleList, totalSchedule:totalSchedule
+                ...prev, scheduleData:scheduleList, totalSchedule:totalSchedule, scheduleExceptList: scheduleExceptList
             }));
            
 
@@ -688,7 +693,7 @@ export const EventApply = () => {
                                 <ul>
                                     {scheduleExceptList.map((schedule, index) => (
                                         <li key={index} style={{ color: "red" }}>
-                                            {schedule.schedule_day}
+                                            {schedule.day}
                                             <button onClick={() => handleRemoveException(index)}>x</button>
                                         </li>
                                     ))}
