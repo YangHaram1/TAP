@@ -92,6 +92,9 @@ function App() {
                 )
             })
         }
+        else{
+            setChat(null);
+        }
     }, [isAuth])
     return (
         <ChatsProvider>

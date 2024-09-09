@@ -2,13 +2,16 @@ import React from 'react';
 import styles from './Support.module.css';
 import { ChatsContext } from '../../context/ChatsContext';
 import { useContext } from 'react';
+import { useAuthStore } from './../../store/store';
 const Support = () => {
     const list = [{ title: '1:1 문의하기', text: '자세한 상담이 가능해요', img: 'null' },
     { title: '내 문의내역 보기', text: '문의한 내용을 확인해보세요', img: 'null' },
     { title: 'TAP집사 상담하기', text: 'TAP집사가 상담을 도와드릴게요', img: 'null' }
     ];
+    const {isAuth}=useAuthStore();
     const {dragRef}=useContext(ChatsContext);
     const handleChat=()=>{
+        if(isAuth)
         dragRef.current.style.visibility = 'visible';
     }
     return (
