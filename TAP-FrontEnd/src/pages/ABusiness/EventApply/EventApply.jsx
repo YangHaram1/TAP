@@ -332,13 +332,14 @@ export const EventApply = () => {
         }));
     
         // 새로운 totalSchedule 설정
-        setTotalSchedule([...updatedTotalSchedule, ...updatedMatchingDates]);
+        setTotalSchedule([...updatedMatchingDates]);
     
         // 스케줄 리스트가 비어 있으면 옵션 활성화
         if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.schedule_day === "전체")) {
             setIsDisabled(false);
         }
     };
+    
      
     // 제외일 변경 함수: 시작일과 종료일 사이인지 확인
     const handleExceptDateChange = (e) => {
