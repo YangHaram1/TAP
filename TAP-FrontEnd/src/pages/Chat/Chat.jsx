@@ -2,6 +2,9 @@ import styles from'./Chat.module.css';
 import { useContext,useEffect } from 'react';
 import { useAuthStore } from '../../store/store';
 import { ChatsContext } from '../../context/ChatsContext';
+import Home from './Home/Home';
+import AI from './AI/AI';
+import ChatApp from './ChatApp/ChatApp';
 const Chat=({websocketRef,draggableRef,setDisabled})=>{
     const { chatAppRef,chatNavi,ws,setChatNavi,dragRef} = useContext(ChatsContext);
     const { loginID } = useAuthStore;
@@ -9,31 +12,17 @@ const Chat=({websocketRef,draggableRef,setDisabled})=>{
    
 
     useEffect(()=>{
-        if(loginID!==null){
-          setChatNavi('chat1');
-         
-        }
-    },[loginID])
-
-    useEffect(()=>{
       if(draggableRef.current)
       dragRef.current=draggableRef.current;
     },[draggableRef])
  
-    if(chatNavi===''){
-      if(chatAppRef.current!=null)
-      chatAppRef.current.style.display='none';
-      
-      if(dragRef.current)
-        dragRef.current.style.display='none';
-    }
 
     const handleEscKey = (event) => {
       if (event.key === 'Escape') {
-        // Esc 키가 눌렸을 때 실행될 코드
-        setChatNavi('');
+        draggableRef.current.style.visibility='hidden';
       }
     };
+    
     useEffect(() => {
         document.addEventListener('keydown', handleEscKey);
         return () => {
@@ -42,8 +31,10 @@ const Chat=({websocketRef,draggableRef,setDisabled})=>{
       }, []);
 
     return(
-        <div className={styles.container}>
-            나는 채팅이다dasdas
+        <div className={styles.container} ref={chatAppRef}>
+           {(chatNavi==='')&&( <Home/>)}
+           {chatNavi==='AI'&&( <AI/>)}
+           {chatNavi==='ChatApp'&&( <ChatApp/>)}
         </div>
     )
 }
