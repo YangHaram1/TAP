@@ -4,3 +4,15 @@
     height: 100%;
     margin: auto;
 }
+
+.chatContainer {
+    background: white;
+    position: absolute;
+    display: none;
+    z-index: 100;
+    top: 100px;
+    right: 100px;
+    flex-direction: column;
+    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+  }
