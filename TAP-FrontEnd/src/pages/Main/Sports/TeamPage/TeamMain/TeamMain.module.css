@@ -1,22 +1,106 @@
 .teamMain {
-    padding: 20px;
-  }
-  
-  .scheduleList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .matchItem {
-    margin-bottom: 10px;
-  }
-  
-  .matchDate {
-    font-weight: bold;
-  }
-  
-  .matchDetails {
-    margin-left: 10px;
-  }
-  
+  padding: 20px;
+  margin: auto;
+  width: 75%;
+}
+
+.scheduleTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeSchedule {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.scheduleDateTime {
+  display: flex;
+  align-items: center;
+}
+
+.date {
+  font-size: 16px;
+}
+
+.time {
+  font-size: 16px;
+  margin-left: 10px; /* 날짜와 시간 사이 간격 */
+  color: #333;
+}
+
+.teamMatch {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+}
+
+.team1, .team2 {
+  display: flex;
+  flex-direction: column; /* 수직으로 정렬 */
+  align-items: center;
+  width: 45%;
+}
+
+.team1 img, .team2 img {
+  width: 60px;
+  height: auto;
+}
+
+.teamName {
+  margin-top: 5px;
+  font-size: 14px;
+  text-align: center;
+  color: #333;
+  text-decoration: none;
+}
+
+.ground {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.btns {
+  display: flex;
+  justify-content: flex-end;
+  width: 15%;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn1 {
+  background-color: #ffcc00;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 5px;
+  font-weight: bold;
+  height: 20px;
+}
+/* TeamMain.module.css */
+
+.vsText {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 10px; /* 로고와의 간격 설정 */
+  display: flex;
+  align-items: center; /* 텍스트를 가운데 정렬 */
+}
+/* '더보기' 버튼 스타일 */
+.more {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #007bff;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+

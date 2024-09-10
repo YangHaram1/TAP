@@ -3,13 +3,18 @@ import styles from './EventApply.module.css';
 import { api } from "../../../config/config";
 import { useAuthStore } from '../../../store/store';
 import MyEditor from "../../../components/MyEditor/MyEditor";
+import MyEditorOnlyText from "../../../components/MyEditor/MyEditorOnlyText";
+import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
+import {eachDayOfInterval, format, getDay} from 'date-fns';
 
 export const EventApply = () => {
-    const { login, loginID, setAuth, role } = useAuthStore();
+    const { login, loginID, setAuth} = useAuthStore();
     const editorRef = useRef();
-    const [age, setAge] = useState(); 
+    
     const [category, setCategory] = useState()
-    const [formData, SetFormData] = useState({
+    const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
+   
+    const [formData, setFormData] = useState({
         id: loginID, 
         name: '', 
         place_seq: '', 
@@ -44,7 +49,7 @@ export const EventApply = () => {
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
     const [content, setContent] = useState('');
     const [content2, setContent2] = useState('');
-
+    const contentRef = useRef(null);
     useEffect(() => {
         api.get(`/biz/application/category`).then((resp) => {
             setCategories(resp.data);
@@ -83,20 +88,20 @@ export const EventApply = () => {
             alert("이상 오류");
         });
 
-        api.get(`/biz/application/description`).then((resp) => {
-            setContent(resp.data[1].description_content);
-            setContent2(resp.data[2].description_content);
-            contentRef.current.innerHTML = resp.data[1].description_content;
-        }).catch(() => {
-            alert("이상 오류");
-        });
+        // api.get(`/biz/application/description`).then((resp) => {
+        //     setContent(resp.data[1].description_content);
+        //     setContent2(resp.data[2].description_content);
+        //     contentRef.current.innerHTML = resp.data[1].description_content;
+        // }).catch(() => {
+        //     alert("이상 오류");
+        // });
     }, []);
-    const contentRef = useRef(null);
+    
     const handleCategory = (e) => {
         const selectedValue = e.target.value;
         setSelectedCategory(selectedValue);
         setCategory(selectedValue);
-        SetFormData({ ...formData, sub_category_seq: "", genre_seq: "", away_team_seq:"" });
+        setFormData({ ...formData, sub_category_seq: "", genre_seq: "", away_team_seq:"" });
 
         setSelectedPlace("");
         setSelectedTeam("");
@@ -104,9 +109,11 @@ export const EventApply = () => {
         setFilteredGenres([]);
     };
 
+    const [subCategory, setSubCategory] = useState("");
     const handleSubCategoryChange = (e) => {
         const selectedSubCategory = e.target.value;
-        SetFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
+        setSubCategory(selectedSubCategory);
+        setFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
 
         const filteredGenres = genres.filter(
             (genre) => genre.SUB_CATEGORY_SEQ.toString() === selectedSubCategory
@@ -114,42 +121,243 @@ export const EventApply = () => {
         setFilteredGenres(filteredGenres);
     };
 
-    useEffect(() => {
-        console.log("Updated formData:", formData);
-    }, [formData]);
 
+
+   
+    //=======================================================
+    // 요일 배열
+    const [weekdays, setWeekdays] = useState([]);
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토",];
+
+    // 두 날짜 사이의 요일 구하기
+    const getDaysBetweenDates = (start, end) => {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        let currentDate = new Date(startDate);
+        const daySet = new Set();
+
+        // 시작일부터 종료일까지의 날짜 계산
+        while (currentDate <= endDate) {
+            daySet.add(currentDate.getDay());
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        // 요일을 배열로 변환하여 반환
+        const weekdaysArray = Array.from(daySet).sort();
+        return ["전체", ...weekdaysArray];
+    };
+   
     const handleChange = (e) => {
         const { name, value } = e.target;
-        SetFormData({ ...formData, [name]: value });
+
+        setFormData(prevData => {
+            const updatedData = { ...prevData, [name]: value };
+
+            // 티켓 오픈 날짜와 시간 통합
+            // if (name === 'expected_open_date' || name === 'expected_open_time') {
+            //     const combinedDateTime = `${updatedData.expected_open_date}T${updatedData.expected_open_time}`;
+            //     updatedData.open_date = combinedDateTime;
+            // }
+            // 시작일과 종료일 유효성 검사
+            if (name === 'start_date' && updatedData.end_date && value > updatedData.end_date) {
+                alert('시작일은 종료일보다 이후일 수 없습니다.');
+                return prevData;
+            }
+            if (name === 'end_date' && updatedData.start_date && value < updatedData.start_date) {
+                alert('종료일은 시작일보다 이전일 수 없습니다.');
+                return prevData;
+            }
+
+            // 요일 계산
+            if (name === 'start_date' && updatedData.end_date) {
+                const weekdays = getDaysBetweenDates(value, updatedData.end_date);
+                setWeekdays(weekdays);
+                setScheduleList([]);
+                setScheduleExceptList([]);
+            } else if (name === 'end_date' && updatedData.start_date) {
+                const weekdays = getDaysBetweenDates(updatedData.start_date, value);
+                setWeekdays(weekdays);
+                setScheduleList([]);
+                setScheduleExceptList([]);
+            }
+
+            return updatedData;
+        });
     };
+
 
     const handleSelectPlace = (e) => {
         const selectedValue = e.target.value;
         setSelectedPlace(selectedValue);
 
+        setFormData({ ...formData, place_seq: selectedValue});
+        
         const selectedPlaceData = teamLocations.find((location) => location.PLACE_SEQ.toString() === selectedValue);
         setSelectedTeam(selectedPlaceData ? selectedPlaceData.TEAM_NAME : '');
         setSelectedTeamType(selectedPlaceData ? selectedPlaceData.TEAM_TYPE : '');
     };
 
+
+// 스케쥴 추가하기
+    const [totalSchedule, setTotalSchedule] = useState([]);
+    const [isDisabled, setIsDisabled] = useState(false);
+
     const handleAddSchedule = () => {
-        if (selectedDay && selectedTime) {
-            setScheduleList([...scheduleList, { day: selectedDay, time: selectedTime }]);
-            setSelectedDay(""); // 초기화
-            setSelectedTime(""); // 초기화
-        } else {
-            alert("요일과 시간을 모두 선택해주세요.");
+        if (!selectedDay || !selectedTime) {
+            return false;
         }
+    
+        const startDate = new Date(formData.start_date);
+        const endDate = new Date(formData.end_date);
+        const allDates = eachDayOfInterval({ start: startDate, end: endDate });
+        const selectedDayIndex = parseInt(selectedDay, 10); // `selectedDay`를 숫자로 변환
+    
+        if (selectedDay === "전체") {
+            // "전체"가 선택되었고, scheduleList가 비어있지 않을 경우
+            if (scheduleList.length > 0) {
+                const confirmClear = window.confirm(
+                    "'전체'를 선택하면 기존 스케줄이 초기화됩니다. 계속하시겠습니까?"
+                );
+                if (confirmClear) {
+                    const allDatesFormatted = allDates.map((date) => ({
+                        schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
+                        schedule_time: selectedTime,
+                    }));
+    
+                    setTotalSchedule(allDatesFormatted);
+                    setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime }]);
+                    setIsDisabled(true); // 다른 요일 옵션 비활성화
+                    setSelectedDay(""); // 요일 초기화
+                    setSelectedTime(""); // 시간 초기화
+                }
+            } else {
+                const allDatesFormatted = allDates.map((date) => ({
+                    schedule_day: format(date, "yyyy-MM-dd"), // 날짜 형식 변환
+                    schedule_time: selectedTime,
+                }));
+    
+                setTotalSchedule(allDatesFormatted);
+                setScheduleList([{ schedule_day: "전체", schedule_time: selectedTime }]);
+                setIsDisabled(true); // 다른 요일 옵션 비활성화
+                setSelectedDay(""); // 요일 초기화
+                setSelectedTime(""); // 시간 초기화
+            }
+        } else {
+            // "전체"가 아닌 경우
+            if (!scheduleList.some((item) => item.schedule_day === "전체")) {
+                // 선택된 요일과 매칭되는 날짜들 필터링
+                const matchingDates = allDates.filter(
+                    (date) => getDay(date) === selectedDayIndex
+                );
+    
+                // 이전의 totalSchedule 상태를 유지하면서 새로운 값을 추가
+                setTotalSchedule((prevTotalSchedule) => [
+                    ...prevTotalSchedule,
+                    ...matchingDates.map((date) => ({
+                        schedule_day: format(date, "yyyy-MM-dd"),
+                        schedule_time: selectedTime,
+                    })),
+                ]);
+    
+                setScheduleList([...scheduleList, { schedule_day: selectedDay, schedule_time: selectedTime }]);
+                setSelectedDay(""); // 초기화
+                setSelectedTime(""); // 초기화
+            } else {
+                alert("이미 '전체'가 선택되어 다른 요일을 추가할 수 없습니다.");
+            }
+        }
+    };
+        
+    // 상태 업데이트 후 옵션 비활성화 체크
+    useEffect(() => {
+        if (scheduleList.some(item => item.schedule_day === "전체")) {
+            setIsDisabled(true);
+        } else {
+            setIsDisabled(false);
+        }
+    }, [scheduleList]);
+    useEffect(() => {
+        console.log("Updated formData:", formData);
+    }, [formData, totalSchedule, scheduleExceptList]);
+   
+   
+    const handleRemoveSchedule = (indexToRemove) => {
+        // scheduleList에서 항목 제거
+        const updatedScheduleList = scheduleList.filter((_, index) => index !== indexToRemove);
+        setScheduleList(updatedScheduleList);
+    
+        // 시작일과 종료일을 가져옴
+        const startDate = new Date(formData.start_date);
+        const endDate = new Date(formData.end_date);
+        const allDates = eachDayOfInterval({ start: startDate, end: endDate });
+    
+        // 삭제된 항목에 대한 정보 추출
+        const removedSchedule = scheduleList[indexToRemove];
+    
+        // totalSchedule 업데이트
+        const updatedTotalSchedule = totalSchedule.filter(schedule => {
+            // 현재 schedule이 삭제된 항목과 매칭되는지 확인
+            const scheduleDate = new Date(schedule.schedule_day);
+            return !(scheduleDate.getDay() === parseInt(removedSchedule.schedule_day, 10) && schedule.schedule_time === removedSchedule.schedule_time);
+        });
+    
+        // 삭제된 항목의 요일과 시간을 기반으로 새로운 날짜들 필터링
+        const updatedMatchingDates = allDates.filter(date => {
+            return updatedScheduleList.some(schedule => {
+                const scheduleDayIndex = parseInt(schedule.schedule_day, 10);
+                return getDay(date) === scheduleDayIndex && schedule.schedule_time === schedule.schedule_time;
+            });
+        }).map(date => ({
+            schedule_day: format(date, "yyyy-MM-dd"),
+            schedule_time: date.schedule_time,
+        }));
+    
+        // 새로운 totalSchedule 설정
+        setTotalSchedule([...updatedMatchingDates]);
+    
+        // 스케줄 리스트가 비어 있으면 옵션 활성화
+        if (updatedScheduleList.length === 0 || !updatedScheduleList.some(item => item.schedule_day === "전체")) {
+            setIsDisabled(false);
+        }
+    };
+    
+     
+    // 제외일 변경 함수: 시작일과 종료일 사이인지 확인
+    const handleExceptDateChange = (e) => {
+        const selectedDate = e.target.value;
+        const startDate = new Date(formData.start_date);
+        const endDate = new Date(formData.end_date);
+        const currentDate = new Date(selectedDate);
+
+        // 시작일과 종료일 사이의 날짜인지 확인
+        if (currentDate < startDate || currentDate > endDate) {
+            alert('제외일은 시작일과 종료일 사이에 있어야 합니다.');
+            return;
+        }
+        setSelectedExceptDay(selectedDate);
     };
 
     const handleAddException = () => {
         if (selectedExceptDay) {
             setScheduleExceptList([...scheduleExceptList, { day: selectedExceptDay }]);
+            
+            // const updatedTotalSchedule = totalSchedule.filter(schedule => {
+            //     return schedule.schedule_day !== selectedExceptDay;
+            // })
+            // setTotalSchedule(updatedTotalSchedule);
             setSelectedExceptDay(""); // 초기화
         } else {
             alert("제외일을 선택해주세요.");
         }
     };
+      // 제외일 삭제 함수
+      const handleRemoveException = (indexToRemove) => {
+        setScheduleExceptList(scheduleExceptList.filter((_, index) => index !== indexToRemove));
+    };
+
+    useEffect(()=>{
+        setScheduleCastingList(scheduleList, castingData)
+        setFormData(prev=>({...prev, scheduleDate:scheduleList, totalSchedule:totalSchedule, scheduleExceptList:scheduleExceptList}));
+    },[scheduleList])
 
     const getSubCategoryOptions = () => {
         const filteredSubCategories = subCategories.filter(
@@ -203,23 +411,170 @@ export const EventApply = () => {
             return <option value="">선택</option>;
         }
     };
+    const handleRunningTimeChange = (e) => {
+        setIsRunningTimeEnabled(e.target.value === "yes");
+    };
 
-    const handleSubmit = () => {
-        api.post(`/biz/application`, formData).then((resp) => {
+    // 캐스팅 상태
+    
+    const [scheduleCastingList, setScheduleCastingList] = useState([]);
+    const [castingData, setCastingData] = useState({});
+    const [currentSchedule, setCurrentSchedule] = useState(null);
 
-        }).catch(() => {
-            alert("잘못됨");
+    const [castingImage, setCastingImage] = useState(null);
+    const [actorName, setActorName] = useState('');
+    const [role, setRole] = useState('');
+    const fileInputRef = useRef(null);
+    const actorInputRef = useRef(null);
+    const characInputRef = useRef(null);
+
+    const handleCastingImageChange = (event) => {
+        setCastingImage(event.target.files[0]);
+        console.log(event.target.files[0])
+    };
+    const handleActorNameChange = (event) => {
+        setActorName(event.target.value);
+    };
+    const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    };
+
+    const fileData = new FormData();
+
+    const handleAddCasting = (scheduleDay, scheduleTime) => {
+        if (actorName && role && castingImage ) {
+            const key = `${scheduleDay}_${scheduleTime}`;
+            setCastingData(prev => ({
+                ...prev,
+                [key]: [
+                    ...(prev[key] || []),
+                    { schedule_day:scheduleDay, schedule_time:scheduleTime, image: castingImage, name: actorName, role: role }
+                ]
+            })); 
+            fileData.append('castingImg', castingImage)
+            fileData.append('name', actorName)
+            fileData.append('role',role)
+            fileData.append('schedule_day', scheduleDay)
+            fileData.append('schedule_time', scheduleTime)
+
+            setCastingImage(null);
+            setActorName('');
+            setRole('');
+            if (actorInputRef.current) {
+                actorInputRef.current.value = ''; // actorInputRef를 통해 값 초기화
+              }
+            characInputRef.current.value=null; 
+            fileInputRef.current.value = null;
+        } else {
+            alert('모든 필드를 입력해 주세요.');
+        }
+    };
+    // const handleRemoveCasting = (indexToRemove) => {
+    //     setCastingList(castingList.filter((_, index) => index !== indexToRemove));
+    // };
+    const handleRemoveCasting = (scheduleDay, scheduleTime, indexToRemove) => {
+        const key = `${scheduleDay}_${scheduleTime}`;
+        setCastingData(prev => {
+            const updatedCastings = prev[key].filter((_, index) => index !== indexToRemove);
+            return { ...prev, [key]: updatedCastings };
         });
+    };
+    // 메인 포스터 업로드
+    const [mainPoster, setMainPoster] = useState(null);
+    const handleMainPosterChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        setMainPoster(file); // 선택된 파일을 mainPoster 상태로 설정
+      }
+    };
+    //
+    const handleSubmit = () => {
+        // 입력값 검증 함수
+        const validateForm = () => {
+            // 필수 항목들이 비어있는지 확인
+            if (!formData.sub_category_seq) {
+                alert("카테고리를 선택해 주세요.");
+                return false;
+            }
+            if (!formData.genre_seq) {
+                alert("장르를 선택해 주세요.");
+                return false;
+            }
+            if (!formData.name) {
+                alert("상품명을 입력해 주세요.");
+                return false;
+            }
+            if (!formData.age_limit) {
+                alert("관람등급을 선택해 주세요.");
+                return false;
+            }
+            if (!formData.start_date || !formData.end_date) {
+                alert("시작일과 종료일을 입력해 주세요.");
+                return false;
+            }
+            if (formData.start_date > formData.end_date) {
+                alert("시작일이 종료일보다 늦을 수 없습니다.");
+                return false;
+            }
+            if (!formData.max_ticket) {
+                alert("최대 티켓 수량을 선택해 주세요.");
+                return false;
+            }
+            if (formData.category === "2" && (!formData.away_team_seq || !selectedTeam)) {
+                alert("경기 팀을 선택해 주세요.");
+                return false;
+            }
+            if (!formData.open_date){ 
+                alert("오픈날짜 선택"); 
+                return false;
+            }
+            if(!formData.running_time ){
+                alert("러닝타임 선택");
+                return false;
+            }
+            if(scheduleList.length==0){
+                alert("시작시간 설정해라");
+                return false;
+            }
+    
+            return true;
+        };
+    
+        // 유효성 검사 통과 시에만 서버로 요청
+        if (validateForm()) {
+            // 제외일을 기준으로 totalSchedule을 필터링
+            const filteredTotalSchedule = totalSchedule.filter(
+                (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
+            );
+            // setFormData(prev=>({
+            //     ...prev, scheduleDate:scheduleList, totalSchedule:filteredTotalSchedule, scheduleExceptList: scheduleExceptList
+            // }));
+
+            const updatedFormData = {
+                ...formData,
+                scheduleDate: scheduleList,
+                totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
+                scheduleExceptList: scheduleExceptList,
+                castingData: castingData, 
+                mainPoster: mainPoster, 
+                fileData:fileData
+            };
+           
+
+            api.post(`/biz/application`, updatedFormData)
+                .then((resp) => {
+                    console.log(resp.data)
+                })
+                .catch(() => {
+                    alert("서버에 안 보내짐. 잘못됨");
+                });
+        }
     };
 
     return (
         <div className={styles.container}>
             <div className={styles.imgContent}>
-            <div className={styles.viewCont} ref={contentRef}></div>
-            <p>abc하이abc</p>
-                {/* db에서 이미지태그 집어넣은거 확인해보기. gcs의 URL은 출력안됨. 일반 URL은 출력됨 */}
-                <div dangerouslySetInnerHTML={{ __html: content }} />
-                <div dangerouslySetInnerHTML={{ __html: content2 }} />
+            {/* <div className={styles.viewCont} ref={contentRef}></div> */}
             </div>
             <div className={styles.header}>
                 <h2>상품 신규 등록</h2>
@@ -248,7 +603,6 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
-
                         <tr>
                             <td>장르</td>
                             <td>
@@ -258,11 +612,10 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
-
                         <tr>
                             <td>상품명</td>
                             <td>
-                                <input type="text" placeholder="상품명 입력" name="eventName" value={formData.eventName} onChange={handleChange}></input>
+                                <input type="text" placeholder="상품명 입력" name="name" value={formData.name} onChange={handleChange}></input>
                             </td>
                         </tr>
                         <tr>
@@ -292,8 +645,7 @@ export const EventApply = () => {
                                 <td>
                                     {selectedPlace 
                                         ? selectedTeam 
-                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />
-                                        
+                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />  
                                     }
                                     <span className={styles.Gap}></span>
                                     VS
@@ -322,15 +674,19 @@ export const EventApply = () => {
                         <tr>
                             <td>시작시간( 스케쥴 테이블에 )</td>
                             <td>
-                                <select className={styles.shortInput} value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
+                                <select className={styles.shortInput} value={selectedDay} 
+                                onChange={(e) => setSelectedDay(e.target.value)}
+                                // disabled={isDisabled && selectedDay !== "전체"} 
+                                disabled={isDisabled}
+                                >
                                     <option value="">요일</option>
-                                    <option value="월">월</option>
-                                    <option value="화">화</option>
-                                    <option value="수">수</option>
-                                    <option value="목">목</option>
-                                    <option value="금">금</option>
-                                    <option value="토">토</option>
-                                    <option value="일">일</option>
+                                    {weekdays.map((day, index) => (
+                                    <option key={index} value={day === "전체" ? "전체" : day}
+                                    disabled={isDisabled && day !== "전체"} 
+                                    >
+                                        {day === "전체" ? "전체" : daysOfWeek[day]}
+                                    </option>
+                                    ))}
                                 </select>
                                 <span className={styles.Gap}></span>
                                 시간: <input type="time" step="300" required className={styles.shortInput} value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}></input>
@@ -339,11 +695,18 @@ export const EventApply = () => {
                                 <br></br>
                                 <ul>
                                     {scheduleList.map((schedule, index) => (
-                                        <li key={index}>{schedule.day} - {schedule.time} <button>x</button></li>
+                                        <li key={index}>
+                                            {schedule.schedule_day === "전체"
+                                                ? "전체"
+                                                : daysOfWeek[schedule.schedule_day]}{" "}
+                                            - {schedule.schedule_time}
+                                            {/* {daysOfWeek[schedule.schedule_day]}- {schedule.schedule_time}  */}
+                                            <button onClick={() => handleRemoveSchedule(index)}>x</button>
+                                        </li>
                                     ))}
                                 </ul>
                                 <br></br>
-                                제외일: <input type="date" value={selectedExceptDay} onChange={(e) => setSelectedExceptDay(e.target.value)}></input>
+                                제외일: <input type="date" value={selectedExceptDay} onChange={handleExceptDateChange}></input>
                                 <span className={styles.Gap}></span>
                                 <button onClick={handleAddException}>추가</button>
                                 <br></br>
@@ -351,26 +714,94 @@ export const EventApply = () => {
                                     {scheduleExceptList.map((schedule, index) => (
                                         <li key={index} style={{ color: "red" }}>
                                             {schedule.day}
-                                            <button>x</button>
+                                            <button onClick={() => handleRemoveException(index)}>x</button>
                                         </li>
                                     ))}
                                 </ul>
                             </td>
                         </tr>
+                        { category == "1" && subCategory === "1" &&  
+                            <tr>
+                                <td>캐스팅 이미지</td>
+                                <td>
+                                    {scheduleList.map((schedule, index)=>(
+                                    <ul>
+                                        <li key={index}>
+                                            {schedule.schedule_day === "전체"
+                                                ? "전체"
+                                                : daysOfWeek[schedule.schedule_day]}{" "}
+                                            - {schedule.schedule_time}
+                                            <br></br>
+                                            <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
+                                            <input type="text" placeholder="배우 이름" ref={actorInputRef} value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
+                                            <span className={styles.Gap}></span>
+                                            <input type="text" placeholder="역할" ref={characInputRef} onChange={handleRoleChange} className={styles.shortInput} />
+                                            <span className={styles.Gap}></span>
+                                            <button onClick={() => handleAddCasting(schedule.schedule_day, schedule.schedule_time)}>추가버튼</button>
+
+                                            <br></br>
+                                            <ul>
+                                            {(castingData[`${schedule.schedule_day}_${schedule.schedule_time}`] || []).map((casting, index) => (
+                                                <li key={index}>
+                                                    {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
+                                                    <span>{casting.name} - {casting.role}</span>
+                                                    <button onClick={() => handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, index)}>x</button>
+                                                </li>
+                                            ))}
+                                            </ul>
+                                        </li> 
+                                    </ul>
+                                    ))}
+                                    
+                                </td>
+                            </tr>
+                        } 
                         <tr>
                             <td>러닝타임</td>
                             <td>
-                                <input type="radio" name="running" value="yes" />러닝타임(인터미션 포함) : <input type="text" style={{ width: "50px" }} />분 <span style={{ fontSize: "13px" }}>(인터미션 :<input type="text" style={{ width: "50px" }} />분)</span>
+                                <input type="radio"  name="running"  value="yes"  onChange={handleRunningTimeChange} />
+                                러닝타임(인터미션 포함) : 
+                                <input 
+                                    type="text" 
+                                    name="running_time" 
+                                    value={formData.running_time} 
+                                    onChange={handleChange} 
+                                    style={{ width: "50px" }} 
+                                    disabled={!isRunningTimeEnabled} // Disable based on state
+                                /> 분
+                                <span style={{ fontSize: "13px" }}>
+                                (인터미션: 
+                                <input 
+                                    type="text" 
+                                    name="running_intertime" 
+                                    value={formData.running_intertime} 
+                                    onChange={handleChange} 
+                                    style={{ width: "50px" }} 
+                                    disabled={!isRunningTimeEnabled} // Disable based on state
+                                /> 분)
+                                </span>
                                 <br></br>
-                                <input type="radio" name="running" value="no" />러닝타임없음
+                                <input type="radio" name="running" value="no"
+                                 onChange={() => setFormData({ ...formData, running_time: '0', running_intertime: '0' })} />러닝타임없음
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>최대 티켓 수량</td>
+                            <td>
+                                <select name="max_ticket"
+                                    value={formData.max_ticket}
+                                    onChange={handleChange}>
+                                        <option value="">수량 선택</option>
+                                 {[...Array(20).keys()].map(i => (
+                                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                    ))}
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <td>티켓 오픈 희망일</td>
                             <td>
-                                <input type="date" name="expected_open_date" value={formData.expected_open_date} onChange={handleChange} />
-                                <span className={styles.Gap}></span>
-                                <input type="time" name="expected_open_time" value={formData.expected_open_time} onChange={handleChange} />
+                                <input type="datetime-local" name="open_date" value={formData.open_date} onChange={handleChange}/>
                             </td>
                         </tr>
                     </tbody>
@@ -383,10 +814,10 @@ export const EventApply = () => {
             <table className={styles.table}>
                 <tbody>
                     <tr>
-                        <td>공지사항</td>
+                        <td>공지사항 </td>
                         <td>
-                            글자 색상 변경만 되고 텍스트만 입려되게
-                            {/* <MyEditor editorRef={editorRef} /> */}
+                            <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
+                            <MyEditorOnlyText editorRef={editorRef} />
                         </td>
                         <td>
 
@@ -394,25 +825,31 @@ export const EventApply = () => {
                     </tr>
                     <tr>
                         <td>메인 포스터</td>
-                        <td><input type="file" placeholder="메인포스터 1하나만 "></input></td>
-                    </tr>
-                    <tr>
-                        <td>상세페이지</td>
                         <td>
-                            에디터 적용 - 미리보기 플러그인도 추가
+                            <input
+                                type="file"
+                                placeholder="메인포스터 하나만"
+                                onChange={handleMainPosterChange}
+                                />
+                                <p style={{ color: "red", fontSize: "13px" }}>
+                                * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
+                                </p>
+                                {mainPoster && ( // 파일이 존재할 때만 이미지 렌더링
+                                <img
+                                    src={URL.createObjectURL(mainPoster)}
+                                    alt="Main Poster"
+                                    style={{ width: "100px", height: "100px" }}
+                                />
+                                )}
                         </td>
                     </tr>
                     <tr>
-                        <td>캐스팅 이미지</td>
+                        <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
-                            <input type="file" />
-                            <input type="text" placeholder="배우 이름" className={styles.shortInput} />
-                            <span className={styles.Gap}></span>
-                            <input type="text" placeholder="역할" className={styles.shortInput} />
-                            <span className={styles.Gap}></span>
-                            <button>추가버튼</button>
+                            <MyEditorOnlyAdmin editorRef={editorRef} height="500px" />
                         </td>
                     </tr>
+                   
                 </tbody>
             </table>
 

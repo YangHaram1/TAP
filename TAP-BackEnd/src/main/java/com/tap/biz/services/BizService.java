@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.tap.biz.dao.BizDAO;
+import com.tap.biz.dto.BizApplyDTO;
 import com.tap.biz.dto.TestClobDTO;
+import com.tap.biz.dto.TotalScheduleDTO;
 
 
 @Service
@@ -35,6 +36,15 @@ public class BizService {
 	}
 	public List<TestClobDTO> getContent(){
 		return bizdao.getContent();
+	}
+	
+	public int createApply(BizApplyDTO formData) {
+		bizdao.createApply(formData);
+		int newPopSeq = formData.getApplication_seq();
+		return newPopSeq;
+	}
+	public void createApplySchedule(TotalScheduleDTO dto) {
+		bizdao.createApplySchedule(dto);
 	}
 	
 }

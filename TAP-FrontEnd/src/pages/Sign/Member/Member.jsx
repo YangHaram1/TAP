@@ -45,15 +45,15 @@ const Member = () => {
     }
 
     const handleIdCheck = () => {
-        api.post(`/members`, member).then(resp => {
-            alert('아이디 중복검사')
+        const id = member.id
+        api.get(`/members/${id}`).then(resp => {
+            alert('아이디 중복 검사')
         })
     }
 
     useEffect(() => {
         console.log(member)
-    }, [member])
-    // 새로고침될때 + member 값이 변할 때 마다 실행
+    }, [member]) // 새로고침될때 + member 값이 변할 때 마다 실행
 
     const navi = useNavigate()
 

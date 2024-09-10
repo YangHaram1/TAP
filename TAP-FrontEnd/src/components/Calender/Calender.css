@@ -1,0 +1,105 @@
+.react-calendar{
+    border: 0px;
+    border-radius: 10px;
+    height: 93%;
+    width: 100%;
+    line-height: 1.2em !important;
+  }
+  
+  .react-calendar__navigation__arrow{
+    background-color: rgba(0,0,0,0) !important;
+  }
+  .react-calendar__navigation{
+    height: 35px !important;
+    margin-bottom: 5px !important;
+  }
+  .react-calendar__navigation__prev-button{
+    font-size: 30px;
+  }
+
+  .react-calendar__navigation__next-button{
+    font-size: 30px;
+  }
+
+  .react-calendar__navigation__prev-button:hover, .react-calendar__navigation__next-button:hover{
+    background-color: rgba(0,0,0,0) !important;
+    font-weight: 700;
+  }
+
+  .react-calendar__navigation__label{
+    padding-top: 8px;
+    pointer-events: none;
+  }
+
+  .react-calendar__navigation__label__labelText{
+    font-size: 15px;
+  }
+  
+  .react-calendar__viewContainer{
+    height: 100%;
+    width: 100%;
+  }
+  
+  .react-calendar__month-view__weekdays{
+    font-size: 15px;
+    padding: 5px;
+    height: 35px;
+    background-color: lightgray;
+    border-radius: 20px !important;
+  }
+  
+  .react-calendar__month-view__days{
+    font-size: 18px;
+    padding: 5px;
+  }
+
+  .react-calendar__tile:disabled{
+    background-color: rgba(0,0,0,0) !important;
+  }
+  
+  .react-calendar__tile{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100% !important; /* 전체 높이 사용 */
+    width: 100% !important; /* 전체 너비 사용 */
+  }
+
+  .react-calendar__tile abbr{
+    display: flex !important; /* 인라인 블록으로 변경하여 중앙 정렬 */
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100% !important; /* 전체 높이 사용 */
+    text-align: center; /* 텍스트를 중앙 정렬 */
+    margin-right: 5px !important;
+  }
+
+  abbr{
+    text-decoration: none !important;
+  }
+
+
+  .react-calendar__tile--now{
+    /* 오늘날짜에 대한 값 설정 */
+    color: black;
+    background-color: rgba(0,0,0,0) !important;
+  }
+
+  .react-calendar__tile--active{
+    color: white !important;
+    background-color: plum !important;
+    border-radius: 100%;
+  }
+
+  .react-calendar__tile.highlight {
+    background-color: rgba(0,0,0,0); /* 범위가 강조된 배경 색상 */
+    border-radius: 50%;
+    color: black;
+  }
+  
+  .react-calendar__tile--active {
+    color: white !important;
+    background-color: plum !important;
+    border-radius: 100%;
+  }
