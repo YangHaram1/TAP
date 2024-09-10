@@ -1,6 +1,7 @@
 package com.tap.members.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.tap.members.dao.MembersDAO;
 import com.tap.members.dto.MembersDTO;
@@ -21,7 +23,11 @@ public class MembersService implements UserDetailsService{
 	@Autowired
 	private MembersDAO dao;
 	
-
+	public int signUp(MembersDTO dto) throws Exception{
+		System.out.println(dto.getPw());
+		return dao.signUp(dto);
+		
+	}
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		User user=null;
@@ -55,5 +61,8 @@ public class MembersService implements UserDetailsService{
 		return dao.updatePwById(map);
 	}
 	
+	public List<String> selectByAdmin() throws Exception{
+		return dao.selectByAdmin();
+	}
 
 }

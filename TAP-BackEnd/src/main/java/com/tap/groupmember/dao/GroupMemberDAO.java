@@ -1,6 +1,7 @@
 package com.tap.groupmember.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -20,6 +21,22 @@ public class GroupMemberDAO {
 		
 		mybatis.insert("GroupMember.insert",map);
 		
+	}
+	
+	public void insertAdmin(int seq,List<String> list) throws Exception{
+	
+		
+		for (String string : list) {
+			Map<String, Object> map=new HashMap<>();
+			map.put("group_seq", seq);
+			map.put("id", string);
+			mybatis.insert("GroupMember.insertAdmin",map);
+		}
+		
+	}
+	
+	public boolean checkById(String member_id) throws Exception{
+		return mybatis.selectOne("GroupMember.checkById",member_id);
 	}
 
 }

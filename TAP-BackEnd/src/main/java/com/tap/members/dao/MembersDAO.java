@@ -1,5 +1,6 @@
 package com.tap.members.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -29,6 +30,14 @@ public class MembersDAO {
 	
 	public int updatePwById(Map<String , String> map) throws Exception{
 		return mybatis.update("Members.updatePwById",map);
+	}
+	
+	public int signUp(MembersDTO dto) throws Exception{
+		return mybatis.insert("Members.signUp",dto);
+	}
+	
+	public List<String> selectByAdmin() throws Exception{
+		return mybatis.selectList("Members.selectByAdmin");
 	}
 
 }
