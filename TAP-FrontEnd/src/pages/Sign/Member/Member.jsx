@@ -47,6 +47,7 @@ const Member = () => {
     const handleIdCheck = () => {
         const id = member.id
         api.get(`/members/${id}`).then(resp => {
+            console.log(resp.data)
             alert('아이디 중복 검사')
         })
     }

@@ -28,10 +28,10 @@ public class MembersController {
 	@Autowired
 	private PasswordEncoder pe;
 
-	
+	// 회원가입 아이디 중복 검사
 	@GetMapping("/{id}")
 	public ResponseEntity<Integer> selectById(@PathVariable String id) throws Exception {
-//		mserv.checkId(id);
+		mserv.checkId(id);
 		return ResponseEntity.ok(null);
 	}
 	
@@ -80,6 +80,7 @@ public class MembersController {
 		}
 	}
 	
+	// 회원가입 등록
 	@PostMapping
 	public ResponseEntity<String> signUp(@RequestBody MembersDTO dto) throws Exception{
 		String encode = pe.encode(dto.getPw());
