@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan ,faRotateLeft} from '@fortawesome/free-solid-svg-icons';
 
 const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
-    const { chatNavi, ws, setChatNavi, dragRef } = useContext(ChatsContext);
+    const { chatNavi, ws, setChatNavi, dragRef,chatAppRef } = useContext(ChatsContext);
     const { loginID } = useAuthStore;
 
 
@@ -21,7 +21,7 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
 
     const handleEscKey = (event) => {
         if (event.key === 'Escape') {
-            draggableRef.current.style.visibility = 'hidden';
+            dragRef.current.style.visibility = 'hidden';
         }
     };
 
@@ -41,11 +41,16 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
         dragRef.current.style.visibility = 'hidden';
         setChatNavi('');
     }
+    const handleRotate=()=>{
+        setChatNavi(''); 
+        chatAppRef.current.style.visibility = "hidden";
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.btn} onMouseEnter={(e) => handleDrag(e, false)} onMouseLeave={(e) => handleDrag(e, true)}>
                 <div>
-                 {(chatNavi !== '') &&(  <button onClick={()=>{setChatNavi('')}}> <FontAwesomeIcon icon={faRotateLeft} /></button>)}
+                 {(chatNavi !== '') &&(  <button onClick={handleRotate}> <FontAwesomeIcon icon={faRotateLeft} /></button>)}
                 </div>
                 <div>
                     <button onClick={handleCancel}><FontAwesomeIcon icon={faBan} /></button>

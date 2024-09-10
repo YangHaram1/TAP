@@ -3,6 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Members">
+	<insert id="signUp">
+		insert into members values(#{id}, #{pw},#{name},#{phone},#{email},#{birth},#{gender},#{delivery_seq},1, sysdate, default, default, default)
+	</insert>
+	
 	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
 		select pw,role,m.name as name, g.name as grade from members
 		m
@@ -14,9 +18,10 @@
 		select * from members where id=#{id}
 	</select>
 	
-	<select id="">
-	
+	<select id="selectByAdmin" parameterType="java.util.List" resultType="String">
+		select id from members where role='ROLE_ADMIN'
 	</select>
+
 	
 	
 

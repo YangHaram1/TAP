@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import com.tap.biz.dto.BizApplyDTO;
 import com.tap.biz.dto.TestClobDTO;
+import com.tap.biz.dto.TotalScheduleDTO;
 
 @Repository
 public class BizDAO {
@@ -37,4 +38,13 @@ public class BizDAO {
 		return mybatis.selectList("Biz.getContent");
 	}
 	
+	public int createApply(BizApplyDTO formData) {
+		
+	    return mybatis.insert("Biz.createApply", formData);
+	    
+//	    Integer applicationSeq = formData.getApplication_seq();
+	}
+	public void createApplySchedule(TotalScheduleDTO dto) {
+		mybatis.insert("Biz.createApplySchedule", dto);
+	}
 }
