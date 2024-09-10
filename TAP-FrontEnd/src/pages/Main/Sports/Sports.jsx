@@ -1,10 +1,9 @@
-// src/components/Sports/Sports.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
 import { Silde } from './Silde/Silde';
 import { MatchList } from './MatchList/MatchList';
 import { Side } from './Side/Side';
 import styles from './Sports.module.css'; // CSS 모듈 임포트
-import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
 import doosan from './Silde/Silder/images/img1.jpg';
 import kiwom from './Silde/Silder/images/img2.jpg';
 
@@ -19,6 +18,12 @@ const teamLogos = [
 
 export const Sports = () => {
   const navigate = useNavigate();
+
+  const handleImageClick = (index) => {
+    // 각 팀에 대한 페이지로 이동
+    navigate(`/team/${index}`);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.sliderContainer}>
@@ -26,7 +31,7 @@ export const Sports = () => {
           <Silde
             images={teamLogos}
             interval={3000}
-            onImageClick={(index) => console.log('Clicked image index:', index)}
+            onImageClick={handleImageClick}
           />
         </div>
       </div>

@@ -21,13 +21,10 @@ public class GroupMemberSerivce {
 	@Autowired
 	private MembersDAO mdao;
 	
-	@Transactional
-	public void insert(int seq,String id) throws Exception{
-		dao.insert(seq, id);
-		List<String> list =mdao.selectByAdmin();
-		
-		dao.insertAdmin(seq,list);
-	}
+//	@Transactional
+//	public void insert(int seq,String id) throws Exception{
+//
+//	}
 	
 	
 	public List<GroupMemberDTO> members(int groupSeq){
