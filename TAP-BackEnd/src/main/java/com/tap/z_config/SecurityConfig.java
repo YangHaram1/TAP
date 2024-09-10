@@ -38,6 +38,8 @@ public class SecurityConfig {
 		.httpBasic(basic->basic.disable())// RESTFul 방식에선 불필요
 		.authorizeHttpRequests(request->{
 			request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
+			request.requestMatchers(HttpMethod.GET,"/board").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members").permitAll();
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
 		}) 
