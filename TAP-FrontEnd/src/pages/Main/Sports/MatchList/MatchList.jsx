@@ -34,6 +34,37 @@ const baseballMatchData = [
     status: "판매예정",
     openDate: "09월 16일 11시 오픈",
   },
+  {
+    team1: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png",
+    team2: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB025.png",
+    date: "2024.09.25 18:30",
+    location: "잠실야구장",
+    team1Name: "두산 베어스",
+    team2Name: "삼성 라이온즈",
+    status: "판매예정",
+    openDate: "09월 16일 11시 오픈",
+  },
+  {
+    team1: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png",
+    team2: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB025.png",
+    date: "2024.09.25 18:30",
+    location: "잠실야구장",
+    team1Name: "두산 베어스",
+    team2Name: "삼성 라이온즈",
+    status: "판매예정",
+    openDate: "09월 16일 11시 오픈",
+  },
+    {
+    team1: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png",
+    team2: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB025.png",
+    date: "2024.09.25 18:30",
+    location: "잠실야구장",
+    team1Name: "두산 베어스",
+    team2Name: "삼성 라이온즈",
+    status: "판매예정",
+    openDate: "09월 16일 11시 오픈",
+  },
+
 ];
 
 // 축구 경기 데이터
@@ -67,6 +98,36 @@ const soccerMatchData = [
     team2Name: "제주 유나이티드",
     status: "예매하기",
     openDate: "",
+  },
+  {
+    team1: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png",
+    team2: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB025.png",
+    date: "2024.09.25 18:30",
+    location: "잠실야구장",
+    team1Name: "두산 베어스",
+    team2Name: "삼성 라이온즈",
+    status: "판매예정",
+    openDate: "09월 16일 11시 오픈",
+  },
+  {
+    team1: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png",
+    team2: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB025.png",
+    date: "2024.09.25 18:30",
+    location: "잠실야구장",
+    team1Name: "두산 베어스",
+    team2Name: "삼성 라이온즈",
+    status: "판매예정",
+    openDate: "09월 16일 11시 오픈",
+  },
+  {
+    team1: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png",
+    team2: "http://ticketimage.interpark.com/TicketImage/sports/web/small/PB025.png",
+    date: "2024.09.25 18:30",
+    location: "잠실야구장",
+    team1Name: "두산 베어스",
+    team2Name: "삼성 라이온즈",
+    status: "판매예정",
+    openDate: "09월 16일 11시 오픈",
   },
 ];
 
@@ -208,7 +269,7 @@ export const MatchList = () => {
 
       {/* 축구 섹션 */}
       <div className={styles.soccerSection}>
-        <div className={styles.sportTitle}>
+        <div className={styles.sportsTitleFootball}>
           <span className={styles.baseballText}>
             축구 <span className={styles.englishText}>| SOCCER</span>
           </span>
