@@ -18,12 +18,13 @@
 /* LeftSilder와 RightSilder 각각의 컨테이너 */
 .leftSilderContainer {
   flex: 3;
-  margin-left: 250px; /* LeftSilder에 왼쪽 여백 */
+  margin-left: 21px;
 }
 
 .rightSilderContainer {
   flex: 7;
-  margin-right: 200px; /* RightSilder에 오른쪽 여백 */
+  margin-right: 21px;
+  
 }
 
 /* 하단의 Side 컴포넌트를 포함하는 컨테이너 */

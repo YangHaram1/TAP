@@ -4,6 +4,17 @@
 }
 
 /* 스포츠 타이틀 스타일 */
+.sportTitle {
+    background: url('//ticketimage.interpark.com/TicketImage/sports/web/bg/07001.jpg') no-repeat center center;
+    background-size: cover;
+    padding: 20px; /* 원하는 패딩을 설정하여 타이틀을 이미지와 겹치지 않게 합니다. */
+    color: white; /* 이미지와의 대비를 위해 텍스트 색상 설정 */
+    position: relative; /* 자식 요소의 절대 위치를 위한 설정 */
+    z-index: 30; /* 배경 이미지 위에 텍스트가 오도록 설정 */
+    width: 928px;
+    margin: auto;
+}
+
 .sportTitle a {
     cursor: pointer;
     font-size: 18px;
@@ -14,16 +25,19 @@
     position: relative;
     z-index: 30; /* 제목이 슬라이드 패널 위에 오도록 설정 */
 }
+
 .sportTitleLink {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
 }
+
 .arrowDown::after {
     content: '▼';
     margin-left: 8px;
 }
+
 .arrowUp::after {
     content: '▲';
     margin-left: 8px;
@@ -58,39 +72,51 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 242px;
-    padding: 20px; /* 내부 여백 추가 */
-    background-color: white;
     
+    height: 320px;
 }
 
 .itemWrap {
     display: flex;
     justify-content: center; /* 중앙 정렬 */
     flex-wrap: wrap; /* 여러 구단을 한 줄에 모두 배치 가능 */
-    gap: 80px; /* 팀 항목 간의 간격 조정 */
+    gap: 60px;
+    
 }
 
 .items {
     width: 120px;
     text-align: center;
     padding: 10px;
-    
+    margin-top: 60px;
 }
-.items a{
+.sportsTitleFootball {
+    background-image: url(//ticketimage.interpark.com/TicketImage/sports/web/bg/07002.jpg);
+    background-size: cover;
+    padding: 20px; /* 원하는 패딩을 설정하여 타이틀을 이미지와 겹치지 않게 합니다. */
+    color: white; /* 이미지와의 대비를 위해 텍스트 색상 설정 */
+    position: relative; /* 자식 요소의 절대 위치를 위한 설정 */
+    z-index: 30; /* 배경 이미지 위에 텍스트가 오도록 설정 */
+    /* 다른 스타일들 */
+    width: 928px;
+    margin: auto;
+    
+  }
+.items a {
     text-decoration: none;
 }
+
 .teamLogo {
     display: flex;
     flex-direction: column; /* 로고와 팀명을 세로로 배치 */
     align-items: center; /* 중앙 정렬 */
+    
 }
 
 .teamLogo img {
     width: 120px; /* 로고 이미지 너비 */
     height: auto; /* 높이는 자동으로 조정 */
 }
-
 
 .teamName {
     font-size: 14px; /* 팀명 크기 조정 */
@@ -101,7 +127,6 @@
     overflow: hidden; /* 텍스트가 상자를 넘어가지 않도록 설정 */
     text-overflow: ellipsis; /* 텍스트가 상자를 넘어갈 때 생략 부호(...)를 추가 */
     text-align: center; /* 중앙 정렬 */
-    
 }
 
 /* 경기 리스트 스타일 */
@@ -132,12 +157,13 @@
     justify-content: space-between;
     margin-bottom: 10px;
 }
-  .vsText {
+
+.vsText {
     font-size: 20px; /* VS 텍스트 크기 조정 */
-    
     color: #333; /* VS 텍스트 색상 */
     margin: 0 10px; /* VS 텍스트와 팀 로고 사이의 간격 조정 */
-  }
+}
+
 .matchDate a,
 .matchLocation a,
 .matchTeam a {
@@ -147,6 +173,7 @@
     pointer-events: none; /* 클릭 이벤트 비활성화 */
     cursor: default; /* 커서를 기본 커서로 설정 */
 }
+
 .teamLogo {
     width: 80px;
     height: auto;
@@ -231,6 +258,7 @@
 .soccerTeamLogo img {
     width: 100px;
     height: auto;
+    
 }
 
 .soccerTeamName {
@@ -241,14 +269,14 @@
 }
 
 /* 텍스트 요소들에 z-index 설정 */
-.baseballText, soccerText {
+.baseballText, .soccerText {
     font-size: 18px;
     font-weight: bold;
     z-index: 20; /* 슬라이드 패널보다 높음 */
     position: relative; /* 위치 설정 */
 }
 
-.englishText{
+.englishText {
     font-size: 12px;
     margin-left: 5px;
     z-index: 20; /* 슬라이드 패널보다 높음 */
@@ -260,7 +288,7 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    color: white;
     margin-top: 5px;
     z-index: 20; /* 슬라이드 패널보다 높음 */
     position: relative; /* 위치 설정 */
