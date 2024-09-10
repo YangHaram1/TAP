@@ -9,8 +9,8 @@
 	</insert>
 	
 	<!-- 회원가입 아이디 중복 검사-->
-	<select id="checkId" resultType="com.tap.members.dto.MembersDTO">
-		select count(*) from members where  id=#{id}
+	<select id="checkId" resultType="int">
+		select count(*) from members where id=#{id}
 	</select>
 	
 	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
