@@ -122,7 +122,7 @@
 }
 
 .calendar{
-    height: 350px;
+    height: 330px;
     width: 95%;
     margin-top: 15px;
     display: flex;
@@ -171,6 +171,7 @@
     border-radius: 5px;
     color: white;
     font-size: 15px;
+    border: 0px;
 }
 
 .book button:hover{

@@ -8,10 +8,9 @@ import { useEffect, useState } from 'react';
 import { Notice } from './Notice/Notice';
 import { ProductData } from './ProductData/ProductData';
 import { Casting } from './Casting/Casting';
-// import { Review } from './Review/Review';
-// import { Excite } from './Excite/Excite';
 import { Write } from './Write/Write';
 import { Calender } from '../../../../components/Calender/Calender';
+import { BookModal } from '../../../../components/BookModal/BookModal';
 
 
 export const Detail = ()=>{
@@ -24,7 +23,7 @@ export const Detail = ()=>{
     const [selectedDate, setSelectedDate] = useState(new Date());
     // 달력 표시 범위 (지금의 경우 9월달만 있기 때문에 화살표가 비활성화 됨)
     const minDate = new Date('2024-09-05');
-    const maxDate = new Date('2024-09-20');
+    const maxDate = new Date('2025-09-20');
     // 활성화 시킬 날짜 설정
     const periods = [
         { start: new Date('2024-09-05'), end: new Date('2024-09-10') },
@@ -37,11 +36,36 @@ export const Detail = ()=>{
     const handleTime = (time) => {
         setSelectedTime(time);
     }
-    
 
     useEffect(()=>{
         console.log("선택한 날짜 : ",selectedDate);
     },[selectedDate])
+
+    // =================== 에매 모달창 멤버 변수 ===================
+    const [bookModal, setBookModal] = useState(false);
+
+    // 모달창이 열리면 스크롤을 비활성화하고, 닫히면 다시 활성화
+    useEffect(() => {
+        if (bookModal) {
+            document.body.style.overflow = 'hidden'; // 스크롤 비활성화
+        } else {
+            document.body.style.overflow = 'auto'; // 스크롤 활성화
+        }
+
+        // 컴포넌트가 언마운트될 때 스크롤 복구
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [bookModal]);
+
+    const isBookModalOpen = ()=>{
+        setBookModal(true);
+    }
+
+    const closeBookModal=()=>{
+        setBookModal(false);
+    }
+
 
     return(
         <div className={styles.container}>
@@ -133,10 +157,14 @@ export const Detail = ()=>{
                         </p>
                     </div>     
                     <div className={styles.book}>
-                        <button>예매하기</button>
+                        <button onClick={isBookModalOpen}>예매하기</button>
                     </div>            
                 </div>
             </div>
+
+            <BookModal isOpen={bookModal} onClose={closeBookModal}/>
+
+
         </div>
     );
 
