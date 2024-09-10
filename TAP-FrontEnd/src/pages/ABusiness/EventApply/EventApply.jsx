@@ -427,10 +427,10 @@ export const EventApply = () => {
     // 캐스팅 상태
     
     const [scheduleCastingList, setScheduleCastingList] = useState([]);
-    const [castingData, setCastingData] = useState({});
+    const [castingData, setCastingData] = useState([]); 
     const [currentSchedule, setCurrentSchedule] = useState(null);
 
-    const [castingImage, setCastingImage] = useState(null);
+    const [castingImage, setCastingImage] = useState({});   // file_oriname과 gcs에 업로드하고 받은 file_sysname
     const [actorName, setActorName] = useState('');
     const [role, setRole] = useState('');
     const fileInputRef = useRef(null);
@@ -438,58 +438,103 @@ export const EventApply = () => {
     const characInputRef = useRef(null);
 
     const handleCastingImageChange = (event) => {
-        setCastingImage(event.target.files[0]);
-        console.log(event.target.files[0])
-    };
-    const handleActorNameChange = (event) => {
-        setActorName(event.target.value);
-    };
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
+        const file = event.target.files[0];
+        if(file){
+            const selectedSubCategory = subCategoryName;
+            const fileData = new FormData();
+            fileData.append('file',file);
+            api.post(`/file/${selectedSubCategory}`, fileData)
+            .then((response) => {
+                console.log("결과 ", response);
+                setCastingImage({file_oriname: file.name, file_sysname: response.data})
+            })
+            .catch((error) => {
+                console.error("Error uploading file:", error);
+            });
+
+        }
+
     };
 
-    const fileData = new FormData();
+  
+    // 각 스케줄별 입력 상태를 관리하는 객체
+    const [castingInputs, setCastingInputs] = useState({});
+    const fileInputRefs = useRef({});
+    const handleLocalActorNameChange = (scheduleKey, value) => {
+    setCastingInputs((prev) => ({
+        ...prev,
+        [scheduleKey]: {
+        ...prev[scheduleKey],
+        actorName: value,
+        },
+    }));
+    };
 
-    const handleAddCasting = (scheduleDay, scheduleTime) => {
-        if (actorName && role && castingImage ) {
-            const key = `${scheduleDay}_${scheduleTime}`;
-            setCastingData(prev => ({
-                ...prev,
-                [key]: [
-                    ...(prev[key] || []),
-                    { schedule_day:scheduleDay, schedule_time:scheduleTime, image: castingImage, name: actorName, role: role }
-                ]
-            })); 
-            fileData.append('castingImg', castingImage)
-            fileData.append('name', actorName)
-            fileData.append('role',role)
-            fileData.append('schedule_day', scheduleDay)
-            fileData.append('schedule_time', scheduleTime)
-
-            setCastingImage(null);
-            setActorName('');
-            setRole('');
-            if (actorInputRef.current) {
-                actorInputRef.current.value = ''; // actorInputRef를 통해 값 초기화
-              }
-            characInputRef.current.value=null; 
-            fileInputRef.current.value = null;
+    const handleLocalRoleChange = (scheduleKey, value) => {
+    setCastingInputs((prev) => ({
+        ...prev,
+        [scheduleKey]: {
+        ...prev[scheduleKey],
+        role: value,
+        },
+    }));
+    };
+    const handleAddLocalCasting = (schedule) => {
+        const scheduleKey = `${schedule.schedule_day}_${schedule.schedule_time}`;
+        const currentInputs = castingInputs[scheduleKey] || {};
+    
+        if (currentInputs.actorName && currentInputs.role && castingImage) {
+        setCastingData((prev) => [
+            ...prev,
+            {
+            schedule_day: schedule.schedule_day,
+            schedule_time: schedule.schedule_time,
+            file_oriname: castingImage.file_oriname,
+            file_sysname: castingImage.file_sysname,
+            casting_name: currentInputs.actorName,
+            casting_role: currentInputs.role,
+            },
+        ]);
+    
+        // 입력 필드 초기화
+        setCastingInputs((prev) => ({
+            ...prev,
+            [scheduleKey]: { actorName: '', role: '' },
+        }));
+        setCastingImage(null);
+        if (actorInputRef.current) {
+            actorInputRef.current.value = '';
+        }
+        characInputRef.current.value = null;
+        // 스케줄별 파일 입력 필드를 초기화
+    if (fileInputRefs.current[scheduleKey]) {
+        fileInputRefs.current[scheduleKey].value = '';
+      }
         } else {
-            alert('모든 필드를 입력해 주세요.');
+        alert('모든 필드를 입력해 주세요.');
         }
     };
-    // const handleRemoveCasting = (indexToRemove) => {
-    //     setCastingList(castingList.filter((_, index) => index !== indexToRemove));
-    // };
+  //////////////////////////////////////////
+
+
+
+    useEffect(()=>{
+        console.log(castingData)
+    },[castingData])
+    
     const handleRemoveCasting = (scheduleDay, scheduleTime, indexToRemove) => {
-        const key = `${scheduleDay}_${scheduleTime}`;
         setCastingData(prev => {
-            const updatedCastings = prev[key].filter((_, index) => index !== indexToRemove);
-            return { ...prev, [key]: updatedCastings };
+            return prev.filter(
+                (casting, index) =>
+                    !(casting.schedule_day === scheduleDay &&
+                      casting.schedule_time === scheduleTime &&
+                      index === indexToRemove)
+            );
         });
     };
+    
     // 메인 포스터 업로드
-    const [mainPoster, setMainPoster] = useState(null);
+    const [mainPoster, setMainPoster] = useState([]);
     
     const handleMainPosterChange = (event) => {
         const file = event.target.files[0];
@@ -504,8 +549,8 @@ export const EventApply = () => {
 
         api.post(`/file/${selectedSubCategory}`, fileData)
         .then((response) => {
-            console.log(response.data);
-            setMainPoster(file); // 업로드 성공 후 상태 업데이트
+            console.log("결과 ", response);
+            setMainPoster({file_oriname: file.name, file_sysname: response.data}); // 업로드 성공 후 상태 업데이트
         })
         .catch((error) => {
             console.error("Error uploading file:", error);
@@ -557,7 +602,7 @@ export const EventApply = () => {
                 alert("러닝타임 선택");
                 return false;
             }
-            if(scheduleList.length==0){
+            if(scheduleList.length===0){
                 alert("시작시간 설정해라");
                 return false;
             }
@@ -580,11 +625,9 @@ export const EventApply = () => {
                 scheduleDate: scheduleList,
                 totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
                 scheduleExceptList: scheduleExceptList,
-                castingData: castingData, 
-                mainPoster: mainPoster, 
-                fileData:fileData
+                 castingData: castingData, 
+                mainPoster: mainPoster
             };
-           
 
             api.post(`/biz/application`, updatedFormData)
                 .then((resp) => {
@@ -745,39 +788,77 @@ export const EventApply = () => {
                                 </ul>
                             </td>
                         </tr>
-                        { category == "1" && subCategory === "1" &&  
+                        { category === "1" && subCategory === "1" &&  
                             <tr>
                                 <td>캐스팅 이미지</td>
                                 <td>
-                                    {scheduleList.map((schedule, index)=>(
-                                    <ul>
-                                        <li key={index}>
-                                            {schedule.schedule_day === "전체"
-                                                ? "전체"
-                                                : daysOfWeek[schedule.schedule_day]}{" "}
-                                            - {schedule.schedule_time}
-                                            <br></br>
-                                            <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
-                                            <input type="text" placeholder="배우 이름" ref={actorInputRef} value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
-                                            <span className={styles.Gap}></span>
-                                            <input type="text" placeholder="역할" ref={characInputRef} onChange={handleRoleChange} className={styles.shortInput} />
-                                            <span className={styles.Gap}></span>
-                                            <button onClick={() => handleAddCasting(schedule.schedule_day, schedule.schedule_time)}>추가버튼</button>
+                                   
+                                    {scheduleList.map((schedule, index) => {
+                            const scheduleKey = `${schedule.schedule_day}_${schedule.schedule_time}`;
+                            const currentInputs = castingInputs[scheduleKey] || { actorName: '', role: '' };
 
-                                            <br></br>
-                                            <ul>
-                                            {(castingData[`${schedule.schedule_day}_${schedule.schedule_time}`] || []).map((casting, index) => (
-                                                <li key={index}>
-                                                    {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
-                                                    <span>{casting.name} - {casting.role}</span>
-                                                    <button onClick={() => handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, index)}>x</button>
-                                                </li>
-                                            ))}
-                                            </ul>
-                                        </li> 
+                            return (
+                                <ul key={index}>
+                                <li>
+                                    {schedule.schedule_day === '전체' ? '전체' : daysOfWeek[schedule.schedule_day]} - {schedule.schedule_time}
+                                    <br />
+                                    <input type="file" 
+                                    ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
+                                    // ref={fileInputRef} 
+                                    onChange={handleCastingImageChange} />
+                                    <input
+                                    type="text"
+                                    placeholder="배우 이름"
+                                    ref={actorInputRef}
+                                    value={currentInputs.actorName}
+                                    onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
+                                    className={styles.shortInput}
+                                    />
+                                    <span className={styles.Gap}></span>
+                                    <input
+                                    type="text"
+                                    placeholder="역할"
+                                    ref={characInputRef}
+                                    value={currentInputs.role}
+                                    onChange={(e) => handleLocalRoleChange(scheduleKey, e.target.value)}
+                                    className={styles.shortInput}
+                                    />
+                                    <span className={styles.Gap}></span>
+                                    <button onClick={() => handleAddLocalCasting(schedule)}>추가버튼</button>
+                                    <br />
+                                    <ul>
+                                    {castingData
+                                        .filter(
+                                        (casting) =>
+                                            casting.schedule_day === schedule.schedule_day &&
+                                            casting.schedule_time === schedule.schedule_time
+                                        )
+                                        .map((casting, castingIndex) => (
+                                        <li key={castingIndex}>
+                                            {casting.file_sysname ? (
+                                            <img
+                                                src={casting.file_sysname}
+                                                alt="Casting"
+                                                style={{ width: '50px', height: '50px' }}
+                                            />
+                                            ) : null}
+                                            <span>
+                                            {casting.casting_name} - {casting.casting_role}
+                                            </span>
+                                            <button
+                                            onClick={() =>
+                                                handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, castingIndex)
+                                            }
+                                            >
+                                            x
+                                            </button>
+                                        </li>
+                                        ))}
                                     </ul>
-                                    ))}
-                                    
+                                </li>
+                                </ul>
+                            );
+                            })}
                                 </td>
                             </tr>
                         } 
@@ -859,13 +940,7 @@ export const EventApply = () => {
                                 <p style={{ color: "red", fontSize: "13px" }}>
                                 * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
                                 </p>
-                                {mainPoster && ( // 파일이 존재할 때만 이미지 렌더링
-                                <img
-                                    src={URL.createObjectURL(mainPoster)}
-                                    alt="Main Poster"
-                                    style={{ width: "100px", height: "100px" }}
-                                />
-                                )}
+                                {mainPoster.file_sysname ? <img src={mainPoster.file_sysname} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
                         </td>
                     </tr>
                     <tr>

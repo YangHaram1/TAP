@@ -21,40 +21,9 @@ public class BizApplyDTO {
 	private Timestamp updated_at;
 	private int max_ticket;
 	private int away_team_seq;
-	private List<ScheduleDateDTO> scheduleDate;
-	private List<TotalScheduleDTO> totalSchedule;
-	
-	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
-			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
-			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
-			int away_team_seq, List<ScheduleDateDTO> scheduleDate, List<TotalScheduleDTO> totalSchedule) {
-		super();
-		this.application_seq = application_seq;
-		this.id = id;
-		this.name = name;
-		this.place_seq = place_seq;
-		this.sub_category_seq = sub_category_seq;
-		this.genre_seq = genre_seq;
-		this.age_limit = age_limit;
-		this.start_date = start_date;
-		this.end_date = end_date;
-		this.running_time = running_time;
-		this.running_intertime = running_intertime;
-		this.open_date = open_date;
-		this.status = status;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-		this.max_ticket = max_ticket;
-		this.away_team_seq = away_team_seq;
-		this.scheduleDate = scheduleDate;
-		this.totalSchedule = totalSchedule;
-	}
-	public List<TotalScheduleDTO> getTotalSchedule() {
-		return totalSchedule;
-	}
-	public void setTotalSchedule(List<TotalScheduleDTO> totalSchedule) {
-		this.totalSchedule = totalSchedule;
-	}
+	private List<TotalScheduleDTO> totalSchedule;	// 회차- 스케쥴 테이블
+	private List<CastingDataDTO> castingData;
+//	private CastingData castingData;
 	public int getApplication_seq() {
 		return application_seq;
 	}
@@ -157,16 +126,22 @@ public class BizApplyDTO {
 	public void setAway_team_seq(int away_team_seq) {
 		this.away_team_seq = away_team_seq;
 	}
-	public List<ScheduleDateDTO> getScheduleDate() {
-		return scheduleDate;
+	public List<TotalScheduleDTO> getTotalSchedule() {
+		return totalSchedule;
 	}
-	public void setScheduleDate(List<ScheduleDateDTO> scheduleDate) {
-		this.scheduleDate = scheduleDate;
+	public void setTotalSchedule(List<TotalScheduleDTO> totalSchedule) {
+		this.totalSchedule = totalSchedule;
+	}
+	public List<CastingDataDTO> getCastingData() {
+		return castingData;
+	}
+	public void setCastingData(List<CastingDataDTO> castingData) {
+		this.castingData = castingData;
 	}
 	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
 			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
 			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
-			int away_team_seq, List<ScheduleDateDTO> scheduleDate) {
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData) {
 		super();
 		this.application_seq = application_seq;
 		this.id = id;
@@ -185,13 +160,12 @@ public class BizApplyDTO {
 		this.updated_at = updated_at;
 		this.max_ticket = max_ticket;
 		this.away_team_seq = away_team_seq;
-		this.scheduleDate = scheduleDate;
+		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
 	}
 	public BizApplyDTO() {
 		super();
 	}
-	
-	
 	
 	
 }
