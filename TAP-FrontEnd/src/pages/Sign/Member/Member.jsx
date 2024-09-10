@@ -40,7 +40,7 @@ const Member = () => {
     }
     const handleAdd = () => {
         api.post(`/members`, member).then(resp => {
-            alert('회원가입 성공~~~~~~~')
+            alert('회원가입 성공')
         })
     }
 
