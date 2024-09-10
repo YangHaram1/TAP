@@ -1,36 +1,43 @@
 import './App.css'
 import styles from './App.module.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { useAuthStore, useCheckList } from './store/store'
-import { ChatsProvider } from './context/ChatsContext'
 import Login from './pages/Login/Login'
 import Main from './pages/Main/Main'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Mypage from './pages/Mypage/Mypage'
 import Sign from './pages/Sign/Sign'
+import Chat from './pages/Chat/Chat'
+import Grade from './pages/Grade/Grade'
+import Draggable from 'react-draggable';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useAuthStore, useCheckList, useNotification } from './store/store'
+import { ChatsProvider } from './context/ChatsContext'
 import { useEffect, useState, useRef } from 'react'
 import { api } from './config/config'
 import { jwtDecode } from 'jwt-decode'
 import { AdminHeader } from './components/Header/AdminHeader'
 import { Biz } from './pages/ABusiness/Biz'
 import { Admin } from './pages/Admin/Admin'
-import Grade from './pages/Grade/Grade'
 import { ResizableBox } from 'react-resizable';
-import 'react-resizable/css/styles.css'
-import Draggable from 'react-draggable';
 import { Slide, ToastContainer } from 'react-toastify';
-import Chat from './pages/Chat/Chat'
 import { host } from './config/config'
+import 'react-resizable/css/styles.css'
+
 
 function App() {
-    const { login, isAuth, setAuth, role,token } = useAuthStore()
+    const { login, isAuth, setAuth, role, token } = useAuthStore()
+    const { webSocketCheck,setWebSocketCheck ,setOnmessage} = useCheckList();
+    const { maxCount } = useNotification();
+
     const [hasScrolled, setHasScrolled] = useState(false)
-    const {webSocketCheck} =useCheckList();
-    const websocketRef = useRef(null);
-    const draggableRef = useRef(null);
     const [disabled, setDisabled] = useState(true);
     const [chat, setChat] = useState();
+    const [maxRetries, setMaxRetries] = useState(0);
+
+    const websocketRef = useRef(null);
+    const draggableRef = useRef(null);
+
+
 
     useEffect(() => {
         const stoken = sessionStorage.getItem('token')
@@ -93,29 +100,52 @@ function App() {
                 )
             })
         }
-        else{
+        else {
             setChat(null);
         }
-    }, [isAuth,disabled])
+    }, [isAuth, disabled])
 
-      //웹소켓 전체 관리
-  useEffect(() => {
-    if (isAuth) {
-      websocketRef.current = new WebSocket(`${host}/chatWebsocket?token=${token}`);
-    }
-    if (websocketRef.current != null) {
-      websocketRef.current.onopen = () => {
-        console.log('Connected to WebSocket');
-      }
-    }
+    //웹소켓 전체 관리
+    useEffect(() => {
+        if (isAuth) {
+            websocketRef.current = new WebSocket(`${host}/chatWebsocket?token=${token}`);
+        }
+        if (websocketRef.current != null) {
+            websocketRef.current.onopen = () => {
+                console.log('Connected to WebSocket');
+                setOnmessage(); //연결되면 chatapp쪽 onmessage 함수 셋팅
+            }
+            websocketRef.current.onclose = () => {
+                console.log('Disconnected from WebSocket');
+                if (maxRetries < 10) {
+                    setWebSocketCheck();
+                    console.log("websocket 재연결 시도")
+                }
+                setMaxRetries((prev) => {
+                    return prev + 1;
+                })
+            };
 
+            websocketRef.current.onerror = (error) => {
+                console.log('WebSocket error observed:', error);
+                if (maxRetries < 10) {
+                    setWebSocketCheck();
+                    console.log("websocket 재연결 시도")
+                }
+                setMaxRetries((prev) => {
+                    return prev + 1;
+                })
 
-    return () => {
-      if (websocketRef.current != null) {
-        websocketRef.current.close();
-      }
-    };
-  }, [isAuth, webSocketCheck]);
+            };
+
+        }
+        return () => {
+            if (websocketRef.current != null) {
+                websocketRef.current.close();
+            }
+        };
+    }, [isAuth, webSocketCheck]);
+
     return (
         <ChatsProvider>
             <Router>
@@ -176,6 +206,7 @@ function App() {
                     rtl={false}
                     pauseOnFocusLoss={false}
                     draggable
+                    limit={maxCount}
                     transition={Slide}
                 />
             </Router>

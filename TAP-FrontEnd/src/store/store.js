@@ -19,13 +19,17 @@ export const useCheckList = create((set) => ({
     webSocketCheck:false,
     chatSeq:0,
     onMessage:false,
-    emoticonDisplay: false,
-    searchDisplay: true,
     chatController:false,
-    setEmoticonDisplay: ()=>set((state) => ({ emoticonDisplay: !state.emoticonDisplay })),
-    setSearchDisplay: (search) => set({ searchDisplay: search }),
     setChatSeq:(seq)=>set({chatSeq:seq}),
     setOnmessage:() => set((state) => ({ onMessage: !state.onMessage  })),
     setWebSocketCheck:() => set((state) => ({ webSocketCheck: !state.webSocketCheck})),
     setChatController:()=>set((state) => ({ chatController: !state.chatController}))
+}));
+
+export const useNotification =create((set)=>({
+    maxCount:3,
+    count:0,
+    increment: () => set((state) => ({ count: state.count + 1 })),
+    decrement: () => set((state) => ({ count: Math.max(state.count - 1, 0) })),
+
 }));
