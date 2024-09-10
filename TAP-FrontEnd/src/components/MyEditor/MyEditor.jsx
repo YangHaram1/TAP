@@ -6,7 +6,7 @@ import styles from './MyEditor.module.css';
 import  Swal  from 'sweetalert2';
 import { api,tinymce } from '../../config/config';
 
-const MyEditor = ({ editorRef }) => {
+const MyEditor = ({ editorRef, height }) => {
 
   const [content, setContent] = useState('');
   const inputRef = useRef(null);
@@ -45,7 +45,7 @@ const MyEditor = ({ editorRef }) => {
         }}
         init={{
           width: "auto",
-          height: "auto",
+          height: height || "auto",
           menubar: true,
           plugins: 'wordcount anchor code', //image
           toolbar: 'fileupload| forecolor backcolor  blocks fontfamily fontsize fontcolor | bold italic underline strikethrough | link image media table mergetags  | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat ',
