@@ -1,9 +1,7 @@
-import 'react-datepicker/dist/react-datepicker.css'
-import { useEffect, useState } from 'react';
 import styles from './Calender.module.css';
-import './Calender.css';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import './Calender.css';
 
 
 export const Calender = ({minDate, maxDate, periods, setSelectedDate, selectedDate }) => {

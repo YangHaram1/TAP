@@ -20,9 +20,8 @@ export const Detail = ()=>{
     const { seq } = location.state || {};  // 전달된 state가 있으면 가져옴
     const [tap, setTap] = useState(0);
 
-    
+    // =================== 캘린더 관련 멤버 변수 =================== 
     const [selectedDate, setSelectedDate] = useState(new Date());
-    
     // 달력 표시 범위 (지금의 경우 9월달만 있기 때문에 화살표가 비활성화 됨)
     const minDate = new Date('2024-09-05');
     const maxDate = new Date('2024-09-20');
@@ -31,6 +30,14 @@ export const Detail = ()=>{
         { start: new Date('2024-09-05'), end: new Date('2024-09-10') },
         { start: new Date('2024-09-15'), end: new Date('2024-09-20') },
     ];
+
+    // =================== 회차 선택 멤버 변수 ===================
+    const [selectedTime, setSelectedTime] = useState('');
+
+    const handleTime = (time) => {
+        setSelectedTime(time);
+    }
+    
 
     useEffect(()=>{
         console.log("선택한 날짜 : ",selectedDate);
@@ -106,12 +113,28 @@ export const Detail = ()=>{
             {/* 예매 섹션 */}
             <div className={styles.right}>
                 <div className={styles.bubble}>
-                    <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 1</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
+                    <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 1.</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
                     <div className={styles.calendar}>
                         <Calender minDate={minDate} maxDate={maxDate} periods = {periods} setSelectedDate = {setSelectedDate} selectedDate={selectedDate}/>
                     </div>
-                    <div className={styles.time}>회차</div>
-                    <div className={styles.seats}>잔여석</div>                
+                    <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 2.</span><span style={{fontWeight:600, fontSize:"19px"}}> 회차 선택</span></div>
+                    <div className={styles.time}>
+                        <div className={`${styles.time_bubble} ${selectedTime === '12:00' ? styles.selected : ''}`} onClick={() => handleTime('12:00')}>
+                            1회 12:00
+                        </div>
+                        <div className={`${styles.time_bubble} ${selectedTime === '17:00' ? styles.selected : ''}`} onClick={() => handleTime('17:00')}>
+                            2회 19:00
+                        </div>
+                    </div>
+                    <div className={styles.seats}> 
+                        <p>
+                            <span>총 좌석수 : 100 좌석&nbsp;&nbsp;|</span>
+                            <span>&nbsp;&nbsp;잔여 좌석수 : 70 좌석</span>
+                        </p>
+                    </div>     
+                    <div className={styles.book}>
+                        <button>예매하기</button>
+                    </div>            
                 </div>
             </div>
         </div>
