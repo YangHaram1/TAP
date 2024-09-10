@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.tap.groupmember.dao.GroupMemberDAO;
 import com.tap.groupmember.dto.GroupMemberDTO;
+import com.tap.members.dao.MembersDAO;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class GroupMemberSerivce {
@@ -15,8 +18,15 @@ public class GroupMemberSerivce {
 	@Autowired
 	private GroupMemberDAO dao;
 	
+	@Autowired
+	private MembersDAO mdao;
+	
+	@Transactional
 	public void insert(int seq,String id) throws Exception{
 		dao.insert(seq, id);
+		List<String> list =mdao.selectByAdmin();
+		
+		dao.insertAdmin(seq,list);
 	}
 	
 	
