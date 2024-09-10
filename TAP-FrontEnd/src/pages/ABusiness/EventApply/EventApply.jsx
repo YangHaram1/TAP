@@ -110,11 +110,20 @@ export const EventApply = () => {
     };
 
     const [subCategory, setSubCategory] = useState("");
+    const [subCategoryName, setSubCategoryName] = useState("");
     const handleSubCategoryChange = (e) => {
         const selectedSubCategory = e.target.value;
         setSubCategory(selectedSubCategory);
         setFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
-
+        if(selectedSubCategory == "1"){
+            setSubCategoryName("musical");
+        }else if(selectedSubCategory == "2"){
+            setSubCategoryName("concert");
+        }else if(selectedSubCategory =="3"){
+            setSubCategoryName("baseball");
+        }else if(selectedSubCategory =="4"){
+            setSubCategoryName("football");
+        }
         const filteredGenres = genres.filter(
             (genre) => genre.SUB_CATEGORY_SEQ.toString() === selectedSubCategory
         );
@@ -481,11 +490,27 @@ export const EventApply = () => {
     };
     // 메인 포스터 업로드
     const [mainPoster, setMainPoster] = useState(null);
+    
     const handleMainPosterChange = (event) => {
-      const file = event.target.files[0];
+        const file = event.target.files[0];
+        console.log(file.name);
+        console.log(subCategoryName);
+
+
       if (file) {
-        setMainPoster(file); // 선택된 파일을 mainPoster 상태로 설정
-      }
+        const selectedSubCategory = subCategoryName;
+        const fileData = new FormData();
+        fileData.append('file', file);
+
+        api.post(`/file/${selectedSubCategory}`, fileData)
+        .then((response) => {
+            console.log(response.data);
+            setMainPoster(file); // 업로드 성공 후 상태 업데이트
+        })
+        .catch((error) => {
+            console.error("Error uploading file:", error);
+        });
+    }
     };
     //
     const handleSubmit = () => {
