@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { LeftSilder } from './Silder/LeftSilde';
+import { LeftSilder } from './Silder/LeftSilder';
 import { RightSilder } from './Silder/RightSilder';
 import styles from './Silde.module.css';
-import { Side } from '../Side/Side';
 
 export const Silde = ({ images = [], interval = 3000, onImageClick = () => {} }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -15,7 +14,7 @@ export const Silde = ({ images = [], interval = 3000, onImageClick = () => {} })
     }, interval);
 
     return () => clearInterval(intervalId);
-  }, [currentIndex, images.length, interval]);
+  }, [interval, images.length]);
 
   const handleImageClick = (index) => {
     setCurrentIndex(index);
@@ -42,8 +41,6 @@ export const Silde = ({ images = [], interval = 3000, onImageClick = () => {} })
           />
         </div>
       </div>
-
-
     </div>
   );
 };

@@ -31,6 +31,7 @@ const Main = () => {
                     <Route path="/detail" element={<Detail />} />
                     <Route path="sports" element={<Sports />} />
                     <Route path="/teamPage" element={<TeamPage />} />
+                    <Route path="/team/:teamId" element={<TeamPage />} />
                     <Route path="/support" element={<Support />} />
                     <Route path="/board" element={<Board />} />
                 </Routes>

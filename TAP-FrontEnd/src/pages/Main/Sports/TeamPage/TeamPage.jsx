@@ -1,4 +1,3 @@
-// src/pages/TeamPage/TeamPage.jsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { TeamHeader } from './TeamHeader/TeamHeader';
@@ -18,7 +17,7 @@ export const TeamPage = () => {
   return (
     <div className={styles.teamPage}>
       <TeamHeader teamName={teamName} teamLogo={teamLogo} homeGround={homeGround} />
-      <TeamMain matches={matches} />
+      <TeamMain matches={matches} selectedTeam={teamName} />
     </div>
   );
 };
