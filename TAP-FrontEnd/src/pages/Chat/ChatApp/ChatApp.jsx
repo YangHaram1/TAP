@@ -187,9 +187,15 @@ const ChatApp = () => {
 
     return (
         <div className={styles.container} ref={chatAppRef}>
-            {
-                list
-            }
+            <div className={styles.messages}>
+                {
+                    list
+                }
+            </div>
+            <div className={styles.editor}>
+
+            </div>
+
         </div>
     )
 }
