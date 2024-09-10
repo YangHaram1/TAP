@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import SweetAlert from '../../../components/SweetAlert/SweetAlert';
 import { host, api } from './../../../config/config';
 import avatar from '../../../images/ai.png'
+import MyEditor from '../MyEditor/MyEditor';
 const ChatApp = () => {
 
     let lastDate = null // 이거 날짜 체크할떄 
@@ -193,9 +194,8 @@ const ChatApp = () => {
                 }
             </div>
             <div className={styles.editor}>
-
+                <MyEditor editorRef={editorRef} height={'130px'}/>
             </div>
-
         </div>
     )
 }
