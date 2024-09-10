@@ -1,6 +1,8 @@
 import styles from './Review.module.css'
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'; // solid 아이콘
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'; // solid 아이콘
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -107,8 +109,13 @@ export const Review = ()=> {
             {/* 기존 작성한 리뷰 출력 */}
             <div className={styles.reviews}>
                 <div className={styles.review_box}>
-                    <div className={styles.reviews_output_header}>
-
+                    <div className={styles.reviews_output_header_left}>
+                        <div className={styles.review_output_stars}></div>
+                    </div>
+                    <div className={styles.reviews_output_header_right}>
+                        <div className={styles.review_output_data}>
+                            id*** | 2024.09.09 | 공감 10 
+                        </div>
                     </div>
                 </div>
             </div>
