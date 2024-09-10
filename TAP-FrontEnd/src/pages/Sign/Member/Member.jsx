@@ -19,6 +19,9 @@ const Member = () => {
         detailed_address: '',
     })
 
+    const [idAvailable, setIdAvailable] = useState(null)
+    const [checkIdStatus, setCheckIdStatus] = useState('')
+
     const handleAddChange = e => {
         const { name, value } = e.target
         setMember(prev => ({ ...prev, [name]: value }))
@@ -36,8 +39,14 @@ const Member = () => {
         }).open()
     }
     const handleAdd = () => {
-        api.post(`/members/id`, member).then(resp => {
+        api.post(`/members`, member).then(resp => {
             alert('회원가입 성공~~~~~~~')
+        })
+    }
+
+    const handleIdCheck = () => {
+        api.post(`/members`, member).then(resp => {
+            alert('아이디 중복검사')
         })
     }
 
@@ -65,6 +74,7 @@ const Member = () => {
                             value={member.id}
                         />
                     </div>
+                    <button onClick={handleIdCheck}>아이디 중복 검사</button>
                 </div>
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>비밀번호</div>
@@ -195,7 +205,7 @@ const Member = () => {
                     <div className={styles.inputTxt}>
                         <input
                             type="text"
-                            name="detail_address"
+                            name="detailed_address"
                             value={member.detailed_address}
                             onChange={handleAddChange}
                             placeholder="아이디는 어쩌고 저쩌고"

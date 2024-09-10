@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,6 @@ public class MembersController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<MembersDTO> selectById(@PathVariable String id) throws Exception {
-		System.out.println(id);
 		return ResponseEntity.ok(mserv.selectById(id));
 	}
 
@@ -63,6 +63,14 @@ public class MembersController {
 		else {
 			 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID:");
 		}
+	}
+	
+	@PostMapping
+	public ResponseEntity<String> signUp(@RequestBody MembersDTO dto) throws Exception{
+		String encode = pe.encode(dto.getPw());
+		dto.setPw(encode);
+		mserv.signUp(dto);
+		return ResponseEntity.ok().build(); 
 	}
 
 }
