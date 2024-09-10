@@ -80,7 +80,8 @@
     display: flex;
     justify-content: center; /* 중앙 정렬 */
     flex-wrap: wrap; /* 여러 구단을 한 줄에 모두 배치 가능 */
-    gap: 60px;
+    row-gap: 20px;
+    column-gap: 60px;
     
 }
 
@@ -191,6 +192,7 @@
     overflow: hidden; /* 텍스트가 넘치는 경우 숨기기 */
     text-align: center;
     margin: 0 auto; /* 부모 컨테이너 내에서 중앙 정렬 */
+    margin-top: 8px;
 }
 
 .matchBtn a {
