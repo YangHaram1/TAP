@@ -7,39 +7,17 @@ import { toast } from 'react-toastify';
 const ChatApp = () => {
     const editorRef = useRef(null);
     const [chats, setChats] = useState();
-    const [maxRetries, setMaxRetries] = useState(0);
+
     const { isAuth, loginID } = useAuthStore();
-    const { ws, setChatNavi, chatNavi, dragRef } = useContext(ChatsContext);
-    const {  chatController,chatSeq, setChatSeq, setOnmessage, setWebSocketCheck, setChatController } = useCheckList();
+    const { ws, setChatNavi, chatNavi, dragRef,chatAppRef } = useContext(ChatsContext);
+    const {  chatController,chatSeq,onMessage, setChatSeq, setChatController ,} = useCheckList();
 
 
     // WebSocket 연결을 설정하는 useEffect
     useEffect(() => {
-        //const url = host.replace(/^https?:/, '')
-        if (isAuth) {
-            ws.current.onclose = () => {
-                console.log('Disconnected from WebSocket');
-                if (maxRetries < 10) {
-                    setWebSocketCheck();
-                    console.log("websocket 재연결 시도")
-                }
-                setMaxRetries((prev) => {
-                    return prev + 1;
-                })
-            };
 
-            ws.current.onerror = (error) => {
-                console.log('WebSocket error observed:', error);
-                if (maxRetries < 10) {
-                    setWebSocketCheck();
-                    console.log("websocket 재연결 시도")
-                }
-                setMaxRetries((prev) => {
-                    return prev + 1;
-                })
-
-            };
-
+        if (isAuth &&ws.current!=null) {    
+            console.log("chatapp")
             ws.current.onmessage = (e) => {
                 if (e.data === 'chatController') {
                     setChatController();
@@ -50,7 +28,6 @@ const ChatApp = () => {
                     //메세지 온거에 맞게 group_seq 사용해서 멤버 list받기 이건 chatSeq 없이 채팅 꺼저있을떄를 위해서 해놈
                     if (chatSeq === 0) {
                         api.get(`/group_member?group_seq=${chat.group_seq}`).then((resp) => {
-                            setOnmessage();
                             if (chat.member_id !== loginID) {
                                 resp.data.forEach((temp) => { //알림보내기 로직
                                     if (temp.member_id === loginID) {
@@ -70,10 +47,7 @@ const ChatApp = () => {
             }
 
         }
-        return () => {
-        };
-
-    }, [chatNavi,chatController]);
+    }, [onMessage]);//chatNavi, 이거뻇음 일단
 
 
     useEffect(() => {
@@ -112,7 +86,6 @@ const ChatApp = () => {
         }
     }, [chatSeq])
 
-
     const handleToastOnclick = (item) => {
         setChatNavi((prev) => {
             if (isAuth) dragRef.current.style.visibility = "visible";
@@ -123,8 +96,8 @@ const ChatApp = () => {
     }
 
     return (
-        <div className={styles.container}>
-
+        <div className={styles.container} ref={chatAppRef}>
+            dada
         </div>
     )
 }

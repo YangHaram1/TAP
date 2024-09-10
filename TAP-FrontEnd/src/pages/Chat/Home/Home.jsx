@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { ChatsContext } from '../../../context/ChatsContext';
 
 const Home = () => {
-    const {setChatNavi} =useContext(ChatsContext);
+    const {setChatNavi,chatAppRef} =useContext(ChatsContext);
 
 
     return (
@@ -27,7 +27,10 @@ const Home = () => {
                         Tap집사랑 상담하기
                     </div>
                 </div>
-                <div className={styles.content} onClick={()=>{setChatNavi('chatapp')}}>
+                <div className={styles.content} onClick={()=>{
+                    setChatNavi('chatapp');
+                    chatAppRef.current.style.visibility = "visible";
+                }}>
                     <div className={styles.img}>
                         <img src={chat} alt="" />
                     </div>
