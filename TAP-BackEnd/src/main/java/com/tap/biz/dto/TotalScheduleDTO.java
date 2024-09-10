@@ -2,14 +2,14 @@ package com.tap.biz.dto;
 
 import java.sql.Timestamp;
 
-public class ScheduleDateDTO {
+public class TotalScheduleDTO {
 	private int schedule_seq;
 	private int application_seq;
 	private String schedule_day;
 	private String schedule_time;
 	
-
-	public ScheduleDateDTO(int schedule_seq, int application_seq, String schedule_day, String schedule_time) {
+	
+	public TotalScheduleDTO(int schedule_seq, int application_seq, String schedule_day, String schedule_time) {
 		super();
 		this.schedule_seq = schedule_seq;
 		this.application_seq = application_seq;
@@ -58,10 +58,9 @@ public class ScheduleDateDTO {
 	}
 
 
-	public ScheduleDateDTO() {
+	public TotalScheduleDTO() {
 		super();
 	}
-	
 	
 	
 }

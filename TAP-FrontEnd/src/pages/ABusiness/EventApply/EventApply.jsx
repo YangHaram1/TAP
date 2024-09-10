@@ -10,6 +10,7 @@ import {eachDayOfInterval, format, getDay} from 'date-fns';
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
     const editorRef = useRef();
+    
     const [category, setCategory] = useState()
     const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
    
@@ -353,10 +354,9 @@ export const EventApply = () => {
         setScheduleExceptList(scheduleExceptList.filter((_, index) => index !== indexToRemove));
     };
 
-    const [scheduleCastingList, setScheduleCastingList] = useState([]);
     useEffect(()=>{
-        setScheduleCastingList(scheduleList)
-        setFormData(prev=>({...prev, scheduleData:scheduleList, totalSchedule:totalSchedule, scheduleExceptList:scheduleExceptList}));
+        setScheduleCastingList(scheduleList, castingData)
+        setFormData(prev=>({...prev, scheduleDate:scheduleList, totalSchedule:totalSchedule, scheduleExceptList:scheduleExceptList}));
     },[scheduleList])
 
     const getSubCategoryOptions = () => {
@@ -416,6 +416,8 @@ export const EventApply = () => {
     };
 
     // 캐스팅 상태
+    
+    const [scheduleCastingList, setScheduleCastingList] = useState([]);
     const [castingData, setCastingData] = useState({});
     const [currentSchedule, setCurrentSchedule] = useState(null);
 
@@ -423,9 +425,12 @@ export const EventApply = () => {
     const [actorName, setActorName] = useState('');
     const [role, setRole] = useState('');
     const fileInputRef = useRef(null);
+    const actorInputRef = useRef(null);
+    const characInputRef = useRef(null);
 
     const handleCastingImageChange = (event) => {
         setCastingImage(event.target.files[0]);
+        console.log(event.target.files[0])
     };
     const handleActorNameChange = (event) => {
         setActorName(event.target.value);
@@ -434,6 +439,8 @@ export const EventApply = () => {
         setRole(event.target.value);
     };
 
+    const fileData = new FormData();
+
     const handleAddCasting = (scheduleDay, scheduleTime) => {
         if (actorName && role && castingImage ) {
             const key = `${scheduleDay}_${scheduleTime}`;
@@ -441,12 +448,22 @@ export const EventApply = () => {
                 ...prev,
                 [key]: [
                     ...(prev[key] || []),
-                    { image: castingImage, name: actorName, role: role }
+                    { schedule_day:scheduleDay, schedule_time:scheduleTime, image: castingImage, name: actorName, role: role }
                 ]
             })); 
+            fileData.append('castingImg', castingImage)
+            fileData.append('name', actorName)
+            fileData.append('role',role)
+            fileData.append('schedule_day', scheduleDay)
+            fileData.append('schedule_time', scheduleTime)
+
             setCastingImage(null);
             setActorName('');
             setRole('');
+            if (actorInputRef.current) {
+                actorInputRef.current.value = ''; // actorInputRef를 통해 값 초기화
+              }
+            characInputRef.current.value=null; 
             fileInputRef.current.value = null;
         } else {
             alert('모든 필드를 입력해 주세요.');
@@ -525,27 +542,22 @@ export const EventApply = () => {
     
         // 유효성 검사 통과 시에만 서버로 요청
         if (validateForm()) {
-            // const data = {
-            //     formData: formData, 
-            //     // scheduleList: scheduleList
-            // }
-
-// 제외일을 기준으로 totalSchedule을 필터링
-const filteredTotalSchedule = totalSchedule.filter(
-    (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
-);
-            console.log(scheduleList);
-            console.log(formData.open_date);
-            console.log(scheduleList.schedule_time);
-
+            // 제외일을 기준으로 totalSchedule을 필터링
+            const filteredTotalSchedule = totalSchedule.filter(
+                (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
+            );
             // setFormData(prev=>({
-            //     ...prev, scheduleData:scheduleList, totalSchedule:filteredTotalSchedule, scheduleExceptList: scheduleExceptList
+            //     ...prev, scheduleDate:scheduleList, totalSchedule:filteredTotalSchedule, scheduleExceptList: scheduleExceptList
             // }));
+
             const updatedFormData = {
                 ...formData,
-                scheduleData: scheduleList,
+                scheduleDate: scheduleList,
                 totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
                 scheduleExceptList: scheduleExceptList,
+                castingData: castingData, 
+                mainPoster: mainPoster, 
+                fileData:fileData
             };
            
 
@@ -712,15 +724,18 @@ const filteredTotalSchedule = totalSchedule.filter(
                             <tr>
                                 <td>캐스팅 이미지</td>
                                 <td>
-                                    {scheduleCastingList.map((schedule, index)=>(
+                                    {scheduleList.map((schedule, index)=>(
                                     <ul>
                                         <li key={index}>
-                                            {daysOfWeek[schedule.schedule_day]} - {schedule.schedule_time}
+                                            {schedule.schedule_day === "전체"
+                                                ? "전체"
+                                                : daysOfWeek[schedule.schedule_day]}{" "}
+                                            - {schedule.schedule_time}
                                             <br></br>
                                             <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
-                                            <input type="text" placeholder="배우 이름" value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
+                                            <input type="text" placeholder="배우 이름" ref={actorInputRef} value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
                                             <span className={styles.Gap}></span>
-                                            <input type="text" placeholder="역할" value={role} onChange={handleRoleChange} className={styles.shortInput} />
+                                            <input type="text" placeholder="역할" ref={characInputRef} onChange={handleRoleChange} className={styles.shortInput} />
                                             <span className={styles.Gap}></span>
                                             <button onClick={() => handleAddCasting(schedule.schedule_day, schedule.schedule_time)}>추가버튼</button>
 
@@ -787,9 +802,6 @@ const filteredTotalSchedule = totalSchedule.filter(
                             <td>티켓 오픈 희망일</td>
                             <td>
                                 <input type="datetime-local" name="open_date" value={formData.open_date} onChange={handleChange}/>
-                                {/* <input type="date" name="expected_open_date" value={formData.expected_open_date} onChange={handleChange} />
-                                <span className={styles.Gap}></span>
-                                <input type="time" name="expected_open_time" value={formData.expected_open_time} onChange={handleChange} /> */}
                             </td>
                         </tr>
                     </tbody>
@@ -806,7 +818,6 @@ const filteredTotalSchedule = totalSchedule.filter(
                         <td>
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
                             <MyEditorOnlyText editorRef={editorRef} />
-                            {/* <textarea name="eventNotice"></textarea> */}
                         </td>
                         <td>
 

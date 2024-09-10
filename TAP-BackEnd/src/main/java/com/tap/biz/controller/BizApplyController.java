@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tap.biz.dto.BizApplyDTO;
 import com.tap.biz.dto.ScheduleDateDTO;
 import com.tap.biz.dto.TestClobDTO;
+import com.tap.biz.dto.TotalScheduleDTO;
 import com.tap.biz.services.BizService;
 
 @RestController
@@ -60,18 +61,26 @@ public class BizApplyController {
 		Timestamp start_date = formData.getStart_date();
 		int running_time = formData.getRunning_time();
 		Timestamp open_date = formData.getOpen_date();
-//		System.out.println(formData.getScheduleDate().get(0).getSchedule_date());
-//		System.out.println(id);
-//		System.out.println(start_date);
-//		System.out.println(open_date);
+		
+		int applicationSeq = bizServ.createApply(formData); // apply테이블에 insert하고 시퀀스 돌려받기. 
+		// applicationSeq로 나머지 데이터 insert하기 
+		System.out.println(applicationSeq);
+		
+		
 		int away_team_seq = formData.getAway_team_seq();
 		System.out.println("원정팀:" + away_team_seq);
 
-		List<ScheduleDateDTO> list = formData.getScheduleDate();
-		System.out.println(list.get(0).getSchedule_date());
+		List<ScheduleDateDTO> s_list = formData.getScheduleDate();
+		List<TotalScheduleDTO> t_list = formData.getTotalSchedule();
+		System.out.println(t_list.get(0).getSchedule_day());
+		System.out.println(s_list.get(0).getSchedule_day());
 		
+		for(int i=0; i<t_list.size(); i++) {
+			TotalScheduleDTO t_dto = t_list.get(i);
+			t_dto.setApplication_seq(applicationSeq);
+			bizServ.createApplySchedule(t_dto);
+		}
 		
-//		bizServ.insertEvent(dto);
 		return ResponseEntity.ok().build();
 	}
 }
