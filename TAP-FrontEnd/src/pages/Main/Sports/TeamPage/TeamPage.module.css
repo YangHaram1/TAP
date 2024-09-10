@@ -1,3 +1,20 @@
 .teamPage {
-    padding: 20px;
-  }
+  display: flex;
+  flex-direction: column; /* 상단에 헤더가 오도록 세로 방향으로 배치 */
+  align-items: stretch;
+}
+
+.sideMainWrapper {
+  display: flex;
+  flex-direction: row; /* 사이드와 메인이 가로로 배치 */
+  justify-content: space-between;
+  gap: 20px; /* 사이드와 메인 간의 간격 */
+}
+
+.sideWrapper {
+  flex: 1; /* 사이드가 차지할 공간 */
+}
+
+.teamMain {
+  flex: 2; /* 메인이 차지할 공간 */
+}
