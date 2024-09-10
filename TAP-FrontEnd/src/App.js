@@ -26,14 +26,14 @@ import 'react-resizable/css/styles.css'
 
 function App() {
     const { login, isAuth, setAuth, role, token } = useAuthStore()
-    const { webSocketCheck,setWebSocketCheck } = useCheckList();
+    const { webSocketCheck,setWebSocketCheck ,setOnmessage} = useCheckList();
     const { maxCount } = useNotification();
 
     const [hasScrolled, setHasScrolled] = useState(false)
     const [disabled, setDisabled] = useState(true);
     const [chat, setChat] = useState();
     const [maxRetries, setMaxRetries] = useState(0);
-    
+
     const websocketRef = useRef(null);
     const draggableRef = useRef(null);
 
@@ -106,7 +106,6 @@ function App() {
     }, [isAuth, disabled])
 
     //웹소켓 전체 관리
-
     useEffect(() => {
         if (isAuth) {
             websocketRef.current = new WebSocket(`${host}/chatWebsocket?token=${token}`);
@@ -114,6 +113,7 @@ function App() {
         if (websocketRef.current != null) {
             websocketRef.current.onopen = () => {
                 console.log('Connected to WebSocket');
+                setOnmessage(); //연결되면 chatapp쪽 onmessage 함수 셋팅
             }
             websocketRef.current.onclose = () => {
                 console.log('Disconnected from WebSocket');

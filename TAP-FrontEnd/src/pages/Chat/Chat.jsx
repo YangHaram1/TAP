@@ -9,9 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan ,faRotateLeft} from '@fortawesome/free-solid-svg-icons';
 
 const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
-    const { chatAppRef, chatNavi, ws, setChatNavi, dragRef } = useContext(ChatsContext);
+    const { chatNavi, ws, setChatNavi, dragRef } = useContext(ChatsContext);
     const { loginID } = useAuthStore;
-
 
 
     useEffect(() => {
@@ -43,7 +42,7 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
         setChatNavi('');
     }
     return (
-        <div className={styles.container} ref={chatAppRef}>
+        <div className={styles.container}>
             <div className={styles.btn} onMouseEnter={(e) => handleDrag(e, false)} onMouseLeave={(e) => handleDrag(e, true)}>
                 <div>
                  {(chatNavi !== '') &&(  <button onClick={()=>{setChatNavi('')}}> <FontAwesomeIcon icon={faRotateLeft} /></button>)}
@@ -54,7 +53,7 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
             </div>
             {(chatNavi === '') && (<Home />)}
             {chatNavi === 'ai' && (<AI />)}
-            {chatNavi === 'chatapp' && (<ChatApp/>)}
+             <ChatApp/>
         </div>
     )
 }
