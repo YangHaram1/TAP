@@ -1,9 +1,13 @@
 .react-calendar{
     border: 0px;
     border-radius: 10px;
-    height: 93%;
+    height: 90%;
     width: 100%;
     line-height: 1.2em !important;
+  }
+
+  .react-calendar__viewContainer{
+    height: inherit !important;
   }
   
   .react-calendar__navigation__arrow{
@@ -42,7 +46,7 @@
   
   .react-calendar__month-view__weekdays{
     font-size: 15px;
-    padding: 5px;
+    padding: 0px 5px;
     height: 35px;
     background-color: lightgray;
     border-radius: 20px !important;
@@ -72,7 +76,6 @@
     align-items: center !important;
     height: 100% !important; /* 전체 높이 사용 */
     text-align: center; /* 텍스트를 중앙 정렬 */
-    margin-right: 5px !important;
   }
 
   abbr{

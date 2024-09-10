@@ -1,0 +1,79 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 903;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 4px;
+    width: 23vw;
+    position: relative;
+    height: 40vh;
+    z-index: 904;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ui_circle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.circle{
+    border: 1px solid blueviolet;
+    background-color: blueviolet;
+    color: white;
+    width: 105px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+.checkword{
+    height: 40px;
+    width: 71%;
+    border: 1px solid black;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    letter-spacing: 8px; 
+}
+
+.preventMacro input{
+    height: 40px;
+    width: 70%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    font-size: 24px;
+    /* gap:10px; */
+    text-indent: 10px;
+}
+
+.preventMacro button{
+    width: 71%;
+    height: 40px;
+    background-color: blueviolet;
+    border: 0px;
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+}
+
