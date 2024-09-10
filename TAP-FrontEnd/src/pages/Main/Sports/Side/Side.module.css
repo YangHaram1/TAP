@@ -1,7 +1,6 @@
 /* src/components/Side/Side.module.css */
 
 .side {
-  
   background-color: #f4f4f4;
   padding: 20px;
   max-width: 180px;
@@ -9,7 +8,6 @@
   border-right: 1px solid #ddd;
   margin: auto;
   margin-top: 75px;
-  overflow: hidden;
   height: 220px;
 }
 
@@ -44,16 +42,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  display: none; /* 기본적으로 숨김 */
+  max-height: 0; /* 기본적으로 숨김 */
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, background-color 0.3s ease-out;
   padding-left: 20px;
   margin-top: 5px;
-}
-
-.subMenu.open {
-  display: block; /* 상태가 열리면 표시됨 */
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.subMenu.open {
+  max-height: 500px; /* 충분한 높이 값을 설정하여 모든 내용을 표시할 수 있도록 */
 }
 
 .subMenu li {
@@ -63,10 +63,15 @@
 .subMenu li a {
   text-decoration: none;
   color: #555;
+  display: block;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-out, color 0.3s ease-out;
 }
 
 .subMenu li a:hover {
   color: #007bff;
+  background-color: #e9ecef;
 }
 
 .listBtn {

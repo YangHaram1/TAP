@@ -92,6 +92,16 @@ export const MatchList = () => {
     '두산 베어스': [
       { date: '2024-09-10', opponent: '롯데 자이언츠' },
       { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' },
+      { date: '2024-09-15', opponent: '삼성 라이온즈' }
+  
     ],
     '키움 히어로즈': [
       { date: '2024-09-12', opponent: 'LG 트윈스' },
@@ -138,18 +148,13 @@ export const MatchList = () => {
       {/* 야구 섹션 */}
       <div className={styles.baseballSection}>
         <div className={styles.sportTitle}>
-          {/* "야구 | BASEBALL" 텍스트 (BASEBALL 텍스트 작게) */}
           <span className={styles.baseballText}>
             야구 <span className={styles.englishText}>| BASEBALL</span>
           </span>
-
-          {/* 우측 끝에 구단선택 텍스트 추가 */}
           <span className={styles.selectTeamText} onClick={toggleBaseballTeamSelect}>
             구단선택
           </span>
         </div>
-
-        {/* 야구 구단 선택 슬라이드 패널 */}
         <div className={`${styles.teamSelect} ${isBaseballTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
           <div className={styles.teamList}>
             <div className={styles.itemWrap}>
@@ -166,8 +171,6 @@ export const MatchList = () => {
             </div>
           </div>
         </div>
-
-        {/* 야구 경기 리스트 */}
         <div className={styles.matchSelect}>
           <div className={styles.itemWrap}>
             {baseballMatchData.map((match, index) => (
@@ -176,12 +179,12 @@ export const MatchList = () => {
                   <div className={styles.teamMatch}>
                     <div className={styles.team1}>
                       <img src={match.team1} alt="팀 1" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.team1Name}</div> {/* 여기에 팀 이름을 추가 */}
+                      <div className={styles.teamName}>{match.team1Name}</div>
                     </div>
                     <div className={styles.vsText}>VS</div>
                     <div className={styles.team2}>
                       <img src={match.team2} alt="팀 2" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.team2Name}</div> {/* 여기에 팀 이름을 추가 */}
+                      <div className={styles.teamName}>{match.team2Name}</div>
                     </div>
                   </div>
                   <div className={styles.matchDate}>
@@ -190,7 +193,6 @@ export const MatchList = () => {
                   <div className={styles.matchLocation}>
                     <a href="#">{match.location}</a>
                   </div>
-                  
                 </div>
                 <div className={styles.matchBtn}>
                   <a href="#">
@@ -214,43 +216,36 @@ export const MatchList = () => {
             구단선택
           </span>
         </div>
-
-        {/* 축구 구단 선택 슬라이드 패널 */}
         <div className={`${styles.teamSelect} ${isSoccerTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
           <div className={styles.teamList}>
             <div className={styles.itemWrap}>
               {soccerTeamList.map((team, index) => (
                 <div key={index} className={styles.items}>
-                  <a
-                    href="javascript:;"
-                    onClick={() => handleTeamClick(team.name, team.logo, team.homeGround)}
-                  >
+                  <a href="javascript:;" onClick={() => handleTeamClick(team.name, team.logo, team.homeGround)}>
                     <span className={styles.teamLogo}>
                       <img src={team.logo} alt={team.name} />
+                      <span className={styles.teamName}>{team.name}</span>
                     </span>
-                    <span>{team.name}</span>
                   </a>
                 </div>
               ))}
             </div>
           </div>
         </div>
-
-        {/* 축구 경기 리스트 */}
         <div className={styles.matchSelect}>
           <div className={styles.itemWrap}>
             {soccerMatchData.map((match, index) => (
               <div key={index} className={styles.matchCard}>
                 <div className={styles.matchContent}>
                   <div className={styles.teamMatch}>
-                  <div className={styles.team1}>
+                    <div className={styles.team1}>
                       <img src={match.team1} alt="팀 1" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.team1Name}</div> {/* 여기에 팀 이름을 추가 */}
+                      <div className={styles.teamName}>{match.team1Name}</div>
                     </div>
                     <div className={styles.vsText}>VS</div>
                     <div className={styles.team2}>
                       <img src={match.team2} alt="팀 2" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.team2Name}</div> {/* 여기에 팀 이름을 추가 */}
+                      <div className={styles.teamName}>{match.team2Name}</div>
                     </div>
                   </div>
                   <div className={styles.matchDate}>
@@ -259,7 +254,6 @@ export const MatchList = () => {
                   <div className={styles.matchLocation}>
                     <a href="#">{match.location}</a>
                   </div>
-                  
                 </div>
                 <div className={styles.matchBtn}>
                   <a href="#">{match.status}</a>
