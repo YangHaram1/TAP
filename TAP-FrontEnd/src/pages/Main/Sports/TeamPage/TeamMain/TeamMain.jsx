@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styles from './TeamMain.module.css'; // CSS 모듈 임포트
+import styles from './TeamMain.module.css';
 
 export const TeamMain = ({ matches, selectedTeam }) => {
-  // 현재 표시되는 항목 수를 관리하는 상태
   const [maxList, setMaxList] = useState(5);
 
-  // useEffect로 matches가 제대로 들어오는지 확인 (필요한 경우 콘솔 로그 추가)
   useEffect(() => {
-    console.log(matches); // matches 데이터 확인
+    console.log(matches);
   }, [matches]);
 
   return (
@@ -16,7 +14,6 @@ export const TeamMain = ({ matches, selectedTeam }) => {
       <div className={styles.scheduleTable}>
         {matches.slice(0, maxList).map((match, index) => (
           <div key={index} className={styles.timeSchedule}>
-            {/* 날짜 및 시간 표시 */}
             <div className={styles.scheduleDateTime}>
               <div className={styles.date}>
                 {new Date(match.date).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}
@@ -27,7 +24,6 @@ export const TeamMain = ({ matches, selectedTeam }) => {
               </div>
             </div>
 
-            {/* 팀 매치 표시 */}
             <div className={styles.teamMatch}>
               <div className={styles.team1}>
                 <a href="#" style={{ cursor: 'default' }}>
@@ -42,7 +38,6 @@ export const TeamMain = ({ matches, selectedTeam }) => {
                 </a>
               </div>
 
-              {/* "vs" 텍스트 */}
               <div className={styles.vsText}>vs</div>
 
               <div className={styles.team2}>
@@ -59,12 +54,10 @@ export const TeamMain = ({ matches, selectedTeam }) => {
               </div>
             </div>
 
-            {/* 홈구장 정보 */}
             <div className={styles.ground}>
               <span>{match.homeGround || '경기장'}</span>
             </div>
 
-            {/* 예매 버튼 */}
             <div className={styles.btns}>
               <a
                 href="#"
@@ -77,7 +70,6 @@ export const TeamMain = ({ matches, selectedTeam }) => {
           </div>
         ))}
 
-        {/* 더보기 버튼 */}
         {matches.length > maxList && (
           <div
             className={styles.more}
