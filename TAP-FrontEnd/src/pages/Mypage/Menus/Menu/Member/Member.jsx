@@ -17,7 +17,7 @@ const Member = () => {
     const phoneRef = useRef();
     useEffect(() => {
         const id = loginID;
-        api.get(`/members/${id}`).then((resp) => {
+        api.get(`/members`).then((resp) => {
             setUser(resp.data)
             if (user.gender === 'F') {
                 setGenderCheck(true);

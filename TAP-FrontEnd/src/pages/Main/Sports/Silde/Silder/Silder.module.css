@@ -2,54 +2,55 @@
 
 /* 슬라이더 컨테이너 */
 .slider-container-left, .slider-container-right {
-    position: relative;
-    height: 400px; /* 고정된 높이 */
-    overflow: hidden; /* 이미지가 컨테이너를 넘어가지 않도록 */
-  }
-  
-  /* Left 슬라이더의 크기 */
-  .slider-container-left {
-    width: 30%; /* 30% 너비 */
-  }
-  
-  /* Right 슬라이더의 크기 */
-  .slider-container-right {
-    width: 70%; /* 70% 너비 */
-  }
-  
-  /* 이미지 스타일 */
-  .slider-container-left img, .slider-container-right img {
-    width: 100%; /* 컨테이너의 너비에 맞게 이미지 확대 */
-    height: 100%; /* 컨테이너의 높이에 맞게 이미지 확대 */
-    object-fit: cover; /* 이미지를 컨테이너를 완전히 채우도록 */
-    object-position: center; /* 이미지 중앙에 위치 */
-  }
-  
-  /* 버튼 및 인디케이터 스타일 */
-  .left-button-container, .indicator-container {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 5px;
-  }
-  
-  .left-button, .indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .left-button.active, .indicator.active {
-    background-color: #000;
-  }
-  .slide {
-    width: 100%;       /* 슬라이드 너비를 부모 요소에 맞춤 */
-    height: 300px;     /* 슬라이드 높이를 고정 */
-    object-fit: cover; /* 이미지를 요소에 맞게 자르거나 확대 */
-    
-  }
+  position: relative;
+  height: 400px; /* 고정된 높이 */
+  overflow: hidden; /* 이미지가 컨테이너를 넘어가지 않도록 */
+}
+
+/* Left 슬라이더의 크기 */
+.slider-container-left {
+  width: 30%; /* 30% 너비 */
+}
+
+/* Right 슬라이더의 크기 */
+.slider-container-right {
+  width: 70%; /* 70% 너비 */
+}
+
+/* 이미지 스타일 */
+.slider-container-left img, .slider-container-right img {
+  width: 100%; /* 컨테이너의 너비에 맞게 이미지 확대 */
+  height: 100%; /* 컨테이너의 높이에 맞게 이미지 확대 */
+  object-fit: cover; /* 이미지를 컨테이너를 완전히 채우도록 */
+  object-position: center; /* 이미지 중앙에 위치 */
+}
+
+/* 버튼 및 인디케이터 스타일 */
+.left-button-container, .indicator-container {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+}
+
+.left-button, .indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.left-button.active, .indicator.active {
+  background-color: #000;
+}
+
+.slide {
+  width: 100%;
+  height: 300px;
+  background-size: cover; /* 배경 이미지가 컨테이너를 완전히 채우도록 */
+  background-position: center; /* 이미지 중앙에 위치 */
+}

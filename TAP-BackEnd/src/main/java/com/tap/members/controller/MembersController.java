@@ -28,10 +28,23 @@ public class MembersController {
 	private PasswordEncoder pe;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<MembersDTO> selectById(@PathVariable String id) throws Exception {
+	public ResponseEntity<Integer> selectById(@PathVariable String id) throws Exception {
 
-		return ResponseEntity.ok(mserv.selectById(id));
+		return ResponseEntity.ok(null);
 	}
+	
+	@GetMapping
+	public ResponseEntity<MembersDTO> selectById(Principal principal) throws Exception {
+		if (principal == null) {
+			System.out.println("principal");
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		
+		return ResponseEntity.ok(mserv.selectById(user.getUsername()));
+	}
+
 
 	@PutMapping
 	public ResponseEntity<String> update(@RequestBody MembersDTO dto) throws Exception {
