@@ -7,7 +7,7 @@
 		insert into group_member values(#{group_seq},#{member_id})
 	</insert>
 	
-	<select id="">
-	
+	<select id="checkById" resultType="boolean">
+		select count(*) from group_member where member_id=#{member_id}
 	</select>
 </mapper>

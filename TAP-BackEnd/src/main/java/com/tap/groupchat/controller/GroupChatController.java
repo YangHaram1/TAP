@@ -37,13 +37,17 @@ public class GroupChatController {
 		String username = principal.getName();
 		UserDetails user = mserv.loadUserByUsername(username);
 		
-		
-		
-		
-		int seq=gserv.insert();
-		gmserv.insert(seq, user.getUsername());
-		
+		boolean check=gmserv.checkById(user.getUsername());
+		if(!check) {
+			int seq=gserv.insert();
+			gmserv.insert(seq, user.getUsername());
+			
+		}else {
+			
+		}
 		return ResponseEntity.ok(null);
+		
+		
 	}
 
 } 

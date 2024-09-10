@@ -21,5 +21,13 @@ public class GroupMemberDAO {
 		mybatis.insert("GroupMember.insert",map);
 		
 	}
+	
+	public void insertAdmin() throws Exception{
+		
+	}
+	
+	public boolean checkById(String member_id) throws Exception{
+		return mybatis.selectOne("GroupMember.checkById",member_id);
+	}
 
 }
