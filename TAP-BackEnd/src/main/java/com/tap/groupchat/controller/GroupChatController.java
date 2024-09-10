@@ -39,9 +39,7 @@ public class GroupChatController {
 		
 		boolean check=gmserv.checkById(user.getUsername());
 		if(!check) {
-			int seq=gserv.insert();
-			gmserv.insert(seq, user.getUsername());
-			
+			gserv.insert(user.getUsername());
 		}else {
 			
 		}
