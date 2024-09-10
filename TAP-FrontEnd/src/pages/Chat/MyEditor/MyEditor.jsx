@@ -4,7 +4,7 @@ import { debounce } from 'lodash';
 import styles from './MyEditor.module.css';
 // import './MyEditor.css';
 import  Swal  from 'sweetalert2';
-import { api,tinymce } from '../../config/config';
+import { api,tinymce } from '../../../config/config'
 import { ChatsContext } from '../../../context/ChatsContext';
 
 const MyEditor = ({ editorRef, height }) => {
@@ -43,7 +43,6 @@ const MyEditor = ({ editorRef, height }) => {
         onEditorChange={(content) => handleEditorChange(content)}
         onInit={(evt, editor) => {
           editorRef.current = editor;
-
         }}
         init={{
           width: "auto",
@@ -98,17 +97,10 @@ const MyEditor = ({ editorRef, height }) => {
                  
                   }
                   editorRef.current.setContent('');
-    
-
                 }
               }
             });
           }
-
-
-
-
-          //
         }}
 
       />

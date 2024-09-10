@@ -5,10 +5,12 @@ import chat from '../../../images/chat.png';
 import { useContext } from 'react';
 import { ChatsContext } from '../../../context/ChatsContext';
 import { api } from '../../../config/config';
+import { useCheckList } from '../../../store/store';
 
 const Home = () => {
     const {setChatNavi,chatAppRef} =useContext(ChatsContext);
-
+    const {setChatSeq} =useCheckList();
+    
     const handleChat=()=>{
         api.post(`groupchat`).then((resp)=>{
             setChatNavi('chatapp');
