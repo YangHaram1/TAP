@@ -21,7 +21,8 @@ const Header = ({ hasScrolled }) => {
                 'warning',
                 '로그아웃',
                 '로그아웃을 하시겠습니까',
-                handleLogout,null
+                handleLogout,
+                null
             )
         } else {
             navi('/login')
@@ -36,6 +37,7 @@ const Header = ({ hasScrolled }) => {
     const handleHome = () => {
         navi('/')
     }
+
     return (
         <div className={hasScrolled ? styles.containerfix : styles.container}>
             <div className={styles.header}>
