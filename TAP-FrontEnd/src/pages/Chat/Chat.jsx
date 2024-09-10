@@ -52,9 +52,9 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
                     <button onClick={handleCancel}><FontAwesomeIcon icon={faBan} /></button>
                 </div>
             </div>
-            {(chatNavi === '') && (<Home setDisabled={setDisabled} />)}
+            {(chatNavi === '') && (<Home />)}
             {chatNavi === 'ai' && (<AI />)}
-            {chatNavi === 'chatapp' && (<ChatApp />)}
+            {chatNavi === 'chatapp' && (<ChatApp/>)}
         </div>
     )
 }
