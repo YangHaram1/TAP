@@ -29,7 +29,7 @@ public class MembersController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<MembersDTO> selectById(@PathVariable String id) throws Exception {
-
+		System.out.println(id);
 		return ResponseEntity.ok(mserv.selectById(id));
 	}
 
