@@ -1,5 +1,3 @@
-// import 'react-datepicker/dist/react-datepicker.css'
-import { useEffect, useState } from 'react';
 import styles from './Calender.module.css';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
