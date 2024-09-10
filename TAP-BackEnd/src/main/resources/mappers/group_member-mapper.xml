@@ -4,10 +4,19 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="GroupMember">
 	<insert id="insert">
-		insert into group_member values(#{group_seq},#{member_id})
+		insert into group_member
+		values(#{group_seq},#{member_id})
 	</insert>
-	
-	<select id="">
-	
+
+	<insert id="insertAdmin">
+		insert into group_member values
+		<foreach collection="list" item="id" separator=",">
+			(#{group_seq}, #{id})
+		</foreach>
+	</insert>
+
+	<select id="checkById" resultType="boolean">
+		select count(*) from
+		group_member where member_id=#{member_id}
 	</select>
 </mapper>
