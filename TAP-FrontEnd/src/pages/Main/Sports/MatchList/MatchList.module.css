@@ -61,6 +61,7 @@
     height: 242px;
     padding: 20px; /* 내부 여백 추가 */
     background-color: white;
+    
 }
 
 .itemWrap {
@@ -74,8 +75,11 @@
     width: 120px;
     text-align: center;
     padding: 10px;
+    
 }
-
+.items a{
+    text-decoration: none;
+}
 .teamLogo {
     display: flex;
     flex-direction: column; /* 로고와 팀명을 세로로 배치 */
@@ -97,6 +101,7 @@
     overflow: hidden; /* 텍스트가 상자를 넘어가지 않도록 설정 */
     text-overflow: ellipsis; /* 텍스트가 상자를 넘어갈 때 생략 부호(...)를 추가 */
     text-align: center; /* 중앙 정렬 */
+    
 }
 
 /* 경기 리스트 스타일 */
@@ -209,6 +214,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    text-decoration: none;
 }
 
 .soccerItemWrap {

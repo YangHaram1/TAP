@@ -4,10 +4,17 @@ import ai from '../../../images/ai.png';
 import chat from '../../../images/chat.png';
 import { useContext } from 'react';
 import { ChatsContext } from '../../../context/ChatsContext';
+import { api } from '../../../config/config';
 
 const Home = () => {
     const {setChatNavi,chatAppRef} =useContext(ChatsContext);
 
+    const handleChat=()=>{
+        api.post(`groupchat`).then((resp)=>{
+            setChatNavi('chatapp');
+            chatAppRef.current.style.visibility = "visible";
+        })
+    }
 
     return (
         <div className={styles.container}>
@@ -27,10 +34,7 @@ const Home = () => {
                         Tap집사랑 상담하기
                     </div>
                 </div>
-                <div className={styles.content} onClick={()=>{
-                    setChatNavi('chatapp');
-                    chatAppRef.current.style.visibility = "visible";
-                }}>
+                <div className={styles.content} onClick={handleChat}>
                     <div className={styles.img}>
                         <img src={chat} alt="" />
                     </div>

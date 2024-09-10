@@ -3,5 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="GroupChat">
-
+	<insert id="insert">
+		insert into group_chat values(group_chat_seq.nextval)
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select group_chat_seq.currval from dual
+		</selectKey>
+	</insert>
 </mapper>
