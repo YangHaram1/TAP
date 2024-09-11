@@ -13,6 +13,7 @@ const ChatApp = () => {
     let lastDate = null // 이거 날짜 체크할떄 
 
     const editorRef = useRef(null);
+    const chatRef=useRef(null);
     const [chats, setChats] = useState([]);
     const [list, setList] = useState();
 
@@ -61,9 +62,9 @@ const ChatApp = () => {
             if (chatNavi === 'chatapp') {
                 const { chatSeq } = useCheckList.getState();
                 if (chatSeq !== 0) {
-                    // api.get(`/chat?chatSeq=${chatSeq}`).then(resp => {//채팅목록 가저오기
-                    //     setChats(resp.data);
-                    // })
+                    api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
+                        setChats(resp.data);
+                    })
                 }
             }
         }
@@ -185,16 +186,26 @@ const ChatApp = () => {
     useEffect(() => {
         handleChatsData();
     }, [handleChatsData])
+    const scrollBottom = useCallback(() => {
+    
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    
+      }, [list]);
+      useEffect(() => { //스크롤 
+        scrollBottom();
+      }, [scrollBottom]);    
 
     return (
         <div className={styles.container} ref={chatAppRef}>
-            <div className={styles.messages}>
+            <div className={styles.messages} ref={chatRef}>
                 {
                     list
                 }
             </div>
             <div className={styles.editor}>
-                <MyEditor editorRef={editorRef} height={'130px'}/>
+               <MyEditor editorRef={editorRef} height={'30px'} />
             </div>
         </div>
     )
