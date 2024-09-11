@@ -132,7 +132,9 @@ export const EventApply = () => {
         setFilteredGenres(filteredGenres);
     };
 
-
+    // 조건부 렌더링을 위해 카테고리 및 서브 카테고리 선택 여부 확인
+    const isCategorySelected = formData.category !== '';
+    const isSubCategorySelected = formData.sub_category_seq !== '';
 
    
     //=======================================================
@@ -566,6 +568,11 @@ export const EventApply = () => {
 //     }
 //     setFileUrls(urls);
 // };
+    
+    // 상세 description 에디터 ====================
+    const handleEditorContentChange = (newContent) => {
+        setFormData(prev => ({ ...prev, detailedDescription: newContent }));
+    };
 
     // 메인 포스터 업로드 =====================================================
     const [mainPoster, setMainPoster] = useState([]);
@@ -724,10 +731,21 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
+                        </tbody>
+                        </table>
+                        </div>
+
+          
+                 {/* 장르, 상품명, 관람등급 등 나머지 입력 폼 */}
+                 <div className={styles.tableWrapper}>
+                        <table className={styles.table}>
+                            <tbody>
                         <tr>
                             <td>장르</td>
                             <td>
-                                <select name="genre_seq" value={formData.genre_seq} onChange={handleChange}>
+                                <select name="genre_seq" value={formData.genre_seq} 
+                                  disabled={!isCategorySelected || !isSubCategorySelected} 
+                                onChange={handleChange}>
                                     <option value="">선택</option>
                                     {getGenres()}
                                 </select>
@@ -736,15 +754,19 @@ export const EventApply = () => {
                         <tr>
                             <td>상품명</td>
                             <td>
-                                <input type="text" placeholder="상품명 입력" name="name" value={formData.name} onChange={handleChange}></input>
+                                <input type="text" placeholder="상품명 입력" name="name" 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                value={formData.name} onChange={handleChange}></input>
                             </td>
                         </tr>
                         <tr>
                             <td>관람등급</td>
                             <td>
-                                <select name="age_limit" value={formData.age_limit} onChange={handleChange}>
+                                <select name="age_limit" value={formData.age_limit} 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                onChange={handleChange}>
                                     <option value="">선택</option>
-                                    <option value="ALL">ALL</option>
+                                    <option value="전체 연령">전체 연령</option>
                                     <option value="8세">8세</option>
                                     <option value="12세">12세</option>
                                     <option value="18세">18세</option>
@@ -754,7 +776,9 @@ export const EventApply = () => {
                         <tr>
                             <td>장소</td>
                             <td>
-                                <select onChange={handleSelectPlace}>
+                                <select onChange={handleSelectPlace}
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                >
                                     <option value="">선택</option>
                                     {getLocationOptions()}
                                 </select>
@@ -771,7 +795,9 @@ export const EventApply = () => {
                                     <span className={styles.Gap}></span>
                                     VS
                                     <span className={styles.Gap}></span>
-                                    <select name="away_team_seq" value={formData.away_team_seq} onChange={handleChange}>
+                                    <select name="away_team_seq" value={formData.away_team_seq} 
+                                     disabled={!isCategorySelected || !isSubCategorySelected}
+                                    onChange={handleChange}>
                                         <option value="">원정팀 선택</option>
                                         {getAwayTeams()}
                                     </select>
@@ -787,15 +813,20 @@ export const EventApply = () => {
                         <tr>
                             <td>일자</td>
                             <td>
-                                시작일: <input type="date" name="start_date" value={formData.start_date} onChange={handleChange} className={styles.shortInput}></input>
+                                시작일: <input type="date" name="start_date" value={formData.start_date} 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                onChange={handleChange} className={styles.shortInput}></input>
                                 <span className={styles.Gap}></span>
-                                종료일: <input type="date" name="end_date" value={formData.end_date} onChange={handleChange} className={styles.shortInput}></input>
+                                종료일: <input type="date" name="end_date" value={formData.end_date} 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                 onChange={handleChange} className={styles.shortInput}></input>
                             </td>
                         </tr>
                         <tr>
                             <td>시작시간( 스케쥴 테이블에 )</td>
                             <td>
                                 <select className={styles.shortInput} value={selectedDay} 
+                                //  disabled={!isCategorySelected || !isSubCategorySelected}
                                 onChange={(e) => setSelectedDay(e.target.value)}
                                 // disabled={isDisabled && selectedDay !== "전체"} 
                                 disabled={isDisabled}
@@ -810,7 +841,10 @@ export const EventApply = () => {
                                     ))}
                                 </select>
                                 <span className={styles.Gap}></span>
-                                시간: <input type="time" step="300" required className={styles.shortInput} value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}></input>
+                                시간: <input type="time" step="300" required className={styles.shortInput} 
+                                value={selectedTime} 
+                                disabled={!formData.start_date || !formData.end_date}
+                                onChange={(e) => setSelectedTime(e.target.value)}></input>
                                 <span className={styles.Gap}></span>
                                 <button onClick={handleAddSchedule}>추가</button>
                                 <br></br>
@@ -998,17 +1032,22 @@ export const EventApply = () => {
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
-                            <MyEditorOnlyAdmin height="500px" editorRef={editorRef} subCategoryName={subCategoryName} />
+                            <MyEditorOnlyAdmin height="500px" editorRef={editorRef} 
+                            subCategoryName={subCategoryName} 
+                            onContentChange={handleEditorContentChange}
+                            />
                         </td>
                     </tr>
                    
                 </tbody>
             </table>
+        
+                             
 
             <button onClick={handleSubmit}>신청</button>
          
             <button onClick={handleCancel}>취소</button>
-
+            
         </div>
     );
 };

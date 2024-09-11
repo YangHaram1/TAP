@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import styles from './CurrentEvent.module.css'
+import styles from './WaitingList.module.css'
 import { api } from '../../../../config/config';
 import {Pagination} from '../../../../components/Pagination/Pagination';
+import { ModalReject } from './ModalReject/ModalReject';
+import { FaLightbulb } from 'react-icons/fa';
 
-export const CurrentEvent=()=>{
+export const WaitingList=()=>{
     
     const [events, setEvents] = useState([]);
     const [filtered, setFiltered] = useState(events);
-
+  
     useEffect(()=>{
         // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
         api.get(`/biz/registration`).then((resp)=>{
@@ -40,6 +42,7 @@ export const CurrentEvent=()=>{
         setCurrentPage(selected);
         window.scrollTo(0,0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
+    
 
     return(
         <div className={styles.container}>
@@ -47,32 +50,51 @@ export const CurrentEvent=()=>{
             <table>
                 <thead>
                 <tr>
+                    <th>접수번호</th>
                     <th>상품정보</th>
                     <th>일시</th>
                     <th>공연장</th>
-                    <th>상품관리/수정</th>
+                    <th>신청일</th>
+                    <th>상태</th>
+                    <th>신청 취소</th>
                 </tr>
                 </thead>
                 <tbody>
                 {filtered.slice(currentPage * PER_PAGE, (currentPage +1) * PER_PAGE).map((product, index) => (
                     <tr key={index}>
+                        <td className={styles.product_id}>
+                            {product.APPLICATION_SEQ}
+                        </td>
                     <td className={styles.product_info}>
                         <div className={styles.product_image_container}>
                         <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
-                        <span className={styles.status_tag}>예매중</span> {/* 상태 표시 */}
                         </div>
                         <div className={styles.product_details }>
-                        <div className={styles.product_name}>{product.NAME}</div>
-                        <div className={styles.product_sub_info}>
-                            {product.SUB_CATEGORY_NAME} | {product.AGE_LIMIT} | {product.RUNNING_TIME} 분
-                        </div>
+                            <div className={styles.product_name}>{product.NAME}</div>
+                            <div className={styles.product_sub_info}>
+                                {product.SUB_CATEGORY_NAME} | {product.AGE_LIMIT} | {product.RUNNING_TIME} 분
+                            </div>
                         </div>
                     </td>
                     <td className={styles.product_date}>{formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}</td>
                     <td className={styles.product_venue}>{product.PLACE_NAME} </td>
+                    <td className={styles.product_venue}>{formatDate(product.created_at)} </td>
+                    <td className={styles.product_venue}>
+                    {product.STATUS !=='반려' && (
+                         <div className={styles.rejectReason}>
+                         <span>{product.STATUS} </span>
+                         </div>
+                    )}
+                     {product.STATUS === '반려' && (
+                    <div className={styles.rejectReason}>
+                      <span>반려</span>
+                      <span className={styles.tooltipIcon}><FaLightbulb size={20} /> </span>
+                      <div className={styles.tooltipText}>{product.REJECTION_REASON} 반려 이유: </div>
+                    </div>
+                  )}
+                    </td>
                     <td>
-                        <button className={styles.manage_button}>상품관리</button>
-                        <button className={styles.edit_button}>수정</button>
+                        <button className={styles.manage_button}>신청 취소</button>
                     </td>
                     </tr>
                 ))}

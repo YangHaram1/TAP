@@ -5,13 +5,18 @@ import styles from './MyEditor.module.css';
 import Swal from 'sweetalert2';
 import { api, tinymce } from '../../config/config';
 
-const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName }) => {
+const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName, onContentChange  }) => {
   
     const [content, setContent] = useState('');
     const inputRef = useRef(null);
   
     const handleEditorChange = debounce((content) => {
+        setContent(content)
       localStorage.setItem('editorContent', content);
+
+      if(onContentChange){
+        onContentChange(content);
+      }
     }, 300);
   
     const handleUpload = () => {
@@ -75,7 +80,7 @@ const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName }) => {
          <Editor
           initialValue={content}
           apiKey={tinymce}
-          onEditorChange={(content) => handleEditorChange(content)}
+          onEditorChange={handleEditorChange}
           onInit={(evt, editor) => {
             editorRef.current = editor;
           }}

@@ -1,7 +1,6 @@
 .container{
     width:100%;
     height:100%;
-    max-width: 2000px;
     /* padding: 0px 100px; */
     /* background-color: beige; */
 }
@@ -27,7 +26,7 @@
 }
 .product_info{
     display: flex;
-  align-items: center;
+    align-items: center;
 }
 
 .product_image_container {
@@ -38,10 +37,10 @@
     width: 100px;
     /* height: 100px; */
     object-fit: cover;
-    padding-left:100px;
+    /* padding-left:100px; */
     /* margin-left:100px; */
   }
-  .status_tag {
+  /* .status_tag {
     position: absolute;
     top: 0;
     left: 0;
@@ -50,7 +49,7 @@
     padding: 2px 5px;
     margin-left:90px;
     font-size: 12px;
-  }
+  } */
   
   .product_details {
     text-align: left;
@@ -82,3 +81,52 @@
   .manage_button:hover, .edit_button:hover {
     background-color: #0056b3;
   }
+
+
+  /* 반려 사유 툴팁 */
+  /* WaitingList.module.css */
+.rejectReason {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltipIcon {
+    margin-left: 5px;
+    cursor: pointer;
+    color: rgb(153, 52, 212); /* 아이콘 색상 */
+  }
+  
+  .tooltipText {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* 위로 표시 */
+    left: 50%;
+    margin-left: -100px; /* 중앙 정렬 */
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltipText::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* 화살표를 아래에 위치 */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+  
+  /* 툴팁 표시 */
+  .rejectReason:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
+  }
+  

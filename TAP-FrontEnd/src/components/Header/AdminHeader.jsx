@@ -1,4 +1,4 @@
-import styles from './Header.module.css';
+import styles from './AdminHeader.module.css';
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from './../../store/store';
 import SweetAlert from './../SweetAlert/SweetAlert';

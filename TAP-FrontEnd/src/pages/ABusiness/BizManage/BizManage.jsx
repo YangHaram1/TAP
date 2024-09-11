@@ -10,7 +10,7 @@ export const BizManage=()=>{
     const [currentData, setCurrentData] = useState([]);
     const [futureData, setFutureData] =useState([]);
     const [pastData, setPastData] =useState([]);
-
+    window.scrollTo(0,0); // 페이지 변경 시 스크롤 맨 위로 이동
     
     return(
     <div className={styles.container}>
