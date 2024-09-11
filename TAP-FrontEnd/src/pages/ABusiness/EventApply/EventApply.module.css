@@ -36,7 +36,12 @@
 
 
 .tableWrapper {
-    padding: 20px;
+    padding:20px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+.tableWrapper2 {
+    padding: 0px 20px;
     background-color: #fff;
     border-radius: 8px;
 }
@@ -64,7 +69,7 @@
 }
 
 .shortInput {
-    width: 20% !important;
+    width: 150px !important;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -80,8 +85,9 @@
 .container input[type="text"], 
 .container input[type="date"], 
 .container input[type="time"], 
+.container input[type="datetime-local"],
 .container select {
-    width: 30%;
+    width: 250px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -92,28 +98,123 @@
 .container input[type="file"] {
     border: none;
     padding: 0;
+    display: none;
+}
+/* 파일 업로드 버튼과 이미지가 나란히 위치할 수 있도록 플렉스 박스 적용 */
+.file_upload_wrapper {
+    display: flex;
+    align-items: center;
+}
+.custom_file_upload {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f7f7f7;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
 }
 
-.container button {
-    padding: 10px 15px;
+.custom_file_upload:hover {
+    background-color: #e0e0e0;
+}
+.file_upload_wrapper img {
+    margin-left: 10px;
+}
+.timeAdd{
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+    width: 100%; 
+    justify-content: flex-start; 
+}
+/* *{border: 1px solid black;} */
+.btnInput{
+    padding: 5px 15px;
     border: none;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: #5a21c8;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
 }
-
-.container button:hover {
-    background-color: #0056b3;
+.btnInput:hover{
+    background-color: #6d48b6;
 }
+.btnEnding{
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+    width: 100%; 
+    justify-content: flex-start; 
+}
+.btnEnd{
+    background-color: pink;
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btnEnd:hover{
+    background-color: green;
+}
+/* ul li 앞에 점(기본 마커) 지우기 */
+.container ul {
+    list-style-type: none; 
+    padding-left: 0; 
+    margin-left: 0; 
+}
+.container li{
+    margin-left:10px;
+}
+
 
 /* ============================================== */
-
 .container input[type="radio"] {
-    margin-right: 5px;
+    appearance: none;
+    /* 기본 브라우저 스타일 제거 */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #5a21c8;
+    /* 외곽선 색상 */
+    border-radius: 50%;
+    /* 원형으로 만들기 */
+    outline: none;
+    cursor: pointer;
+    position: relative;
 }
+
+.container input[type="radio"]:checked {
+    background-color: #5a21c8;
+    /* 선택된 상태의 배경색 */
+    border: 2px solid #5a21c8;
+}
+
+.container input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    /* 내부 원 색상 */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* .container input[type="radio"] {
+    margin-right: 5px;
+    border: 2px solid #5a21c8;
+} */
+
+
+
+
 
 .container span {
     color: #666;
