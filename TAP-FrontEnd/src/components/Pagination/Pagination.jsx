@@ -27,6 +27,7 @@ export const Pagination = ({ pageCount, onPageChange, currentPage }) => {
 //  방법이야 찾을 수 있겠다만 나중에....
 
     // <<< 페이지네이션 적용할 컴포넌트에 설정할 코드들 >>>
+    // << pages -> ABusiness -> BizManage -> CurrentEvent.jsx 참고. >
     //   //==========================================================================
     // const [currentPage, setCurrentPage] = useState(0);
     // // Pagingation
