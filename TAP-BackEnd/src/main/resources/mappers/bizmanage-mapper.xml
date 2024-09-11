@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BizManage">
+<resultMap id="TimestampResultMap" type="java.util.HashMap">
+    	<result property="created_at" column="created_at" javaType="java.sql.Timestamp" />
+    	<result property="end_date" column="end_date" javaType="java.sql.Timestamp" />
+    	<result property="start_date" column="start_date" javaType="java.sql.Timestamp" />
+    	    	<result property="open_date" column="open_date" javaType="java.sql.Timestamp" />
+    	
+</resultMap>
+<select id="getAllProduct" resultMap="TimestampResultMap">
+select apply.* , 
+CAST(apply.created_at AS TIMESTAMP) AS created_at,
+CAST(apply.end_date AS TIMESTAMP) AS end_date,
+CAST(apply.start_date AS TIMESTAMP) AS start_date,
+CAST(apply.open_date AS TIMESTAMP) AS open_date,
+
+sub_category.*, files.*
+from apply
+join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
+join place on apply.place_seq = place.place_seq
+join files on apply.application_seq = files.files_parent_seq
+where apply.id = 'test5' and files.files_type='poster'
+
+</select>
+<select id="getAllPoster" resultType="java.util.HashMap">
+select * from poster where 
+</select>
+
+</mapper>

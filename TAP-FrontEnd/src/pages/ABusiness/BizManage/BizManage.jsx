@@ -17,6 +17,37 @@ export const BizManage=()=>{
         //   })
     })
 
+    const [events, setEvents] = useState([]);
+    const [categoryNames, setCategoryNames] = useState([]);
+    const [posters, setPosters] = useState([]);
+    const [placeNames, setPlaceNames] = useState([]);
+    const [filtered, setFiltered] = useState(events);
+
+    useEffect(()=>{
+        // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
+        api.get(`/biz/registration`).then((resp)=>{
+            setEvents(resp.data); // 상품들 세팅하기
+            setFiltered(resp.data); // 검색될때 사용할 filtered 상태
+        });
+
+        // 신청대기중, 
+
+
+        // 조인으로 가져올거얌. 
+        // // 카테고리 이름
+        // api.get(`/biz/registration/categoryname`).then((resp)=>{
+        //     setCategoryNames(resp.data);
+        // })
+        // // 포스터 이미지 
+        // api.get(`biz/registration/poster`).then((resp)=>{
+        //     setPosters(resp.data);
+        // })
+        // // 장소 이름 
+        // api.get(`/biz/registration/place`).then((resp)=>{
+        //     setPlaceNames(resp.data);
+        // })
+    },[])
+
     return(
         <div className={styles.container}>
             <div className={styles.header}>
@@ -37,6 +68,7 @@ export const BizManage=()=>{
                     </thead>
                     <tbody>
                         <tr>
+                            
                             <td> 이미지 사진 , 제목, 카테고리, 총시간(러닝타임 불러오기), 연령리밋</td>
                             <td> START-DATE ~ END_DATE 불러오고</td>
                             <td> place 불러오고 </td>
