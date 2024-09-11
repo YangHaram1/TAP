@@ -26,7 +26,7 @@ const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName }) => {
         }
     
       
-        api.post(`/chatUpload?group_seq=${subCategoryName}`, formData).then(resp => { //파일 로직 처리
+        api.post(`/bizUpload?group_seq=${subCategoryName}`, formData).then(resp => { //파일 로직 처리
           const array = resp.data;
           // for (let index = 0; index < array.length; index++) {
           //   const jsonString = JSON.stringify(array[index]);
@@ -48,8 +48,8 @@ const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName }) => {
     
   
     useEffect(() => {
-      const savedContent = localStorage.getItem('editorContent');
-      setContent(savedContent || '');
+    //   const savedContent = localStorage.getItem('editorContent');
+    //   setContent(savedContent || '');
     }, []);
   
     const handleImageUpload = async (file) => {
@@ -58,9 +58,8 @@ const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName }) => {
           formData.append('files', file); // FormData에 파일 추가
     
           // 이미지 업로드
-          
         //   const response = await api.post(`/chatUpload?group_seq=0`, formData);
-          const response = await api.post(`/files?group_seq=0`, formData);
+          const response = await api.post(`/bizUpload?group_seq=0`, formData);
           const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
           const image = `<img src="${imageUrl}" alt="uploaded image" />`;
           const prevContent = editorRef.current.getContent();

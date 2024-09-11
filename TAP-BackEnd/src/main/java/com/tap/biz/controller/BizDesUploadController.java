@@ -1,6 +1,5 @@
 package com.tap.biz.controller;
 
-
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +16,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import com.tap.files.dto.FilesDTO;
+import com.tap.chatupload.dto.ChatUploadDTO;
+import com.tap.chatupload.service.ChatUploadService;
+import com.tap.files.service.FilesService;
 
 @RestController
-@RequestMapping("/descriptionUpload")
-public class BizDescriptionFileController {
-
+@RequestMapping("/bizUpload")
+public class BizDesUploadController {
 	@Autowired
 	private Storage storage;
 	@Autowired
-//	private ChatUploadService cserv;
-	private BizDesUploadService dServ;
+	private ChatUploadService cserv;
 	
 	@PostMapping
-	public ResponseEntity<List<String>> upload(@RequestParam int group_seq ,@RequestParam MultipartFile[] files,Principal principal) {
+	public ResponseEntity<List<String>> upload(@RequestParam int group_seq, @RequestParam MultipartFile[] files,Principal principal) {
 		
 		if (principal == null) {
 			System.out.println("principal");
@@ -50,7 +49,7 @@ public class BizDescriptionFileController {
 					continue;
 				}
 				//파일유효아이디
-				String sysname = "description/"+UUID.randomUUID().toString();
+				String sysname = "desc/"+UUID.randomUUID().toString();
 				
 				//업로드 하기 위한 정보 객체 생성
 				BlobId blobId = BlobId.of(bucketName, sysname);
@@ -59,7 +58,6 @@ public class BizDescriptionFileController {
 				
 				// DB 저장
 				System.out.println(file.getOriginalFilename());
-
 //				ChatUploadDTO dto = new ChatUploadDTO();
 //				dto.setOriname(file.getOriginalFilename());
 //				dto.setSysname(sysname);
@@ -67,7 +65,7 @@ public class BizDescriptionFileController {
 //				dto.setGroup_seq(group_seq);
 //				dto.setCode(0);
 				String url="http://storage.googleapis.com/exam-attachment-study/"+sysname;
-//				dServ.insert(dto);
+//				cserv.insert(dto);
 				result.add(url);
 			}
 			return ResponseEntity.ok(result);
