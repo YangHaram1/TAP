@@ -29,14 +29,14 @@ public class MembersController {
 	private PasswordEncoder pe;
 
 	// 회원가입 아이디 중복 검사
-	@GetMapping("/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<Integer> selectById(@PathVariable String id) throws Exception {
 		int checkId = mserv.checkId(id);  // 1 or 0
 		return ResponseEntity.ok(checkId);
 	}
 	
 	// 회원가입 이메일 중복 검사
-	@GetMapping("/{email}")
+	@GetMapping("/email/{email}")
 	public ResponseEntity<Integer> selectByEmail(@PathVariable String email) throws Exception {
 		int checkEmail = mserv.checkEmail(email);  // 1 or 0
 		return ResponseEntity.ok(checkEmail);

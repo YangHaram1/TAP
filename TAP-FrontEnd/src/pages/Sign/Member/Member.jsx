@@ -44,7 +44,7 @@ const Member = () => {
     const handleIdCheck = async () => {
         const id = member.id
         try {
-            const resp = await api.get(`/members/${id}`)
+            const resp = await api.get(`/members/id/${id}`)
             console.log(resp.data)
             if (resp.data === 0) {
                 alert('사용 가능한 아이디')
@@ -64,7 +64,7 @@ const Member = () => {
     const handleEmailCheck = async () => {
         const email = member.email
         try {
-            const resp = await api.get(`/members/${email}`)
+            const resp = await api.get(`/members/email/${email}`)
             if (resp.data === 0) {
                 alert('사용 가능한 이메일')
                 setEmailAvailable(true)
@@ -93,15 +93,14 @@ const Member = () => {
         e.preventDefault() // 기본 폼 제출 동작을 막음
 
         if (!idAvailable) {
-            alert('사용 불가능한 아이디입니다. 중복체크를 다시 해주세요.')
+            alert('아이디 중복 체크를 해주세요.')
             return
         }
 
         if (!emailAvailable) {
-            alert('사용 불가능한 이메일입니다. 이메일 중복체크를 해주세요.')
+            alert('이메일 중복 체크를 해주세요.')
             return
         }
-
         // 아이디, 이메일 사용 가능할 때만 회원가입 처리
         await handleAdd()
     }
