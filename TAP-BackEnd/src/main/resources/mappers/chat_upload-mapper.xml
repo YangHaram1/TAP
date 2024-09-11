@@ -5,5 +5,8 @@
 <mapper namespace="ChatUpload">
 	<insert id="insert">
 		insert into chat_upload values(chat_upload_seq.nextval,#{oriname},#{sysname},${group_seq},#{member_id},${code})
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select chat_upload_seq.currval from dual
+		</selectKey>
 	</insert>
 </mapper> 
