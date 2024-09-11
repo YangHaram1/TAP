@@ -11,20 +11,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import com.tap.delivery.dao.deliveryDAO;
 import com.tap.members.dao.MembersDAO;
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.dto.MembersGradeDTO;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class MembersService implements UserDetailsService{
 
 	@Autowired
 	private MembersDAO dao;
+	
+	@Autowired
+	private deliveryDAO ddao;
 	//	회원가입 등록
-	public int signUp(MembersDTO dto) throws Exception{
+	@Transactional
+	public int signUp(MembersDeliveryDTO dto) throws Exception{
 		System.out.println(dto.getPw());
+		dto.setMember_id(dto.getId());
+		ddao.insert(dto);
 		return dao.signUp(dto);
 		
 	}
