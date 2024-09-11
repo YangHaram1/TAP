@@ -13,20 +13,198 @@
 
 .modal {
     background: white;
-    padding: 20px;
-    border-radius: 4px;
-    width: 55vw;
+    border: 2px solid rgba(0, 0, 0, 0.662);
+    /* padding: 20px; */
+    /* border-radius: 5px; */
+    width: 57vw;
     position: relative;
-    height: 80vh;
+    height: 87vh;
     z-index: 901;
+}
+
+.header{
+    display: flex;
+    height: 60PX;
+    border-bottom: 1px solid gray;
+}
+
+.header_title{
+    height: 100%;
+    flex:1.5;
+    background-color: blueviolet;
+    color: white;
+    font-size: 28px;
+    text-indent: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.header_middle{
+    flex:7.5;
+    padding: 5px;
+    height: 100px;
+    text-indent: 10px;
+}
+
+.header_middle p{
+    margin: 0px;
+}
+
+.header_middle_select{
+    display: flex;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.header_end{
+    height: 100%;
+    flex:1;
 }
 
 .closeButton {
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 10px;
     border: none;
     background: transparent;
     font-size: 24px;
     cursor: pointer;
+}
+
+
+.main{
+    display: flex;
+    height: 92%;
+}
+
+.main_left{
+    flex:6.75;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row{
+    display: flex;
+    height: 30px;
+}
+
+.row p{
+    margin: 0px;
+    width: 42px;
+    text-align: center;
+}
+
+.seat_btn{
+    background-color: rgba(0,0,0,0);
+    width: 30px;
+}
+
+.main_right{
+    flex:3.25;
+    height: 100%;
+    border-left: 1px solid black;
+}
+
+.main_right_header{
+    width: 100%;
+    height: 45px;
+    color: white;
+    background-color: blueviolet;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+}
+
+.main_right_section{
+    border-bottom: 1px solid black;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main_right_section_img{
+    width: 90%;
+    height: 90%;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.section_btns{
+    min-height: 35px;
+    height: 120px;
+    max-height: 120px;
+    border: 1px solid black;
+    width: 70%;
+    /* display: flex;
+    justify-content: center; */
+}
+
+.section_btns:hover{
+    cursor: pointer;
+    background-color: gray;
+}
+
+.seats_level{
+    height: 25%;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.seats_level_text{
+    width: 90%;
+    height: 30px;
+    font-weight: 700;
+}
+
+.seats_level_box{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 90%;
+    height:75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* margin-left: 20px; */
+}
+
+.level_box_data{
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+
+.seats_level_color{
+    height: 20px;
+    width: 20px;
+    border: 1px solid black;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.level_box_data{
+    display: flex;
+    width: 95%;
+}
+
+
+.seat_selected{
+    height: 28%;
+    border: 1px solid black;
+}
+
+.next_page{
+    height: 10%;
+    border: 1px solid black;
 }
