@@ -22,11 +22,17 @@ public class MembersService implements UserDetailsService{
 
 	@Autowired
 	private MembersDAO dao;
-	
+	//	회원가입 등록
 	public int signUp(MembersDTO dto) throws Exception{
 		System.out.println(dto.getPw());
 		return dao.signUp(dto);
 		
+	}
+	
+	// 회원가입 아이디 중복 검사
+	public int checkId(String id) throws Exception{
+		System.out.println(id);
+		return dao.checkId(id);
 	}
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
