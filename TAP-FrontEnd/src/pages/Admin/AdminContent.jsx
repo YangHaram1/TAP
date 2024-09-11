@@ -3,6 +3,7 @@ import styles from './AdminContent.module.css'
 import { Dash } from './Dash/Dash';
 import { UserMem } from './Members/UserMem/UserMem';
 import { BizMem } from './Members/BizMem/BizMem';
+import Chat from './Chat/Chat';
 
 export const AdminContent =()=>{
     return(
@@ -11,6 +12,7 @@ export const AdminContent =()=>{
                 <Route path="/*" element={<Dash/>}/>
                 <Route path="/members/user/*" element={<UserMem/>}/>
                 <Route path="/members/biz/*" element={<BizMem/>}/>
+                <Route path='/chat/*' element={<Chat/>}/>
             </Routes>
         </div>
     );

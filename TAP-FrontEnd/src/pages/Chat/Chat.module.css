@@ -14,6 +14,11 @@
     border-top-right-radius: 20px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     padding-bottom: 5px;
+    flex: 1;
+}
+.component{
+    display: flex;
+    flex: 1;
 }
 .btn div{
     flex: 1;

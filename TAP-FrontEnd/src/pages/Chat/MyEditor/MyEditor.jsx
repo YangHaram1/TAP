@@ -52,7 +52,7 @@ const MyEditor = ({ editorRef, height }) => {
           }}
           init={{
             width: "auto",
-            height: '50px',
+            height: '40px',
             menubar: false,
             plugins: 'wordcount anchor code', //image
             toolbar: false,
