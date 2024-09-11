@@ -13,9 +13,11 @@ public class AdminUserMemberDAO {
 	@Autowired
 	private SqlSession mybatis;
 
-	public List<MembersDTO> selectMember(MembersDTO dto) {
-		return	mybatis.selectList("AdminUserMem.getAllUserMem", dto);
+	public List<MembersDTO> selectMember() {
+		return	mybatis.selectList("AdminUserMem.getAllUserMem");
 		
 	}
-	
+    public List<MembersDTO> searchUserMem(String keyword) {
+        return mybatis.selectList("AdminUserMem.searchUserMem", keyword);
+    }
 }
