@@ -6,10 +6,12 @@ import MyEditor from "../../../components/MyEditor/MyEditor";
 import MyEditorOnlyText from "../../../components/MyEditor/MyEditorOnlyText";
 import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
 import {eachDayOfInterval, format, getDay} from 'date-fns';
+import BizNoticeEditor from "../../../components/QuillEditor/BizNoticeEditor";
+import BizDescription from "../../../components/QuillEditor/BizDescription";
+import WebEditor from "../../../components/WebEditor/WebEditor";
 
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
-    const editorRef = useRef();
     
     const [category, setCategory] = useState()
     const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
@@ -47,7 +49,7 @@ export const EventApply = () => {
     const [scheduleList, setScheduleList] = useState([]);
     const [selectedExceptDay, setSelectedExceptDay] = useState("");
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
-    const [content, setContent] = useState('');
+ 
     const [content2, setContent2] = useState('');
     const contentRef = useRef(null);
     useEffect(() => {
@@ -516,6 +518,12 @@ export const EventApply = () => {
     };
   //////////////////////////////////////////
 
+  const editorRef = useRef();
+  const [noticeContent, setNoticeContent] = useState('');
+  const handleContentChange = (newContent) => {
+    setNoticeContent(newContent);
+  }
+
 
 
     useEffect(()=>{
@@ -532,8 +540,12 @@ export const EventApply = () => {
             );
         });
     };
-    
-    // 메인 포스터 업로드
+//  에디터==============================================
+
+
+
+
+    // 메인 포스터 업로드 =====================================================
     const [mainPoster, setMainPoster] = useState([]);
     
     const handleMainPosterChange = (event) => {
@@ -550,7 +562,7 @@ export const EventApply = () => {
         api.post(`/file/${selectedSubCategory}`, fileData)
         .then((response) => {
             console.log("결과 ", response);
-            setMainPoster({file_oriname: file.name, file_sysname: response.data}); // 업로드 성공 후 상태 업데이트
+            setMainPoster({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 후 상태 업데이트
         })
         .catch((error) => {
             console.error("Error uploading file:", error);
@@ -558,7 +570,7 @@ export const EventApply = () => {
     }
     };
     //
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // 입력값 검증 함수
         const validateForm = () => {
             // 필수 항목들이 비어있는지 확인
@@ -612,30 +624,28 @@ export const EventApply = () => {
     
         // 유효성 검사 통과 시에만 서버로 요청
         if (validateForm()) {
-            // 제외일을 기준으로 totalSchedule을 필터링
-            const filteredTotalSchedule = totalSchedule.filter(
-                (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
-            );
-            // setFormData(prev=>({
-            //     ...prev, scheduleDate:scheduleList, totalSchedule:filteredTotalSchedule, scheduleExceptList: scheduleExceptList
-            // }));
-
-            const updatedFormData = {
-                ...formData,
-                scheduleDate: scheduleList,
-                totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
-                scheduleExceptList: scheduleExceptList,
-                 castingData: castingData, 
-                mainPoster: mainPoster
-            };
-
-            api.post(`/biz/application`, updatedFormData)
-                .then((resp) => {
-                    console.log(resp.data)
-                })
-                .catch(() => {
-                    alert("서버에 안 보내짐. 잘못됨");
-                });
+            try {
+            
+               
+                // 제외일을 기준으로 totalSchedule을 필터링
+                const filteredTotalSchedule = totalSchedule.filter(
+                    (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
+                );
+             
+                const updatedFormData = {
+                    ...formData,
+                    totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
+                    noticeContent: noticeContent,
+                    castingData: castingData,
+                    main_poster: mainPoster
+                };
+    
+                await api.post(`/biz/application`, updatedFormData);
+                alert('신청이 완료되었습니다!');
+            } catch (error) {
+                console.error('서버에 전송 중 오류 발생:', error);
+                alert('서버에 전송 실패. 다시 시도해 주세요.');
+            }
         }
     };
 
@@ -768,7 +778,6 @@ export const EventApply = () => {
                                                 ? "전체"
                                                 : daysOfWeek[schedule.schedule_day]}{" "}
                                             - {schedule.schedule_time}
-                                            {/* {daysOfWeek[schedule.schedule_day]}- {schedule.schedule_time}  */}
                                             <button onClick={() => handleRemoveSchedule(index)}>x</button>
                                         </li>
                                     ))}
@@ -804,7 +813,6 @@ export const EventApply = () => {
                                     <br />
                                     <input type="file" 
                                     ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
-                                    // ref={fileInputRef} 
                                     onChange={handleCastingImageChange} />
                                     <input
                                     type="text"
@@ -923,7 +931,8 @@ export const EventApply = () => {
                         <td>공지사항 </td>
                         <td>
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
-                            <MyEditorOnlyText editorRef={editorRef} />
+                            {/* <WebEditor  editorRef={editorRef}handleContentChange={handleContentChange} height="300px" defaultContent=""/> */}
+                            <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
                         </td>
                         <td>
 
@@ -940,13 +949,16 @@ export const EventApply = () => {
                                 <p style={{ color: "red", fontSize: "13px" }}>
                                 * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
                                 </p>
-                                {mainPoster.file_sysname ? <img src={mainPoster.file_sysname} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
+                                {mainPoster.files_sysname ? <img src={mainPoster.files_sysname} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
                         </td>
                     </tr>
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
-                            <MyEditorOnlyAdmin editorRef={editorRef} height="500px" />
+                        <input 
+                                type="file" 
+                                multiple 
+                            />
                         </td>
                     </tr>
                    

@@ -3,6 +3,8 @@ package com.tap.biz.dto;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.tap.files.dto.FilesDTO;
+
 public class BizApplyDTO {
 	private int application_seq;
 	private String id;
@@ -23,7 +25,114 @@ public class BizApplyDTO {
 	private int away_team_seq;
 	private List<TotalScheduleDTO> totalSchedule;	// 회차- 스케쥴 테이블
 	private List<CastingDataDTO> castingData;
-//	private CastingData castingData;
+	private FilesDTO main_poster;
+	private String description_content;
+	private String noticeContent;
+	
+	
+	
+	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
+			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
+			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+			FilesDTO main_poster, String description_content, String noticeContent) {
+		super();
+		this.application_seq = application_seq;
+		this.id = id;
+		this.name = name;
+		this.place_seq = place_seq;
+		this.sub_category_seq = sub_category_seq;
+		this.genre_seq = genre_seq;
+		this.age_limit = age_limit;
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.running_time = running_time;
+		this.running_intertime = running_intertime;
+		this.open_date = open_date;
+		this.status = status;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.max_ticket = max_ticket;
+		this.away_team_seq = away_team_seq;
+		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
+		this.main_poster = main_poster;
+		this.description_content = description_content;
+		this.noticeContent = noticeContent;
+	}
+	public FilesDTO getMain_poster() {
+		return main_poster;
+	}
+	public void setMain_poster(FilesDTO main_poster) {
+		this.main_poster = main_poster;
+	}
+	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
+			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
+			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+			String description_content, String noticeContent) {
+		super();
+		this.application_seq = application_seq;
+		this.id = id;
+		this.name = name;
+		this.place_seq = place_seq;
+		this.sub_category_seq = sub_category_seq;
+		this.genre_seq = genre_seq;
+		this.age_limit = age_limit;
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.running_time = running_time;
+		this.running_intertime = running_intertime;
+		this.open_date = open_date;
+		this.status = status;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.max_ticket = max_ticket;
+		this.away_team_seq = away_team_seq;
+		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
+		this.description_content = description_content;
+		this.noticeContent = noticeContent;
+	}
+	public String getNoticeContent() {
+		return noticeContent;
+	}
+	public void setNoticeContent(String noticeContent) {
+		this.noticeContent = noticeContent;
+	}
+	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
+			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
+			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+			String description_content) {
+		super();
+		this.application_seq = application_seq;
+		this.id = id;
+		this.name = name;
+		this.place_seq = place_seq;
+		this.sub_category_seq = sub_category_seq;
+		this.genre_seq = genre_seq;
+		this.age_limit = age_limit;
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.running_time = running_time;
+		this.running_intertime = running_intertime;
+		this.open_date = open_date;
+		this.status = status;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.max_ticket = max_ticket;
+		this.away_team_seq = away_team_seq;
+		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
+		this.description_content = description_content;
+	}
+	public String getDescription_content() {
+		return description_content;
+	}
+	public void setDescription_content(String description_content) {
+		this.description_content = description_content;
+	}
 	public int getApplication_seq() {
 		return application_seq;
 	}
