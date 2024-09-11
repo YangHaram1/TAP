@@ -19,7 +19,8 @@ const Member = () => {
         detailed_address: '',
     })
 
-    const [idAvailable, setIdAvailable] = useState(false)
+    const [idAvailable, setIdAvailable] = useState(false) // 아이디 상태
+    const [emailAvailable, setEmailAvailable] = useState(false) // 이메일 상태
     const [checkIdStatus, setCheckIdStatus] = useState('')
 
     const handleAddChange = e => {
@@ -38,11 +39,12 @@ const Member = () => {
             },
         }).open()
     }
+
     // 아이디 중복 체크
     const handleIdCheck = async () => {
         const id = member.id
         try {
-            const resp = await api.get(`/members/${id}`)
+            const resp = await api.get(`/members/id/${id}`)
             console.log(resp.data)
             if (resp.data === 0) {
                 alert('사용 가능한 아이디')
@@ -55,6 +57,25 @@ const Member = () => {
             console.error(error)
             alert('아이디 중복 검사 중 오류가 발생했습니다.')
             setIdAvailable(false)
+        }
+    }
+
+    // 이메일 중복 체크
+    const handleEmailCheck = async () => {
+        const email = member.email
+        try {
+            const resp = await api.get(`/members/email/${email}`)
+            if (resp.data === 0) {
+                alert('사용 가능한 이메일')
+                setEmailAvailable(true)
+            } else {
+                alert('사용 불가능한 이메일')
+                setEmailAvailable(false)
+            }
+        } catch (error) {
+            console.error(error)
+            alert('이메일 중복 검사 중 오류가 발생했습니다.')
+            setEmailAvailable(false)
         }
     }
 
@@ -72,11 +93,15 @@ const Member = () => {
         e.preventDefault() // 기본 폼 제출 동작을 막음
 
         if (!idAvailable) {
-            alert('사용 불가능한 아이디입니다. 중복체크를 다시 해주세요.')
+            alert('아이디 중복 체크를 해주세요.')
             return
         }
 
-        // 아이디가 사용 가능할 때만 회원가입 처리
+        if (!emailAvailable) {
+            alert('이메일 중복 체크를 해주세요.')
+            return
+        }
+        // 아이디, 이메일 사용 가능할 때만 회원가입 처리
         await handleAdd()
     }
 
@@ -151,6 +176,11 @@ const Member = () => {
                             onChange={handleAddChange}
                             value={member.email}
                         />
+                    </div>
+                    <div>
+                        <button onClick={handleEmailCheck}>
+                            이메일 중복 검사
+                        </button>
                     </div>
                     <div>
                         <button className={styles.emailBtn}>이메일 인증</button>
