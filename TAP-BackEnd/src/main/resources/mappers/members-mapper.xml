@@ -34,7 +34,9 @@
 	</select>
 
 	
-	
+	<select id="selectMember" resultType="com.tap.members.dto.MembersDTO">
+		select * from members
+	</select>
 
 	<update id="updateMember">
 		update members set email=#{email},phone=#{phone}

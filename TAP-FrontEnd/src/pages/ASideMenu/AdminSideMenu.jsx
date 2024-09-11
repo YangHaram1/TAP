@@ -17,6 +17,9 @@ export const AdminSideMenu =()=>{
             { name: "일반회원관리", link: "/members/user" },
             { name: "기업회원관리", link: "/members/biz" }
           ]
+        },
+        {
+           name: "관리자 1:1 상담", link: "/chat", type: "chatManage"
         }
     ];
     

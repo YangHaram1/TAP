@@ -14,6 +14,7 @@ const MyEditor = ({ editorRef, height }) => {
   const [content, setContent] = useState('');
   const { ws } = useContext(ChatsContext);
   const inputRef = useRef(null);
+  const { chatSeq } = useCheckList();
 
   const handleEditorChange = debounce((content) => {
     localStorage.setItem('editorContent', content);
@@ -29,12 +30,52 @@ const MyEditor = ({ editorRef, height }) => {
       formData.append("files", files[index]);
     }
 
+
+    api.post(`/chatUpload?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
+      const array = resp.data;
+      // for (let index = 0; index < array.length; index++) {
+      //   const jsonString = JSON.stringify(array[index]);
+      //   ws.current.send(jsonString);
+      //   inputRef.current.value = '';
+      // }
+      for (let index = 0; index < array.length; index++) {
+        const imageUrl = `<img src="${array[index]}" alt="uploaded image" />`;
+        const prevContent = editorRef.current.getContent();
+        editorRef.current.setContent(prevContent + imageUrl);
+      }
+
+      inputRef.current.value = '';
+
+    }).catch(error => {
+      console.error('There was an error posting the data!', error);
+    });
   }
+
+
+
 
   useEffect(() => {
     const savedContent = localStorage.getItem('editorContent');
-    setContent(savedContent || '');
+    // setContent(savedContent || '');
   }, []);
+  const handleImageUpload = async (file) => {
+    try {
+
+      const formData = new FormData();
+      formData.append('files', file); // FormData에 파일 추가
+
+      // 이미지 업로드
+      const response = await api.post(`/chatUpload?group_seq=${chatSeq}`, formData);
+      const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
+      const image = `<img src="${imageUrl}" alt="uploaded image" />`;
+      const prevContent = editorRef.current.getContent();
+      editorRef.current.setContent(prevContent + image);
+
+    } catch (error) {
+      console.error('파일 업로드 중 오류가 발생했습니다!', error);
+      // TinyMCE에 실패를 알림
+    }
+  }
 
 
   return (
@@ -52,13 +93,14 @@ const MyEditor = ({ editorRef, height }) => {
           }}
           init={{
             width: "auto",
-            height: '50px',
+            height: '40px',
             menubar: false,
-            plugins: 'wordcount anchor code', //image
+            plugins: 'wordcount anchor code image', //image
             toolbar: false,
             language: 'ko_KR',
             statusbar: false,
             file_picker_types: 'file image media',
+            // images_upload_handler: handleImageUpload,
             file_picker_callback: (callback, value, meta) => { },
             setup: (editor) => {
               editor.on('PastePreProcess ', (e) => {
@@ -68,15 +110,34 @@ const MyEditor = ({ editorRef, height }) => {
                 // 이미지 태그가 있는지 검사
                 const images = tempDiv.getElementsByTagName('img');
                 if (images.length > 0) {
-                  e.preventDefault(); // 이미지가 포함된 붙여넣기를 막음
+
+                  const getBlobFromBlobUrl = async (blobUrl) => {
+                    const response = await fetch(blobUrl);
+                    const blob = await response.blob();
+                    return blob;
+                  };
+                  const blobToFile = (blob, fileName) => {
+                    return new File([blob], fileName, { type: blob.type });
+                  };
+                  // 사용 예
+                  getBlobFromBlobUrl(images[0].src).then(blob => {
+                    const file = blobToFile(blob, 'example.jpg');
+                    console.log(file); // File 객체
+                    handleImageUpload(file);
+                  }).catch(error => {
+                    console.error('파일로 변환하는 데 오류가 발생했습니다:', error);
+                  });
+
+                  // console.log(tempDiv.innerHTML)
+                  //   e.content = tempDiv.innerHTML;
                 } else {
                   // 이미지가 없다면 다른 콘텐츠는 허용
                   e.content = tempDiv.innerHTML;
                 }
               });
               editor.on('PastePostProcess', (e) => {
-                // 붙여넣기 후에 처리할 로직을 여기에 추가
                 console.log('After Paste:', e.node.innerHTML);
+                e.node.innerHTML = '';
               });
               editor.ui.registry.addButton('fileupload', {
                 text: '',
@@ -85,7 +146,7 @@ const MyEditor = ({ editorRef, height }) => {
 
                 },
                 onAction: (e) => {
-               
+
                 },
               });
               editor.on('keydown', (event) => {
@@ -101,7 +162,7 @@ const MyEditor = ({ editorRef, height }) => {
                         })
                       } else {
                         const { chatSeq } = useCheckList.getState();
-                        const data={chatSeq:chatSeq,message:editorRef.current.getContent()};
+                        const data = { chatSeq: chatSeq, message: editorRef.current.getContent() };
                         const jsonString = JSON.stringify(data);
                         ws.current.send(jsonString);
                       }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.dto.MembersGradeDTO;
 
 @Repository
@@ -34,7 +35,7 @@ public class MembersDAO {
 	
 	
 	//	회원가입 등록
-	public int signUp(MembersDTO dto) throws Exception{
+	public int signUp(MembersDeliveryDTO dto) throws Exception{
 		return mybatis.insert("Members.signUp",dto);
 	}
 	
