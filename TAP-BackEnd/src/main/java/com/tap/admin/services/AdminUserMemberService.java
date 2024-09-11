@@ -13,7 +13,13 @@ public class AdminUserMemberService {
 	@Autowired
 	private AdminUserMemberDAO aumDao;
 	
-	public List<MembersDTO> selectMEmbers(MembersDTO dto){
-		return aumDao.selectMember(dto);
-	}
+    public List<MembersDTO> selectMEmbers() {
+        return aumDao.selectMember();
+    }
+
+    public List<MembersDTO> searchUserMem(String keyword) {
+        MembersDTO dto = new MembersDTO();
+        dto.setName(keyword);
+        return aumDao.searchUserMem(keyword);
+    }
 }
