@@ -13,6 +13,9 @@ public class BizManageDAO {
 	private SqlSession mybatis;
 	
 	public List<HashMap<String, Object>> getAllProduct(){
-		return mybatis.selectList("Biz.getAllProduct");
+		return mybatis.selectList("BizManage.getAllProduct");
+	}
+	public List<HashMap<String, Object>> getAllPoster(){
+		return mybatis.selectList("BizManage.getAllPoster");
 	}
 }

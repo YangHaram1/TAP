@@ -1,0 +1,37 @@
+.pagination {
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  
+    > * {
+      cursor: pointer;
+    }
+  }
+  .pagination__arrow {
+    color: #999;
+    transition: all 0.25s;
+  }
+  
+  .pagination__arrow:hover {
+    color: #000;
+  }
+  
+  .pagination__link {
+    transition: all 0.25s;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.3rem;
+  }
+  
+  .pagination__link__active {
+    background-color: #bbb;
+    color: #fefefe;
+  }
+
+  .pagination ul{
+    list-style: none;
+  }
+  .pagination li{
+    list-style: none;
+  }
