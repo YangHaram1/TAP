@@ -14,6 +14,7 @@ const MyEditor = ({ editorRef, height }) => {
   const [content, setContent] = useState('');
   const { ws } = useContext(ChatsContext);
   const inputRef = useRef(null);
+  const {chatSeq}= useCheckList();
 
   const handleEditorChange = debounce((content) => {
     localStorage.setItem('editorContent', content);
@@ -29,7 +30,29 @@ const MyEditor = ({ editorRef, height }) => {
       formData.append("files", files[index]);
     }
 
+  
+    api.post(`/chatUpload?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
+      const array = resp.data;
+      // for (let index = 0; index < array.length; index++) {
+      //   const jsonString = JSON.stringify(array[index]);
+      //   ws.current.send(jsonString);
+      //   inputRef.current.value = '';
+      // }
+      for (let index = 0; index < array.length; index++) {
+        const imageUrl = `<img src="${array[index]}" alt="uploaded image" />`;
+        const prevContent= editorRef.current.getContent();
+        editorRef.current.setContent(prevContent+imageUrl);
+      }
+    
+      inputRef.current.value = '';
+
+    }).catch(error => {
+      console.error('There was an error posting the data!', error);
+    });
   }
+
+
+
 
   useEffect(() => {
     const savedContent = localStorage.getItem('editorContent');

@@ -1,0 +1,12 @@
+.title{
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.493);
+}
+.contents{
+    display: flex;
+    flex-direction: column;
+    flex: 10;
+}
