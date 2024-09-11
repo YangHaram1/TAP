@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.service.MembersService;
 
 @RestController
@@ -89,7 +90,7 @@ public class MembersController {
 	
 	// 회원가입 등록
 	@PostMapping
-	public ResponseEntity<String> signUp(@RequestBody MembersDTO dto) throws Exception{
+	public ResponseEntity<String> signUp(@RequestBody MembersDeliveryDTO dto) throws Exception{
 		String encode = pe.encode(dto.getPw());
 		dto.setPw(encode);
 		mserv.signUp(dto);
