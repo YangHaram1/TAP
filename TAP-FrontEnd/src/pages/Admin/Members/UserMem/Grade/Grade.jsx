@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Grade.module.css'; // CSS 모듈 import
+import styles from './Grade.module.css';
 
 const Grade = ({ grades, selectedGrade, onGradeChange }) => {
     return (
@@ -12,12 +12,13 @@ const Grade = ({ grades, selectedGrade, onGradeChange }) => {
             >
                 <option value="">등급 선택</option>
                 {grades.map((grade) => (
-                    <option key={grade.SEQ} value={grade.SEQ}>
-                        {grade.NAME} {/* GRADE_NAME 대신 NAME */}
+                    <option key={grade.seq} value={grade.seq}>
+                        {grade.name} {/* `name`으로 표시 */}
                     </option>
                 ))}
             </select>
         </div>
     );
 };
+
 export default Grade;

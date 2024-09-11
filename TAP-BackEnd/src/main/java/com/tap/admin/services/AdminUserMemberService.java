@@ -18,12 +18,7 @@ public class AdminUserMemberService {
         return aumDao.selectMember();
     }
 
-    public List<MembersDTO> searchUserMem(String keyword) {
-        MembersDTO dto = new MembersDTO();
-        dto.setName(keyword);
-        return aumDao.searchUserMem(keyword);
-    }
-    public List<MembersGradeDTO> getGrade(){
-    	return aumDao.getGrade();
+    public List<MembersDTO> searchUserMem(String keyword, Integer gradeSeq) {
+        return aumDao.searchUserMem(keyword, gradeSeq);
     }
 }
