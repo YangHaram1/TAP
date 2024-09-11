@@ -19,14 +19,12 @@ public class AdminUserMemberDAO {
 		return	mybatis.selectList("AdminUserMem.getAllUserMem");
 		
 	}
-	public List<MembersDTO> searchUserMem(String keyword, Integer gradeSeq) {
-	  
+	public List<MembersDTO> searchUserMems(String keyword, Integer gradeSeq) {
 	    Map<String, Object> params = new HashMap<>();
 	    params.put("keyword", keyword);
 	    params.put("gradeSeq", gradeSeq);
-	    
-	    // MyBatis 쿼리를 실행하고 결과를 반환합니다.
-	    return mybatis.selectList("AdminUserMem.searchUserMem", params);
+
+	    return mybatis.selectList("searchUserMem", params);
 	}
 
 }

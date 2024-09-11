@@ -28,29 +28,19 @@ export const UserMem = () => {
     const fetchGrades = async () => {
         try {
             const resp = await api.get(`/admin/usermem/grades`);
-            console.log('Fetched Grades:', resp.data); // 데이터 확인
             setGrades(resp.data);
         } catch (error) {
             console.error(error);
         }
     };
 
-    const filterUserMemsByGrade = (grade) => {
-        const gradeName = grades.find(g => g.seq === parseInt(grade))?.name;
-        const filtered = userMems.filter(mem =>
-            gradeName ? mem.GRADE === gradeName : true
-        );
-        setFilteredUserMems(filtered);
-    };
-
     const handleNameSearch = async () => {
         try {
-            const resp = await api.get(`/admin/usermem/search`, {
-                params: {
-                    keyword,
-                    gradeSeq: selectedGrade || undefined
-                }
-            });
+            const params = {
+                keyword,
+                gradeSeq: selectedGrade || null // null로 변경하여 gradeSeq가 없을 때를 처리
+            };
+            const resp = await api.get(`/admin/usermem/search`, { params });
             setFilteredUserMems(resp.data);
         } catch (error) {
             console.error(error);
@@ -61,6 +51,14 @@ export const UserMem = () => {
         const newGrade = e.target.value;
         setSelectedGrade(newGrade);
         filterUserMemsByGrade(newGrade); // 선택된 등급으로 필터링
+    };
+
+    const filterUserMemsByGrade = (grade) => {
+        const gradeName = grades.find(g => g.seq === parseInt(grade))?.name;
+        const filtered = userMems.filter(mem =>
+            gradeName ? mem.GRADE === gradeName : true
+        );
+        setFilteredUserMems(filtered);
     };
 
     const formatDate = (dateString) => {

@@ -19,6 +19,6 @@ public class AdminUserMemberService {
     }
 
     public List<MembersDTO> searchUserMem(String keyword, Integer gradeSeq) {
-        return aumDao.searchUserMem(keyword, gradeSeq);
+        return aumDao.searchUserMems(keyword, gradeSeq);
     }
 }
