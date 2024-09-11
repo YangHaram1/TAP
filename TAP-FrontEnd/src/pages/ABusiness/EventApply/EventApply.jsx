@@ -9,10 +9,12 @@ import {eachDayOfInterval, format, getDay} from 'date-fns';
 import BizNoticeEditor from "../../../components/QuillEditor/BizNoticeEditor";
 import BizDescription from "../../../components/QuillEditor/BizDescription";
 import WebEditor from "../../../components/WebEditor/WebEditor";
+import { useNavigate } from "react-router-dom";
 
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
-    
+    const navi = useNavigate();
+
     const [category, setCategory] = useState()
     const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
    
@@ -541,9 +543,31 @@ export const EventApply = () => {
         });
     };
 //  에디터==============================================
+    const [files, setFiles] = useState([]);
+    const [fileUrls, setFileUrls] = useState([]);
+// 파일 선택 처리
+const handleFileChange = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    setFiles(selectedFiles);
+};
+ // 파일 업로드 및 URL 반환
+ const uploadFiles = async () => {
+    if(!files){return false;}
+    const urls = [];
+    for (const file of files) {
+        const evnetFilesData = new FormData();
+        evnetFilesData.append('file', file);
 
-
-
+        try {
+            const response = await api.post(`/file/${subCategoryName}`, evnetFilesData);
+            urls.push({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 시 반환된 URL 저장
+            console.log("성공")
+        } catch (error) {
+            console.error("파일 업로드 오류:", error);
+        }
+    }
+    setFileUrls(urls);
+};
 
     // 메인 포스터 업로드 =====================================================
     const [mainPoster, setMainPoster] = useState([]);
@@ -618,6 +642,8 @@ export const EventApply = () => {
                 alert("시작시간 설정해라");
                 return false;
             }
+            if(!noticeContent){ alert("공지안내를 작성하세요." ); return false;}
+            if(subCategory == "1" && !castingData ){ alert("캐스팅 작성하세요." ); return false;}
     
             return true;
         };
@@ -626,23 +652,28 @@ export const EventApply = () => {
         if (validateForm()) {
             try {
             
+                
+                await uploadFiles();
+               
                
                 // 제외일을 기준으로 totalSchedule을 필터링
                 const filteredTotalSchedule = totalSchedule.filter(
                     (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
                 );
-             
+                // const description = fileUrls;
                 const updatedFormData = {
                     ...formData,
                     totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
                     noticeContent: noticeContent,
                     castingData: castingData,
-                    main_poster: mainPoster
+                    main_poster: mainPoster, 
+                    // fileUrls: description
                 };
     
                 await api.post(`/biz/application`, updatedFormData);
                 alert('신청이 완료되었습니다!');
-            } catch (error) {
+                navi('/'); 
+                } catch (error) {
                 console.error('서버에 전송 중 오류 발생:', error);
                 alert('서버에 전송 실패. 다시 시도해 주세요.');
             }
@@ -958,6 +989,7 @@ export const EventApply = () => {
                         <input 
                                 type="file" 
                                 multiple 
+                                onChange={handleFileChange} 
                             />
                         </td>
                     </tr>
@@ -966,7 +998,7 @@ export const EventApply = () => {
             </table>
 
             <button onClick={handleSubmit}>신청</button>
-            <button>임시저장</button>
+         
             <button>취소</button>
 
         </div>
