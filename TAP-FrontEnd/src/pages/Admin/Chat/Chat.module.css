@@ -3,6 +3,9 @@
     height: 800px;
     display: flex;
     flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 20px;
+   
 }
 
 .header{
@@ -12,14 +15,29 @@
     align-items: center;
     font-weight: 700;
     font-size: 20px;
+    border-bottom: 2px solid gray;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.icon{
+    width: 70px;
+    height: 50px;
 }
 .body{
     display: flex;
     flex: 7;
 }
 .list{
+    display: flex;
+    flex-direction: column;
     flex: 1;
+    border-right: 1px solid gray;
 }
 .chatapp{
+    display: flex;
+    flex-direction: column;
     flex: 1;
 }
