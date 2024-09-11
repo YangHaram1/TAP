@@ -39,11 +39,12 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
 
     const handleCancel = () => {
         dragRef.current.style.visibility = 'hidden';
+        chatAppRef.current.style.display = "none";
         setChatNavi('');
     }
     const handleRotate=()=>{
         setChatNavi(''); 
-        chatAppRef.current.style.visibility = "hidden";
+        chatAppRef.current.style.display = "none";
     }
 
     return (

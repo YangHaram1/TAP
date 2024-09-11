@@ -14,7 +14,7 @@ const Home = () => {
     const handleChat=()=>{
         api.post(`groupchat`).then((resp)=>{
             setChatNavi('chatapp');
-            chatAppRef.current.style.visibility = "visible";
+            chatAppRef.current.style.display = "flex";
             setChatSeq(resp.data);
         })
     }
