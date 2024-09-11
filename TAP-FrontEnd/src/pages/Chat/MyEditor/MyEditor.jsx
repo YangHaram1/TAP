@@ -19,6 +19,10 @@ const MyEditor = ({ editorRef, height }) => {
   const handleEditorChange = debounce((content) => {
     localStorage.setItem('editorContent', content);
   }, 300);
+  // useEffect(() => {
+  //   const savedContent = localStorage.getItem('editorContent');
+  //   // setContent(savedContent || '');
+  // }, []);
 
   const handleUpload = () => {
     inputRef.current.click();
@@ -43,7 +47,6 @@ const MyEditor = ({ editorRef, height }) => {
         const prevContent = editorRef.current.getContent();
         editorRef.current.setContent(prevContent + imageUrl);
       }
-
       inputRef.current.value = '';
 
     }).catch(error => {
@@ -54,16 +57,12 @@ const MyEditor = ({ editorRef, height }) => {
 
 
 
-  useEffect(() => {
-    const savedContent = localStorage.getItem('editorContent');
-    // setContent(savedContent || '');
-  }, []);
+
   const handleImageUpload = async (file) => {
     try {
 
       const formData = new FormData();
       formData.append('files', file); // FormData에 파일 추가
-
       // 이미지 업로드
       const response = await api.post(`/chatUpload?group_seq=${chatSeq}`, formData);
       const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
@@ -100,7 +99,6 @@ const MyEditor = ({ editorRef, height }) => {
             language: 'ko_KR',
             statusbar: false,
             file_picker_types: 'file image media',
-            // images_upload_handler: handleImageUpload,
             file_picker_callback: (callback, value, meta) => { },
             setup: (editor) => {
               editor.on('PastePreProcess ', (e) => {
@@ -127,7 +125,7 @@ const MyEditor = ({ editorRef, height }) => {
                   }).catch(error => {
                     console.error('파일로 변환하는 데 오류가 발생했습니다:', error);
                   });
-
+                  e.preventDefault();
                   // console.log(tempDiv.innerHTML)
                   //   e.content = tempDiv.innerHTML;
                 } else {
@@ -136,8 +134,7 @@ const MyEditor = ({ editorRef, height }) => {
                 }
               });
               editor.on('PastePostProcess', (e) => {
-                console.log('After Paste:', e.node.innerHTML);
-                e.node.innerHTML = '';
+                //console.log('After Paste:', e.node.innerHTML);
               });
               editor.ui.registry.addButton('fileupload', {
                 text: '',
