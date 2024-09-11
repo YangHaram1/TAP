@@ -3,6 +3,7 @@ import img1 from '../../../images/logo192.png'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../../config/config'
+import Company from '../Company/Company'
 const Member = () => {
     const [members, setMembers] = useState([])
     const [member, setMember] = useState({
@@ -113,12 +114,17 @@ const Member = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.title}>
-                <img src={img1} alt="" className={styles.logo} />
-            </div>
             <div className={styles.signConts}>
                 <div className={styles.signCont}>
-                    <div className={styles.subTitle}>아이디</div>
+                    <div className={styles.subTitle}>
+                        아이디
+                        <button
+                            onClick={handleIdCheck}
+                            className={styles.checkBtn}
+                        >
+                            아이디 중복 검사
+                        </button>
+                    </div>
                     <div className={styles.inputTxt}>
                         <input
                             type="text"
@@ -128,7 +134,6 @@ const Member = () => {
                             value={member.id}
                         />
                     </div>
-                    <button onClick={handleIdCheck}>아이디 중복 검사</button>
                 </div>
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>비밀번호</div>
@@ -167,7 +172,15 @@ const Member = () => {
                     </div>
                 </div>
                 <div className={styles.signCont}>
-                    <div className={styles.subTitle}>이메일</div>
+                    <div className={styles.subTitle}>
+                        이메일
+                        <button
+                            onClick={handleEmailCheck}
+                            className={styles.checkBtn}
+                        >
+                            이메일 인증
+                        </button>
+                    </div>
                     <div className={styles.inputTxt}>
                         <input
                             type="text"
@@ -177,14 +190,10 @@ const Member = () => {
                             value={member.email}
                         />
                     </div>
-                    <div>
-                        <button onClick={handleEmailCheck}>
-                            이메일 중복 검사
-                        </button>
-                    </div>
-                    <div>
+
+                    {/* <div>
                         <button className={styles.emailBtn}>이메일 인증</button>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>생년월일</div>
@@ -205,18 +214,20 @@ const Member = () => {
                             type="radio"
                             name="gender"
                             value="M"
+                            id="male"
                             checked={member.gender === 'M'}
                             onChange={handleAddChange}
                         />
-                        남자
+                        <label htmlFor="male">남자</label>
                         <input
                             type="radio"
                             name="gender"
                             value="F"
+                            id="female"
                             checked={member.gender === 'F'}
                             onChange={handleAddChange}
                         />
-                        여자
+                        <label htmlFor="female">여자</label>
                     </div>
                 </div>
                 <div className={styles.signCont}>
@@ -233,20 +244,22 @@ const Member = () => {
                 </div>
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>우편번호</div>
-                    <div className={styles.inputTxt}>
+                    <div className={styles.inputZipCode}>
                         <input
                             type="text"
                             value={member.zip_code}
                             disabled={true}
                             placeholder="아이디는 어쩌고 저쩌고"
                         />
+                        <div>
+                            <button
+                                className={styles.addressBtn}
+                                onClick={handleAddressSearch}
+                            >
+                                우편 번호 찾기
+                            </button>
+                        </div>
                     </div>
-                    <button
-                        className={styles.addressBtn}
-                        onClick={handleAddressSearch}
-                    >
-                        우편 번호 찾기
-                    </button>
                 </div>
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>기본 주소</div>
@@ -272,13 +285,7 @@ const Member = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.agree}>
-                <div>
-                    <input type="checkbox" />
-                    약관 동의
-                </div>
-                <div>약관 동의 내용</div>
-            </div>
+
             <div className={styles.btn}>
                 <button onClick={handleSubmit}>회원가입</button>
             </div>
