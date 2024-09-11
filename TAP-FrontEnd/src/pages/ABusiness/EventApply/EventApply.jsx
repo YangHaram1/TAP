@@ -5,6 +5,9 @@ import { useAuthStore } from '../../../store/store';
 import {eachDayOfInterval, format, getDay} from 'date-fns';
 import BizNoticeEditor from "../../../components/QuillEditor/BizNoticeEditor";
 import { useNavigate } from "react-router-dom";
+import MyEditor from "../../Chat/MyEditor/MyEditor";
+import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
+import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
@@ -589,6 +592,20 @@ const handleFileChange = (event) => {
     }
     };
     //
+    const handleCancel = ()=>{
+        const userConfirmed = window.confirm("작성을 취소하시겠습니까?");
+    
+        if (userConfirmed) {
+            // 사용자가 "확인"을 클릭한 경우
+            console.log("작성이 취소되었습니다.");
+            // 취소 처리를 여기서 수행하세요
+            navi('/'); 
+        } else {
+            // 사용자가 "취소"를 클릭한 경우
+            console.log("작성이 계속됩니다.");
+            // 계속하기 처리를 여기서 수행하세요
+        }
+    };
     const handleSubmit = async () => {
         // 입력값 검증 함수
         const validateForm = () => {
@@ -986,6 +1003,8 @@ const handleFileChange = (event) => {
                                 multiple 
                                 onChange={handleFileChange} 
                             />
+
+                            <MyEditorOnlyAdmin height="500px" editorRef={editorRef} subCategoryName={subCategoryName}/>
                         </td>
                     </tr>
                    
@@ -994,7 +1013,7 @@ const handleFileChange = (event) => {
 
             <button onClick={handleSubmit}>신청</button>
          
-            <button>취소</button>
+            <button onClick={handleCancel}>취소</button>
 
         </div>
     );
