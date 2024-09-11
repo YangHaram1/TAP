@@ -2,13 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import styles from './EventApply.module.css';
 import { api } from "../../../config/config";
 import { useAuthStore } from '../../../store/store';
-import MyEditor from "../../../components/MyEditor/MyEditor";
-import MyEditorOnlyText from "../../../components/MyEditor/MyEditorOnlyText";
-import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
 import {eachDayOfInterval, format, getDay} from 'date-fns';
 import BizNoticeEditor from "../../../components/QuillEditor/BizNoticeEditor";
-import BizDescription from "../../../components/QuillEditor/BizDescription";
-import WebEditor from "../../../components/WebEditor/WebEditor";
 import { useNavigate } from "react-router-dom";
 
 export const EventApply = () => {
