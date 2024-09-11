@@ -17,4 +17,7 @@ public class BizManageService {
 	public List<HashMap<String, Object>> getAllProduct(){
 		return bizMandao.getAllProduct();
 	}
+	public List<HashMap<String,Object>> getAllPoster(){
+		return bizMandao.getAllPoster();
+	}
 }

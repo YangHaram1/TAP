@@ -47,7 +47,7 @@ const MyEditorOnlyText = ({ editorRef }) => {
           width: "auto",
           height: "300px",
           menubar: false, // 메뉴바 숨기기
-          plugins: 'colorpicker textcolor advlist autolink lists link image charmap print preview anchor help searchreplace visualblocks code fullscreen insertdatetime media table paste code', // 필요한 플러그인들 추가
+          plugins: 'wordcount anchor code', // 필요한 플러그인들 추가
           toolbar: 'undo redo | formatselect | bold italic underline strikethrough | forecolor  | alignleft aligncenter alignright alignjustify | outdent indent | removeformat', // 필요한 툴바 버튼들 추가
          
           language: 'ko_KR',

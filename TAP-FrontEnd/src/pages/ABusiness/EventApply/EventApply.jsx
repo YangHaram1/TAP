@@ -5,6 +5,9 @@ import { useAuthStore } from '../../../store/store';
 import {eachDayOfInterval, format, getDay} from 'date-fns';
 import BizNoticeEditor from "../../../components/QuillEditor/BizNoticeEditor";
 import { useNavigate } from "react-router-dom";
+import MyEditor from "../../Chat/MyEditor/MyEditor";
+import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
+import SweetAlert from "../../../components/SweetAlert/SweetAlert";
 
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
@@ -537,32 +540,32 @@ export const EventApply = () => {
             );
         });
     };
-//  에디터==============================================
-    const [files, setFiles] = useState([]);
-    const [fileUrls, setFileUrls] = useState([]);
-// 파일 선택 처리
-const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    setFiles(selectedFiles);
-};
- // 파일 업로드 및 URL 반환
- const uploadFiles = async () => {
-    if(!files){return false;}
-    const urls = [];
-    for (const file of files) {
-        const evnetFilesData = new FormData();
-        evnetFilesData.append('file', file);
+//  멀티 url 파일 업로드 할때 ==============================================
+//     const [files, setFiles] = useState([]);
+//     const [fileUrls, setFileUrls] = useState([]);
+// // 파일 선택 처리
+// const handleFileChange = (event) => {
+//     const selectedFiles = Array.from(event.target.files);
+//     setFiles(selectedFiles);
+// };
+//  // 파일 업로드 및 URL 반환
+//  const uploadFiles = async () => {
+//     if(!files){return false;}
+//     const urls = [];
+//     for (const file of files) {
+//         const evnetFilesData = new FormData();
+//         evnetFilesData.append('file', file);
 
-        try {
-            const response = await api.post(`/file/${subCategoryName}`, evnetFilesData);
-            urls.push({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 시 반환된 URL 저장
-            console.log("성공")
-        } catch (error) {
-            console.error("파일 업로드 오류:", error);
-        }
-    }
-    setFileUrls(urls);
-};
+//         try {
+//             const response = await api.post(`/file/${subCategoryName}`, evnetFilesData);
+//             urls.push({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 시 반환된 URL 저장
+//             console.log("성공")
+//         } catch (error) {
+//             console.error("파일 업로드 오류:", error);
+//         }
+//     }
+//     setFileUrls(urls);
+// };
 
     // 메인 포스터 업로드 =====================================================
     const [mainPoster, setMainPoster] = useState([]);
@@ -589,6 +592,20 @@ const handleFileChange = (event) => {
     }
     };
     //
+    const handleCancel = ()=>{
+        const userConfirmed = window.confirm("작성을 취소하시겠습니까?");
+    
+        if (userConfirmed) {
+            // 사용자가 "확인"을 클릭한 경우
+            console.log("작성이 취소되었습니다.");
+            // 취소 처리를 여기서 수행하세요
+            navi('/'); 
+        } else {
+            // 사용자가 "취소"를 클릭한 경우
+            console.log("작성이 계속됩니다.");
+            // 계속하기 처리를 여기서 수행하세요
+        }
+    };
     const handleSubmit = async () => {
         // 입력값 검증 함수
         const validateForm = () => {
@@ -647,8 +664,8 @@ const handleFileChange = (event) => {
         if (validateForm()) {
             try {
             
-                
-                await uploadFiles();
+               // 파일 멀티 업로드 할때  
+                // await uploadFiles();
                
                
                 // 제외일을 기준으로 totalSchedule을 필터링
@@ -981,11 +998,7 @@ const handleFileChange = (event) => {
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
-                        <input 
-                                type="file" 
-                                multiple 
-                                onChange={handleFileChange} 
-                            />
+                            <MyEditorOnlyAdmin height="500px" editorRef={editorRef} subCategoryName={subCategoryName} />
                         </td>
                     </tr>
                    
@@ -994,7 +1007,7 @@ const handleFileChange = (event) => {
 
             <button onClick={handleSubmit}>신청</button>
          
-            <button>취소</button>
+            <button onClick={handleCancel}>취소</button>
 
         </div>
     );

@@ -63,7 +63,7 @@ public class BizDAO {
 	public void createApplyFilesMain(FilesDTO main_poster, int applicationSeq) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("files_oriname", main_poster.getFiles_oriname());
-		params.put("files_sysname", main_poster.getFiles_oriname());
+		params.put("files_sysname", main_poster.getFiles_sysname());
 		params.put("files_parent_seq", applicationSeq);
 		mybatis.insert("Biz.createApplyFilesMain", params);
 	}
