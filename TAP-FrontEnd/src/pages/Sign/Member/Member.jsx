@@ -19,7 +19,7 @@ const Member = () => {
         detailed_address: '',
     })
 
-    const [idAvailable, setIdAvailable] = useState(null)
+    const [idAvailable, setIdAvailable] = useState(false)
     const [checkIdStatus, setCheckIdStatus] = useState('')
 
     const handleAddChange = e => {
@@ -38,17 +38,46 @@ const Member = () => {
             },
         }).open()
     }
-    const handleAdd = () => {
-        api.post(`/members`, member).then(resp => {
-            alert('회원가입 성공~~~~~~~')
-        })
+    // 아이디 중복 체크
+    const handleIdCheck = async () => {
+        const id = member.id
+        try {
+            const resp = await api.get(`/members/${id}`)
+            console.log(resp.data)
+            if (resp.data === 0) {
+                alert('사용 가능한 아이디')
+                setIdAvailable(true)
+            } else {
+                alert('사용 불가능한 아이디')
+                setIdAvailable(false)
+            }
+        } catch (error) {
+            console.error(error)
+            alert('아이디 중복 검사 중 오류가 발생했습니다.')
+            setIdAvailable(false)
+        }
     }
 
-    const handleIdCheck = () => {
-        const id = member.id
-        api.get(`/members/${id}`).then(resp => {
-            alert('아이디 중복 검사')
-        })
+    // 회원가입 처리
+    const handleAdd = async () => {
+        try {
+            await api.post(`/members`, member)
+            alert('회원가입 성공')
+        } catch (error) {
+            console.error(error)
+            alert('회원가입 중 오류가 발생했습니다.')
+        }
+    }
+    const handleSubmit = async e => {
+        e.preventDefault() // 기본 폼 제출 동작을 막음
+
+        if (!idAvailable) {
+            alert('사용 불가능한 아이디입니다. 중복체크를 다시 해주세요.')
+            return
+        }
+
+        // 아이디가 사용 가능할 때만 회원가입 처리
+        await handleAdd()
     }
 
     useEffect(() => {
@@ -221,7 +250,7 @@ const Member = () => {
                 <div>약관 동의 내용</div>
             </div>
             <div className={styles.btn}>
-                <button onClick={handleAdd}>회원가입</button>
+                <button onClick={handleSubmit}>회원가입</button>
             </div>
         </div>
     )
