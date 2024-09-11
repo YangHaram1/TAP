@@ -25,13 +25,11 @@ public class GroupMemberSerivce {
 //	public void insert(int seq,String id) throws Exception{
 //
 //	}
-	
-	
-	public List<GroupMemberDTO> members(int groupSeq){
-		List<GroupMemberDTO> list=new ArrayList<>();
-		return list;
+	public List<GroupMemberDTO> membersByGroupSeq(int group_seq) throws Exception{
+		return dao.membersByGroupSeq(group_seq);
 	}
-	public boolean checkById(String member_id) throws Exception{
+	
+	public int checkById(String member_id) throws Exception{
 		return dao.checkById(member_id);
 	}
 }

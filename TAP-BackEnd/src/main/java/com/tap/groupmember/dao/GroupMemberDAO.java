@@ -8,6 +8,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.tap.groupmember.dto.GroupMemberDTO;
+
 @Repository
 public class GroupMemberDAO {
 	
@@ -35,8 +37,17 @@ public class GroupMemberDAO {
 		
 	}
 	
-	public boolean checkById(String member_id) throws Exception{
-		return mybatis.selectOne("GroupMember.checkById",member_id);
+	public int checkById(String member_id) throws Exception{
+		
+		Integer groupSeq = mybatis.selectOne("GroupMember.checkById",member_id);
+		if (groupSeq == null) {
+		    groupSeq = 0;
+		}
+		return groupSeq;
+	}
+	
+	public List<GroupMemberDTO> membersByGroupSeq(int group_seq) throws Exception{
+		return mybatis.selectList("GroupMember.membersByGroupSeq",group_seq);
 	}
 
 }

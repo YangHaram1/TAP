@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.dto.MembersGradeDTO;
 
 @Repository
@@ -32,12 +33,24 @@ public class MembersDAO {
 		return mybatis.update("Members.updatePwById",map);
 	}
 	
-	public int signUp(MembersDTO dto) throws Exception{
+	
+	//	회원가입 등록
+	public int signUp(MembersDeliveryDTO dto) throws Exception{
 		return mybatis.insert("Members.signUp",dto);
+	}
+	
+	// 회원가입 아이디 중복 검사
+	public int checkId(String id) throws Exception{
+		return mybatis.selectOne("Members.checkId",id);
+	}
+	
+	// 회원가입 이메일 중복 검사
+	public int checkEmail(String email) throws Exception{
+		return mybatis.selectOne("Members.checkEmail",email);
 	}
 	
 	public List<String> selectByAdmin() throws Exception{
 		return mybatis.selectList("Members.selectByAdmin");
 	}
-
+	
 }

@@ -11,11 +11,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import com.tap.delivery.dao.deliveryDAO;
 import com.tap.members.dao.MembersDAO;
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.dto.MembersGradeDTO;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class MembersService implements UserDetailsService{
@@ -23,11 +26,31 @@ public class MembersService implements UserDetailsService{
 	@Autowired
 	private MembersDAO dao;
 	
-	public int signUp(MembersDTO dto) throws Exception{
+	@Autowired
+	private deliveryDAO ddao;
+	//	회원가입 등록
+	@Transactional
+	public int signUp(MembersDeliveryDTO dto) throws Exception{
 		System.out.println(dto.getPw());
+		dto.setMember_id(dto.getId());
+		ddao.insert(dto);
 		return dao.signUp(dto);
 		
 	}
+	
+	// 회원가입 아이디 중복 검사
+	public int checkId(String id) throws Exception{
+		System.out.println(id);
+		return dao.checkId(id);
+	}
+	
+	// 회원가입 이메일 중복 검사
+	public int checkEmail(String email) throws Exception{
+		System.out.println(email);
+		return dao.checkEmail(email);
+	}
+	
+	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		User user=null;

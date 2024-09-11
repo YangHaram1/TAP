@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.service.MembersService;
 
 @RestController
@@ -28,11 +29,18 @@ public class MembersController {
 	@Autowired
 	private PasswordEncoder pe;
 
-	
-	@GetMapping("/{id}")
+	// 회원가입 아이디 중복 검사
+	@GetMapping("/id/{id}")
 	public ResponseEntity<Integer> selectById(@PathVariable String id) throws Exception {
-//		mserv.checkId(id);
-		return ResponseEntity.ok(null);
+		int checkId = mserv.checkId(id);  // 1 or 0
+		return ResponseEntity.ok(checkId);
+	}
+	
+	// 회원가입 이메일 중복 검사
+	@GetMapping("/email/{email}")
+	public ResponseEntity<Integer> selectByEmail(@PathVariable String email) throws Exception {
+		int checkEmail = mserv.checkEmail(email);  // 1 or 0
+		return ResponseEntity.ok(checkEmail);
 	}
 	
 	@GetMapping
@@ -80,8 +88,9 @@ public class MembersController {
 		}
 	}
 	
+	// 회원가입 등록
 	@PostMapping
-	public ResponseEntity<String> signUp(@RequestBody MembersDTO dto) throws Exception{
+	public ResponseEntity<String> signUp(@RequestBody MembersDeliveryDTO dto) throws Exception{
 		String encode = pe.encode(dto.getPw());
 		dto.setPw(encode);
 		mserv.signUp(dto);

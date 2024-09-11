@@ -7,11 +7,13 @@ import { format } from 'date-fns';
 import SweetAlert from '../../../components/SweetAlert/SweetAlert';
 import { host, api } from './../../../config/config';
 import avatar from '../../../images/ai.png'
+import MyEditor from '../MyEditor/MyEditor';
 const ChatApp = () => {
 
     let lastDate = null // 이거 날짜 체크할떄 
 
     const editorRef = useRef(null);
+    const chatRef=useRef(null);
     const [chats, setChats] = useState([]);
     const [list, setList] = useState();
 
@@ -60,7 +62,7 @@ const ChatApp = () => {
             if (chatNavi === 'chatapp') {
                 const { chatSeq } = useCheckList.getState();
                 if (chatSeq !== 0) {
-                    api.get(`/chat?chatSeq=${chatSeq}`).then(resp => {//채팅목록 가저오기
+                    api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
                         setChats(resp.data);
                     })
                 }
@@ -137,12 +139,13 @@ const ChatApp = () => {
                 if (item.upload_seq !== 0) {
                     const split = item.message.split('*');
                     fileCheck = true;
-                    if (split[2] === '2') {
-                        file = `<p style="color: blue; cursor: pointer;">${split[0]}</p>`;
-                    }
-                    else if (split[2] === '1') {
-                        file = `<p style='color: blue; cursor: pointer;'><img src='${host}/images/chat/${split[1]}' alt=downloadImage></img></p>`;
-                    }
+                    // if (split[2] === '2') {
+                      
+                    // }
+                    // else if (split[2] === '1') {
+                    //     file = `<p style='color: blue; cursor: pointer;'><img src='${host}/images/chat/${split[1]}' alt="downloadImage" class="${styles.img}"></img></p>`;
+                    // }
+                    file = `<p style="color: blue; cursor: pointer;">${split[0]}</p>`;
                 }
                 //--------------------------------------------------// 여긴 시스템 로직 처리
                 let systemCheck = false;
@@ -184,12 +187,27 @@ const ChatApp = () => {
     useEffect(() => {
         handleChatsData();
     }, [handleChatsData])
+    const scrollBottom = useCallback(() => {
+    
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    
+      }, [list]);
+      useEffect(() => { //스크롤 
+        scrollBottom();
+      }, [scrollBottom]);    
 
     return (
         <div className={styles.container} ref={chatAppRef}>
-            {
-                list
-            }
+            <div className={styles.messages} ref={chatRef}>
+                {
+                    list
+                }
+            </div>
+            <div className={styles.editor}>
+            <MyEditor editorRef={editorRef} height={120} />
+            </div>
         </div>
     )
 }

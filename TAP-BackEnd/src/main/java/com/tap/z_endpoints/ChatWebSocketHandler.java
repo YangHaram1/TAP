@@ -1,10 +1,9 @@
-package com.tap.endpoints;
+package com.tap.z_endpoints;
 
-import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.tap.chat.dto.ChatDTO;
 import com.tap.chat.service.ChatService;
 import com.tap.groupmember.dto.GroupMemberDTO;
 import com.tap.groupmember.service.GroupMemberSerivce;
 import com.tap.members.service.MembersService;
-
-import jakarta.servlet.http.HttpSession;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
@@ -42,13 +41,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 	private GroupMemberSerivce memberService;
 	@Autowired
 	private MembersService mserv;
-	
+
 	private UserDetails user;
-	
+
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		clients.add(session);
-		Authentication authentication = ((SecurityContext)session.getAttributes().get("SPRING_SECURITY_CONTEXT")).getAuthentication();
+		Authentication authentication = ((SecurityContext) session.getAttributes().get("SPRING_SECURITY_CONTEXT"))
+				.getAuthentication();
 		if (authentication != null && authentication.isAuthenticated()) {
 			String userId = authentication.getName(); // 인증된 사용자 ID
 			System.out.println("웹소켓 연결 : user ID: " + userId);
@@ -60,15 +60,38 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		String sender = user.getUsername();
+		System.out.println(sender);
+		List<GroupMemberDTO> list = new ArrayList<>();
+		String jsonString = message.getPayload();
+		boolean jsonValidate = validateJson(jsonString);
+		int groupSeq = 0;
+		int uploadSeq=0;
+		String messages = null;
 		
-		int group_seq = 0;
-		String sender =user.getUsername();
-		List<GroupMemberDTO> list = memberService.members(group_seq);
-		//boolean jsonValidate = validateJson(message.getPayload());
-		
-		if (message.getPayload().equals("chatController")) {
-			broadcastMessage("chatController", list);
-		} else{
+		if (jsonValidate) {
+			Type mapType = new TypeToken<Map<String, Object>>() {
+			}.getType();
+			
+			Map<String, Object> map = gson.fromJson(jsonString, mapType);
+
+			Object checkUploadSeq = map.get("upload_seq");
+			
+			// Double인 경우 Integer로 변환
+			if (checkUploadSeq instanceof Double) {
+				uploadSeq = ((Double) checkUploadSeq).intValue();
+			} else if (checkUploadSeq instanceof Integer) {
+				uploadSeq = (Integer) checkUploadSeq;
+			}
+			Object chatSeq = map.get("group_seq");
+			// Double인 경우 Integer로 변환
+			if (chatSeq instanceof Double) {
+				groupSeq = ((Double) chatSeq).intValue();
+			} else if (chatSeq instanceof Integer) {
+				groupSeq = (Integer) chatSeq;
+			}
+			list = memberService.membersByGroupSeq(groupSeq);
+
 			boolean listCheck = false;
 			for (GroupMemberDTO dto : list) { // 만약 방나갓는데 채팅 보낼라고하면 막기
 				if (dto.getMember_id().equals(sender)) {
@@ -76,16 +99,28 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 					break;
 				}
 			}
+			
 			if (listCheck) {
-				ChatDTO dto = new ChatDTO(0, sender, message.getPayload(), null, group_seq, 0);
-				dto = chatService.insert(dto);
-				// ChatImgDTO sendDTO =chatService.selectOne(dto.getSeq());
-				String json = gson.toJson(dto);
-				broadcastMessage(json, list);
-				System.out.println(list.get(1).getMember_id());
-				System.out.println("메세지보냄");
+				if (uploadSeq == 0) {
+					messages = (String) map.get("message");
+					ChatDTO dto = new ChatDTO(0, sender, messages, null, groupSeq, 0);
+					dto = chatService.insert(dto);
+					String json = gson.toJson(dto);
+					broadcastMessage(json, list);
+					System.out.println("메세지보냄");
+
+				} else {
+					broadcastMessage(jsonString, list);
+					System.out.println("파일업로드함");
+				}
 			}
-		} 
+
+		}
+
+//		if (message.getPayload().equals("chatController")) {
+//			broadcastMessage("chatController", list);
+//		}
+//		
 
 //			System.out.println("파일업로드 웹소켓");
 //			String jsonString = message.getPayload();
@@ -101,7 +136,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 //			}
 //			String json = gson.toJson(dto);
 //			broadcastMessage(json, list);
-
 
 	}
 

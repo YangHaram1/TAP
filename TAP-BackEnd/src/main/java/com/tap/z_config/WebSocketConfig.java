@@ -7,8 +7,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import com.tap.endpoints.ChatWebSocketHandler;
-import com.tap.interceptors.WebHandshakeInterceptor;
+import com.tap.z_endpoints.ChatWebSocketHandler;
+import com.tap.z_interceptors.WebHandshakeInterceptor;
 
 @Configuration
 @EnableWebSocket

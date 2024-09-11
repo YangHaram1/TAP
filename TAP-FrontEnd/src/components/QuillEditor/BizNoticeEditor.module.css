@@ -1,0 +1,19 @@
+/* BizNoticeEditor.module.css */
+
+/* Quill 에디터 컨테이너의 높이 설정 */
+.qlContainer {
+    height: 300px; /* 원하는 높이로 조정 */
+  }
+  
+  /* 에디터 내용 영역의 최소 높이 설정 */
+  .qlEditor {
+    height: 250px; /* 원하는 높이로 조정 */
+  }
+
+  .ql-container{
+    height:350px;
+  }
+  .ql-toolbar {
+    border-bottom: 1px solid #be2f2f; /* 툴바의 테두리 색상 변경 */
+  }
+  

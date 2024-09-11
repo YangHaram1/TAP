@@ -1,5 +1,6 @@
 package com.tap.biz.services;
 
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.tap.biz.dao.BizDAO;
 import com.tap.biz.dto.BizApplyDTO;
+import com.tap.biz.dto.CastingDataDTO;
 import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.dto.TotalScheduleDTO;
+import com.tap.files.dto.FilesDTO;
 
 
 @Service
@@ -46,5 +49,15 @@ public class BizService {
 	public void createApplySchedule(TotalScheduleDTO dto) {
 		bizdao.createApplySchedule(dto);
 	}
+	public void createApplyCasting(CastingDataDTO dto) {
+		bizdao.createApplyCasting(dto);
+	}
+	public void createApplyNotice(String content, int applicationSeq) {
+		bizdao.createApplyNotice(content, applicationSeq);
+	}
+	public void createApplyFiles(FilesDTO main_poster, int applicationSeq) {
+		bizdao.createApplyFilesMain(main_poster, applicationSeq);
+	}
+	
 	
 }

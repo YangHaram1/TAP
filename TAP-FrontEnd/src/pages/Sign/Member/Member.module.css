@@ -1,6 +1,6 @@
 .container {
     width: 600px;
-    height: 1000px;
+    height: 1400px;
     /* border: 1px solid black; */
     margin: auto;
     display: flex;
@@ -32,16 +32,20 @@
 
 .signCont {
     flex: 1;
-    border-bottom: 3px solid rgb(235, 235, 235);
+    /* border-bottom: 3px solid rgb(235, 235, 235); */
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    /* align-items: center; */
+    /* gap: 10px; */
     margin-top: 20px;
-
+    /* height: 80px; */
 }
 
 .subTitle {
-    /* flex: 1; */
+    font-size: 15px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 10px;
 }
 
 .inputTxt {
@@ -56,18 +60,44 @@
 
 .inputTxt input {
     width: 100%;
-    height: 100%;
+    height: 40px;
     border-radius: 10px;
-    border: none;
     padding-left: 10px;
-    background-color: rgb(232, 240, 254);
+    /* background-color: rgb(232, 240, 254); */
+    border: 2px solid rgb(228, 228, 228);
 }
 
-input:focus {
+.inputZipCode {
+    display: flex;
+    align-items: center;
+
+}
+
+.inputZipCode input {
+    flex: 8;
+    height: 40px;
+    border-radius: 10px;
+    padding-left: 10px;
+    /* background-color: rgb(232, 240, 254); */
+    border: 2px solid rgb(228, 228, 228);
+}
+
+.addressBtn {
+    flex: 2;
+}
+
+.inputTxt input:focus {
     outline: none;
     border: none;
     /* 필요 시 추가 */
+    border: 2px solid #5a21c8;
+    box-shadow: 0px 4px 8px rgba(90, 33, 200, 0.3);
+}
 
+.checkBox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .agree {
@@ -95,14 +125,29 @@ input:focus {
 
 .btn button {
     width: 70%;
-    height: 70%;
+    height: 40%;
     font-size: 18px;
     font-weight: bold;
     border-radius: 50px;
     border: none;
     color: white;
-    background-color: #2b2d42;
+    background-color: #bfbfbf;
     cursor: pointer;
+    font-size: 22px;
+}
+
+.btn button:hover {
+    width: 70%;
+    height: 40%;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+    color: white;
+    background-color: #5e20d2;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 22px;
 }
 
 .emailBtn {
@@ -110,4 +155,69 @@ input:focus {
     border-radius: 10px;
     border: none;
 
+}
+
+.checkBtn {
+    border: 2px solid #5a21c8;
+    margin-left: 10px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    color: #5a21c8;
+    background-color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.addressBtn {
+    height: 40px;
+    border: 10px;
+    /* border: 5px solid; */
+    border-radius: 8px;
+    background-color: #434343;
+    cursor: pointer;
+    color: white;
+}
+
+.checkBtn:hover {
+    background-color: #5a21c8;
+    margin-left: 10px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    color: white;
+    border: 2px solid #5a21c8;
+    transition: 0.2s;
+}
+
+input[type="radio"] {
+    appearance: none;
+    /* 기본 브라우저 스타일 제거 */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #5a21c8;
+    /* 외곽선 색상 */
+    border-radius: 50%;
+    /* 원형으로 만들기 */
+    outline: none;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="radio"]:checked {
+    background-color: #5a21c8;
+    /* 선택된 상태의 배경색 */
+    border: 2px solid #5a21c8;
+}
+
+input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    /* 내부 원 색상 */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

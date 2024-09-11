@@ -3,6 +3,8 @@ package com.tap.biz.dto;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.tap.files.dto.FilesDTO;
+
 public class BizApplyDTO {
 	private int application_seq;
 	private String id;
@@ -21,13 +23,57 @@ public class BizApplyDTO {
 	private Timestamp updated_at;
 	private int max_ticket;
 	private int away_team_seq;
-	private List<ScheduleDateDTO> scheduleDate;
-	private List<TotalScheduleDTO> totalSchedule;
+	private List<TotalScheduleDTO> totalSchedule;	// 회차- 스케쥴 테이블
+	private List<CastingDataDTO> castingData;
+	private FilesDTO main_poster;
+	private String description_content;
+	private String noticeContent;
+//	private List<FilesDTO> filesUrls;
 	
+	
+	
+//	
+//	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
+//			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
+//			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
+//			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+//			FilesDTO main_poster, String description_content, String noticeContent, List<FilesDTO> filesUrls) {
+//		super();
+//		this.application_seq = application_seq;
+//		this.id = id;
+//		this.name = name;
+//		this.place_seq = place_seq;
+//		this.sub_category_seq = sub_category_seq;
+//		this.genre_seq = genre_seq;
+//		this.age_limit = age_limit;
+//		this.start_date = start_date;
+//		this.end_date = end_date;
+//		this.running_time = running_time;
+//		this.running_intertime = running_intertime;
+//		this.open_date = open_date;
+//		this.status = status;
+//		this.created_at = created_at;
+//		this.updated_at = updated_at;
+//		this.max_ticket = max_ticket;
+//		this.away_team_seq = away_team_seq;
+//		this.totalSchedule = totalSchedule;
+//		this.castingData = castingData;
+//		this.main_poster = main_poster;
+//		this.description_content = description_content;
+//		this.noticeContent = noticeContent;
+//		this.filesUrls = filesUrls;
+//	}
+//	public List<FilesDTO> getFilesUrls() {
+//		return filesUrls;
+//	}
+//	public void setFilesUrls(List<FilesDTO> filesUrls) {
+//		this.filesUrls = filesUrls;
+//	}
 	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
 			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
 			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
-			int away_team_seq, List<ScheduleDateDTO> scheduleDate, List<TotalScheduleDTO> totalSchedule) {
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+			FilesDTO main_poster, String description_content, String noticeContent) {
 		super();
 		this.application_seq = application_seq;
 		this.id = id;
@@ -46,14 +92,84 @@ public class BizApplyDTO {
 		this.updated_at = updated_at;
 		this.max_ticket = max_ticket;
 		this.away_team_seq = away_team_seq;
-		this.scheduleDate = scheduleDate;
 		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
+		this.main_poster = main_poster;
+		this.description_content = description_content;
+		this.noticeContent = noticeContent;
 	}
-	public List<TotalScheduleDTO> getTotalSchedule() {
-		return totalSchedule;
+	public FilesDTO getMain_poster() {
+		return main_poster;
 	}
-	public void setTotalSchedule(List<TotalScheduleDTO> totalSchedule) {
+	public void setMain_poster(FilesDTO main_poster) {
+		this.main_poster = main_poster;
+	}
+	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
+			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
+			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+			String description_content, String noticeContent) {
+		super();
+		this.application_seq = application_seq;
+		this.id = id;
+		this.name = name;
+		this.place_seq = place_seq;
+		this.sub_category_seq = sub_category_seq;
+		this.genre_seq = genre_seq;
+		this.age_limit = age_limit;
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.running_time = running_time;
+		this.running_intertime = running_intertime;
+		this.open_date = open_date;
+		this.status = status;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.max_ticket = max_ticket;
+		this.away_team_seq = away_team_seq;
 		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
+		this.description_content = description_content;
+		this.noticeContent = noticeContent;
+	}
+	public String getNoticeContent() {
+		return noticeContent;
+	}
+	public void setNoticeContent(String noticeContent) {
+		this.noticeContent = noticeContent;
+	}
+	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
+			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
+			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData,
+			String description_content) {
+		super();
+		this.application_seq = application_seq;
+		this.id = id;
+		this.name = name;
+		this.place_seq = place_seq;
+		this.sub_category_seq = sub_category_seq;
+		this.genre_seq = genre_seq;
+		this.age_limit = age_limit;
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.running_time = running_time;
+		this.running_intertime = running_intertime;
+		this.open_date = open_date;
+		this.status = status;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.max_ticket = max_ticket;
+		this.away_team_seq = away_team_seq;
+		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
+		this.description_content = description_content;
+	}
+	public String getDescription_content() {
+		return description_content;
+	}
+	public void setDescription_content(String description_content) {
+		this.description_content = description_content;
 	}
 	public int getApplication_seq() {
 		return application_seq;
@@ -157,16 +273,22 @@ public class BizApplyDTO {
 	public void setAway_team_seq(int away_team_seq) {
 		this.away_team_seq = away_team_seq;
 	}
-	public List<ScheduleDateDTO> getScheduleDate() {
-		return scheduleDate;
+	public List<TotalScheduleDTO> getTotalSchedule() {
+		return totalSchedule;
 	}
-	public void setScheduleDate(List<ScheduleDateDTO> scheduleDate) {
-		this.scheduleDate = scheduleDate;
+	public void setTotalSchedule(List<TotalScheduleDTO> totalSchedule) {
+		this.totalSchedule = totalSchedule;
+	}
+	public List<CastingDataDTO> getCastingData() {
+		return castingData;
+	}
+	public void setCastingData(List<CastingDataDTO> castingData) {
+		this.castingData = castingData;
 	}
 	public BizApplyDTO(int application_seq, String id, String name, int place_seq, int sub_category_seq, int genre_seq,
 			String age_limit, Timestamp start_date, Timestamp end_date, int running_time, int running_intertime,
 			Timestamp open_date, String status, Timestamp created_at, Timestamp updated_at, int max_ticket,
-			int away_team_seq, List<ScheduleDateDTO> scheduleDate) {
+			int away_team_seq, List<TotalScheduleDTO> totalSchedule, List<CastingDataDTO> castingData) {
 		super();
 		this.application_seq = application_seq;
 		this.id = id;
@@ -185,13 +307,12 @@ public class BizApplyDTO {
 		this.updated_at = updated_at;
 		this.max_ticket = max_ticket;
 		this.away_team_seq = away_team_seq;
-		this.scheduleDate = scheduleDate;
+		this.totalSchedule = totalSchedule;
+		this.castingData = castingData;
 	}
 	public BizApplyDTO() {
 		super();
 	}
-	
-	
 	
 	
 }

@@ -24,11 +24,11 @@ public class GroupChatService {
 	private MembersDAO mdao;
 	
 	@Transactional
-	public void insert(String id) throws Exception{
+	public int insert(String id) throws Exception{
 		int seq= dao.insert();
 		gmdao.insert(seq, id);
 		List<String> list =mdao.selectByAdmin();
 		gmdao.insertAdmin(seq,list);
-
+		return seq;
 	}
 }

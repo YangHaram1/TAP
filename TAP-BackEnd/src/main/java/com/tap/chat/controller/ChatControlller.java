@@ -19,10 +19,10 @@ public class ChatControlller {
 	@Autowired
 	private ChatService cserv;
 	
-	@GetMapping("/{GroupSeq}")
-	public ResponseEntity<List<ChatDTO>> selectByGroupSeq(@PathVariable int GroupSeq) throws Exception {
-
-		return ResponseEntity.ok().build();
+	@GetMapping("/{chatSeq}")
+	public ResponseEntity<List<ChatDTO>> selectByGroupSeq(@PathVariable int chatSeq) throws Exception {
+		
+		return ResponseEntity.ok(cserv.selectByGroupSeq(chatSeq));
 	}
 
 }

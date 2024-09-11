@@ -40,6 +40,9 @@ public class SecurityConfig {
 			request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
 			request.requestMatchers(HttpMethod.GET,"/board").permitAll();
 			request.requestMatchers(HttpMethod.POST,"/members").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/members/id/{id}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/members/email/{email}").permitAll();
+			
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
 		}) 
