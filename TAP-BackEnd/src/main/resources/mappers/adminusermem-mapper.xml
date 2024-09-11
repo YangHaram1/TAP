@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminUserMem">
+	<resultMap id="memberResultMap" type="java.util.HashMap">
+    	<result property="JOIN_DATE" column="join_date" javaType="java.sql.Timestamp" />    	
+	</resultMap>
+	<select id="getAllUserMem" resultMap="memberResultMap">
+		select m.name as name,g.name as grade ,m.join_date,m.enabled  from members m left join grade g on m.grade_seq = g.seq
+	</select> 
+</mapper>
