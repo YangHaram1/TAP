@@ -4,8 +4,10 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,15 +27,14 @@ public class FilesController {
 	@Autowired
 	private FilesService fServ;
 	
-	@PostMapping
-	public ResponseEntity<String> upload(MultipartFile file) {
-		
-		System.out.println(file.getOriginalFilename());
+	@PostMapping("/{path}")
+	public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable String path) {
+		System.out.println(" test: " +file.getOriginalFilename());
 		try {
 			String bucketName = "exam-attachment-study";
-			
+		
 			//파일유효아이디
-			String sysname = "musical/"+UUID.randomUUID().toString();
+			String sysname = path+"/"+UUID.randomUUID().toString();
 			
 			//업로드 하기 위한 정보 객체 생성
 			BlobId blobId = BlobId.of(bucketName, sysname);

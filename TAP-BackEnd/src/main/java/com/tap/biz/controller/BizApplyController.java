@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.dto.BizApplyDTO;
-import com.tap.biz.dto.ScheduleDateDTO;
+import com.tap.biz.dto.CastingDataDTO;
 import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.dto.TotalScheduleDTO;
 import com.tap.biz.services.BizService;
+import com.tap.files.dto.FilesDTO;
 
 @RestController
 @RequestMapping("/biz/application")
@@ -55,32 +56,58 @@ public class BizApplyController {
 
 	// 상품 테이블에 insert POST
 	@PostMapping
-	public ResponseEntity<Void> insertEvent(@RequestBody BizApplyDTO formData
+	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData
 			){
 		String id = formData.getId();
 		Timestamp start_date = formData.getStart_date();
 		int running_time = formData.getRunning_time();
 		Timestamp open_date = formData.getOpen_date();
+		System.out.println("ghkrd");
+	
 		
+		// Apply 테이블에 삽입 ==================================
 		int applicationSeq = bizServ.createApply(formData); // apply테이블에 insert하고 시퀀스 돌려받기. 
-		// applicationSeq로 나머지 데이터 insert하기 
 		System.out.println(applicationSeq);
 		
 		
-		int away_team_seq = formData.getAway_team_seq();
-		System.out.println("원정팀:" + away_team_seq);
-
-		List<ScheduleDateDTO> s_list = formData.getScheduleDate();
+		// Schedule 테이블에 삽입 ======================================
 		List<TotalScheduleDTO> t_list = formData.getTotalSchedule();
-		System.out.println(t_list.get(0).getSchedule_day());
-		System.out.println(s_list.get(0).getSchedule_day());
-		
 		for(int i=0; i<t_list.size(); i++) {
 			TotalScheduleDTO t_dto = t_list.get(i);
 			t_dto.setApplication_seq(applicationSeq);
 			bizServ.createApplySchedule(t_dto);
 		}
 		
-		return ResponseEntity.ok().build();
+		// Casting 테이블에 삽입 ==========================================
+		List<CastingDataDTO> c_list = formData.getCastingData();
+		for(int i=0; i<c_list.size(); i++) {
+			CastingDataDTO c_dto = c_list.get(i);
+			c_dto.setApplication_seq(applicationSeq);
+			bizServ.createApplyCasting(c_dto);
+		}
+		
+		// Event_popup 테이블에 삽입 ===================================
+		String content = formData.getNoticeContent();
+		System.out.println("s공지 내용 : "+content);
+		bizServ.createApplyNotice(content, applicationSeq);
+		// File에 메인포스터 삽입 ===================================
+		FilesDTO main_poster = formData.getMain_poster();
+		System.out.println("메인포스터 : "+ main_poster.getFiles_oriname());
+		System.out.println("메인포스터 : "+ main_poster.getFiles_sysname());
+		bizServ.createApplyFiles(main_poster, applicationSeq);
+		// File에 상세이미지들 삽입. ================================
+//		List<FilesDTO> f_list = formData.getFilesUrls();
+//		for(int i=0; i<f_list.size(); i++) {
+//			FilesDTO f_dto = f_list.get(i);
+////			f_dto.setApplication_seq(applicationSeq);
+////			bizServ.createApplyDescription(f_dto, applicationSeq);
+//		}
+		
+
+	//////////////////////////////////////////////////	
+
+
+		
+		return ResponseEntity.ok(formData);
 	}
 }

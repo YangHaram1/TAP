@@ -2,15 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import styles from './EventApply.module.css';
 import { api } from "../../../config/config";
 import { useAuthStore } from '../../../store/store';
-import MyEditor from "../../../components/MyEditor/MyEditor";
-import MyEditorOnlyText from "../../../components/MyEditor/MyEditorOnlyText";
-import MyEditorOnlyAdmin from "../../../components/MyEditor/MyEditorOnlyAdmin";
 import {eachDayOfInterval, format, getDay} from 'date-fns';
+import BizNoticeEditor from "../../../components/QuillEditor/BizNoticeEditor";
+import { useNavigate } from "react-router-dom";
 
 export const EventApply = () => {
     const { login, loginID, setAuth} = useAuthStore();
-    const editorRef = useRef();
-    
+    const navi = useNavigate();
+
     const [category, setCategory] = useState()
     const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
    
@@ -47,7 +46,7 @@ export const EventApply = () => {
     const [scheduleList, setScheduleList] = useState([]);
     const [selectedExceptDay, setSelectedExceptDay] = useState("");
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
-    const [content, setContent] = useState('');
+ 
     const [content2, setContent2] = useState('');
     const contentRef = useRef(null);
     useEffect(() => {
@@ -110,11 +109,20 @@ export const EventApply = () => {
     };
 
     const [subCategory, setSubCategory] = useState("");
+    const [subCategoryName, setSubCategoryName] = useState("");
     const handleSubCategoryChange = (e) => {
         const selectedSubCategory = e.target.value;
         setSubCategory(selectedSubCategory);
         setFormData({ ...formData, sub_category_seq: selectedSubCategory, genre_seq: "" });
-
+        if(selectedSubCategory == "1"){
+            setSubCategoryName("musical");
+        }else if(selectedSubCategory == "2"){
+            setSubCategoryName("concert");
+        }else if(selectedSubCategory =="3"){
+            setSubCategoryName("baseball");
+        }else if(selectedSubCategory =="4"){
+            setSubCategoryName("football");
+        }
         const filteredGenres = genres.filter(
             (genre) => genre.SUB_CATEGORY_SEQ.toString() === selectedSubCategory
         );
@@ -418,10 +426,10 @@ export const EventApply = () => {
     // 캐스팅 상태
     
     const [scheduleCastingList, setScheduleCastingList] = useState([]);
-    const [castingData, setCastingData] = useState({});
+    const [castingData, setCastingData] = useState([]); 
     const [currentSchedule, setCurrentSchedule] = useState(null);
 
-    const [castingImage, setCastingImage] = useState(null);
+    const [castingImage, setCastingImage] = useState({});   // file_oriname과 gcs에 업로드하고 받은 file_sysname
     const [actorName, setActorName] = useState('');
     const [role, setRole] = useState('');
     const fileInputRef = useRef(null);
@@ -429,66 +437,159 @@ export const EventApply = () => {
     const characInputRef = useRef(null);
 
     const handleCastingImageChange = (event) => {
-        setCastingImage(event.target.files[0]);
-        console.log(event.target.files[0])
-    };
-    const handleActorNameChange = (event) => {
-        setActorName(event.target.value);
-    };
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
+        const file = event.target.files[0];
+        if(file){
+            const selectedSubCategory = subCategoryName;
+            const fileData = new FormData();
+            fileData.append('file',file);
+            api.post(`/file/${selectedSubCategory}`, fileData)
+            .then((response) => {
+                console.log("결과 ", response);
+                setCastingImage({file_oriname: file.name, file_sysname: response.data})
+            })
+            .catch((error) => {
+                console.error("Error uploading file:", error);
+            });
+
+        }
+
     };
 
-    const fileData = new FormData();
+  
+    // 각 스케줄별 입력 상태를 관리하는 객체
+    const [castingInputs, setCastingInputs] = useState({});
+    const fileInputRefs = useRef({});
+    const handleLocalActorNameChange = (scheduleKey, value) => {
+    setCastingInputs((prev) => ({
+        ...prev,
+        [scheduleKey]: {
+        ...prev[scheduleKey],
+        actorName: value,
+        },
+    }));
+    };
 
-    const handleAddCasting = (scheduleDay, scheduleTime) => {
-        if (actorName && role && castingImage ) {
-            const key = `${scheduleDay}_${scheduleTime}`;
-            setCastingData(prev => ({
-                ...prev,
-                [key]: [
-                    ...(prev[key] || []),
-                    { schedule_day:scheduleDay, schedule_time:scheduleTime, image: castingImage, name: actorName, role: role }
-                ]
-            })); 
-            fileData.append('castingImg', castingImage)
-            fileData.append('name', actorName)
-            fileData.append('role',role)
-            fileData.append('schedule_day', scheduleDay)
-            fileData.append('schedule_time', scheduleTime)
-
-            setCastingImage(null);
-            setActorName('');
-            setRole('');
-            if (actorInputRef.current) {
-                actorInputRef.current.value = ''; // actorInputRef를 통해 값 초기화
-              }
-            characInputRef.current.value=null; 
-            fileInputRef.current.value = null;
+    const handleLocalRoleChange = (scheduleKey, value) => {
+    setCastingInputs((prev) => ({
+        ...prev,
+        [scheduleKey]: {
+        ...prev[scheduleKey],
+        role: value,
+        },
+    }));
+    };
+    const handleAddLocalCasting = (schedule) => {
+        const scheduleKey = `${schedule.schedule_day}_${schedule.schedule_time}`;
+        const currentInputs = castingInputs[scheduleKey] || {};
+    
+        if (currentInputs.actorName && currentInputs.role && castingImage) {
+        setCastingData((prev) => [
+            ...prev,
+            {
+            schedule_day: schedule.schedule_day,
+            schedule_time: schedule.schedule_time,
+            file_oriname: castingImage.file_oriname,
+            file_sysname: castingImage.file_sysname,
+            casting_name: currentInputs.actorName,
+            casting_role: currentInputs.role,
+            },
+        ]);
+    
+        // 입력 필드 초기화
+        setCastingInputs((prev) => ({
+            ...prev,
+            [scheduleKey]: { actorName: '', role: '' },
+        }));
+        setCastingImage(null);
+        if (actorInputRef.current) {
+            actorInputRef.current.value = '';
+        }
+        characInputRef.current.value = null;
+        // 스케줄별 파일 입력 필드를 초기화
+    if (fileInputRefs.current[scheduleKey]) {
+        fileInputRefs.current[scheduleKey].value = '';
+      }
         } else {
-            alert('모든 필드를 입력해 주세요.');
+        alert('모든 필드를 입력해 주세요.');
         }
     };
-    // const handleRemoveCasting = (indexToRemove) => {
-    //     setCastingList(castingList.filter((_, index) => index !== indexToRemove));
-    // };
+  //////////////////////////////////////////
+
+  const editorRef = useRef();
+  const [noticeContent, setNoticeContent] = useState('');
+  const handleContentChange = (newContent) => {
+    setNoticeContent(newContent);
+  }
+
+
+
+    useEffect(()=>{
+        console.log(castingData)
+    },[castingData])
+    
     const handleRemoveCasting = (scheduleDay, scheduleTime, indexToRemove) => {
-        const key = `${scheduleDay}_${scheduleTime}`;
         setCastingData(prev => {
-            const updatedCastings = prev[key].filter((_, index) => index !== indexToRemove);
-            return { ...prev, [key]: updatedCastings };
+            return prev.filter(
+                (casting, index) =>
+                    !(casting.schedule_day === scheduleDay &&
+                      casting.schedule_time === scheduleTime &&
+                      index === indexToRemove)
+            );
         });
     };
-    // 메인 포스터 업로드
-    const [mainPoster, setMainPoster] = useState(null);
+//  에디터==============================================
+    const [files, setFiles] = useState([]);
+    const [fileUrls, setFileUrls] = useState([]);
+// 파일 선택 처리
+const handleFileChange = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    setFiles(selectedFiles);
+};
+ // 파일 업로드 및 URL 반환
+ const uploadFiles = async () => {
+    if(!files){return false;}
+    const urls = [];
+    for (const file of files) {
+        const evnetFilesData = new FormData();
+        evnetFilesData.append('file', file);
+
+        try {
+            const response = await api.post(`/file/${subCategoryName}`, evnetFilesData);
+            urls.push({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 시 반환된 URL 저장
+            console.log("성공")
+        } catch (error) {
+            console.error("파일 업로드 오류:", error);
+        }
+    }
+    setFileUrls(urls);
+};
+
+    // 메인 포스터 업로드 =====================================================
+    const [mainPoster, setMainPoster] = useState([]);
+    
     const handleMainPosterChange = (event) => {
-      const file = event.target.files[0];
+        const file = event.target.files[0];
+        console.log(file.name);
+        console.log(subCategoryName);
+
+
       if (file) {
-        setMainPoster(file); // 선택된 파일을 mainPoster 상태로 설정
-      }
+        const selectedSubCategory = subCategoryName;
+        const fileData = new FormData();
+        fileData.append('file', file);
+
+        api.post(`/file/${selectedSubCategory}`, fileData)
+        .then((response) => {
+            console.log("결과 ", response);
+            setMainPoster({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 후 상태 업데이트
+        })
+        .catch((error) => {
+            console.error("Error uploading file:", error);
+        });
+    }
     };
     //
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // 입력값 검증 함수
         const validateForm = () => {
             // 필수 항목들이 비어있는지 확인
@@ -532,42 +633,45 @@ export const EventApply = () => {
                 alert("러닝타임 선택");
                 return false;
             }
-            if(scheduleList.length==0){
+            if(scheduleList.length===0){
                 alert("시작시간 설정해라");
                 return false;
             }
+            if(!noticeContent){ alert("공지안내를 작성하세요." ); return false;}
+            if(subCategory == "1" && !castingData ){ alert("캐스팅 작성하세요." ); return false;}
     
             return true;
         };
     
         // 유효성 검사 통과 시에만 서버로 요청
         if (validateForm()) {
-            // 제외일을 기준으로 totalSchedule을 필터링
-            const filteredTotalSchedule = totalSchedule.filter(
-                (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
-            );
-            // setFormData(prev=>({
-            //     ...prev, scheduleDate:scheduleList, totalSchedule:filteredTotalSchedule, scheduleExceptList: scheduleExceptList
-            // }));
-
-            const updatedFormData = {
-                ...formData,
-                scheduleDate: scheduleList,
-                totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
-                scheduleExceptList: scheduleExceptList,
-                castingData: castingData, 
-                mainPoster: mainPoster, 
-                fileData:fileData
-            };
-           
-
-            api.post(`/biz/application`, updatedFormData)
-                .then((resp) => {
-                    console.log(resp.data)
-                })
-                .catch(() => {
-                    alert("서버에 안 보내짐. 잘못됨");
-                });
+            try {
+            
+                
+                await uploadFiles();
+               
+               
+                // 제외일을 기준으로 totalSchedule을 필터링
+                const filteredTotalSchedule = totalSchedule.filter(
+                    (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
+                );
+                // const description = fileUrls;
+                const updatedFormData = {
+                    ...formData,
+                    totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
+                    noticeContent: noticeContent,
+                    castingData: castingData,
+                    main_poster: mainPoster, 
+                    // fileUrls: description
+                };
+    
+                await api.post(`/biz/application`, updatedFormData);
+                alert('신청이 완료되었습니다!');
+                navi('/'); 
+                } catch (error) {
+                console.error('서버에 전송 중 오류 발생:', error);
+                alert('서버에 전송 실패. 다시 시도해 주세요.');
+            }
         }
     };
 
@@ -700,7 +804,6 @@ export const EventApply = () => {
                                                 ? "전체"
                                                 : daysOfWeek[schedule.schedule_day]}{" "}
                                             - {schedule.schedule_time}
-                                            {/* {daysOfWeek[schedule.schedule_day]}- {schedule.schedule_time}  */}
                                             <button onClick={() => handleRemoveSchedule(index)}>x</button>
                                         </li>
                                     ))}
@@ -720,39 +823,76 @@ export const EventApply = () => {
                                 </ul>
                             </td>
                         </tr>
-                        { category == "1" && subCategory === "1" &&  
+                        { category === "1" && subCategory === "1" &&  
                             <tr>
                                 <td>캐스팅 이미지</td>
                                 <td>
-                                    {scheduleList.map((schedule, index)=>(
-                                    <ul>
-                                        <li key={index}>
-                                            {schedule.schedule_day === "전체"
-                                                ? "전체"
-                                                : daysOfWeek[schedule.schedule_day]}{" "}
-                                            - {schedule.schedule_time}
-                                            <br></br>
-                                            <input type="file" ref={fileInputRef} onChange={handleCastingImageChange} />
-                                            <input type="text" placeholder="배우 이름" ref={actorInputRef} value={actorName} onChange={handleActorNameChange} className={styles.shortInput} />
-                                            <span className={styles.Gap}></span>
-                                            <input type="text" placeholder="역할" ref={characInputRef} onChange={handleRoleChange} className={styles.shortInput} />
-                                            <span className={styles.Gap}></span>
-                                            <button onClick={() => handleAddCasting(schedule.schedule_day, schedule.schedule_time)}>추가버튼</button>
+                                   
+                                    {scheduleList.map((schedule, index) => {
+                            const scheduleKey = `${schedule.schedule_day}_${schedule.schedule_time}`;
+                            const currentInputs = castingInputs[scheduleKey] || { actorName: '', role: '' };
 
-                                            <br></br>
-                                            <ul>
-                                            {(castingData[`${schedule.schedule_day}_${schedule.schedule_time}`] || []).map((casting, index) => (
-                                                <li key={index}>
-                                                    {casting.image ? <img src={URL.createObjectURL(casting.image)} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
-                                                    <span>{casting.name} - {casting.role}</span>
-                                                    <button onClick={() => handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, index)}>x</button>
-                                                </li>
-                                            ))}
-                                            </ul>
-                                        </li> 
+                            return (
+                                <ul key={index}>
+                                <li>
+                                    {schedule.schedule_day === '전체' ? '전체' : daysOfWeek[schedule.schedule_day]} - {schedule.schedule_time}
+                                    <br />
+                                    <input type="file" 
+                                    ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
+                                    onChange={handleCastingImageChange} />
+                                    <input
+                                    type="text"
+                                    placeholder="배우 이름"
+                                    ref={actorInputRef}
+                                    value={currentInputs.actorName}
+                                    onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
+                                    className={styles.shortInput}
+                                    />
+                                    <span className={styles.Gap}></span>
+                                    <input
+                                    type="text"
+                                    placeholder="역할"
+                                    ref={characInputRef}
+                                    value={currentInputs.role}
+                                    onChange={(e) => handleLocalRoleChange(scheduleKey, e.target.value)}
+                                    className={styles.shortInput}
+                                    />
+                                    <span className={styles.Gap}></span>
+                                    <button onClick={() => handleAddLocalCasting(schedule)}>추가버튼</button>
+                                    <br />
+                                    <ul>
+                                    {castingData
+                                        .filter(
+                                        (casting) =>
+                                            casting.schedule_day === schedule.schedule_day &&
+                                            casting.schedule_time === schedule.schedule_time
+                                        )
+                                        .map((casting, castingIndex) => (
+                                        <li key={castingIndex}>
+                                            {casting.file_sysname ? (
+                                            <img
+                                                src={casting.file_sysname}
+                                                alt="Casting"
+                                                style={{ width: '50px', height: '50px' }}
+                                            />
+                                            ) : null}
+                                            <span>
+                                            {casting.casting_name} - {casting.casting_role}
+                                            </span>
+                                            <button
+                                            onClick={() =>
+                                                handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, castingIndex)
+                                            }
+                                            >
+                                            x
+                                            </button>
+                                        </li>
+                                        ))}
                                     </ul>
-                                    ))}
-                                    
+                                </li>
+                                </ul>
+                            );
+                            })}
                                 </td>
                             </tr>
                         } 
@@ -817,7 +957,8 @@ export const EventApply = () => {
                         <td>공지사항 </td>
                         <td>
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
-                            <MyEditorOnlyText editorRef={editorRef} />
+                            {/* <WebEditor  editorRef={editorRef}handleContentChange={handleContentChange} height="300px" defaultContent=""/> */}
+                            <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
                         </td>
                         <td>
 
@@ -834,19 +975,17 @@ export const EventApply = () => {
                                 <p style={{ color: "red", fontSize: "13px" }}>
                                 * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
                                 </p>
-                                {mainPoster && ( // 파일이 존재할 때만 이미지 렌더링
-                                <img
-                                    src={URL.createObjectURL(mainPoster)}
-                                    alt="Main Poster"
-                                    style={{ width: "100px", height: "100px" }}
-                                />
-                                )}
+                                {mainPoster.files_sysname ? <img src={mainPoster.files_sysname} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
                         </td>
                     </tr>
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
-                            <MyEditorOnlyAdmin editorRef={editorRef} height="500px" />
+                        <input 
+                                type="file" 
+                                multiple 
+                                onChange={handleFileChange} 
+                            />
                         </td>
                     </tr>
                    
@@ -854,7 +993,7 @@ export const EventApply = () => {
             </table>
 
             <button onClick={handleSubmit}>신청</button>
-            <button>임시저장</button>
+         
             <button>취소</button>
 
         </div>
