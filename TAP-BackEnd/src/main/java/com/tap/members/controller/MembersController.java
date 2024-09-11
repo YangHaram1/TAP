@@ -35,6 +35,13 @@ public class MembersController {
 		return ResponseEntity.ok(checkId);
 	}
 	
+	// 회원가입 이메일 중복 검사
+	@GetMapping("/{email}")
+	public ResponseEntity<Integer> selectByEmail(@PathVariable String email) throws Exception {
+		int checkEmail = mserv.checkEmail(email);  // 1 or 0
+		return ResponseEntity.ok(checkEmail);
+	}
+	
 	@GetMapping
 	public ResponseEntity<MembersDTO> selectById(Principal principal) throws Exception {
 		if (principal == null) {

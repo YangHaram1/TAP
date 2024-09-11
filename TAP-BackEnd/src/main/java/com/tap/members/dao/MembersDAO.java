@@ -43,6 +43,11 @@ public class MembersDAO {
 		return mybatis.selectOne("Members.checkId",id);
 	}
 	
+	// 회원가입 이메일 중복 검사
+	public int checkEmail(String email) throws Exception{
+		return mybatis.selectOne("Members.checkEmail",email);
+	}
+	
 	public List<String> selectByAdmin() throws Exception{
 		return mybatis.selectList("Members.selectByAdmin");
 	}
