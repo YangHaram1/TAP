@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersGradeDTO;
 
 @Repository
 public class AdminUserMemberDAO {
@@ -19,5 +20,9 @@ public class AdminUserMemberDAO {
 	}
     public List<MembersDTO> searchUserMem(String keyword) {
         return mybatis.selectList("AdminUserMem.searchUserMem", keyword);
+    }
+    public List<MembersGradeDTO> getGrade () {
+    	return mybatis.selectList("AdminUserMem.getGrade");
+    	
     }
 }

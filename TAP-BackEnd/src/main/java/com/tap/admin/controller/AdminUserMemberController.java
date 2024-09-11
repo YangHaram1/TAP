@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.admin.services.AdminUserMemberService;
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersGradeDTO;
 
 @RestController
 @RequestMapping("/admin/usermem")
@@ -24,5 +25,11 @@ public class AdminUserMemberController {
     @GetMapping("/search")
     public List<MembersDTO> searchUserMem(@RequestParam String keyword) {
         return aumServ.searchUserMem(keyword);
+    }
+    @GetMapping("/grades")
+    public List<MembersGradeDTO> getGrade() {
+        List<MembersGradeDTO> grades = aumServ.getGrade();
+        System.out.println(grades); // 서버에서 데이터 확인
+        return grades;
     }
 }
