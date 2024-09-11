@@ -1,11 +1,12 @@
-// src/pages/TeamPage/TeamPage.jsx
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TeamHeader } from './TeamHeader/TeamHeader';
 import { TeamMain } from './TeamMain/TeamMain';
+import { Side } from '../Side/Side';
 import styles from './TeamPage.module.css';
 
 export const TeamPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
   
@@ -18,7 +19,12 @@ export const TeamPage = () => {
   return (
     <div className={styles.teamPage}>
       <TeamHeader teamName={teamName} teamLogo={teamLogo} homeGround={homeGround} />
-      <TeamMain matches={matches} />
+      <div className={styles.sideMainWrapper}>
+        <div className={styles.sideWrapper}>
+          <Side navigate={navigate} />
+        </div>
+        <TeamMain matches={matches} selectedTeam={teamName} />
+      </div>
     </div>
   );
 };

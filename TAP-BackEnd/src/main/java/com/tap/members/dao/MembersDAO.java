@@ -1,5 +1,6 @@
 package com.tap.members.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,5 +31,25 @@ public class MembersDAO {
 	public int updatePwById(Map<String , String> map) throws Exception{
 		return mybatis.update("Members.updatePwById",map);
 	}
-
+	
+	
+	//	회원가입 등록
+	public int signUp(MembersDTO dto) throws Exception{
+		return mybatis.insert("Members.signUp",dto);
+	}
+	
+	// 회원가입 아이디 중복 검사
+	public int checkId(String id) throws Exception{
+		return mybatis.selectOne("Members.checkId",id);
+	}
+	
+	// 회원가입 이메일 중복 검사
+	public int checkEmail(String email) throws Exception{
+		return mybatis.selectOne("Members.checkEmail",email);
+	}
+	
+	public List<String> selectByAdmin() throws Exception{
+		return mybatis.selectList("Members.selectByAdmin");
+	}
+	
 }

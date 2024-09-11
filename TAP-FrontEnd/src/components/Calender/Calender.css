@@ -1,10 +1,13 @@
 .react-calendar{
     border: 0px;
     border-radius: 10px;
-    height: 93%;
+    height: 90%;
     width: 100%;
-    /* background-color: lightgray; */
     line-height: 1.2em !important;
+  }
+
+  .react-calendar__viewContainer{
+    height: inherit !important;
   }
   
   .react-calendar__navigation__arrow{
@@ -39,24 +42,21 @@
   .react-calendar__viewContainer{
     height: 100%;
     width: 100%;
-    /* background-color: gray; */
   }
   
   .react-calendar__month-view__weekdays{
     font-size: 15px;
-    padding: 5px;
-    height: 30px !important;
+    padding: 0px 5px;
+    height: 35px;
+    background-color: lightgray;
+    border-radius: 20px !important;
   }
   
   .react-calendar__month-view__days{
     font-size: 18px;
     padding: 5px;
   }
-  
-  /* .react-calendar__month-view__days__day--neighboringMonth{
-    padding: 30 !important;
-  }
-   */
+
   .react-calendar__tile:disabled{
     background-color: rgba(0,0,0,0) !important;
   }
@@ -76,8 +76,12 @@
     align-items: center !important;
     height: 100% !important; /* 전체 높이 사용 */
     text-align: center; /* 텍스트를 중앙 정렬 */
-    margin-right: 5px !important;
   }
+
+  abbr{
+    text-decoration: none !important;
+  }
+
 
   .react-calendar__tile--now{
     /* 오늘날짜에 대한 값 설정 */
