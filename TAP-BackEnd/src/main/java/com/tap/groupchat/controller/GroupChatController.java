@@ -27,24 +27,24 @@ public class GroupChatController {
 	private MembersService mserv;
 	
 	@PostMapping()
-	public ResponseEntity<String> insert(Principal principal) throws Exception {
+	public ResponseEntity<Integer> insert(Principal principal) throws Exception {
 		
 		if (principal == null) {
 			System.out.println("principal");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+			return ResponseEntity.ok(null);
 
 		}
 		String username = principal.getName();
 		UserDetails user = mserv.loadUserByUsername(username);
 		
-		boolean check=gmserv.checkById(user.getUsername());
-		if(!check) {
-			gserv.insert(user.getUsername());
+		int seq=gmserv.checkById(user.getUsername());
+		System.out.println(seq);
+		if(seq==0) {
+			seq=gserv.insert(user.getUsername());
+			return ResponseEntity.ok(seq);
 		}else {
-			
+			return ResponseEntity.ok(seq);
 		}
-		return ResponseEntity.ok(null);
-		
 		
 	}
 

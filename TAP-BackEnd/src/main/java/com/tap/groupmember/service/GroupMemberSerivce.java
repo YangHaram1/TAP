@@ -31,7 +31,7 @@ public class GroupMemberSerivce {
 		List<GroupMemberDTO> list=new ArrayList<>();
 		return list;
 	}
-	public boolean checkById(String member_id) throws Exception{
+	public int checkById(String member_id) throws Exception{
 		return dao.checkById(member_id);
 	}
 }

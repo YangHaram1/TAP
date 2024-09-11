@@ -12,8 +12,12 @@
 			insert into group_member values (#{group_seq}, #{id})
 	</insert>
 
-	<select id="checkById" resultType="boolean">
-		select count(*) from
+	<select id="checkById" resultType="Integer">
+		select group_seq from
 		group_member where member_id=#{member_id}
+	</select>
+	
+	<select id="membersByGroupSeq" resultType="com.tap.groupmember.dto.GroupMemberDTO">
+		select * from group_member where group_seq=#{group_seq}
 	</select>
 </mapper>

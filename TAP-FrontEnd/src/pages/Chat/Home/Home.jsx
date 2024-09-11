@@ -2,21 +2,26 @@ import styles from './Home.module.css';
 import logo from '../../../images/logo192.png';
 import ai from '../../../images/ai.png';
 import chat from '../../../images/chat.png';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ChatsContext } from '../../../context/ChatsContext';
 import { api } from '../../../config/config';
 import { useCheckList } from '../../../store/store';
 
 const Home = () => {
     const {setChatNavi,chatAppRef} =useContext(ChatsContext);
-    const {setChatSeq} =useCheckList();
-    
+    const {setChatSeq,chatSeq} =useCheckList();
+
     const handleChat=()=>{
         api.post(`groupchat`).then((resp)=>{
             setChatNavi('chatapp');
             chatAppRef.current.style.visibility = "visible";
+            setChatSeq(resp.data);
         })
     }
+
+    useEffect(()=>{
+        console.log(chatSeq)
+    },[chatSeq])
 
     return (
         <div className={styles.container}>

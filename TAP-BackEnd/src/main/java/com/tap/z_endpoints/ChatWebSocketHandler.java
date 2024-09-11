@@ -1,10 +1,8 @@
-package com.tap.endpoints;
+package com.tap.z_endpoints;
 
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +19,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.tap.chat.dto.ChatDTO;
 import com.tap.chat.service.ChatService;
 import com.tap.groupmember.dto.GroupMemberDTO;
 import com.tap.groupmember.service.GroupMemberSerivce;
 import com.tap.members.service.MembersService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {

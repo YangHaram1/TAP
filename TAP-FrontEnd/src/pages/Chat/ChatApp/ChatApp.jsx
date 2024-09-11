@@ -61,9 +61,9 @@ const ChatApp = () => {
             if (chatNavi === 'chatapp') {
                 const { chatSeq } = useCheckList.getState();
                 if (chatSeq !== 0) {
-                    api.get(`/chat?chatSeq=${chatSeq}`).then(resp => {//채팅목록 가저오기
-                        setChats(resp.data);
-                    })
+                    // api.get(`/chat?chatSeq=${chatSeq}`).then(resp => {//채팅목록 가저오기
+                    //     setChats(resp.data);
+                    // })
                 }
             }
         }
