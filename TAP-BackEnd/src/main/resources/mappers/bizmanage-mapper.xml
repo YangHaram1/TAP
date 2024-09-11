@@ -16,8 +16,9 @@ CAST(apply.created_at AS TIMESTAMP) AS created_at,
 CAST(apply.end_date AS TIMESTAMP) AS end_date,
 CAST(apply.start_date AS TIMESTAMP) AS start_date,
 CAST(apply.open_date AS TIMESTAMP) AS open_date,
-
-sub_category.*, files.*
+sub_category.*, 
+files.*,
+PLACE.*
 from apply
 join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 join place on apply.place_seq = place.place_seq
