@@ -11,7 +11,8 @@ public class ChatUploadDAO {
 	@Autowired
 	private SqlSession mybatis;
 	
-	public void insert(ChatUploadDTO dto) throws Exception{
+	public int insert(ChatUploadDTO dto) throws Exception{
 		mybatis.insert("ChatUpload.insert",dto);
+		return dto.getSeq();
 	}
 }

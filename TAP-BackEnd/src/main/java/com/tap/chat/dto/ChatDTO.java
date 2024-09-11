@@ -8,7 +8,7 @@ public class ChatDTO {
 	private String message;
 	private Timestamp write_date;
 	private int group_seq;
-	private int upload_seq;
+	private int upload_seq=0;
 	public int getSeq() {
 		return seq;
 	}
