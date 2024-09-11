@@ -34,6 +34,14 @@ public class MembersService implements UserDetailsService{
 		System.out.println(id);
 		return dao.checkId(id);
 	}
+	
+	// 회원가입 이메일 중복 검사
+	public int checkEmail(String email) throws Exception{
+		System.out.println(email);
+		return dao.checkEmail(email);
+	}
+	
+	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		User user=null;
