@@ -5,6 +5,8 @@ import { ChatsContext } from '../../../../context/ChatsContext';
 import { api } from '../../../../config/config';
 import { format } from 'date-fns';
 import Modal from './Modal/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell, faComment, faCommentSlash, faExclamation, faSlash, faThumbtack } from '@fortawesome/free-solid-svg-icons';
 
 
 const List = () => {
@@ -159,18 +161,15 @@ const List = () => {
                                     <div className={styles.room} onContextMenu={handleRightClick(index)} onDoubleClick={handleDoubleClick(item.seq)}>
                                         <div className={styles.message}>
                                             <div className={styles.name}>
-                                                <div style={{ flex: 3 }}>
+                                                <div className={styles.username}>
                                                     {item.mdto.id}{`(${item.mdto.name})`}
                                                 </div>
                                                 <div className={styles.bookmark}>
-                                                    {item.bookmark === 'Y' ? <i className="fa-solid fa-bookmark"></i> : false}
+                                                    {item.bookmark === 'Y' &&(<FontAwesomeIcon icon={faThumbtack}  className={styles.icon}/>) }
+                                                  
                                                 </div>
-                                                <div className={styles.size}>
-                                                    {item.size}
-                                                </div>
-
                                             </div>
-                                            <div style={{ display: "flex" }}>
+                                            <div>
                                                 <div className={styles.content} dangerouslySetInnerHTML={{ __html: (item.dto != null) ? truncatedText : '메세지가 없습니다' }}>
                                                 </div>
                                                 <div className={styles.unread}>
@@ -184,7 +183,7 @@ const List = () => {
                                                 {formattedTimestamp}
                                             </div>
                                             <div className={styles.alarm}>
-                                                {item.alarm === 'Y' ? (<i className="fa-solid fa-bell"></i>) : (<i className="fa-solid fa-bell-slash"></i>)}
+                                                {item.alarm === 'Y' ? (<FontAwesomeIcon icon={faBell} />) : (<FontAwesomeIcon icon={faSlash} />)}
                                             </div>
                                         </div>
                                     </div>

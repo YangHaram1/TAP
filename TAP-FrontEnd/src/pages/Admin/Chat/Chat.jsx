@@ -3,21 +3,20 @@ import List from './List/List';
 import ChatApp from './ChatApp/ChatApp';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeadset } from '@fortawesome/free-solid-svg-icons';
-const Chat=()=>{
-    return(
+const Chat = () => {
+    return (
         <div className={styles.container}>
             <div className={styles.header}>
-            <FontAwesomeIcon icon={faHeadset}  className={styles.icon}/>
-                관리자 1:1 상담
+                {/* <FontAwesomeIcon icon={faHeadset} className={styles.icon} /> */}
+                 ChatAdmin
             </div>
             <div className={styles.body}>
-                <div className={styles.list}>
-                    <List/>
-                </div>
                 <div className={styles.chatapp}>
-                    <ChatApp/>
+                    <ChatApp />
                 </div>
-                
+                <div className={styles.list}>
+                    <List />
+                </div>
             </div>
         </div>
     )
