@@ -37,7 +37,7 @@ export const UserMem = () => {
     const handleNameSearch = async () => {
         try {
             const params = {
-                keyword,
+                keyword : keyword,
                 gradeSeq: selectedGrade || null // null로 변경하여 gradeSeq가 없을 때를 처리
             };
             const resp = await api.get(`/admin/usermem/search`, { params });
