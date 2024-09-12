@@ -20,4 +20,38 @@
 	<select id="membersByGroupSeq" resultType="com.tap.groupmember.dto.GroupMemberDTO">
 		select * from group_member where group_seq=${group_seq}
 	</select>
+	
+	<select id="list" resultType="com.tap.groupmember.dto.GroupMemberDTO">
+		select *from group_member where member_id=#{member_id}
+	</select>
+
+	<select id="memberId" resultType="String">
+		select member_id from group_member g
+		join members m on g.member_id=m.id
+		where m.role='ROLE_USER' and  g.group_seq=#{group_seq}
+	</select>
+	
+	
+	<update id="updateCheck">
+		update group_member set last_chat_seq =${last_chat_seq} where group_seq=${group_seq} and member_id=#{member_id}
+	</update>
+	
+	<update id="updateAlarm">
+		update group_member set alarm = case
+                when alarm = 'Y' then 'N'
+                when alarm = 'N' then 'Y'
+                else 'N'
+            end
+		where group_seq=${group_seq} and member_id=#{member_id}
+	</update>
+	
+	<update id="updateBookmark">
+		update group_member set bookmark = case
+                when bookmark = 'Y' then 'N'
+                when bookmark = 'N' then 'Y'
+                else 'Y'
+            end
+		where group_seq=${group_seq} and member_id=#{member_id}
+	</update>
+	
 </mapper>

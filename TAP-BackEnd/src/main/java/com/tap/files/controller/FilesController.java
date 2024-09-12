@@ -61,11 +61,11 @@ public class FilesController {
 		}
 	}
 
-	@GetMapping("/{sysname}/{oriname}")
-	public ResponseEntity<ByteArrayResource> download(@PathVariable String sysname, @PathVariable String oriname)
+	@GetMapping("/download")
+	public ResponseEntity<ByteArrayResource> download(@RequestParam String sysname, @RequestParam String oriname)
 			throws UnsupportedEncodingException {
 		System.out.println(sysname);
-		String bucketName = "yangharam";
+		String bucketName = "exam-attachment-study";
 		String encodedFileName = URLEncoder.encode(oriname, "UTF-8").replace("+", "%20");
 
 		Blob blob = storage.get(BlobId.of(bucketName, sysname));
@@ -76,7 +76,7 @@ public class FilesController {
 		ByteArrayResource resource = new ByteArrayResource(blob.getContent());
 		HttpHeaders header = new HttpHeaders();
 		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFileName);
-		header.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		header.add(HttpHeaders.CONTENT_TYPE, blob.getContentType());//MediaType.APPLICATION_OCTET_STREAM_VALUE
 		return ResponseEntity.ok().headers(header).contentLength(blob.getSize()).body(resource);
 
 	}

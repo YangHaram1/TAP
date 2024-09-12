@@ -22,7 +22,7 @@ import { ResizableBox } from 'react-resizable';
 import { Slide, ToastContainer } from 'react-toastify';
 import { host } from './config/config'
 import 'react-resizable/css/styles.css'
-
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
     const { login, isAuth, setAuth, role, token } = useAuthStore()
