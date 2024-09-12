@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './BookModal.module.css';
 import { PreventMacro } from './PreventMacro/PreventMacro';
 import { api } from '../../config/config';
@@ -12,7 +12,7 @@ export const BookModal = ({ isOpen, onClose }) =>{
     let sections = ['section1','section2','section3'];
     let maxTicket = 6;
     const [seats, setSeats] = useState({row:0,col:0}); 
-
+    const [section, setSection] = useState("");
     const [selectedSeats, setSelectedSeats] = useState([]); // 선택된 좌석 상태
 
     const [seatsLevel, setSeatsLevel] = useState([{level:"VIP", price:150000}, {level:"R", price:130000}, {level:"S", price:110000}, {level:"A", price:90000}])
@@ -51,6 +51,8 @@ export const BookModal = ({ isOpen, onClose }) =>{
     // 우측 상단 섹션(층수) 선택 시 좌측 세부 좌석이 바뀜
     const handleSection =(section)=>{
         //받아온 section 값을 통해 섹션 데이터 확인
+        setSection(section);
+
         if(section === 'section1'){
             setSeats({row:10, col:5});
             console.log(section,seats);
@@ -83,6 +85,12 @@ export const BookModal = ({ isOpen, onClose }) =>{
             }
         }
     };
+
+    // useEffect(()=>{},[selectedSeats])
+
+    useEffect(()=>{
+        setSelectedSeats([]);
+    },[section]);
 
     const getBackgroundColor = (level) => {
         switch (level) {
@@ -144,6 +152,9 @@ export const BookModal = ({ isOpen, onClose }) =>{
                     </div>
 
                     <div className={styles.main}>
+
+                        {/* 여기 컴포넌트를 갈아 끼워야 됨 */}
+
                         <div className={styles.main_left}>
                             {(() => {
                                 let buttons = [];
@@ -205,10 +216,35 @@ export const BookModal = ({ isOpen, onClose }) =>{
                                 */}    
                             </div>
                             <div className={styles.seat_selected}>
-                                선택한 좌석
+                                <div className={styles.seat_selected_title}>
+                                    <div className={styles.seat_selected_title_left}>
+                                        선택 좌석
+                                    </div>
+                                    <div className={styles.seat_selected_title_right}>
+                                        총 {selectedSeats.length}석이 선택되었습니다.
+                                    </div>
+                                </div>
+                                <div className={styles.seat_selected_main}>
+                                    <div className={styles.seat_selected_header}>
+                                        <div className={styles.seat_selected_header_text1}>좌석등급</div>
+                                        <div className={styles.seat_selected_header_text2}>좌석번호</div>
+                                    </div>
+                                    <div className={styles.seat_selected_content}>
+                                    {
+                                        selectedSeats.map((seat)=>{
+                                            return(
+                                                <div className={styles.seat_selected_content_box}>
+                                                    <div className={styles.seat_selected_content_text1}>level</div>
+                                                    <div className={styles.seat_selected_content_text2}>{seat}</div>
+                                                </div>
+                                            );
+                                        })
+                                    }
+                                    </div>
+                                </div>
                             </div>
                             <div className={styles.next_page}>
-                                <button>다음페이지</button>
+                                <button style={{textAlign:"center"}} onClick={()=>{}}>다음페이지</button>
                             </div>
                         </div>
                     </div>
