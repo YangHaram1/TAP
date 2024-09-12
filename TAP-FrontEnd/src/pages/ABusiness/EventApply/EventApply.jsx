@@ -888,31 +888,37 @@ export const EventApply = () => {
 
                             return (
                                 <ul key={index}>
-                                <li>
-                                    {schedule.schedule_day === '전체' ? '전체' : daysOfWeek[schedule.schedule_day]} - {schedule.schedule_time}
+                                <li> 
+                                    {schedule.schedule_day === "전체"
+                                                ? "전체"
+                                                : `${daysOfWeek[schedule.schedule_day]}요일`}{" "}
+                                            - {schedule.schedule_time}
                                     <br />
-                                    <input type="file" 
-                                    ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
-                                    onChange={handleCastingImageChange} />
-                                    <input
-                                    type="text"
-                                    placeholder="배우 이름"
-                                    ref={actorInputRef}
-                                    value={currentInputs.actorName}
-                                    onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
-                                    className={styles.shortInput}
-                                    />
-                                    <span className={styles.Gap}></span>
-                                    <input
-                                    type="text"
-                                    placeholder="역할"
-                                    ref={characInputRef}
-                                    value={currentInputs.role}
-                                    onChange={(e) => handleLocalRoleChange(scheduleKey, e.target.value)}
-                                    className={styles.shortInput}
-                                    />
-                                    <span className={styles.Gap}></span>
-                                    <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
+                                    {/*  */}
+                                    <div className={styles.file_upload_wrapper}>
+                                        <input id="file_upload_1" type="file" style={{display:"block"}}
+                                        ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
+                                        onChange={handleCastingImageChange} />
+                                        <input
+                                        type="text"
+                                        placeholder="배우 이름"
+                                        ref={actorInputRef}
+                                        value={currentInputs.actorName}
+                                        onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
+                                        className={styles.shortInput}
+                                        />
+                                        <span className={styles.Gap}></span>
+                                        <input
+                                        type="text"
+                                        placeholder="역할"
+                                        ref={characInputRef}
+                                        value={currentInputs.role}
+                                        onChange={(e) => handleLocalRoleChange(scheduleKey, e.target.value)}
+                                        className={styles.shortInput}
+                                        />
+                                        <span className={styles.Gap}></span>
+                                        <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
+                                    </div>
                                     <br />
                                     <ul>
                                     {castingData
@@ -1018,6 +1024,7 @@ export const EventApply = () => {
 
                         </td>
                     </tr>
+                    { category === "1" &&  
                     <tr>
                         <td>메인 포스터</td>
                         <td>
@@ -1044,6 +1051,7 @@ export const EventApply = () => {
                                
                         </td>
                     </tr>
+                    }
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.dto.BizApplyDTO;
@@ -57,6 +58,14 @@ public class BizApplyController {
 	public ResponseEntity<List<HashMap<String, Object>>> getAllSeats(){
 		return ResponseEntity.ok(bizServ.getAllSeats());
 	}
+	@GetMapping("/prices")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllPrices(){
+		return ResponseEntity.ok(bizServ.getAllPrices());
+	}
+	@GetMapping("/products")
+    public ResponseEntity<List<HashMap<String, Object>>> getProductByName(@RequestParam String name) {
+        return ResponseEntity.ok(bizServ.getProductByName(name));
+    }
 
 	// 상품 테이블에 insert POST
 	@PostMapping

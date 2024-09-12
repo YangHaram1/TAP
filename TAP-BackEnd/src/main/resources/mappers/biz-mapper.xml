@@ -29,6 +29,18 @@
 	<select id="getAllSeats" resultType="java.util.HashMap">
 		select * from seats join place on place.place_seq = seats.place_seq
 	</select>
+	<select id="getAllPrices" resultType="java.util.HashMap">
+	select apply.application_seq, apply.name, seats.*, place.* from apply
+	join seats on apply.place_seq = seats.place_seq
+	join place on place.place_seq = seats.place_seq
+	</select>
+	<select id="getProductByName" resultType="java.util.HashMap">
+	select apply.application_seq, apply.name, seats.*, place.* from apply
+	join seats on apply.place_seq = seats.place_seq
+	join place on place.place_seq = seats.place_seq
+	WHERE apply.application_seq LIKE '%' || #{name} || '%'
+   OR apply.name LIKE '%' || #{name} || '%'
+	</select>
 	
 	<select id="getAllProduct" resultType="java.util.HashMap">
 		select * from apply where status = 'approved'
