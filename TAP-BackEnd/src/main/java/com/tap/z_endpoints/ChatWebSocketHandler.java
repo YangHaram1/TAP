@@ -42,8 +42,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 	@Autowired
 	private MembersService mserv;
 
-	private UserDetails user;
-
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		clients.add(session);
@@ -52,7 +50,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 		if (authentication != null && authentication.isAuthenticated()) {
 			String userId = authentication.getName(); // 인증된 사용자 ID
 			System.out.println("웹소켓 연결 : user ID: " + userId);
-			user = mserv.loadUserByUsername(userId);
+			UserDetails user = mserv.loadUserByUsername(userId);
 		} else {
 			System.out.println("웹소켓 연결 실패 : User is not authenticated");
 		}
@@ -60,7 +58,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		String sender = user.getUsername();
+		Authentication authentication = ((SecurityContext) session.getAttributes().get("SPRING_SECURITY_CONTEXT"))
+				.getAuthentication();
+		String sender =authentication.getName();
 		System.out.println(sender);
 		List<GroupMemberDTO> list = new ArrayList<>();
 		String jsonString = message.getPayload();
@@ -106,11 +106,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 					ChatDTO dto = new ChatDTO(0, sender, messages, null, groupSeq, 0);
 					dto = chatService.insert(dto);
 					String json = gson.toJson(dto);
-					broadcastMessage(json, list);
+					broadcastMessage(json, list,sender);
+					
 					System.out.println("메세지보냄");
 
 				} else {
-					broadcastMessage(jsonString, list);
+					broadcastMessage(jsonString, list,sender);
 					System.out.println("파일업로드함");
 				}
 			}
@@ -155,11 +156,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 	}
 
-	private void broadcastMessage(String message, List<GroupMemberDTO> list) {// 그룹별 메세지 전송 로직
+	private void broadcastMessage(String message, List<GroupMemberDTO> list,String username) {// 그룹별 메세지 전송 로직
 		synchronized (clients) {
 			for (WebSocketSession client : clients) {
 				try {
-					String member_id = user.getUsername();
+					String member_id = username;
 					for (GroupMemberDTO dto : list) {
 						if (dto.getMember_id().equals(member_id)) {
 							client.sendMessage(new TextMessage(message));

@@ -63,4 +63,8 @@
 		 INSERT INTO files (files_seq, files_oriname, files_sysname, files_type, files_from, files_parent_seq)
         	VALUES (files_seq.nextval, #{files_oriname}, #{files_sysname}, 'poster','event', #{files_parent_seq})
 	</insert>
+	<insert id="createApplyDescription" parameterType="map">
+		 INSERT INTO description (description_seq, application_seq, description_content)
+        	VALUES (description_seq.nextval, #{application_seq}, #{detailed_description})
+	</insert>
 </mapper>

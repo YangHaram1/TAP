@@ -1,0 +1,21 @@
+.container{
+    position: absolute;
+    width: 100px; /* 사이드바의 너비 */
+    overflow: auto;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    gap: 5px; 
+    z-index: 9999;
+}
+.content{
+    font-size: 12px;
+    cursor: pointer;
+}
+.content:hover{
+    background-color: wheat;
+    color: red;
+}

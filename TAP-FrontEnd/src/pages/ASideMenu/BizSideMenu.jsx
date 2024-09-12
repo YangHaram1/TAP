@@ -11,7 +11,12 @@ export const BizSideMenu =()=>{
 
     const menus = [
         { name: "상품등록내역", link: "/", type: "productRegistration" , icon:FaBox},
-        { name: "상품신청내역", link: "/waitingapply", type: "productWaiting",icon:FaExclamationCircle },
+        { name: "상품신청내역", link: "/waitingapply", type: "productWaiting",icon:FaExclamationCircle,
+          submenus: [
+            { name: "상품등록신청내역", link: "/waitingapply/registration" },
+            { name: "상품세일신청내역", link: "/waitingapply/sale" }
+          ]
+         },
         { 
           name: "상품신청", link: "/application", type: "productApplication", icon:FaCartPlus,
           submenus: [
