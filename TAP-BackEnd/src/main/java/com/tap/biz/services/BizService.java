@@ -37,6 +37,9 @@ public class BizService {
 	public List<HashMap<String, Object>> getAllTeamLocation(){
 		return bizdao.getAllTeamLocation();
 	}
+	public List<HashMap<String, Object>> getAllSeats(){
+		return bizdao.getAllSeats();
+	}
 	public List<TestClobDTO> getContent(){
 		return bizdao.getContent();
 	}

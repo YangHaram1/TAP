@@ -14,7 +14,7 @@ export const EventApply = () => {
     const navi = useNavigate();
 
     const [category, setCategory] = useState()
-    const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
+    const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false);
    
     const [formData, setFormData] = useState({
         id: loginID, 
@@ -31,7 +31,8 @@ export const EventApply = () => {
         max_ticket: '', 
         away_team_seq: ''
     });
-
+    
+    const [seats, setSeats] = useState([]);
     const [selectedPlace, setSelectedPlace] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [categories, setCategories] = useState([]);
@@ -50,7 +51,6 @@ export const EventApply = () => {
     const [selectedExceptDay, setSelectedExceptDay] = useState("");
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
  
-    const [content2, setContent2] = useState('');
     const contentRef = useRef(null);
     useEffect(() => {
         api.get(`/biz/application/category`).then((resp) => {
@@ -89,6 +89,10 @@ export const EventApply = () => {
         }).catch(() => {
             alert("이상 오류");
         });
+        api.get(`/biz/application/seats`).then(resp=>{
+            setSeats(resp.data);
+            console.log(resp.data)
+        })
 
         // api.get(`/biz/application/description`).then((resp) => {
         //     setContent(resp.data[1].description_content);
@@ -785,12 +789,25 @@ export const EventApply = () => {
                                 </td>
                             </tr>
                         }
-                        <tr>
+                       <tr>
                             <td>좌석 등급 및 가격</td>
                             <td>
-                                {/* 장소 선택 시 자동 설정되게 */}
+                                {selectedPlace ? (
+                                    <ul>
+                                        {seats
+                                            .filter((seat) => seat.PLACE_SEQ.toString() === selectedPlace)
+                                            .map((seat, index) => (
+                                                <li key={index}>
+                                                    {seat.PLACE_SEAT_LEVEL} - {seat.PRICE_SEAT} 원
+                                                </li>
+                                            ))}
+                                    </ul>
+                                ) : (
+                                    '좌석 정보를 보려면 장소를 선택하세요.'
+                                )}
                             </td>
                         </tr>
+
                         <tr>
                             <td>일자</td>
                             <td>

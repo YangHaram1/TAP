@@ -14,15 +14,14 @@ export const AdminSideMenu =()=>{
         { 
           name: "상품관리", link: "/products", type: "productManage", icon:FaCartPlus,
           submenus: [
-            { name: "상품ㅎ관리", link: "/products/user" },
-            // { name: "기업회원관리", link: "/products/biz" }
+            { name: "상품ㅎ관리", link: "/products/product" },
+            { name: "상품신청관리", link: "/products/apply" }
           ]
         },
         { 
           name: "주문관리", link: "/orders", type: "orderManage", icon:FaCartPlus,
           submenus: [
             { name: "주문ㅎ관리", link: "/orders/user" },
-            { name: "주문회원관리", link: "/orders/biz" }
           ]
         },
         { 
@@ -58,7 +57,7 @@ export const AdminSideMenu =()=>{
     useEffect(() => {
         const path = location.pathname;
         let newSelectedMenu = '';
-        let newDropdownState = {  };
+        let newDropdownState = {};
     
         menus.forEach(menu => {
           if (path.startsWith(menu.link)) {

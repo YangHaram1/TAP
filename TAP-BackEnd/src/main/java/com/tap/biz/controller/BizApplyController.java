@@ -53,6 +53,10 @@ public class BizApplyController {
 	public ResponseEntity<List<TestClobDTO>> getContent(){
 		return ResponseEntity.ok(bizServ.getContent());
 	}
+	@GetMapping("/seats")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllSeats(){
+		return ResponseEntity.ok(bizServ.getAllSeats());
+	}
 
 	// 상품 테이블에 insert POST
 	@PostMapping
