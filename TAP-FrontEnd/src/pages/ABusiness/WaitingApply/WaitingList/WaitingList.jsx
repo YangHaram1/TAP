@@ -13,15 +13,15 @@ export const WaitingList=()=>{
   
     useEffect(()=>{
         // // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
-        // api.get(`/biz/registration/waiting/${loginID}`).then((resp)=>{
-        //     setEvents(resp.data); // 상품들 세팅하기
-        //     setFiltered(resp.data); // 검색될때 사용할 filtered 상태
-        //     console.log(resp.data);
-        // });
+        api.get(`/biz/registration/waiting`).then((resp)=>{
+            setEvents(resp.data); // 상품들 세팅하기
+            setFiltered(resp.data); // 검색될때 사용할 filtered 상태
+            console.log(resp.data);
+        });
 
         // // 신청대기중, 
 
-    },[])
+    },[loginID])
 
     // 신청 취소 버튼 함수
     const handleCancel = ()=>{
@@ -110,11 +110,11 @@ export const WaitingList=()=>{
                     </td>
                     <td>
                     {product.STATUS !== '반려' && (
-                        <button className={styles.manage_button} onClick={handleCancel}>신청 취소</button>
+                        <button className={styles.manage_button} onClick={handleCancel}>신청취소</button>
                     )}
                      {product.STATUS === '반려' && (
                         <div className={styles.rejectReason}>
-                         <span className={styles.tooltipIcon}><FaLightbulb size={20} /> </span>
+                         <span className={styles.tooltipIcon}>사유<FaLightbulb size={20} /> </span>
                          <div className={styles.tooltipText}>{product.REJECTION_REASON} 반려 이유: </div>
                        </div>
                     )}

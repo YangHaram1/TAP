@@ -288,6 +288,7 @@ export const EventApply = () => {
             setIsDisabled(false);
         }
     }, [scheduleList]);
+
     useEffect(() => {
         console.log("Updated formData:", formData);
     }, [formData, totalSchedule, scheduleExceptList]);
@@ -520,8 +521,8 @@ export const EventApply = () => {
     };
   //////////////////////////////////////////
 
-  const editorRef = useRef();
-  const [noticeContent, setNoticeContent] = useState('');
+    const editorRef = useRef();
+    const [noticeContent, setNoticeContent] = useState('');
 
     const handleContentChange = (newContent) => {
         // <p><br></p> 또는 <br>과 같은 불필요한 태그를 제거
@@ -550,36 +551,11 @@ export const EventApply = () => {
             );
         });
     };
-//  멀티 url 파일 업로드 할때 ==============================================
-//     const [files, setFiles] = useState([]);
-//     const [fileUrls, setFileUrls] = useState([]);
-// // 파일 선택 처리
-// const handleFileChange = (event) => {
-//     const selectedFiles = Array.from(event.target.files);
-//     setFiles(selectedFiles);
-// };
-//  // 파일 업로드 및 URL 반환
-//  const uploadFiles = async () => {
-//     if(!files){return false;}
-//     const urls = [];
-//     for (const file of files) {
-//         const evnetFilesData = new FormData();
-//         evnetFilesData.append('file', file);
 
-//         try {
-//             const response = await api.post(`/file/${subCategoryName}`, evnetFilesData);
-//             urls.push({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 시 반환된 URL 저장
-//             console.log("성공")
-//         } catch (error) {
-//             console.error("파일 업로드 오류:", error);
-//         }
-//     }
-//     setFileUrls(urls);
-// };
     
     // 상세 description 에디터 ====================
     const handleEditorContentChange = (newContent) => {
-        setFormData(prev => ({ ...prev, detailedDescription: newContent }));
+        setFormData(prev => ({ ...prev, description_content: newContent }));
     };
 
     // 메인 포스터 업로드 =====================================================
@@ -708,6 +684,7 @@ export const EventApply = () => {
     return (
         <div className={styles.container}>
             <div className={styles.imgContent}>
+                {/* 에디터 내용 가져오는 건데(2차플젝에서) */}
             {/* <div className={styles.viewCont} ref={contentRef}></div> */}
             </div>
             <div className={styles.header}>

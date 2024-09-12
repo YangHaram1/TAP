@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import styles from './WaitingApply.module.css';
-import { CompletedApply } from './CompletedApply/CompletedApply';
-import { WaitingList } from './WaitingList/WaitingList';
+import styles from './WaitingSaleApply.module.css';
+import { CompletedSaleApply } from './CompletedSaleApply/CompletedSaleApply';
+import { WaitingSaleList } from './WaitingSaleList/WaitingSaleList';
 
-export const WaitingApply=()=>{
+export const WaitingSaleApply =()=>{
     const [tap, setTap] = useState(0);
     const [currentData, setCurrentData] = useState([]);
     const [futureData, setFutureData] =useState([]);
@@ -13,7 +13,7 @@ export const WaitingApply=()=>{
     return(
     <div className={styles.container}>
         <div className={styles.product_table}>
-        <h2>상품 신청 내역 </h2>
+        <h2>상품 세일 신청 내역 </h2>
         <div className={styles.btns}>
             <button onClick={()=>{setTap(0)}}
                 className={tap === 0 ? styles.active : ''}
@@ -25,11 +25,11 @@ export const WaitingApply=()=>{
         <div className={styles.divider}></div>
         <div className={styles.detail_page}>
             {
-                tap === 1 ? <CompletedApply/> :
-                <WaitingList/>
+                tap === 1 ? <CompletedSaleApply/> :
+                <WaitingSaleList/>
             }
         </div>
         </div>
     </div>
-  );
+    );
 }

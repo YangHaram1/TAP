@@ -1,16 +1,21 @@
 package com.tap.biz.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.services.BizManageService;
+import com.tap.members.service.MembersService;
 
 @RestController
 @RequestMapping("/biz/registration")
@@ -19,36 +24,86 @@ public class BizManageController {
 	@Autowired
 	private BizManageService bizManServ;
 	
+	@Autowired
+	private MembersService mserv;
+	// 판매중 상품 
+	@GetMapping("/current")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllCurrentApproved(Principal principal){
+		if (principal == null) {
+			System.out.println("principal");
+			return null;
+
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		
+		
+		System.out.println("id는 : "+ user.getUsername());
+		return ResponseEntity.ok(bizManServ.getAllCurrentApproved(user.getUsername()));
+	}
+	// 판매 예정 상품
+	@GetMapping("/future")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllFutureApproved(Principal principal){
+		if (principal == null) {
+			System.out.println("principal");
+			return null;
+
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		
+		
+		System.out.println("id는 : "+ user.getUsername());
+		return ResponseEntity.ok(bizManServ.getAllFutureApproved(user.getUsername()));
+	}
+	// 판매 종료 상품
+		@GetMapping("/past")
+		public ResponseEntity<List<HashMap<String, Object>>> getAllPastApproved(Principal principal){
+			if (principal == null) {
+				System.out.println("principal");
+				return null;
+
+			}
+			String username = principal.getName();
+			UserDetails user = mserv.loadUserByUsername(username);
+			
+			
+			System.out.println("id는 : "+ user.getUsername());
+			return ResponseEntity.ok(bizManServ.getAllPastApproved(user.getUsername()));
+		}
+	
+	
 	// apply & 세부카테고리 & 장소 & files 4개 조인하기 
-	@GetMapping("/waiting/{loginID}")
-	public ResponseEntity<List<HashMap<String, Object>>> getAllWaiting(@PathVariable String loginID){
-		System.out.println("id는 : "+ loginID);
-		return ResponseEntity.ok(bizManServ.getAllWaiting(loginID));
+	@GetMapping("/waiting")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllWaiting(Principal principal){
+		if (principal == null) {
+			System.out.println("principal");
+			return null;
+
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		
+		System.out.println("id는 : "+ user.getUsername());
+		return ResponseEntity.ok(bizManServ.getAllWaiting(user.getUsername()));
 	}
 	
-	@GetMapping("/recent/{loginID}")
-	public ResponseEntity<List<HashMap<String, Object>>> getAllRecentApproved(@PathVariable String loginID){
-		System.out.println("id는 : "+ loginID);
-		return ResponseEntity.ok(bizManServ.getAllRecentApproved(loginID));
+	@GetMapping("/recent")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllRecentApproved(Principal principal){
+		if (principal == null) {
+			System.out.println("principal");
+			return null;
+
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		String id = user.getUsername();
+		
+		System.out.println("id는 : "+ user.getUsername());
+		return ResponseEntity.ok(bizManServ.getAllRecentApproved(user.getUsername()));
 	}
-	// 판매중 상품 
-	@GetMapping("/current/${loginID}")
-	public ResponseEntity<List<HashMap<String, Object>>> getAllCurrentApproved(@PathVariable String loginID){
-		System.out.println("id는 : "+ loginID);
-		return ResponseEntity.ok(bizManServ.getAllCurrentApproved(loginID));
-	}
+	
 //	// 
-////	@GetMapping("/categoryname")
-////	public ResponseEntity<List<HashMap<String, Object>>> getAllCategory(){
-////		return ResponseEntity.ok(bizManServ.getAllCategory());
-////	}
-////	@GetMapping("/place")
-////	public ResponseEntity<List<HashMap<String, Object>>> getAllPlace(){
-////		return ResponseEntity.ok(bizManServ.getAllPlace());
-////	}
-//	@GetMapping("/poster")
-//	public ResponseEntity<List<HashMap<String, Object>>> getAllPoster(){
-//		return ResponseEntity.ok(bizManServ.getAllPoster());
-//	}
+
 	
 }

@@ -55,7 +55,7 @@
 	CAST(apply.end_date AS TIMESTAMP) AS end_date,
 	CAST(apply.start_date AS TIMESTAMP) AS start_date,
 	CAST(apply.open_date AS TIMESTAMP) AS open_date,
-	CAST(apply.updated_at AS TIMESTAMP) AS updated_date,
+	CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
 	sub_category.*, 
 	files.*,
 	PLACE.*
@@ -65,7 +65,45 @@
 	join files on apply.application_seq = files.files_parent_seq
 	where apply.status = '승인' and files.files_type='poster'
 	and apply.id = #{id}
-	and apply.updated_at BETWEEN (CURRENT_DATE - INTERVAL '1' MONTH) AND CURRENT_DATE
+	and CURRENT_DATE BETWEEN apply.start_date and apply.end_date
+	order by apply.created_at desc
+</select>
+<select id="getAllFutureApproved" resultMap="TimestampResultMap">
+	select apply.* , 
+	CAST(apply.created_at AS TIMESTAMP) AS created_at,
+	CAST(apply.end_date AS TIMESTAMP) AS end_date,
+	CAST(apply.start_date AS TIMESTAMP) AS start_date,
+	CAST(apply.open_date AS TIMESTAMP) AS open_date,
+	CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
+	sub_category.*, 
+	files.*,
+	PLACE.*
+	from apply
+	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
+	join place on apply.place_seq = place.place_seq
+	join files on apply.application_seq = files.files_parent_seq
+	where apply.status = '승인' and files.files_type='poster'
+	and apply.id = #{id}
+	and apply.start_date <![CDATA[>]]> CURRENT_DATE
+	order by apply.created_at desc
+</select>
+<select id="getAllPastApproved" resultMap="TimestampResultMap">
+	select apply.* , 
+	CAST(apply.created_at AS TIMESTAMP) AS created_at,
+	CAST(apply.end_date AS TIMESTAMP) AS end_date,
+	CAST(apply.start_date AS TIMESTAMP) AS start_date,
+	CAST(apply.open_date AS TIMESTAMP) AS open_date,
+	CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
+	sub_category.*, 
+	files.*,
+	PLACE.*
+	from apply
+	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
+	join place on apply.place_seq = place.place_seq
+	join files on apply.application_seq = files.files_parent_seq
+	where apply.status = '승인' and files.files_type='poster'
+	and apply.id = #{id}
+	and apply.end_date <![CDATA[<]]> CURRENT_DATE
 	order by apply.created_at desc
 </select>
 <select id="getAllPoster" resultType="java.util.HashMap">

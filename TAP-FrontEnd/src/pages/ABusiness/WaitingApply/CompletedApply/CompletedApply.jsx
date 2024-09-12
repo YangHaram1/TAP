@@ -11,11 +11,11 @@ export const CompletedApply =()=>{
   
     useEffect(()=>{
         // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
-        // api.get(`/biz/registration/recent/${loginID}`).then((resp)=>{
-        //     setEvents(resp.data); // 상품들 세팅하기
-        //     setFiltered(resp.data); // 검색될때 사용할 filtered 상태
-        //     console.log(resp.data);
-        // });
+        api.get(`/biz/registration/recent`).then((resp)=>{
+            setEvents(resp.data); // 상품들 세팅하기
+            setFiltered(resp.data); // 검색될때 사용할 filtered 상태
+            console.log(resp.data);
+        });
 
     },[])
 

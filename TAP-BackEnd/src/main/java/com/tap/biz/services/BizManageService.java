@@ -14,6 +14,16 @@ public class BizManageService {
 	@Autowired
 	private BizManageDAO bizMandao;
 	
+	public List<HashMap<String, Object>> getAllCurrentApproved(String id){
+		return bizMandao.getAllCurrentApproved(id);
+	}
+	public List<HashMap<String, Object>> getAllFutureApproved(String id){
+		return bizMandao.getAllFutureApproved(id);
+	}
+	public List<HashMap<String, Object>> getAllPastApproved(String id){
+		return bizMandao.getAllPastApproved(id);
+	}
+	
 	public List<HashMap<String, Object>> getAllWaiting(String id){
 		return bizMandao.getAllWaiting(id);
 	}
@@ -21,9 +31,7 @@ public class BizManageService {
 		return bizMandao.getAllRecentApproved(id);
 	}
 	
-	public List<HashMap<String, Object>> getAllCurrentApproved(String id){
-		return bizMandao.getAllCurrentApproved(id);
-	}
+
 	public List<HashMap<String,Object>> getAllPoster(){
 		return bizMandao.getAllPoster();
 	}

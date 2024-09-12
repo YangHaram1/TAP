@@ -97,14 +97,10 @@ public class BizApplyController {
 		System.out.println("메인포스터 : "+ main_poster.getFiles_oriname());
 		System.out.println("메인포스터 : "+ main_poster.getFiles_sysname());
 		bizServ.createApplyFiles(main_poster, applicationSeq);
-		// File에 상세이미지들 삽입. ================================
-//		List<FilesDTO> f_list = formData.getFilesUrls();
-//		for(int i=0; i<f_list.size(); i++) {
-//			FilesDTO f_dto = f_list.get(i);
-////			f_dto.setApplication_seq(applicationSeq);
-////			bizServ.createApplyDescription(f_dto, applicationSeq);
-//		}
-		
+		// String : detailedDescription에 상세이미지 content 가져오기.. ================================
+		String detailed = formData.getDescription_content();
+		System.out.println("상세 내용 : "+ detailed);
+		bizServ.createApplyDescription(detailed, applicationSeq);
 
 	//////////////////////////////////////////////////	
 
