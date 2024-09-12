@@ -5,8 +5,7 @@ public class DeliveryDTO {
 	private String member_id;
 	private String address;
 	private String detailed_address;
-	private int zipcode;
-	
+	private String zipcode;
 	public Long getSeq() {
 		return seq;
 	}
@@ -31,13 +30,13 @@ public class DeliveryDTO {
 	public void setDetailed_address(String detailed_address) {
 		this.detailed_address = detailed_address;
 	}
-	public int getZipcode() {
+	public String getZipcode() {
 		return zipcode;
 	}
-	public void setZipcode(int zipcode) {
+	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
-	public DeliveryDTO(Long seq, String member_id, String address, String detailed_address, int zipcode) {
+	public DeliveryDTO(Long seq, String member_id, String address, String detailed_address, String zipcode) {
 		super();
 		this.seq = seq;
 		this.member_id = member_id;
@@ -49,5 +48,6 @@ public class DeliveryDTO {
 		super();
 	}
 	
+	 
 	
 }

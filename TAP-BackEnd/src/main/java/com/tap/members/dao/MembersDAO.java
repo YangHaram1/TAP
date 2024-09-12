@@ -39,6 +39,12 @@ public class MembersDAO {
 		return mybatis.insert("Members.signUp",dto);
 	}
 	
+	//	회원가입 등록
+	public int signUpBiz(MembersDTO dto) throws Exception{
+		return mybatis.insert("Members.signUpBiz",dto);
+	}
+	
+	
 	// 회원가입 아이디 중복 검사
 	public int checkId(String id) throws Exception{
 		return mybatis.selectOne("Members.checkId",id);
