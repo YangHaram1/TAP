@@ -65,7 +65,7 @@ export const BizMem=()=>{
                     }}
                     className={styles.searchInput}
                 />
-                <button onClick={handleNameSearch}>
+                <button className={styles.button} onClick={handleNameSearch}>
                     돋보기
                     {/* <FaSearch className={styles.searchLogo} /> */}
                 </button>
