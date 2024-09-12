@@ -41,19 +41,14 @@
 
 .header_middle{
     flex:7.5;
-    padding: 5px;
-    height: 100px;
+    height: 100%;
     text-indent: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .header_middle p{
     margin: 0px;
-}
-
-.header_middle_select{
-    display: flex;
-    margin-top: 5px;
-    font-size: 13px;
 }
 
 .header_end{
@@ -71,36 +66,23 @@
     cursor: pointer;
 }
 
+/* ========= MAIN CSS ============== */
 
 .main{
     display: flex;
     height: 92%;
 }
 
+/* ========= MAIN Left CSS ========================== */
+
 .main_left{
     flex:6.75;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
-.row{
-    display: flex;
-    height: 30px;
-}
-
-.row p{
-    margin: 0px;
-    width: 42px;
-    text-align: center;
-}
-
-.seat_btn{
-    background-color: rgba(0,0,0,0);
-    width: 30px;
-}
+/* ========= MAIN ringt CSS ========================== */
 
 .main_right{
     flex:3.25;
@@ -108,6 +90,7 @@
     border-left: 1px solid black;
 }
 
+/* ========= 오른쪽 헤더 CSS ============== */
 .main_right_header{
     width: 100%;
     height: 45px;
@@ -119,153 +102,63 @@
     font-size: 17px;
 }
 
-.main_right_section{
-    border-bottom: 1px solid black;
-    height: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* ========= 오른쪽 상품 상세정보 CSS ============== */
 
-.main_right_section_img{
-    width: 90%;
-    height: 90%;
+.main_right_detail{
+    margin: 8px;
     /* border: 1px solid black; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.section_btns{
-    min-height: 35px;
-    height: 120px;
-    max-height: 120px;
-    border: 1px solid black;
-    width: 70%;
-    /* display: flex;
-    justify-content: center; */
-}
-
-.section_btns:hover{
-    cursor: pointer;
-    background-color: gray;
-}
-
-.seats_level{
     height: 25%;
-    /* border: 1px solid black; */
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
-.seats_level_text{
-    width: 90%;
-    height: 30px;
-    font-weight: 700;
+.right_detail_img{
+    flex:4.25;
 }
 
-.seats_level_box{
-    border: 1px solid black;
-    border-radius: 10px;
-    width: 90%;
-    height:75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* margin-left: 20px; */
+.right_detail_content{
+    flex:5.75;
 }
 
-.level_box_data{
+.right_detail_img img{
+    width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
 }
 
-
-.seats_level_color{
-    height: 20px;
-    width: 20px;
-    border: 1px solid black;
-    margin-right: 10px;
+.right_detail_content p{
+    margin: 0px;
     margin-left: 10px;
+    margin-top: 7px;
 }
 
-.level_box_data{
-    display: flex;
+/* ========= 오른쪽 선택좌석 CSS ============== */
+
+.main_right_selectSeat{
+    margin-top: 30px;
+    margin-left: 10px;
+    font-size: 13px;
+    /* text-indent: 10px; */
+}
+
+.main_right_selectSeat h3{
+    margin: 0px;
+    font-size: large;
+    margin-bottom: 10px;
+}
+
+.main_right_selectSeat table{
+    border: 1px solid lightgray;
+    border-collapse: collapse;
     width: 95%;
+    text-indent: 5px;
+}
+
+.main_right_selectSeat td{
+    border: 1px solid lightgray;
+    height: 40px;
 }
 
 
-.seat_selected{
-    height: 29%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.seat_selected_title{
-    width: 95%;
-    height: 15%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.seat_selected_main{
-    height: 74%;
-    width: 90%;
-    border: 1px solid black;
-    text-indent: 10px;
-}
-
-.seat_selected_header{
-    height: 30px;
-    width: 100%;
-    display: flex;
-    border-bottom: 1px solid gray;
-    overflow: auto;
-    scrollbar-gutter: stable;
-}
-
-.seat_selected_header_text1, .seat_selected_content_text1{
-    width: 30%;
-    background-color: lightgray;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    border-right: 1px solid gray;
-}
-
-.seat_selected_header_text2, .seat_selected_content_text2{
-    width: 70%;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    /* border-bottom: 1px solid gray; */
-}
-
-.seat_selected_content{
-    height: 80%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-    /* border: 1px solid black; */
-}
-
-.seat_selected_content_box{
-    display: flex;
-}
-
-.seat_number{
-    background-color: gray;
-}
+/* ========= 오른쪽 버튼 CSS ============== */
 
 .next_page{
     height: 10%;
@@ -276,13 +169,41 @@
 .next_page button{
     height: 55%;
     width: 99%;
-    border: 0px;
-    background-color: blueviolet;
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 600;
+    margin-bottom: 5px;
 }
+
+.prev_btn{
+    background-color: white; 
+    color:blueviolet; 
+    border: 1px solid blueviolet;
+    text-align: center;
+}
+.prev_btn:hover{
+    cursor: pointer;
+    background-color: rgb(178, 173, 182); 
+    color:blueviolet; 
+    border: 1px solid blueviolet;
+    text-align: center;
+}
+
+.next_btn{
+    background-color: blueviolet;
+    color: white;
+    border: 1px solid blueviolet;
+    text-align: center;
+}
+
+.next_btn:hover{
+    cursor: pointer;
+    background-color: rgb(114, 64, 160);
+    color: white;
+    border: 1px solid blueviolet;
+    text-align: center;
+}
+
