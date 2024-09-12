@@ -85,7 +85,7 @@ export const UserMem = () => {
                         }}
                         className={styles.searchInput}
                     />
-                    <button onClick={handleNameSearch}>
+                    <button className={styles.button}  onClick={handleNameSearch}>
                         돋보기
                     </button>
                 </div>
