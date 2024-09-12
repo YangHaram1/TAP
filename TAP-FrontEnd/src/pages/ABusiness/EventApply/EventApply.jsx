@@ -132,7 +132,9 @@ export const EventApply = () => {
         setFilteredGenres(filteredGenres);
     };
 
-
+    // 조건부 렌더링을 위해 카테고리 및 서브 카테고리 선택 여부 확인
+    const isCategorySelected = formData.category !== '';
+    const isSubCategorySelected = formData.sub_category_seq !== '';
 
    
     //=======================================================
@@ -520,9 +522,17 @@ export const EventApply = () => {
 
   const editorRef = useRef();
   const [noticeContent, setNoticeContent] = useState('');
-  const handleContentChange = (newContent) => {
-    setNoticeContent(newContent);
-  }
+
+    const handleContentChange = (newContent) => {
+        // <p><br></p> 또는 <br>과 같은 불필요한 태그를 제거
+        const sanitizedContent = newContent
+            .replace(/<p>(&nbsp;|\s|<br>|<\/?p>)*<\/p>/g, '')  // <p><br></p>와 비슷한 패턴 제거
+            .replace(/<br>/g, '')  // <br> 태그 제거
+            .trim();  // 공백 제거
+
+        // 실제 내용이 없는 경우 빈 문자열로 설정
+        setNoticeContent(sanitizedContent ? newContent : '');
+    };
 
 
 
@@ -566,6 +576,11 @@ export const EventApply = () => {
 //     }
 //     setFileUrls(urls);
 // };
+    
+    // 상세 description 에디터 ====================
+    const handleEditorContentChange = (newContent) => {
+        setFormData(prev => ({ ...prev, detailedDescription: newContent }));
+    };
 
     // 메인 포스터 업로드 =====================================================
     const [mainPoster, setMainPoster] = useState([]);
@@ -654,8 +669,9 @@ export const EventApply = () => {
                 alert("시작시간 설정해라");
                 return false;
             }
+            if(!mainPoster){alert("메인 포스터를 업로드하세요"); return false;}
             if(!noticeContent){ alert("공지안내를 작성하세요." ); return false;}
-            if(subCategory == "1" && !castingData ){ alert("캐스팅 작성하세요." ); return false;}
+            if(subCategory == "1" && castingData.length === 0 ){ alert("캐스팅 작성하세요." ); return false;}
     
             return true;
         };
@@ -663,11 +679,6 @@ export const EventApply = () => {
         // 유효성 검사 통과 시에만 서버로 요청
         if (validateForm()) {
             try {
-            
-               // 파일 멀티 업로드 할때  
-                // await uploadFiles();
-               
-               
                 // 제외일을 기준으로 totalSchedule을 필터링
                 const filteredTotalSchedule = totalSchedule.filter(
                     (schedule) => !scheduleExceptList.some((except) => schedule.schedule_day.trim() === except.day.trim())
@@ -677,10 +688,14 @@ export const EventApply = () => {
                     ...formData,
                     totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
                     noticeContent: noticeContent,
-                    castingData: castingData,
+                    // castingData: castingData,
                     main_poster: mainPoster, 
                     // fileUrls: description
                 };
+                // 서브 카테고리가 뮤지컬(1)인 경우에만 캐스팅 데이터를 포함
+                if (subCategory === "1") {
+                    updatedFormData.castingData = castingData;
+                }
     
                 await api.post(`/biz/application`, updatedFormData);
                 alert('신청이 완료되었습니다!');
@@ -724,10 +739,19 @@ export const EventApply = () => {
                                 </select>
                             </td>
                         </tr>
+                        </tbody>
+                        </table>
+                        </div>
+                 {/* 장르, 상품명, 관람등급 등 나머지 입력 폼 */}
+                 <div className={styles.tableWrapper2}>
+                        <table className={styles.table}>
+                            <tbody>
                         <tr>
                             <td>장르</td>
                             <td>
-                                <select name="genre_seq" value={formData.genre_seq} onChange={handleChange}>
+                                <select name="genre_seq" value={formData.genre_seq} 
+                                  disabled={!isCategorySelected || !isSubCategorySelected} 
+                                onChange={handleChange}>
                                     <option value="">선택</option>
                                     {getGenres()}
                                 </select>
@@ -736,15 +760,19 @@ export const EventApply = () => {
                         <tr>
                             <td>상품명</td>
                             <td>
-                                <input type="text" placeholder="상품명 입력" name="name" value={formData.name} onChange={handleChange}></input>
+                                <input type="text" placeholder="상품명 입력" name="name" 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                value={formData.name} onChange={handleChange}></input>
                             </td>
                         </tr>
                         <tr>
                             <td>관람등급</td>
                             <td>
-                                <select name="age_limit" value={formData.age_limit} onChange={handleChange}>
+                                <select name="age_limit" value={formData.age_limit} 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                onChange={handleChange}>
                                     <option value="">선택</option>
-                                    <option value="ALL">ALL</option>
+                                    <option value="전체 연령">전체 연령</option>
                                     <option value="8세">8세</option>
                                     <option value="12세">12세</option>
                                     <option value="18세">18세</option>
@@ -754,7 +782,9 @@ export const EventApply = () => {
                         <tr>
                             <td>장소</td>
                             <td>
-                                <select onChange={handleSelectPlace}>
+                                <select onChange={handleSelectPlace}
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                >
                                     <option value="">선택</option>
                                     {getLocationOptions()}
                                 </select>
@@ -771,7 +801,9 @@ export const EventApply = () => {
                                     <span className={styles.Gap}></span>
                                     VS
                                     <span className={styles.Gap}></span>
-                                    <select name="away_team_seq" value={formData.away_team_seq} onChange={handleChange}>
+                                    <select name="away_team_seq" value={formData.away_team_seq} 
+                                    disabled={!isCategorySelected || !isSubCategorySelected}
+                                    onChange={handleChange}>
                                         <option value="">원정팀 선택</option>
                                         {getAwayTeams()}
                                     </select>
@@ -787,15 +819,21 @@ export const EventApply = () => {
                         <tr>
                             <td>일자</td>
                             <td>
-                                시작일: <input type="date" name="start_date" value={formData.start_date} onChange={handleChange} className={styles.shortInput}></input>
+                                시작일: <input type="date" name="start_date" value={formData.start_date} 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                onChange={handleChange} className={styles.shortInput}></input>
                                 <span className={styles.Gap}></span>
-                                종료일: <input type="date" name="end_date" value={formData.end_date} onChange={handleChange} className={styles.shortInput}></input>
+                                종료일: <input type="date" name="end_date" value={formData.end_date} 
+                                 disabled={!isCategorySelected || !isSubCategorySelected}
+                                 onChange={handleChange} className={styles.shortInput}></input>
                             </td>
                         </tr>
                         <tr>
                             <td>시작시간( 스케쥴 테이블에 )</td>
                             <td>
+                                <div  className={styles.timeAdd}>
                                 <select className={styles.shortInput} value={selectedDay} 
+                                //  disabled={!isCategorySelected || !isSubCategorySelected}
                                 onChange={(e) => setSelectedDay(e.target.value)}
                                 // disabled={isDisabled && selectedDay !== "전체"} 
                                 disabled={isDisabled}
@@ -810,31 +848,39 @@ export const EventApply = () => {
                                     ))}
                                 </select>
                                 <span className={styles.Gap}></span>
-                                시간: <input type="time" step="300" required className={styles.shortInput} value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}></input>
+                                시간: 
+                                <input type="time" step="300" required className={styles.shortInput} 
+                                value={selectedTime} 
+                                disabled={!formData.start_date || !formData.end_date}
+                                onChange={(e) => setSelectedTime(e.target.value)}></input>
                                 <span className={styles.Gap}></span>
-                                <button onClick={handleAddSchedule}>추가</button>
-                                <br></br>
+                                <button onClick={handleAddSchedule} className={styles.btnInput}>추가</button>
+                                </div>
                                 <ul>
                                     {scheduleList.map((schedule, index) => (
                                         <li key={index}>
+                                            <div className={styles.timeAdd}>
                                             {schedule.schedule_day === "전체"
                                                 ? "전체"
-                                                : daysOfWeek[schedule.schedule_day]}{" "}
+                                                : `${daysOfWeek[schedule.schedule_day]}요일`}{" "}
                                             - {schedule.schedule_time}
-                                            <button onClick={() => handleRemoveSchedule(index)}>x</button>
+                                            <button onClick={() => handleRemoveSchedule(index)}  className={styles.btnInput}>x</button>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
-                                <br></br>
+                                <div  className={styles.timeAdd}>
                                 제외일: <input type="date" value={selectedExceptDay} onChange={handleExceptDateChange}></input>
                                 <span className={styles.Gap}></span>
-                                <button onClick={handleAddException}>추가</button>
-                                <br></br>
+                                <button onClick={handleAddException}  className={styles.btnInput}>추가</button>
+                                </div>
                                 <ul>
                                     {scheduleExceptList.map((schedule, index) => (
                                         <li key={index} style={{ color: "red" }}>
+                                            <div className={styles.timeAdd}>
                                             {schedule.day}
-                                            <button onClick={() => handleRemoveException(index)}>x</button>
+                                            <button onClick={() => handleRemoveException(index)}  className={styles.btnInput}>x</button>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
@@ -844,7 +890,6 @@ export const EventApply = () => {
                             <tr>
                                 <td>캐스팅 이미지</td>
                                 <td>
-                                   
                                     {scheduleList.map((schedule, index) => {
                             const scheduleKey = `${schedule.schedule_day}_${schedule.schedule_time}`;
                             const currentInputs = castingInputs[scheduleKey] || { actorName: '', role: '' };
@@ -875,7 +920,7 @@ export const EventApply = () => {
                                     className={styles.shortInput}
                                     />
                                     <span className={styles.Gap}></span>
-                                    <button onClick={() => handleAddLocalCasting(schedule)}>추가버튼</button>
+                                    <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
                                     <br />
                                     <ul>
                                     {castingData
@@ -900,6 +945,7 @@ export const EventApply = () => {
                                             onClick={() =>
                                                 handleRemoveCasting(schedule.schedule_day, schedule.schedule_time, castingIndex)
                                             }
+                                            className={styles.btnInput}
                                             >
                                             x
                                             </button>
@@ -974,7 +1020,6 @@ export const EventApply = () => {
                         <td>공지사항 </td>
                         <td>
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
-                            {/* <WebEditor  editorRef={editorRef}handleContentChange={handleContentChange} height="300px" defaultContent=""/> */}
                             <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
                         </td>
                         <td>
@@ -984,31 +1029,48 @@ export const EventApply = () => {
                     <tr>
                         <td>메인 포스터</td>
                         <td>
-                            <input
-                                type="file"
-                                placeholder="메인포스터 하나만"
-                                onChange={handleMainPosterChange}
+                        <p style={{ color: "red", fontSize: "13px" }}>
+                            * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
+                        </p>
+                        <div className={styles.file_upload_wrapper}>
+                            <label for="file_upload" className={styles.custom_file_upload}>
+                                파일 선택
+                            </label>
+                            {mainPoster.files_sysname ? (
+                                <img
+                                    src={mainPoster.files_sysname}
+                                    alt="Casting"
+                                    style={{ width: '80px',marginLeft: '80px' }}
                                 />
-                                <p style={{ color: "red", fontSize: "13px" }}>
-                                * 파일이 업로드되기까지 일정 시간이 소요됩니다. 업로드 후 해당 파일이 첨부 파일 리스트에 추가되었는지 꼭 체크해 주시기 바랍니다.
-                                </p>
-                                {mainPoster.files_sysname ? <img src={mainPoster.files_sysname} alt="Casting" style={{ width: '50px', height: '50px' }} /> : null}
+                            ) : null}
+                        </div>
+                        <input id="file_upload"
+                        type="file"
+                        placeholder="메인포스터 하나만"
+                        onChange={handleMainPosterChange}
+                        />
+                               
                         </td>
                     </tr>
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
-                            <MyEditorOnlyAdmin height="500px" editorRef={editorRef} subCategoryName={subCategoryName} />
+                            <MyEditorOnlyAdmin height="500px" editorRef={editorRef} 
+                            subCategoryName={subCategoryName} 
+                            onContentChange={handleEditorContentChange}
+                            />
                         </td>
                     </tr>
                    
                 </tbody>
             </table>
-
-            <button onClick={handleSubmit}>신청</button>
+        
+                             
+            <div className={styles.btnEnding}>
+            <button onClick={handleSubmit} className={styles.btnEnd}>신청</button>
          
-            <button onClick={handleCancel}>취소</button>
-
+            <button onClick={handleCancel} className={styles.btnEnd}>취소</button>
+            </div>
         </div>
     );
 };

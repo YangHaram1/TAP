@@ -43,7 +43,7 @@
 	    max_ticket, away_team_seq)
 	    VALUES (#{application_seq}, #{id}, #{name}, #{place_seq}, #{sub_category_seq}, #{genre_seq},
 	    #{age_limit}, #{start_date}, #{end_date}, #{running_time}, #{running_intertime}, 
-	    #{open_date}, 'pending', sysdate, null, #{max_ticket}, #{away_team_seq})
+	    #{open_date}, '승인 대기', sysdate, null, #{max_ticket}, #{away_team_seq})
 	</insert>
 	<insert id="createApplySchedule" parameterType="com.tap.biz.dto.TotalScheduleDTO">
 		insert into schedule (schedule_seq, application_seq, schedule_day, schedule_time)

@@ -29,7 +29,7 @@ export const Pagination = ({ pageCount, onPageChange, currentPage }) => {
     // <<< 페이지네이션 적용할 컴포넌트에 설정할 코드들 >>>
     // << pages -> ABusiness -> BizManage -> CurrentEvent.jsx 참고. >
     //   //==========================================================================
-    // const [currentPage, setCurrentPage] = useState(0);
+    // const [currentPage, setCurrentPage] = useState(0);  // !! useState(0) 으로 해야함~~
     // // Pagingation
     // const PER_PAGE = 10; // 한 페이지에 보여줄 목록 수 
     // const pageCount = Math.ceil(filtered.length / PER_PAGE); // (총 갯수 / PER_PAGE) = 페이지 몇 개 나올지 계산  

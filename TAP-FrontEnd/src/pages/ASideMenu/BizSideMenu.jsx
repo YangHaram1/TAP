@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './BizSideMenu.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FaBox, FaCartPlus } from 'react-icons/fa';
+import { FaBox, FaCartPlus, FaExclamationCircle, FaSpinner } from 'react-icons/fa';
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
 
 export const BizSideMenu =()=>{
@@ -10,14 +10,15 @@ export const BizSideMenu =()=>{
     const [selectedMenu, setSelectedMenu] = useState('');
 
     const menus = [
-        { name: "상품등록내역", link: "/", type: "productRegistration" },
+        { name: "상품등록내역", link: "/", type: "productRegistration" , icon:FaBox},
+        { name: "상품신청내역", link: "/waitingapply", type: "productWaiting",icon:FaExclamationCircle },
         { 
-          name: "상품신청", link: "/application", type: "productApplication", 
+          name: "상품신청", link: "/application", type: "productApplication", icon:FaCartPlus,
           submenus: [
             { name: "상품등록신청", link: "/application/registration" },
             { name: "상품세일신청", link: "/application/sale" }
           ]
-        }
+        },
     ];
     
     const [dropdown, setDropdown] = useState(() => {
@@ -76,7 +77,8 @@ export const BizSideMenu =()=>{
                   onClick={() => menu.submenus ? toggleDropdown(menu.type) : handleMenuClick(menu.link, menu.type)}
                 >
                   <div className={styles.icon}>
-                    {menu.type === 'productRegistration' ? <FaBox size={20} /> : <FaCartPlus size={20} />}
+                  {React.createElement(menu.icon, { size: 20 })} {/* 아이콘 동적 생성 */}
+                    {/* {menu.type === 'productRegistration' ? <FaBox size={20} /> : <FaCartPlus size={20} />} */}
                   </div>
                   <span className={styles.menuTitle}>{menu.name}</span>
                   {menu.submenus && (
