@@ -36,7 +36,7 @@
 	CAST(apply.end_date AS TIMESTAMP) AS end_date,
 	CAST(apply.start_date AS TIMESTAMP) AS start_date,
 	CAST(apply.open_date AS TIMESTAMP) AS open_date,
-	CAST(apply.updated_at AS TIMESTAMP) AS updated_date,
+	CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
 	sub_category.*, 
 	files.*,
 	PLACE.*

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './BizSideMenu.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaBox, FaCartPlus } from 'react-icons/fa';
@@ -10,22 +10,36 @@ export const AdminSideMenu =()=>{
     const [selectedMenu, setSelectedMenu] = useState('');
 
     const menus = [
-        { name: "대시보드", link: "/", type: "dashboard" },
+        { name: "대시보드", link: "/", type: "dashboard"  , icon:FaBox},
         { 
-          name: "회원관리", link: "/members", type: "memberManage", 
+          name: "상품관리", link: "/products", type: "productManage", icon:FaCartPlus,
+          submenus: [
+            { name: "상품ㅎ관리", link: "/products/user" },
+            // { name: "기업회원관리", link: "/products/biz" }
+          ]
+        },
+        { 
+          name: "주문관리", link: "/orders", type: "orderManage", icon:FaCartPlus,
+          submenus: [
+            { name: "주문ㅎ관리", link: "/orders/user" },
+            { name: "주문회원관리", link: "/orders/biz" }
+          ]
+        },
+        { 
+          name: "고객관리", link: "/members", type: "memberManage", icon:FaCartPlus,
           submenus: [
             { name: "일반회원관리", link: "/members/user" },
             { name: "기업회원관리", link: "/members/biz" }
           ]
         },
         {
-           name: "관리자 1:1 상담", link: "/chat", type: "chatManage"
+           name: "관리자 1:1 상담", link: "/chat", type: "chatManage", icon:FaCartPlus,
         }
     ];
     
     const [dropdown, setDropdown] = useState(() => {
         const savedState = localStorage.getItem('dropdownState');
-        return savedState ? JSON.parse(savedState) : { memberManage: false };
+        return savedState ? JSON.parse(savedState) : { };
     });
 
     const handleMenuClick = (link, type) => {
@@ -44,7 +58,7 @@ export const AdminSideMenu =()=>{
     useEffect(() => {
         const path = location.pathname;
         let newSelectedMenu = '';
-        let newDropdownState = { memberManage: false };
+        let newDropdownState = {  };
     
         menus.forEach(menu => {
           if (path.startsWith(menu.link)) {
@@ -79,7 +93,8 @@ export const AdminSideMenu =()=>{
                   onClick={() => menu.submenus ? toggleDropdown(menu.type) : handleMenuClick(menu.link, menu.type)}
                 >
                   <div className={styles.icon}>
-                    {menu.type === 'dashboard' ? <FaBox size={20} /> : <FaCartPlus size={20} />}
+                  {React.createElement(menu.icon, { size: 20 })} {/* 아이콘 동적 생성 */}
+                    {/* {menu.type === 'dashboard' ? <FaBox size={20} /> : <FaCartPlus size={20} />} */}
                   </div>
                   <span className={styles.menuTitle}>{menu.name}</span>
                   {menu.submenus && (
