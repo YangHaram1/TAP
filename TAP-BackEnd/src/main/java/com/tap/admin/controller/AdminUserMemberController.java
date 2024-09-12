@@ -30,6 +30,7 @@ public class AdminUserMemberController {
     public List<MembersDTO> searchUserMem(
             @RequestParam String keyword,
             @RequestParam(required = false) Integer gradeSeq) {
+    	
         return aumServ.searchUserMem(keyword, gradeSeq);
     }
 

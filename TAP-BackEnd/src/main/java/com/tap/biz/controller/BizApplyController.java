@@ -56,8 +56,7 @@ public class BizApplyController {
 
 	// 상품 테이블에 insert POST
 	@PostMapping
-	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData
-			){
+	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData){
 		String id = formData.getId();
 		Timestamp start_date = formData.getStart_date();
 		int running_time = formData.getRunning_time();
@@ -79,12 +78,15 @@ public class BizApplyController {
 		}
 		
 		// Casting 테이블에 삽입 ==========================================
-		List<CastingDataDTO> c_list = formData.getCastingData();
-		for(int i=0; i<c_list.size(); i++) {
-			CastingDataDTO c_dto = c_list.get(i);
-			c_dto.setApplication_seq(applicationSeq);
-			bizServ.createApplyCasting(c_dto);
+		if(formData.getCastingData() != null ) {
+			List<CastingDataDTO> c_list = formData.getCastingData();
+			for(int i=0; i<c_list.size(); i++) {
+				CastingDataDTO c_dto = c_list.get(i);
+				c_dto.setApplication_seq(applicationSeq);
+				bizServ.createApplyCasting(c_dto);
+			}
 		}
+	
 		
 		// Event_popup 테이블에 삽입 ===================================
 		String content = formData.getNoticeContent();
@@ -95,14 +97,10 @@ public class BizApplyController {
 		System.out.println("메인포스터 : "+ main_poster.getFiles_oriname());
 		System.out.println("메인포스터 : "+ main_poster.getFiles_sysname());
 		bizServ.createApplyFiles(main_poster, applicationSeq);
-		// File에 상세이미지들 삽입. ================================
-//		List<FilesDTO> f_list = formData.getFilesUrls();
-//		for(int i=0; i<f_list.size(); i++) {
-//			FilesDTO f_dto = f_list.get(i);
-////			f_dto.setApplication_seq(applicationSeq);
-////			bizServ.createApplyDescription(f_dto, applicationSeq);
-//		}
-		
+		// String : detailedDescription에 상세이미지 content 가져오기.. ================================
+		String detailed = formData.getDescription_content();
+		System.out.println("상세 내용 : "+ detailed);
+		bizServ.createApplyDescription(detailed, applicationSeq);
 
 	//////////////////////////////////////////////////	
 
