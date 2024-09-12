@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Company">
+	<!-- 회원가입 등록 -->
+	<insert id="signUp">
+		insert into company values(#{member_id},#{address},#{detailed_address},#{name},#{phone},#{registration_number},#{zipcode},sysdate)
+	</insert>
+	
+</mapper>

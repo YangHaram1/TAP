@@ -13,6 +13,8 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '../../config/config'
 import { useAuthStore } from '../../store/store'
 import { jwtDecode } from 'jwt-decode'
+import FindId from './FindId/FindId'
+import FindPw from './FindPw/FindPw'
 
 const Login = () => {
     const navi = useNavigate()
@@ -41,6 +43,7 @@ const Login = () => {
         })
     }
     const [showEye, setShowEye] = useState(false)
+    const [page, setPage] = useState('login')
 
     const handleToggleEye = () => {
         setShowEye(prevShowEye => !prevShowEye)
@@ -92,7 +95,7 @@ const Login = () => {
                     localStorage.removeItem('loginId')
                 }
                 setAuth(decoded)
-                navi(-1)
+                navi('/')
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
@@ -105,6 +108,16 @@ const Login = () => {
         if (pwRef.current && !pwRef.current.contains(e.target)) {
             setPwDiv(true)
         }
+    }
+
+    const handlePageChange = newPage => {
+        setPage(newPage)
+    }
+    if (page === 'findId') {
+        return <FindId></FindId>
+    }
+    if (page === 'findPw') {
+        return <FindPw></FindPw>
     }
 
     return (
@@ -185,6 +198,14 @@ const Login = () => {
                             onChange={handleCheck}
                         />
                         <span className={styles.saveId}>아이디 저장</span>
+                    </div>
+                    <div>
+                        <button onClick={() => handlePageChange('findId')}>
+                            아이디 찾기
+                        </button>
+                        <button onClick={() => handlePageChange('findPw')}>
+                            비밀번호 찾기
+                        </button>
                     </div>
                 </div>
                 <div>

@@ -1,15 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Notice.module.css'
-import { url } from '../../../../../config/config';
+import { api, url } from '../../../../../config/config';
 
 export const Notice = ()=> {
 
     const [boxSize, setBoxSize] = useState(true);
+    const [detail, setDetail] = useState({});
 
     const handleSize = ()=>{
         console.log(boxSize);
         setBoxSize(!boxSize);
     }
+    
+    // 내용 출력 테스트
+    // const seq = 1038;
+
+    // useEffect(()=>{
+    //     api.get(`/description/${seq}`)
+    //     .then((resp)=>{
+    //         console.log(resp.data);
+    //         setDetail(resp.data);
+    //     })
+    //     .catch((err)=>{
+    //         console.log(err);
+    //     })
+    // },[])
+
 
     return (
         <div className={styles.container}>
@@ -85,6 +101,8 @@ export const Notice = ()=> {
             <div className={styles.notice}>
                 <h2> 공지사항 </h2>
                 <img src={`${url}/musical/a52ee2d8-7191-435a-acb6-8d9e23e28c0d`}></img>
+
+                {/* <div dangerouslySetInnerHTML={{ __html: detail.description_content }} /> */}
 
                 {/* <h2> 상세내용 </h2>
                 <img src={`${url}/musical/a52ee2d8-7191-435a-acb6-8d9e23e28c0d`}></img> */}

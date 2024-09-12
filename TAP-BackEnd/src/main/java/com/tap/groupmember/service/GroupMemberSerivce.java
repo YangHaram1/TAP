@@ -1,6 +1,5 @@
 package com.tap.groupmember.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.stereotype.Service;
 import com.tap.groupmember.dao.GroupMemberDAO;
 import com.tap.groupmember.dto.GroupMemberDTO;
 import com.tap.members.dao.MembersDAO;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class GroupMemberSerivce {
@@ -32,4 +29,18 @@ public class GroupMemberSerivce {
 	public int checkById(String member_id) throws Exception{
 		return dao.checkById(member_id);
 	}
+
+	public void updateCheck(int group_seq,String member_id,int last_chat_seq) throws Exception{
+		dao.updateCheck(group_seq,member_id,last_chat_seq);
+	}
+	
+	public void updateAlarm(int group_seq,String member_id) throws Exception{
+		dao.updateAlarm(group_seq,member_id);
+	}
+	
+	public void updateBookmark(int group_seq,String member_id) throws Exception{
+		dao.updateBookmark(group_seq,member_id);
+	}
+
+
 }

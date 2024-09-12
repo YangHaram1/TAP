@@ -1,15 +1,31 @@
 .ql-toolbar {
-    border-bottom: 1px solid #be2f2f; /* 툴바의 테두리 색상 변경 */
-    background-color: #f1f1f1; /* 배경 색상 추가 */
-  }
-  
-  /* 에디터 컨테이너 스타일링 */
-  /* 에디터 컨테이너의 높이 설정 */
-  /* .ql-container {
+  border-bottom: 1px solid #be2f2f;
+  /* 툴바의 테두리 색상 변경 */
+  background-color: #f1f1f1;
+  /* 배경 색상 추가 */
+}
+
+
+/* 에디터 컨테이너 스타일링 */
+/* 에디터 컨테이너의 높이 설정 */
+/* .ql-container {
     min-height: 300px; 
   } */
-  
-  /* 에디터 내용 영역의 최소 높이 설정 */
-  /* .ql-editor {
+
+/* 에디터 내용 영역의 최소 높이 설정 */
+/* .ql-editor {
     min-height: 250px; 
   } */
+
+.Toastify__toast {
+  padding: 0 !important;
+}
+
+.Toastify__toast-icon {
+  flex: 1 !important;
+}
+
+.Toastify__toast-body div:nth-child(2) {
+  flex: 3 !important;
+  padding: 0 !important;
+}
