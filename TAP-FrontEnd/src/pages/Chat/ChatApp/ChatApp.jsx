@@ -139,12 +139,13 @@ const ChatApp = () => {
                 if (item.upload_seq !== 0) {
                     const split = item.message.split('*');
                     fileCheck = true;
-                    if (split[2] === '2') {
-                        file = `<p style="color: blue; cursor: pointer;">${split[0]}</p>`;
-                    }
-                    else if (split[2] === '1') {
-                        file = `<p style='color: blue; cursor: pointer;'><img src='${host}/images/chat/${split[1]}' alt=downloadImage></img></p>`;
-                    }
+                    // if (split[2] === '2') {
+                      
+                    // }
+                    // else if (split[2] === '1') {
+                    //     file = `<p style='color: blue; cursor: pointer;'><img src='${host}/images/chat/${split[1]}' alt="downloadImage" class="${styles.img}"></img></p>`;
+                    // }
+                    file = `<p style="color: blue; cursor: pointer;">${split[0]}</p>`;
                 }
                 //--------------------------------------------------// 여긴 시스템 로직 처리
                 let systemCheck = false;
@@ -205,7 +206,7 @@ const ChatApp = () => {
                 }
             </div>
             <div className={styles.editor}>
-               <MyEditor editorRef={editorRef} height={'30px'} />
+            <MyEditor editorRef={editorRef} height={120} />
             </div>
         </div>
     )

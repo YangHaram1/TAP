@@ -63,24 +63,35 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 		String sender = user.getUsername();
 		System.out.println(sender);
 		List<GroupMemberDTO> list = new ArrayList<>();
-		boolean jsonValidate = validateJson(message.getPayload());
+		String jsonString = message.getPayload();
+		boolean jsonValidate = validateJson(jsonString);
 		int groupSeq = 0;
-		String messages=null;
+		int uploadSeq=0;
+		String messages = null;
+		
 		if (jsonValidate) {
-			Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
-			String jsonString = message.getPayload();
+			Type mapType = new TypeToken<Map<String, Object>>() {
+			}.getType();
+			
 			Map<String, Object> map = gson.fromJson(jsonString, mapType);
+
+			Object checkUploadSeq = map.get("upload_seq");
 			
-			Object chatSeq=map.get("chatSeq");
-		    // Double인 경우 Integer로 변환
-		    if (chatSeq instanceof Double) {
-		        groupSeq = ((Double) chatSeq).intValue();
-		    } else if (chatSeq instanceof Integer) {
-		        groupSeq = (Integer) chatSeq;       
-		    }
-			messages=(String)map.get("message");
-			list=memberService.membersByGroupSeq(groupSeq);
-			
+			// Double인 경우 Integer로 변환
+			if (checkUploadSeq instanceof Double) {
+				uploadSeq = ((Double) checkUploadSeq).intValue();
+			} else if (checkUploadSeq instanceof Integer) {
+				uploadSeq = (Integer) checkUploadSeq;
+			}
+			Object chatSeq = map.get("group_seq");
+			// Double인 경우 Integer로 변환
+			if (chatSeq instanceof Double) {
+				groupSeq = ((Double) chatSeq).intValue();
+			} else if (chatSeq instanceof Integer) {
+				groupSeq = (Integer) chatSeq;
+			}
+			list = memberService.membersByGroupSeq(groupSeq);
+
 			boolean listCheck = false;
 			for (GroupMemberDTO dto : list) { // 만약 방나갓는데 채팅 보낼라고하면 막기
 				if (dto.getMember_id().equals(sender)) {
@@ -90,24 +101,21 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 			}
 			
 			if (listCheck) {
-				ChatDTO dto = new ChatDTO(0, sender, messages, null, groupSeq, 0);
-				dto = chatService.insert(dto);
-				// ChatImgDTO sendDTO =chatService.selectOne(dto.getSeq());
-				String json = gson.toJson(dto);
-				broadcastMessage(json, list);
-//				System.out.println(list.get(1).getMember_id());
-				System.out.println("메세지보냄");
-			}
-		}
-		
-		
+				if (uploadSeq == 0) {
+					messages = (String) map.get("message");
+					ChatDTO dto = new ChatDTO(0, sender, messages, null, groupSeq, 0);
+					dto = chatService.insert(dto);
+					String json = gson.toJson(dto);
+					broadcastMessage(json, list);
+					System.out.println("메세지보냄");
 
-		
-		
-	
-		
-		
-		
+				} else {
+					broadcastMessage(jsonString, list);
+					System.out.println("파일업로드함");
+				}
+			}
+
+		}
 
 //		if (message.getPayload().equals("chatController")) {
 //			broadcastMessage("chatController", list);

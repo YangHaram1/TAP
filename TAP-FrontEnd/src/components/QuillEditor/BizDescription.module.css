@@ -1,0 +1,16 @@
+.qlContainer {
+    height: 700px; /* 원하는 높이로 조정 */
+  }
+  
+  /* 에디터 내용 영역의 최소 높이 설정 */
+  .qlEditor {
+    height: 650px; /* 원하는 높이로 조정 */
+  }
+
+  .ql-container{
+    height:4500px;
+  }
+  .ql-toolbar {
+    border-bottom: 1px solid #be2f2f; /* 툴바의 테두리 색상 변경 */
+  }
+  

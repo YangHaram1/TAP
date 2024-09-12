@@ -50,4 +50,17 @@
 		values
 		(schedule_seq.nextval, #{application_seq}, TO_DATE(#{schedule_day}, 'YYYY-MM-DD'), TO_DATE(#{schedule_time}, 'HH24:MI:SS'))
 	</insert>
+	<insert id="createApplyCasting" parameterType="com.tap.biz.dto.CastingDataDTO">
+		insert into casting (casting_seq, application_seq, casting_name, casting_role, schedule_day, schedule_time, file_oriname, file_sysname)
+		values
+		(casting_seq.nextval, #{application_seq}, #{casting_name},#{casting_role},#{schedule_day}, TO_DATE(#{schedule_time}, 'HH24:MI:SS'), #{file_oriname}, #{file_sysname})
+	</insert>
+	<insert id="createApplyNotice" parameterType="map">
+		 INSERT INTO event_popup 
+        	VALUES (event_popup_seq.nextval, #{application_seq}, #{event_popup_content})
+	</insert>
+	<insert id="createApplyFilesMain" parameterType="map">
+		 INSERT INTO files (files_seq, files_oriname, files_sysname, files_type, files_from, files_parent_seq)
+        	VALUES (files_seq.nextval, #{files_oriname}, #{files_sysname}, 'poster','event', #{files_parent_seq})
+	</insert>
 </mapper>
