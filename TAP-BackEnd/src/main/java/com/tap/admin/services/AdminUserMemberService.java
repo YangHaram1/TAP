@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tap.admin.dao.AdminUserMemberDAO;
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersGradeDTO;
 
 @Service
 public class AdminUserMemberService {
@@ -17,9 +18,7 @@ public class AdminUserMemberService {
         return aumDao.selectMember();
     }
 
-    public List<MembersDTO> searchUserMem(String keyword) {
-        MembersDTO dto = new MembersDTO();
-        dto.setName(keyword);
-        return aumDao.searchUserMem(keyword);
+    public List<MembersDTO> searchUserMem(String keyword, Integer gradeSeq) {
+        return aumDao.searchUserMems(keyword, gradeSeq);
     }
 }
