@@ -10,9 +10,18 @@
 		select m.name as name,g.name as grade ,m.join_date,m.enabled  from members m left join grade g on m.grade_seq = g.seq
 	</select> 
 <select id="searchUserMem" resultMap="memberResultMap">
-SELECT m.name AS name, g.name AS grade, m.join_date, m.enabled
-FROM members m
-LEFT JOIN grade g ON m.grade_seq = g.seq
-WHERE m.name LIKE '%' || #{name} || '%'
+    SELECT m.name AS name, g.name AS grade, m.join_date, m.enabled
+    FROM members m
+    LEFT JOIN grade g ON m.grade_seq = g.seq
+    WHERE 1=1
+    <if test="keyword != null and keyword != ''">
+        AND m.name LIKE '%' || #{keyword} || '%'
+    </if>
+    <if test="gradeSeq != null">
+        AND m.grade_seq = #{gradeSeq}
+    </if>
+</select>
+<select id="getGrade" resultType="com.tap.grade.dto.GradeDTO">
+    select * from grade
 </select>
 </mapper>

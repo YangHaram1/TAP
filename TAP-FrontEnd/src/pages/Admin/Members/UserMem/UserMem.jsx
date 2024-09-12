@@ -1,42 +1,66 @@
-import { api } from "../../../../config/config";
+import React, { useState, useEffect } from 'react';
 import styles from './UserMem.module.css';
-import { useState, useEffect } from "react";
+import { api } from "../../../../config/config";
+import Grade from "./Grade/Grade";
 
 export const UserMem = () => {
-    const [UserMem, setUserMems] = useState([]);
-    const [filteredUserMem, setFilteredUserMems] = useState([]);
+    const [userMems, setUserMems] = useState([]);
+    const [filteredUserMems, setFilteredUserMems] = useState([]);
     const [keyword, setKeyword] = useState('');
+    const [grades, setGrades] = useState([]);
+    const [selectedGrade, setSelectedGrade] = useState('');
 
     useEffect(() => {
         fetchUserMems();
+        fetchGrades();
     }, []);
 
-    // 데이터 로딩 함수
     const fetchUserMems = async () => {
         try {
             const resp = await api.get(`/admin/usermem/selectAll`);
-            console.log(resp.data);
             setUserMems(resp.data);
-            setFilteredUserMems(resp.data); // 초기 데이터로 필터링된 데이터 설정
+            setFilteredUserMems(resp.data);
         } catch (error) {
             console.error(error);
         }
     };
 
-    // 검색 처리 함수
+    const fetchGrades = async () => {
+        try {
+            const resp = await api.get(`/admin/usermem/grades`);
+            setGrades(resp.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleNameSearch = async () => {
         try {
-            const resp = await api.get(`/admin/usermem/search`, {
-                params: { keyword }
-            });
-            console.log(resp.data);
-            setFilteredUserMems(resp.data); // 검색 결과로 필터링된 데이터 설정
+            const params = {
+                keyword : keyword,
+                gradeSeq: selectedGrade || null // null로 변경하여 gradeSeq가 없을 때를 처리
+            };
+            const resp = await api.get(`/admin/usermem/search`, { params });
+            setFilteredUserMems(resp.data);
         } catch (error) {
             console.error(error);
         }
     };
 
-    // 날짜 포맷팅 함수
+    const handleGradeChange = (e) => {
+        const newGrade = e.target.value;
+        setSelectedGrade(newGrade);
+        filterUserMemsByGrade(newGrade); // 선택된 등급으로 필터링
+    };
+
+    const filterUserMemsByGrade = (grade) => {
+        const gradeName = grades.find(g => g.seq === parseInt(grade))?.name;
+        const filtered = userMems.filter(mem =>
+            gradeName ? mem.GRADE === gradeName : true
+        );
+        setFilteredUserMems(filtered);
+    };
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
@@ -52,9 +76,8 @@ export const UserMem = () => {
                     <input
                         type="text"
                         placeholder="회원 이름으로 검색"
-                        name="userName"
                         value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)} // 상태 업데이트
+                        onChange={(e) => setKeyword(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 handleNameSearch();
@@ -62,10 +85,16 @@ export const UserMem = () => {
                         }}
                         className={styles.searchInput}
                     />
-                    <button onClick={handleNameSearch}>
+                    <button className={styles.button}  onClick={handleNameSearch}>
                         돋보기
                     </button>
                 </div>
+
+                <Grade 
+                    grades={grades}
+                    selectedGrade={selectedGrade}
+                    onGradeChange={handleGradeChange}
+                />
 
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
@@ -78,14 +107,20 @@ export const UserMem = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredUserMem.map((mem, i) => (
-                                <tr key={i}>
-                                    <td>{mem.NAME}</td>
-                                    <td>{mem.GRADE}</td>
-                                    <td>{formatDate(mem.JOIN_DATE)}</td>
-                                    <td>{mem.ENABLED === 1 ? '일반회원' : '블랙리스트'}</td>
+                            {filteredUserMems.length > 0 ? (
+                                filteredUserMems.map((mem, i) => (
+                                    <tr key={i}>
+                                        <td>{mem.NAME}</td>
+                                        <td>{mem.GRADE}</td>
+                                        <td>{formatDate(mem.JOIN_DATE)}</td>
+                                        <td>{mem.ENABLED === 1 ? '일반회원' : '블랙리스트'}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4">결과가 없습니다.</td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
