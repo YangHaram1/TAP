@@ -58,6 +58,10 @@ public class BizService {
 	public void createApplyFiles(FilesDTO main_poster, int applicationSeq) {
 		bizdao.createApplyFilesMain(main_poster, applicationSeq);
 	}
+	public void createApplyDescription(String detailed, int applicationSeq) {
+		bizdao.createApplyDescription(detailed, applicationSeq);
+	}
+	
 	
 	
 }

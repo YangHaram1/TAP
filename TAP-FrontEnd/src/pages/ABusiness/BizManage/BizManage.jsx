@@ -17,9 +17,15 @@ export const BizManage=()=>{
         <div className={styles.product_table}>
         <h2>상품관리 </h2>
         <div className={styles.btns}>
-            <button onClick={()=>{setTap(0)}}>판매중</button>
-            <button onClick={()=>{setTap(1)}}>판매예정</button>
-            <button onClick={()=>{setTap(2)}}>판매종료</button>
+            <button onClick={()=>{setTap(0)}}
+                className={tap === 0 ? styles.active : ''}
+                >판매중</button>
+            <button onClick={()=>{setTap(1)}}
+                className={tap === 1 ? styles.active : ''}
+                >판매예정</button>
+            <button onClick={()=>{setTap(2)}}
+                className={tap === 2 ? styles.active : ''}
+                >판매종료</button>
         </div>
         <div className={styles.divider}></div>
         <div className={styles.detail_page}>

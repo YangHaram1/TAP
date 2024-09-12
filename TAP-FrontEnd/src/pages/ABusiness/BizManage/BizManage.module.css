@@ -34,6 +34,9 @@
     font-weight: 600;
     background-color: transparent; 
 }
+.btns button.active{
+    border-bottom: solid purple;
+}
 
 /* 구분선 스타일 추가 */
 .divider {
