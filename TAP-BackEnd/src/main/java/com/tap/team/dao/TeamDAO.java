@@ -1,20 +1,22 @@
-package com.tap.files.dao;
+package com.tap.team.dao;
+
+import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.tap.files.dto.FilesDTO;
+import com.tap.team.dto.TeamDTO;
 
 @Repository
-public class FilesDAO {
-
+public class TeamDAO {
+	
+	
 	@Autowired
 	private SqlSession mybatis;
 	
-	public int insertBizz(FilesDTO fdto) {
-		return mybatis.insert("Files.insert",fdto);
-		
+	public List<TeamDTO> selectTeam(){
+		return mybatis.selectList("Team.selectTeam");
 	}
 
 }

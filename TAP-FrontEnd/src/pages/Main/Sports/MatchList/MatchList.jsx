@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 사용
 import styles from './MatchList.module.css';
-
+import { api } from '../../../../config/config';
 // 야구 경기 데이터
 const baseballMatchData = [
   {
@@ -66,6 +67,7 @@ const baseballMatchData = [
   },
 
 ];
+
 
 // 축구 경기 데이터
 const soccerMatchData = [
@@ -147,7 +149,7 @@ export const MatchList = () => {
   const [isBaseballTeamSelectOpen, setIsBaseballTeamSelectOpen] = useState(false); // 야구 구단 선택 슬라이드 상태
   const [isSoccerTeamSelectOpen, setIsSoccerTeamSelectOpen] = useState(false); // 축구 구단 선택 슬라이드 상태
   const navigate = useNavigate(); // useNavigate 훅 사용
-
+  const [teams, setTeams] = useState([]); // 서버에서 가져온 팀 정보
   // 각 팀에 해당하는 경기 일정
   const teamMatches = {
     '두산 베어스': [
@@ -203,7 +205,16 @@ export const MatchList = () => {
       state: { teamName, teamLogo, homeGround, matches },
     });
   };
-
+  
+  useEffect(() => {
+    api.get('/team')
+      .then((response) => {
+        setTeams(response.data); // 구단 정보 상태에 저장
+      })
+      .catch((error) => {
+        console.error('Error fetching team data:', error);
+      });
+  }, []);
   return (
     <div className={styles.container}>
       {/* 야구 섹션 */}
@@ -266,7 +277,7 @@ export const MatchList = () => {
           </div>
         </div>
       </div>
-
+    
       {/* 축구 섹션 */}
       <div className={styles.soccerSection}>
         <div className={styles.sportsTitleFootball}>

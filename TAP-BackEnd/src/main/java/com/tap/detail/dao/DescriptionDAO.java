@@ -1,20 +1,19 @@
-package com.tap.files.dao;
+package com.tap.detail.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.tap.files.dto.FilesDTO;
+import com.tap.detail.dto.DescriptionDTO;
 
 @Repository
-public class FilesDAO {
-
+public class DescriptionDAO {
+	
 	@Autowired
 	private SqlSession mybatis;
 	
-	public int insertBizz(FilesDTO fdto) {
-		return mybatis.insert("Files.insert",fdto);
-		
+	public DescriptionDTO getContent(int seq) {
+		return mybatis.selectOne("Description.getOne",seq);
 	}
 
 }
