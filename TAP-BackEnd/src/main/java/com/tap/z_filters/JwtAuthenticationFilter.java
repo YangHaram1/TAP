@@ -33,10 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 	    String tokenWebsocket = httpRequest.getParameter("token");
-	    System.out.println(tokenWebsocket);
+	    
 	    String token=null;
 	    if(tokenWebsocket!=null) {
 	    	token=tokenWebsocket;
+	    	System.out.println("웹소켓 api요청");
 	    }
 	    else {
 	    	token=jwt.extractToken(request);

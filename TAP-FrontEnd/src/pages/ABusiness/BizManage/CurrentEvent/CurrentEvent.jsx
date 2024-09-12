@@ -4,13 +4,13 @@ import { api } from '../../../../config/config';
 import {Pagination} from '../../../../components/Pagination/Pagination';
 
 export const CurrentEvent=()=>{
-    
     const [events, setEvents] = useState([]);
     const [filtered, setFiltered] = useState(events);
 
+
     useEffect(()=>{
         // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
-        api.get(`/biz/registration`).then((resp)=>{
+        api.get(`/biz/registration/current`).then((resp)=>{
             setEvents(resp.data); // 상품들 세팅하기
             setFiltered(resp.data); // 검색될때 사용할 filtered 상태
             console.log(resp.data);

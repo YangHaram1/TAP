@@ -67,4 +67,11 @@ public class BizDAO {
 		params.put("files_parent_seq", applicationSeq);
 		mybatis.insert("Biz.createApplyFilesMain", params);
 	}
+	public void createApplyDescription(String detailed, int applicationSeq) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("detailed_description", detailed);
+		params.put("application_seq", applicationSeq);
+		mybatis.insert("Biz.createApplyDescription", params);
+	}
+	
 }

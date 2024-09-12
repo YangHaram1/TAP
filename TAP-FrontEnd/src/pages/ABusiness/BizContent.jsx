@@ -4,13 +4,15 @@ import { EventApply } from './EventApply/EventApply';
 import { BizManage } from './BizManage/BizManage';
 import { SaleApply } from './SaleApply/SaleApply';
 import { WaitingApply } from './WaitingApply/WaitingApply';
+import { WaitingSaleApply } from './WaitingSaleApply/WaitingSaleApply';
 
 export const BizContent=()=>{
     return(
         <div className={styles.container}>
             <Routes>
                 <Route path="/*" element={<BizManage/>}/>
-                <Route path="/waitingapply/*" element={<WaitingApply/>}/>
+                <Route path="/waitingapply/registration/*" element={<WaitingApply/>}/>
+                <Route path="/waitingapply/sale/*" element={<WaitingSaleApply/>}/>
                 <Route path="/application/registration/*" element={<EventApply/>}/>
                 <Route path="/application/sale/*" element={<SaleApply/>}/>
             </Routes>
