@@ -4,17 +4,32 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Chat">
 	<insert id="insert">
-		insert into chat values(chat_seq.nextval,#{member_id},#{message},sysdate,${group_seq},${upload_seq})
+		insert into chat
+		values(chat_seq.nextval,#{member_id},#{message},sysdate,${group_seq},${upload_seq})
 		<selectKey resultType="int" order="AFTER" keyProperty="seq">
 			select chat_seq.currval from dual
 		</selectKey>
 	</insert>
-	
+
 	<select id="writeDateBySeq" resultType="java.sql.Timestamp">
-		select write_date from chat where seq=#{seq}
+		select write_date from
+		chat where seq=#{seq}
+	</select>
+
+	<select id="selectByGroupSeq"
+		resultType="com.tap.chat.dto.ChatDTO">
+		select * from chat where group_seq=#{group_seq} order by
+		seq
+	</select>
+
+	<select id="getLastDto" resultType="com.tap.chat.dto.ChatDTO">
+		select *from chat where
+		seq=(select max(seq) from chat where group_seq = ${group_seq})
+	</select>
+
+	<select id="unread" resultType="int">
+		select count(seq) from chat where
+		group_seq=${group_seq} and seq between ${last_chat_seq} and ${seq}
 	</select>
 	
-	<select id="selectByGroupSeq" resultType="com.tap.chat.dto.ChatDTO">
-		select * from chat where group_seq=#{group_seq} order by seq
-	</select>
 </mapper>

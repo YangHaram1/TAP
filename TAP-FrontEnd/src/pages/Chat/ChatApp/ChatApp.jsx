@@ -8,18 +8,20 @@ import SweetAlert from '../../../components/SweetAlert/SweetAlert';
 import { host, api } from './../../../config/config';
 import avatar from '../../../images/ai.png'
 import MyEditor from '../MyEditor/MyEditor';
+import logo from '../../../images/logo192.png'
+import 'react-toastify/dist/ReactToastify.css'
 const ChatApp = () => {
 
     let lastDate = null // 이거 날짜 체크할떄 
 
     const editorRef = useRef(null);
-    const chatRef=useRef(null);
+    const chatRef = useRef(null);
     const [chats, setChats] = useState([]);
     const [list, setList] = useState();
 
-    const { isAuth, loginID } = useAuthStore();
+    const { isAuth, loginID,role } = useAuthStore();
     const { ws, setChatNavi, chatNavi, dragRef, chatAppRef } = useContext(ChatsContext);
-    const { chatController, chatSeq, onMessage, setChatSeq, setChatController, } = useCheckList();
+    const { chatSeq, onMessage, setChatSeq, setChatController, } = useCheckList();
 
 
     // WebSocket 연결을 설정하는 useEffect
@@ -27,31 +29,34 @@ const ChatApp = () => {
         if (isAuth && ws.current != null) {
             console.log("chatapp")
             ws.current.onmessage = (e) => {
-                if (e.data === 'chatController') {
-                    setChatController();
+                let chat = JSON.parse(e.data);
+                const { chatSeq } = useCheckList.getState();
+                //메세지 온거에 맞게 group_seq 사용해서 멤버 list받기 이건 chatSeq 없이 채팅 꺼저있을떄를 위해서 해놈
+                if (chatSeq !==chat.group_seq ) {
+                    api.get(`/groupmember?groupSeq=${chat.group_seq}`).then((resp) => {
+                        console.log(resp.data)
+                        if (chat.member_id !== loginID) {
+                            resp.data.forEach((temp) => { //알림보내기 로직
+                                if (temp.member_id === loginID) {
+                                    if (temp.alarm === 'N') notify(chat);
+                                }
+                            })
+                        }
+                    })
+                    
                 }
-                else {
-                    let chat = JSON.parse(e.data);
-                    const { chatSeq } = useCheckList.getState();
-                    //메세지 온거에 맞게 group_seq 사용해서 멤버 list받기 이건 chatSeq 없이 채팅 꺼저있을떄를 위해서 해놈
-                    if (chatSeq === 0) {
-                        api.get(`/group_member?group_seq=${chat.group_seq}`).then((resp) => {
-                            if (chat.member_id !== loginID) {
-                                resp.data.forEach((temp) => { //알림보내기 로직
-                                    if (temp.member_id === loginID) {
-                                        if (temp.alarm === 'Y') notify(chat);
-                                    }
-                                })
-                            }
-                        })
-                    }
-                    else if (chat.group_seq === chatSeq) {
-                        setChats((prev) => {
-                            return [...prev, chat]
-                        })
+                else if (chat.group_seq === chatSeq) {
+                    setChats((prev) => {
+                        return [...prev, chat]
+                    })
 
-                    }
                 }
+                else{
+                    alert("에러입니다")
+                    console.log(chat.group_seq)
+                }
+                setChatController();
+
             }
         }
     }, [onMessage]);//chatNavi, 이거뻇음 일단
@@ -68,18 +73,22 @@ const ChatApp = () => {
                 }
             }
         }
-    }, [chatNavi, chatController])
+    }, [chatNavi])
 
 
     const notify = useCallback((item) => {
         const { maxCount, count, increment, decrement } = useNotification.getState();
-        const { chatSeq } = useCheckList.getState();
-        if (chatSeq !== 0) {
-            return false;
+        console.log("알림")
+        let title;
+        if(role==='ROLE_ADMIN'){
+            title=`${item.member_id}님한테 상담메세지가 왔습니다`;
+        }
+        else{
+            title='관리자 답변이 왔습니다.'
         }
         if (count < maxCount) {
             console.log("알림");
-            toast.info(`${item.name}님한테 메세지가 왔습니다`, {
+            toast.info(`${title}`, {
                 position: "top-right", // 오른쪽 위에 표시
                 autoClose: 5000, // 5초 후 자동으로 닫힘
                 hideProgressBar: false, // 진행 바 숨기기: false로 설정하여 진행 바 표시
@@ -90,7 +99,7 @@ const ChatApp = () => {
                 onClose: decrement,
                 onOpen: increment,
                 onClick: () => handleToastOnclick(item),
-                icon: <img src='' alt="custom-icon" className={styles.shake} />
+                icon: <img src={logo} alt="custom-icon" className={styles.shake} />
             });
         }
     }, [chatSeq])
@@ -107,11 +116,16 @@ const ChatApp = () => {
 
     //다운로드 컨트롤
     const handleDownload = (split) => {
-        const linkElement = document.createElement('a');
-        // 2. 링크 속성 설정
-        linkElement.href = `${host}/files/downloadChat?oriname=${split[0]}&sysname=${split[1]}`;
-        linkElement.download = split[0];
-        linkElement.click();
+        const sysname = split[1];
+        const oriname = split[0];
+        api.get(`/file/download?sysname=${sysname}&oriname=${oriname}`, { responseType: 'blob' }).then((resp) => {
+            const url = window.URL.createObjectURL(new Blob([resp.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            // 서버에서 받은 파일 이름으로 다운로드 파일명 설정
+            link.setAttribute('download', oriname);
+            link.click();
+        })
     }
 
     //채팅 list 목록 출력
@@ -140,7 +154,7 @@ const ChatApp = () => {
                     const split = item.message.split('*');
                     fileCheck = true;
                     // if (split[2] === '2') {
-                      
+
                     // }
                     // else if (split[2] === '1') {
                     //     file = `<p style='color: blue; cursor: pointer;'><img src='${host}/images/chat/${split[1]}' alt="downloadImage" class="${styles.img}"></img></p>`;
@@ -188,15 +202,15 @@ const ChatApp = () => {
         handleChatsData();
     }, [handleChatsData])
     const scrollBottom = useCallback(() => {
-    
+
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
-    
-      }, [list]);
-      useEffect(() => { //스크롤 
+
+    }, [list]);
+    useEffect(() => { //스크롤 
         scrollBottom();
-      }, [scrollBottom]);    
+    }, [scrollBottom]);
 
     return (
         <div className={styles.container} ref={chatAppRef}>
@@ -206,7 +220,7 @@ const ChatApp = () => {
                 }
             </div>
             <div className={styles.editor}>
-            <MyEditor editorRef={editorRef} height={120} />
+                <MyEditor editorRef={editorRef} height={120} />
             </div>
         </div>
     )
