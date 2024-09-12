@@ -14,8 +14,15 @@ public class BizManageService {
 	@Autowired
 	private BizManageDAO bizMandao;
 	
-	public List<HashMap<String, Object>> getAllProduct(){
-		return bizMandao.getAllProduct();
+	public List<HashMap<String, Object>> getAllWaiting(String id){
+		return bizMandao.getAllWaiting(id);
+	}
+	public List<HashMap<String, Object>> getAllRecentApproved(String id){
+		return bizMandao.getAllRecentApproved(id);
+	}
+	
+	public List<HashMap<String, Object>> getAllCurrentApproved(String id){
+		return bizMandao.getAllCurrentApproved(id);
 	}
 	public List<HashMap<String,Object>> getAllPoster(){
 		return bizMandao.getAllPoster();

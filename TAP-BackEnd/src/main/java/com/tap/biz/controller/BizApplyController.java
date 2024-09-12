@@ -56,8 +56,7 @@ public class BizApplyController {
 
 	// 상품 테이블에 insert POST
 	@PostMapping
-	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData
-			){
+	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData){
 		String id = formData.getId();
 		Timestamp start_date = formData.getStart_date();
 		int running_time = formData.getRunning_time();
@@ -79,12 +78,15 @@ public class BizApplyController {
 		}
 		
 		// Casting 테이블에 삽입 ==========================================
-		List<CastingDataDTO> c_list = formData.getCastingData();
-		for(int i=0; i<c_list.size(); i++) {
-			CastingDataDTO c_dto = c_list.get(i);
-			c_dto.setApplication_seq(applicationSeq);
-			bizServ.createApplyCasting(c_dto);
+		if(formData.getCastingData() != null ) {
+			List<CastingDataDTO> c_list = formData.getCastingData();
+			for(int i=0; i<c_list.size(); i++) {
+				CastingDataDTO c_dto = c_list.get(i);
+				c_dto.setApplication_seq(applicationSeq);
+				bizServ.createApplyCasting(c_dto);
+			}
 		}
+	
 		
 		// Event_popup 테이블에 삽입 ===================================
 		String content = formData.getNoticeContent();

@@ -688,9 +688,7 @@ export const EventApply = () => {
                     ...formData,
                     totalSchedule: filteredTotalSchedule, // 필터링된 totalSchedule 사용
                     noticeContent: noticeContent,
-                    // castingData: castingData,
                     main_poster: mainPoster, 
-                    // fileUrls: description
                 };
                 // 서브 카테고리가 뮤지컬(1)인 경우에만 캐스팅 데이터를 포함
                 if (subCategory === "1") {
@@ -699,7 +697,7 @@ export const EventApply = () => {
     
                 await api.post(`/biz/application`, updatedFormData);
                 alert('신청이 완료되었습니다!');
-                navi('/'); 
+                // navi('/'); 
                 } catch (error) {
                 console.error('서버에 전송 중 오류 발생:', error);
                 alert('서버에 전송 실패. 다시 시도해 주세요.');

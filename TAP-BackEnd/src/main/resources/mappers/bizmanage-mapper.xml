@@ -5,26 +5,68 @@
 <mapper namespace="BizManage">
 <resultMap id="TimestampResultMap" type="java.util.HashMap">
     	<result property="created_at" column="created_at" javaType="java.sql.Timestamp" />
+    	<result property="updated_at" column="updated_at" javaType="java.sql.Timestamp" />
     	<result property="end_date" column="end_date" javaType="java.sql.Timestamp" />
     	<result property="start_date" column="start_date" javaType="java.sql.Timestamp" />
-    	    	<result property="open_date" column="open_date" javaType="java.sql.Timestamp" />
+    	<result property="open_date" column="open_date" javaType="java.sql.Timestamp" />
     	
 </resultMap>
-<select id="getAllProduct" resultMap="TimestampResultMap">
-select apply.* , 
-CAST(apply.created_at AS TIMESTAMP) AS created_at,
-CAST(apply.end_date AS TIMESTAMP) AS end_date,
-CAST(apply.start_date AS TIMESTAMP) AS start_date,
-CAST(apply.open_date AS TIMESTAMP) AS open_date,
-sub_category.*, 
-files.*,
-PLACE.*
-from apply
-join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
-join place on apply.place_seq = place.place_seq
-join files on apply.application_seq = files.files_parent_seq
-where apply.id = 'test5' and files.files_type='poster'
-
+<select id="getAllWaiting" resultMap="TimestampResultMap">
+	 SELECT apply.*, 
+           CAST(apply.created_at AS TIMESTAMP) AS created_at,
+           CAST(apply.end_date AS TIMESTAMP) AS end_date,
+           CAST(apply.start_date AS TIMESTAMP) AS start_date,
+           CAST(apply.open_date AS TIMESTAMP) AS open_date,
+           CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
+           sub_category.*, 
+           files.*, 
+           place.*
+    FROM apply
+    JOIN sub_category ON apply.sub_category_seq = sub_category.sub_category_seq
+    JOIN place ON apply.place_seq = place.place_seq
+    JOIN files ON apply.application_seq = files.files_parent_seq
+    WHERE apply.status != '승인' 
+      AND files.files_type = 'poster'
+      AND apply.id = #{id}
+    ORDER BY apply.created_at DESC
+</select>
+<select id="getAllRecentApproved" resultMap="TimestampResultMap">
+	select apply.* , 
+	CAST(apply.created_at AS TIMESTAMP) AS created_at,
+	CAST(apply.end_date AS TIMESTAMP) AS end_date,
+	CAST(apply.start_date AS TIMESTAMP) AS start_date,
+	CAST(apply.open_date AS TIMESTAMP) AS open_date,
+	CAST(apply.updated_at AS TIMESTAMP) AS updated_date,
+	sub_category.*, 
+	files.*,
+	PLACE.*
+	from apply
+	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
+	join place on apply.place_seq = place.place_seq
+	join files on apply.application_seq = files.files_parent_seq
+	where apply.status = '승인' and files.files_type='poster'
+	and apply.id = #{id}
+	and apply.updated_at BETWEEN (CURRENT_DATE - INTERVAL '1' MONTH) AND CURRENT_DATE
+	order by apply.created_at desc
+</select>
+<select id="getAllCurrentApproved" resultMap="TimestampResultMap">
+	select apply.* , 
+	CAST(apply.created_at AS TIMESTAMP) AS created_at,
+	CAST(apply.end_date AS TIMESTAMP) AS end_date,
+	CAST(apply.start_date AS TIMESTAMP) AS start_date,
+	CAST(apply.open_date AS TIMESTAMP) AS open_date,
+	CAST(apply.updated_at AS TIMESTAMP) AS updated_date,
+	sub_category.*, 
+	files.*,
+	PLACE.*
+	from apply
+	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
+	join place on apply.place_seq = place.place_seq
+	join files on apply.application_seq = files.files_parent_seq
+	where apply.status = '승인' and files.files_type='poster'
+	and apply.id = #{id}
+	and apply.updated_at BETWEEN (CURRENT_DATE - INTERVAL '1' MONTH) AND CURRENT_DATE
+	order by apply.created_at desc
 </select>
 <select id="getAllPoster" resultType="java.util.HashMap">
 select * from poster where 

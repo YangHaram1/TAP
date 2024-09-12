@@ -2,21 +2,22 @@ import { useEffect, useState } from 'react';
 import styles from './CurrentEvent.module.css'
 import { api } from '../../../../config/config';
 import {Pagination} from '../../../../components/Pagination/Pagination';
+import { useAuthStore } from '../../../../store/store';
 
 export const CurrentEvent=()=>{
-    
+    const { login, loginID, setAuth} = useAuthStore();
     const [events, setEvents] = useState([]);
     const [filtered, setFiltered] = useState(events);
 
     useEffect(()=>{
-        // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
-        api.get(`/biz/registration`).then((resp)=>{
-            setEvents(resp.data); // 상품들 세팅하기
-            setFiltered(resp.data); // 검색될때 사용할 filtered 상태
-            console.log(resp.data);
-        });
+        // // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
+        // api.get(`/biz/registration/current/${loginID}`).then((resp)=>{
+        //     setEvents(resp.data); // 상품들 세팅하기
+        //     setFiltered(resp.data); // 검색될때 사용할 filtered 상태
+        //     console.log(resp.data);
+        // });
 
-        // 신청대기중, 
+        // // 신청대기중, 
 
     },[])
 
