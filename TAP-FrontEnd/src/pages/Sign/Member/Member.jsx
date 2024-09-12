@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../../config/config'
 import Company from '../Company/Company'
+import Swal from 'sweetalert2'
 const Member = () => {
-    const [members, setMembers] = useState([])
     const [member, setMember] = useState({
         id: '',
         pw: '',
@@ -15,7 +15,7 @@ const Member = () => {
         birth: '',
         gender: '',
         phone: '',
-        zip_code: '',
+        zipcode: '',
         address: '',
         detailed_address: '',
     })
@@ -34,7 +34,7 @@ const Member = () => {
                 console.log(data)
                 setMember(prev => ({
                     ...prev,
-                    zip_code: data.zonecode,
+                    zipcode: data.zonecode,
                     address: data.address,
                 }))
             },
@@ -48,15 +48,26 @@ const Member = () => {
             const resp = await api.get(`/members/id/${id}`)
             console.log(resp.data)
             if (resp.data === 0) {
-                alert('사용 가능한 아이디')
+                Swal.fire({
+                    icon: 'success',
+                    title: '회원가입',
+                    text: '사용 가능한 아이디',
+                })
                 setIdAvailable(true)
             } else {
-                alert('사용 불가능한 아이디')
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입',
+                    text: '사용 불가능한 이메일',
+                })
                 setIdAvailable(false)
             }
         } catch (error) {
-            console.error(error)
-            alert('아이디 중복 검사 중 오류가 발생했습니다.')
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '아이디 중복 검사 중 오류가 발생했습니다.',
+            })
             setIdAvailable(false)
         }
     }
@@ -67,15 +78,26 @@ const Member = () => {
         try {
             const resp = await api.get(`/members/email/${email}`)
             if (resp.data === 0) {
-                alert('사용 가능한 이메일')
+                Swal.fire({
+                    icon: 'success',
+                    title: '회원가입',
+                    text: '사용 가능한 이메일',
+                })
                 setEmailAvailable(true)
             } else {
-                alert('사용 불가능한 이메일')
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입',
+                    text: '사용 불가능한 이메일',
+                })
                 setEmailAvailable(false)
             }
         } catch (error) {
-            console.error(error)
-            alert('이메일 중복 검사 중 오류가 발생했습니다.')
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '이메일 중복 검사 중 오류가 발생했습니다.',
+            })
             setEmailAvailable(false)
         }
     }
@@ -84,22 +106,38 @@ const Member = () => {
     const handleAdd = async () => {
         try {
             await api.post(`/members`, member)
-            alert('회원가입 성공')
+            Swal.fire({
+                icon: 'success',
+                title: '회원가입',
+                text: '회원가입 성공',
+            })
+            navi('/login')
         } catch (error) {
-            console.error(error)
-            alert('회원가입 중 오류가 발생했습니다.')
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '회원가입 실패',
+            })
         }
     }
     const handleSubmit = async e => {
         e.preventDefault() // 기본 폼 제출 동작을 막음
 
         if (!idAvailable) {
-            alert('아이디 중복 체크를 해주세요.')
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '아이디 중복 체크를 해주세요',
+            })
             return
         }
 
         if (!emailAvailable) {
-            alert('이메일 중복 체크를 해주세요.')
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '이메일 중복 체크를 해주세요',
+            })
             return
         }
         // 아이디, 이메일 사용 가능할 때만 회원가입 처리
@@ -247,7 +285,7 @@ const Member = () => {
                     <div className={styles.inputZipCode}>
                         <input
                             type="text"
-                            value={member.zip_code}
+                            value={member.zipcode}
                             disabled={true}
                             placeholder="아이디는 어쩌고 저쩌고"
                         />
