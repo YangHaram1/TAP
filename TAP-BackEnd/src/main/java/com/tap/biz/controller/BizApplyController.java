@@ -67,6 +67,23 @@ public class BizApplyController {
         return ResponseEntity.ok(bizServ.getProductByName(name));
     }
 
+	@PostMapping("/sale")
+	public ResponseEntity<List<HashMap<String, Object>>> insertSale(
+	    @RequestBody List<HashMap<String, Object>> saleDataList) {
+	    
+	    // 데이터 처리
+	    for (HashMap<String, Object> saleData : saleDataList) {
+	        // saleData에서 application_seq, place_seat_level 등의 값을 추출하여 처리
+	        System.out.println("application_seq: " + saleData.get("application_seq"));
+	        System.out.println("place_seat_level: " + saleData.get("place_seat_level"));
+	        System.out.println("sale_price: " + saleData.get("discountedPrice"));
+	        System.out.println("sale_rate: " + saleData.get("discountRate"));
+	    }
+
+	    // 처리 후 응답 반환
+	    return ResponseEntity.ok(saleDataList);
+	}
+	
 	// 상품 테이블에 insert POST
 	@PostMapping
 	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData){

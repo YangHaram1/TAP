@@ -18,9 +18,9 @@ public class AdminProductController {
 	private AdminProductService AdProServ;
 	
 
-	// 발송완료 제외하고 주문 가져오기 
-	@GetMapping
-	public ResponseEntity<List<HashMap<String, Object>>> getAllCurrentProducts(){
-		return ResponseEntity.ok(AdProServ.getAllCurrentProducts());
-	}
+//	// 발송완료 제외하고 주문 가져오기 
+//	@GetMapping
+//	public ResponseEntity<List<HashMap<String, Object>>> getAllCurrentProducts(){
+//		return ResponseEntity.ok(AdProServ.getAllCurrentProducts());
+//	}
 }

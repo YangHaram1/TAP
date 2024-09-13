@@ -41,7 +41,7 @@
   }
   
   .search input {
-    width: 100%;
+    width: 50%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -65,7 +65,7 @@
   }
   
   .sale_percent input {
-    width: 100%;
+    width: 30%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
