@@ -1,5 +1,7 @@
 .container {
-    width: 350px;
+    width: 300px;
+     /* 사이즈 줄일 때 사이즈가 줄지 않게 설정  - admin.module.css 에도 설정*/
+     flex-shrink:0;
     /* background-color: #333; */
     /* color: #fff; */
     height: 100vh;

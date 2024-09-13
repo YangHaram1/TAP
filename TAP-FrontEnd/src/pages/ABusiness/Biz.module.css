@@ -1,6 +1,6 @@
 .container{
-    /* background-color: pink; */
-    width: 100%;
-    height: 3000px;
+    height: 2000px;
     display:flex;
+    /* flex 요소드링 너무 좁아지지 않게 설정하는 방법 */
+    min-width:0;
 }
