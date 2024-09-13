@@ -24,16 +24,25 @@ export const WaitingList=()=>{
     },[loginID])
 
     // 신청 취소 버튼 함수
-    const handleCancel = ()=>{
+    const handleCancel = (applicationSeq)=>{
         const confirmClear = window.confirm(
             "상품 등록 신청을 취소하시겠습니까?"
         );
         if (confirmClear) {
-            alert("apfhd");
+            alert(`접수번호 ${applicationSeq}가 취소되었습니다.`);
             console.log()
-        //    api.delete(`biz/registration/${상품번호}`).then((resp)=>{
-        //     console.log(resp.data);
-        //    })
+            api.put(`/biz/registration/${applicationSeq}`).then((resp) => {
+                console.log(`상품 ${applicationSeq}가 취소되었습니다.`);
+                // 성공적인 삭제 후, 페이지를 다시 로드하거나 상태를 업데이트하여 UI에서 상품을 제거해야 함.
+                setEvents((prevEvents) =>
+                    prevEvents.filter(event => event.APPLICATION_SEQ !== applicationSeq)
+                );
+                setFiltered((prevFiltered) =>
+                    prevFiltered.filter(event => event.APPLICATION_SEQ !== applicationSeq)
+                );
+            }).catch(error => {
+                console.error("신청 취소 중 오류가 발생했습니다.", error);
+            });
         }
     }
 
@@ -110,7 +119,9 @@ export const WaitingList=()=>{
                     </td>
                     <td>
                     {product.STATUS !== '반려' && (
-                        <button className={styles.manage_button} onClick={handleCancel}>신청<br/>취소</button>
+                        <button className={styles.manage_button} onClick={() => handleCancel(product.APPLICATION_SEQ)}>
+                            신청<br/>취소
+                        </button>
                     )}
                      {product.STATUS === '반려' && (
                         <div className={styles.rejectReason}>
