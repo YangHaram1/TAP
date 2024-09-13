@@ -39,7 +39,7 @@ public class MembersDAO {
 		return mybatis.insert("Members.signUp",dto);
 	}
 	
-	//	회원가입 등록
+	//	회원가입 사업자 등록
 	public int signUpBiz(MembersDTO dto) throws Exception{
 		return mybatis.insert("Members.signUpBiz",dto);
 	}
@@ -55,6 +55,13 @@ public class MembersDAO {
 		return mybatis.selectOne("Members.checkEmail",email);
 	}
 	
+	// 아이디 찾기
+	public String findId(String name, String email) throws Exception{
+		MembersDTO dto =new MembersDTO();
+		dto.setEmail(email);
+		dto.setName(name);
+		return mybatis.selectOne("Members.findId", dto);
+	}
 	public List<String> selectByAdmin() throws Exception{
 		return mybatis.selectList("Members.selectByAdmin");
 	}

@@ -23,6 +23,11 @@
 		select count(*) from members where email=#{email}
 	</select>
 	
+	<!-- 아이디 찾기 -->
+	<select id="findId" resultType="String">
+		select id from members where email=#{email} and name=#{name}
+	</select>
+		
 	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
 		select pw,role,m.name as name, g.name as grade from members
 		m
