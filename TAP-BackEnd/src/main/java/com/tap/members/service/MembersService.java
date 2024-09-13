@@ -50,7 +50,12 @@ public class MembersService implements UserDetailsService{
 		return dao.checkEmail(email);
 	}
 	
-	
+	// 아이디 찾기
+	public String findId(String name, String email) throws Exception{
+		System.out.println(name);
+		System.out.println(email);
+		return dao.findId(name, email);
+	}
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		User user=null;

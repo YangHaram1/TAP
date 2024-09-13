@@ -9,7 +9,7 @@
     position: absolute;
     z-index: 999;
     display: flex;
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     top: 100px;
     right: 100px;
     border-radius: 20px;
