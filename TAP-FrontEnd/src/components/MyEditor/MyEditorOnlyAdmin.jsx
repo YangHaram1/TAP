@@ -1,142 +1,118 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { debounce } from 'lodash';
 import styles from './MyEditor.module.css';
 import Swal from 'sweetalert2';
 import { api, tinymce } from '../../config/config';
 
-const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName, onContentChange  }) => {
-  
-    const [content, setContent] = useState('');
-    const inputRef = useRef(null);
-  
-    const handleEditorChange = debounce((content) => {
-        setContent(content)
-      localStorage.setItem('editorContent', content);
+const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName, onContentChange }) => {
+  const [content, setContent] = useState('');
+  const inputRef = useRef(null);
 
-      if(onContentChange){
-        onContentChange(content);
-      }
-    }, 300);
-  
-    const handleUpload = () => {
-      inputRef.current.click();
+  // Text and content update handler
+  const handleEditorChange = (content) => {
+    setContent(content);
+    if (onContentChange) {
+      onContentChange(content);
+    }
+  };
+
+  // Image upload handler
+  const handleUpload = () => {
+    inputRef.current.click();
+  };
+
+  // Handle image insertion from the input
+  const handleOnchange = () => {
+    const files = inputRef.current.files;
+    const formData = new FormData();
+
+    for (let index = 0; index < files.length; index++) {
+      formData.append("files", files[index]);
     }
 
-    const handleOnchange = () => {
-        const files = inputRef.current.files;
-        const formData = new FormData();
-        for (let index = 0; index < files.length; index++) {
-          formData.append("files", files[index]);
-        }
-    
-      
-        api.post(`/bizUpload?group_seq=${subCategoryName}`, formData).then(resp => { //파일 로직 처리
-          const array = resp.data;
-          for (let index = 0; index < array.length; index++) {
-            const imageUrl = `<img src="${array[index]}" alt="uploaded image" />`;
-            const prevContent= editorRef.current.getContent();
-            editorRef.current.setContent(prevContent+imageUrl);
-          }
-        
-          inputRef.current.value = '';
-    
-        }).catch(error => {
-          console.error('There was an error posting the data!', error);
-        });
-      }
-    
-  
-    useEffect(() => {
-    //   const savedContent = localStorage.getItem('editorContent');
-    //   setContent(savedContent || '');
-    }, []);
-  
-    const handleImageUpload = async (file) => {
-        try {
-          const formData = new FormData();
-          formData.append('files', file); // FormData에 파일 추가
-    
-          // 이미지 업로드
-        //   const response = await api.post(`/chatUpload?group_seq=0`, formData);
-          const response = await api.post(`/bizUpload?group_seq=0`, formData);
-          const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
-          const image = `<img src="${imageUrl}" alt="uploaded image" />`;
+    api.post(`/bizUpload?group_seq=0`, formData)
+      .then(resp => {
+        const array = resp.data;
+        array.forEach((imageUrl) => {
+          const imageTag = `<img src="${imageUrl}" alt="uploaded image" style="width: 100%; height: auto;"/>`;
           const prevContent = editorRef.current.getContent();
-          editorRef.current.setContent(prevContent + image);
-    
-        } catch (error) {
-          console.error('파일 업로드 중 오류가 발생했습니다!', error);
-          // TinyMCE에 실패를 알림
-        }
-      }
-    return (
-      <div className={styles.container}>
-         <Editor
-          initialValue={content}
-          apiKey={tinymce}
-          onEditorChange={handleEditorChange}
-          onInit={(evt, editor) => {
-            editorRef.current = editor;
-          }}
-          init={{
-            width: "auto",
-            height: height,
-            menubar: false,
-            plugins: 'wordcount anchor code image', //image
-            toolbar: 'fileupload| forecolor backcolor  blocks fontfamily fontsize fontcolor | bold italic underline strikethrough | link image media table mergetags  | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat ',
-            
-          
-            language: 'ko_KR',
-            statusbar: false,
-            file_picker_types: 'file image media',
-            file_picker_callback: (callback, value, meta) => { },
-            setup: (editor) => {
-                editor.on('PastePreProcess ', (e) => {
-                  // 임시 div 요소에 붙여넣기된 콘텐츠를 삽입
-                  const tempDiv = document.createElement('div');
-                  tempDiv.innerHTML = e.content;
-                  // 이미지 태그가 있는지 검사
-                  const images = tempDiv.getElementsByTagName('img');
-                  if (images.length > 0) {
-                    e.preventDefault(); // 이미지가 포함된 붙여넣기를 막음
-                    const getBlobFromBlobUrl = async (blobUrl) => {
-                      const response = await fetch(blobUrl);
-                      const blob = await response.blob();
-                      return blob;
-                    };
-                    const blobToFile = (blob, fileName) => {
-                      return new File([blob], fileName, { type: blob.type });
-                    };
-                    // 사용 예
-                    getBlobFromBlobUrl(images[0].src).then(blob => {
-                      const file = blobToFile(blob, 'example.jpg');
-                      console.log(file); // File 객체
-                      handleImageUpload(file);
-                    }).catch(error => {
-                      console.error('파일로 변환하는 데 오류가 발생했습니다:', error);
-                    });
-  
-                    // console.log(tempDiv.innerHTML)
-                    //   e.content = tempDiv.innerHTML;
-                  } else {
-                    // 이미지가 없다면 다른 콘텐츠는 허용
-                    e.content = tempDiv.innerHTML;
-                  }
-                });
-              // 붙여넣기 후 이미지 허용
+          editorRef.current.setContent(prevContent + imageTag);
+        });
+        inputRef.current.value = ''; // Clear the input
+      })
+      .catch(error => {
+        console.error('There was an error posting the data!', error);
+      });
+  };
+
+  // Handle image upload from pasted content
+  const handleImageUpload = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('files', file); // FormData에 파일 추가
+      const response = await api.post(`/bizUpload?group_seq=0`, formData);
+      const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
+      const imageTag = `<img src="${imageUrl}" alt="uploaded image" style="width: 100%; height: auto;"/>`;
+      const prevContent = editorRef.current.getContent();
+      editorRef.current.setContent(prevContent + imageTag);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <Editor
+        apiKey={tinymce}
+        value={content}
+        onEditorChange={handleEditorChange}
+        onInit={(evt, editor) => {
+          editorRef.current = editor;
+        }}
+        init={{
+          height: height,
+          menubar: false,
+          plugins: 'wordcount anchor code image',
+          toolbar: 'bold italic underline | alignleft aligncenter alignright alignjustify | image',
+          language: 'ko_KR',
+          statusbar: false,
+          forced_root_block: 'p',  // 줄바꿈을 p 태그로 처리
+          file_picker_callback: (callback, value, meta) => {
+            if (meta.filetype === 'image') {
+              handleUpload();
+            }
+          },
+          setup: (editor) => {
             editor.on('PastePreProcess', (e) => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = e.content;
-                const images = tempDiv.getElementsByTagName('img');
-                if (images.length > 0) {
-                  e.content = tempDiv.innerHTML;
-                }
-              });
-            },
-          }}
-        />
-   <div className={styles.hidden}>
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = e.content;
+              const images = tempDiv.getElementsByTagName('img');
+              
+              if (images.length > 0) {
+                e.preventDefault(); // 기본 붙여넣기 중단
+                const getBlobFromBlobUrl = async (blobUrl) => {
+                  const response = await fetch(blobUrl);
+                  return await response.blob();
+                };
+                getBlobFromBlobUrl(images[0].src).then(blob => {
+                  const file = new File([blob], 'uploaded_image.jpg', { type: blob.type });
+                  handleImageUpload(file); // 이미지 업로드 함수 호출
+                });
+              } else {
+                e.content = tempDiv.innerHTML;  // 이미지가 없는 경우 콘텐츠를 그대로 허용
+              }
+            });
+
+            // **엔터 키 관련 동작 제거** - 기본 TinyMCE 줄바꿈 동작을 따르게 함
+            editor.on('keydown', (event) => {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                // 더 이상 preventDefault 호출하지 않음 -> 기본 줄바꿈 동작 유지
+              }
+            });
+          },
+        }}
+      />
+      <div className={styles.hidden}>
         <input
           type="file"
           className={styles.upload}
@@ -146,8 +122,8 @@ const MyEditorOnlyAdmin = ({ editorRef, height, subCategoryName, onContentChange
           multiple
         />
       </div>
-  
-      </div>);
-  };
+    </div>
+  );
+};
 
 export default MyEditorOnlyAdmin;
