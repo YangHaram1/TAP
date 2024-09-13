@@ -65,7 +65,7 @@ export const WaitingList=()=>{
             <table>
                 <thead>
                 <tr>
-                    <th>접수번호</th>
+                    <th>접수<br/>번호</th>
                     <th>상품정보</th>
                     <th>공연장 및 일시</th>
                     <th>신청일</th>
@@ -110,7 +110,7 @@ export const WaitingList=()=>{
                     </td>
                     <td>
                     {product.STATUS !== '반려' && (
-                        <button className={styles.manage_button} onClick={handleCancel}>신청취소</button>
+                        <button className={styles.manage_button} onClick={handleCancel}>신청<br/>취소</button>
                     )}
                      {product.STATUS === '반려' && (
                         <div className={styles.rejectReason}>
