@@ -37,12 +37,13 @@ public class BizManageService {
 	public List<HashMap<String, Object>> getAllSaleWaiting(String id){
 		return bizMandao.getAllSaleWaiting(id);
 	}
+	public void cancelSaleRegistration(Long applicationSeq) {
+        bizMandao.cancelSaleRegistration(applicationSeq);
+    }
 	public List<HashMap<String, Object>> getAllSaleRecentApproved(String id){
 		return bizMandao.getAllRecentApproved(id);
 	}
-	public void cancelSaleRegistration(Long applicationSeq) {
-        bizMandao.cancelRegistration(applicationSeq);
-    }
+	
 	
 	
 	

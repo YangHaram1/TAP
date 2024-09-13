@@ -9,7 +9,7 @@ export const WaitingSaleList =()=>{
     const { login, loginID, setAuth} = useAuthStore();
     const [events, setEvents] = useState([]);
     const [filtered, setFiltered] = useState(events);
-  
+ 
     useEffect(()=>{
         // 할인 신청 승인대기중 목록 - { 대기, 반려, 취소}
         api.get(`/biz/registration/sale/waiting`).then((resp)=>{
@@ -27,8 +27,7 @@ export const WaitingSaleList =()=>{
         );
         if (confirmClear) {
             alert(`상품번호 ${applicationSeq}가 취소되었습니다.`);
-            console.log()
-            api.put(`/biz/registration/${applicationSeq}`).then((resp) => {
+            api.put(`/biz/registration/sale/${applicationSeq}`).then((resp) => {
                 console.log(`상품 ${applicationSeq}가 취소되었습니다.`);
                 setEvents((prevEvents) =>
                     prevEvents.filter(event => event.APPLICATION_SEQ !== applicationSeq)

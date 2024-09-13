@@ -110,7 +110,6 @@ public class BizManageController {
         @PathVariable("applicationSeq") Long applicationSeq) {
         bizManServ.cancelRegistration(applicationSeq);
         return ResponseEntity.ok().build();
-        
     }
     
     // --------------------------------------------
@@ -127,8 +126,16 @@ public class BizManageController {
 		System.out.println("id는 : "+ user.getUsername());
 		return ResponseEntity.ok(bizManServ.getAllSaleWaiting(user.getUsername()));
 	}
+    // 세일 신청 취소한거  업데이트 처리
+    @PutMapping("/sale/{applicationSeq}")
+    public ResponseEntity<Void> cancelSaleRegistration(
+        @PathVariable("applicationSeq") Long applicationSeq) {
+        bizManServ.cancelSaleRegistration(applicationSeq);
+        return ResponseEntity.ok().build();
+    }
+    
     // 세일 신청 승인된 목록 리스트 
     
-    // 세일 신청 취소한거  업데이트 처리
+    
 	
 }

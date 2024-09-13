@@ -117,7 +117,7 @@ select * from poster where
 	    SET 
 	    	status = '취소'
 	    WHERE application_seq = #{applicationSeq}
-	</update>
+</update>
 
 <select id="getAllSaleWaiting" resultMap="TimestampResultMap">
 SELECT 
@@ -153,6 +153,12 @@ GROUP BY
     f.files_sysname
 ORDER BY MAX(s.sale_seq) DESC
 </select>
-
+<update id="cancelSaleRegistration">
+    UPDATE 
+	    	sale 
+	    SET 
+	    	sale_approved = '취소'
+	    WHERE application_seq = #{applicationSeq}
+</update>
 
 </mapper>
