@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminOrder">
+<resultMap id="TimestampResultMap" type="java.util.HashMap">
+    	<result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
+    	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
+</resultMap>
+<select id="getAllOrders" resultMap="TimestampResultMap">
+select 
+ CAST(orders.order_date AS TIMESTAMP) AS order_date,
+ CAST(members.join_date AS TIMESTAMP) AS join_date,
+orders.*, apply.name, members.*, book.*, section.*
+from orders 
+join members on members.id = orders.member_id
+join apply on apply.application_seq = orders.application_seq
+join book on orders.order_seq = book.order_seq
+join section on section.section_seq = book.section_seq
+WHERE ORDERS.DELIVERY_STATUS = 'not shipped'
+</select>
+</mapper>
