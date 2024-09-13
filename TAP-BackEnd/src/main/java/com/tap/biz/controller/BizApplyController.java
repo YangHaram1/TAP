@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.dto.BizApplyDTO;
@@ -53,7 +54,36 @@ public class BizApplyController {
 	public ResponseEntity<List<TestClobDTO>> getContent(){
 		return ResponseEntity.ok(bizServ.getContent());
 	}
+	@GetMapping("/seats")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllSeats(){
+		return ResponseEntity.ok(bizServ.getAllSeats());
+	}
+	@GetMapping("/prices")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllPrices(){
+		return ResponseEntity.ok(bizServ.getAllPrices());
+	}
+	@GetMapping("/products")
+    public ResponseEntity<List<HashMap<String, Object>>> getProductByName(@RequestParam String name) {
+        return ResponseEntity.ok(bizServ.getProductByName(name));
+    }
 
+	@PostMapping("/sale")
+	public ResponseEntity<List<HashMap<String, Object>>> insertSale(
+	    @RequestBody List<HashMap<String, Object>> saleDataList) {
+	    
+	    // 데이터 처리
+	    for (HashMap<String, Object> saleData : saleDataList) {
+	        // saleData에서 application_seq, place_seat_level 등의 값을 추출하여 처리
+	        System.out.println("application_seq: " + saleData.get("application_seq"));
+	        System.out.println("place_seat_level: " + saleData.get("place_seat_level"));
+	        System.out.println("sale_price: " + saleData.get("discountedPrice"));
+	        System.out.println("sale_rate: " + saleData.get("discountRate"));
+	    }
+
+	    // 처리 후 응답 반환
+	    return ResponseEntity.ok(saleDataList);
+	}
+	
 	// 상품 테이블에 insert POST
 	@PostMapping
 	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData){

@@ -150,17 +150,19 @@
     align-items: center; 
     gap: 10px;
     width: 100%; 
-    justify-content: flex-start; 
+    justify-content: center; 
 }
 .btnEnd{
     background-color: pink;
     padding: 10px 20px; 
+    margin-top: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
+
 .btnEnd:hover{
-    background-color: green;
+    background-color: rgb(231, 189, 221);
 }
 /* ul li 앞에 점(기본 마커) 지우기 */
 .container ul {
