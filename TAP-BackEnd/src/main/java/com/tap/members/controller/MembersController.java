@@ -43,6 +43,16 @@ public class MembersController {
 		return ResponseEntity.ok(checkEmail);
 	}
 	
+	// 아이디 찾기
+	@GetMapping("/findId/{name}/{email}")
+	public ResponseEntity<String> findId(@PathVariable String name, @PathVariable String email) throws Exception{
+		String findId = mserv.findId(name, email);
+		System.out.println(name);
+		System.out.println(email);
+		return ResponseEntity.ok(findId);
+		
+	}
+	
 	@GetMapping
 	public ResponseEntity<MembersDTO> selectById(Principal principal) throws Exception {
 		if (principal == null) {
