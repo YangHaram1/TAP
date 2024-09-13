@@ -1,5 +1,5 @@
 import styles from './Login.module.css'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Routes } from 'react-router-dom'
 import img1 from '../../images/logo192.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -19,7 +19,6 @@ import FindPw from './FindPw/FindPw'
 const Login = () => {
     const navi = useNavigate()
     const location = useLocation()
-    const previousPath = location.state?.from?.pathname || '/'
     const [user, setUser] = useState({ id: '', pw: '' })
     const { login, isAuth, setAuth } = useAuthStore()
     const handleChange = e => {
@@ -111,17 +110,23 @@ const Login = () => {
     }
 
     const handlePageChange = newPage => {
-        setPage(newPage)
+        navi(newPage)
     }
-    if (page === 'findId') {
+    if (location.pathname.split('/')[2] === 'findId') {
         return <FindId></FindId>
     }
-    if (page === 'findPw') {
+    if (location.pathname.split('/')[2] === 'findPw') {
         return <FindPw></FindPw>
     }
 
     return (
         <div className={styles.container} onClick={handleContainer}>
+            {/* <Routes>
+                <Route path="" element={<Login />} />
+                <Route path="findId" element={<Login />} />
+                <Route path="findPw" element={<Login />} />
+            </Routes> */}
+
             <div className={styles.container}>
                 <div className={styles.title}>
                     <img src={img1} alt="logo" className={styles.logo} />

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import img1 from '../../../images/logo192.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 import {
     faUser,
     faLock,
@@ -12,6 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { api } from '../../../config/config'
 const FindId = () => {
+    const navi = useNavigate()
     const [findId, setFindId] = useState({ name: '', email: '' })
     const handleChange = e => {
         const { name, value } = e.target
@@ -30,6 +32,7 @@ const FindId = () => {
                     title: '아이디 찾기',
                     text: `아이디는 ${resp.data}입니다.`,
                 })
+                navi('login')
             } else {
                 Swal.fire({
                     icon: 'error',

@@ -1,0 +1,4 @@
+.slick-dots {
+    display: flex !important;
+    gap: 50px !important;
+}
