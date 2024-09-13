@@ -46,7 +46,11 @@ public class BizService {
 	public List<HashMap<String, Object>> getProductByName(String name){
 		return bizdao.getProductByName(name);
 	}
-	
+	public void createSale(List<HashMap<String, Object>> saleDataList) {
+        for (HashMap<String, Object> saleData : saleDataList) {
+            bizdao.createSale(saleData); 
+        }
+    }
 	
 	public List<TestClobDTO> getContent(){
 		return bizdao.getContent();

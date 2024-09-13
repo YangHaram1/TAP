@@ -63,7 +63,7 @@
   .faMagnifyingGlass:hover {
     color: #0056b3;
   }
-  
+  /* *{border: 1px solid black;} */
   .sale_percent input {
     width: 30%;
     padding: 8px;

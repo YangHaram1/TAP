@@ -47,7 +47,9 @@ public class BizDAO {
 	public List<HashMap<String, Object>> getProductByName(String name){
 		return mybatis.selectList("Biz.getProductByName", name);
 	}
-	
+	public void createSale(HashMap<String, Object> saleData) {
+		mybatis.insert("Biz.createSale", saleData);
+	}
 	
 	
 	public List<TestClobDTO> getContent(){

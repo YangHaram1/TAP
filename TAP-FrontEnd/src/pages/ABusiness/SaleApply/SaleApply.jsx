@@ -12,7 +12,7 @@ export const SaleApply = () => {
   const [discountedPrices, setDiscountedPrices] = useState([]); // 계산된 할인 가격들
   const [searchedKeyword, setSearchedKeyword] = useState(''); // 검색된 상품명 저장
   const navi = useNavigate();
-  // 상품 데이터 가져오기
+ 
   const fetchProductData = async () => {
     try {
       const response = await api.get(`/biz/application/products?name=${productName}`);
@@ -28,20 +28,15 @@ export const SaleApply = () => {
   // 상품명 입력 핸들러
   const handleSearch = () => {
     if (!productName.trim()) {
-      // 입력이 없을 경우 데이터 초기화
       setProductData([]); // 상품 데이터 초기화
       setDiscountedPrices([]); // 할인 가격 초기화
       setSearchedKeyword(''); // 검색어 초기화
       return;
     }
-  
-    // 입력이 있는 경우에만 데이터 검색
     setSearchedKeyword(productName); // 검색어 저장
     fetchProductData();
 
   };
-
-  // 엔터 키 이벤트 핸들러
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
@@ -50,14 +45,24 @@ export const SaleApply = () => {
 
  // 할인율 계산
   useEffect(() => {
+    if (!discountRate) {
+      setDiscountedPrices([]); // 할인율이 없으면 할인 가격 초기화
+      return;
+    }
     if (productData.length > 0 && discountRate) {
       const calculatedPrices = productData.map((item) => {
-        const calculatedPrice = item.PRICE_SEAT * (1 - discountRate / 100);
-        return calculatedPrice;
+        return {
+          application_seq: item.APPLICATION_SEQ,
+          place_seat_level: item.PLACE_SEAT_LEVEL,
+          discountedPrice: (item.PRICE_SEAT * (1 - discountRate / 100)).toFixed(0),  // 할인 가격 계산
+          discountRate: discountRate
+        };
       });
       setDiscountedPrices(calculatedPrices);
     }
   }, [discountRate, productData]);
+
+
 
   const handleCancel=()=>{
     const userConfirmed = window.confirm("작성을 취소하시겠습니까?");
@@ -70,20 +75,10 @@ export const SaleApply = () => {
     }
   }
 
-
-
-
   const handleSubmit = async ()=>{
     try {
-      const sendData = productData.map((item, index) => ({
-        application_seq: item.APPLICATION_SEQ,
-        place_seat_level: item.PLACE_SEAT_LEVEL,
-        discountedPrice: discountedPrices[index],
-        discountRate: discountRate,
-      }));
-  
-      // 배열 형태로 서버에 전송
-      const response = await api.post(`/biz/application/sale`, sendData);
+        
+      const response = await api.post(`/biz/application/sale`, discountedPrices);
       alert('신청이 완료되었습니다!');
       navi('/'); // 완료 후 메인 페이지로 이동
     } catch (error) {
@@ -99,7 +94,7 @@ export const SaleApply = () => {
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <tbody>
-            <tr>
+            <tr style={{height:"150px"}}>
               <td>상품명</td>
               <td>
                 <div className={styles.search}>
@@ -132,7 +127,7 @@ export const SaleApply = () => {
               </td>
             </tr>
             <tr>
-              <td>할인율</td>
+              <td>할인가 적용</td>
               <td>
                 <div className={styles.sale_percent}>
                   <input
@@ -145,29 +140,58 @@ export const SaleApply = () => {
                 </div>
                 <div className={styles.input_price}>
                   <div className={styles.price}>
-                    {productData.length > 0 ? (
-                      productData.map((item, index) => (
-                        <p key={index}>
-                          좌석 레벨: {item.PLACE_SEAT_LEVEL}, 기존 가격: {item.PRICE_SEAT}원
-                        </p>
+                  <table style={{height:"250px"}}>
+                          <thead>
+                            <tr>
+                              <td>좌석 레벨</td>
+                              <td>기존 가격</td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {productData.length > 0 ? (
+                            productData.map((item, index) => (
+                              <tr key={index}>
+                              <td>{item.PLACE_SEAT_LEVEL}</td>
+                              <td>{item.PRICE_SEAT}원</td>
+                            </tr>
                       ))
                     ) : (
-                      <p>가격을 불러오세요</p>
+                      // <tr><td colSpan={2} style={{textAlign:"center"}}> 
+                      //   가격을 불러오세요
+                      // </td></tr>
+                      ""
                     )}
+                    </tbody>
+                        </table>
                   </div>
                   <div className={styles.arrow}>
                     <p>{'>'}</p>
                   </div>
                   <div className={styles.price}>
-                    {discountedPrices.length > 0 ? (
+                  <table style={{height:"250px"}}>
+                          <thead>
+                            <tr>
+                              <td>좌석 레벨</td>
+                              <td>할인 가격</td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {discountedPrices.length > 0 ? (
                       discountedPrices.map((price, index) => (
-                        <p key={index}>
-                          할인 가격: {price.toFixed(0)}원
-                        </p>
+                        <tr key={index}>
+                        <td>{price.place_seat_level}</td>
+                        <td>{price.discountedPrice}원</td>
+                      </tr>
                       ))
                     ) : (
-                      <p>계산값 출력</p>
+                      // <tr><td colSpan={2} style={{textAlign:"center"}}> 
+                      //   가격을 불러오세요
+                      // </td></tr>
+                      ""
                     )}
+                    </tbody>
+                </table>
+                   
                   </div>
                 </div>
               </td>
