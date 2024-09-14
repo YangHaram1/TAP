@@ -11,16 +11,16 @@ export const ProductsCurrent = ({ category, tap }) => {
         const fetchProducts = async () => {
             try {
                 // tap 값에 따라 서버 엔드포인트 결정
-                let endpoint = '';
+                let productList = '';
                 if (tap === 0) {
-                    endpoint = `/admin/products/current?category=${category}`; // 현재 판매 중인 상품
+                    productList = `/admin/products/current?category=${category}`; // 현재 판매 중인 상품
                 } else if (tap === 1) {
-                    endpoint = `/admin/products/past?category=${category}`; // 판매 종료된 상품
+                    productList = `/admin/products/past?category=${category}`; // 판매 종료된 상품
                 } else if (tap === 2) {
-                    endpoint = `/admin/products/future?category=${category}`; // 판매 예정인 상품
+                    productList = `/admin/products/future?category=${category}`; // 판매 예정인 상품
                 }
 
-                const response = await api.get(endpoint);
+                const response = await api.get(productList);
                 setProducts(response.data);
                 setFiltered(response.data);
             } catch (error) {
