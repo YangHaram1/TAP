@@ -1,0 +1,84 @@
+.container{
+    width:100%;
+    height:100%;
+    max-width: 2000px;
+    /* padding: 0px 100px; */
+    /* background-color: beige; */
+}
+.header{
+    padding: 30px 50px 10px 50px;
+}
+
+/* *{border: 1px solid black;} */
+
+.product_table{
+    width:1000px;
+   
+}
+.product_table table{
+    width:100%;
+    border:1px solid gray;
+}
+.product_table table thead tr th {
+    background-color: pink;
+}
+.product_table table td{
+    border:1px solid gray;
+}
+.product_info{
+    display: flex;
+  align-items: center;
+}
+
+.product_image_container {
+    position: relative;
+    margin-right: 10px;
+  }
+  .product_image {
+    width: 100px;
+    /* height: 100px; */
+    object-fit: cover;
+    padding-left:100px;
+    /* margin-left:100px; */
+  }
+  .status_tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #f4b400;
+    color: white;
+    padding: 2px 5px;
+    margin-left:80px;
+    font-size: 12px;
+  }
+  
+  .product_details {
+    text-align: left;
+  }
+  
+  .product_name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .product_sub_info {
+    color: gray;
+  }
+  
+  .product_date, .product_venue {
+    font-size: 14px;
+    width:150px
+  }
+  
+  .manage_button, .edit_button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin: 2px;
+    cursor: pointer;
+  }
+  
+  .manage_button:hover, .edit_button:hover {
+    background-color: #0056b3;
+  }

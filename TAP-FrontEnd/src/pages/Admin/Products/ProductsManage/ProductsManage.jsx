@@ -6,11 +6,16 @@ export const ProductsManage = () => {
     const [category, setCategory] = useState(0); // 카테고리 탭
     const [tap, setTap] = useState(0); // 상품 상태 탭
 
-    const categories = ['뮤지컬', '콘서트', '야구', '축구'];
+    const categories = ['뮤지컬', '콘서트', '야구', '축구'];    // 카테고리 하드코딩 변경 필요함~~~~
 
     // 카테고리 및 상품 상태에 따라 데이터를 표시
     const renderProducts = () => {
         return <ProductsCurrent category={categories[category]} tap={tap} />;
+    };
+
+    const handleCategoryChange = (index) => {
+    setCategory(index);
+    setTap(0); // 탭을 0으로 초기화
     };
 
     return (
@@ -23,7 +28,7 @@ export const ProductsManage = () => {
                     {categories.map((cat, index) => (
                         <button
                             key={index}
-                            onClick={() => setCategory(index)}
+                            onClick={() => handleCategoryChange(index)} 
                             className={category === index ? styles.active : ''}
                         >
                             {cat}
@@ -40,16 +45,16 @@ export const ProductsManage = () => {
                         현재 판매 상품
                     </button>
                     <button
-                        onClick={() => setTap(1)}
-                        className={tap === 1 ? styles.active : ''}
-                    >
-                        판매 종료 상품
-                    </button>
-                    <button
                         onClick={() => setTap(2)}
                         className={tap === 2 ? styles.active : ''}
                     >
                         판매 예정 상품
+                    </button>
+                    <button
+                        onClick={() => setTap(1)}
+                        className={tap === 1 ? styles.active : ''}
+                    >
+                        판매 종료 상품
                     </button>
                 </div>
 

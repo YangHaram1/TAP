@@ -52,10 +52,13 @@ export const ProductsCurrent = ({ category, tap }) => {
 
     return (
         <div className={styles.container}>
-            <div>
-                <h3>{category} - {tap === 0 ? "현재 판매 중" : tap === 1 ? "판매 종료" : "판매 예정"}</h3>
+            <h3>{category} - {tap === 0 ? "현재 판매 중" : tap === 1 ? "판매 종료" : "판매 예정"}</h3>
+                <div className={styles.product_table}>
+                    
                 {filtered.length > 0 ? (
                     <>
+                    <table className={styles.table}>
+                    <tbody>
                         {filtered
                             .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
                             .map((product, index) => (
@@ -67,7 +70,9 @@ export const ProductsCurrent = ({ category, tap }) => {
                                                 alt={product.FILES_ORINAME}
                                                 className={styles.product_image}
                                             />
-                                            <span className={styles.status_tag}>예매중</span>
+                                            <span className={styles.status_tag}>
+                                            {tap === 0 ? "예매중" : tap === 1 ? "판매 종료" : "판매 예정"}
+                                            </span>
                                         </div>
                                         <div className={styles.product_details}>
                                             <div className={styles.product_name}>
@@ -86,14 +91,16 @@ export const ProductsCurrent = ({ category, tap }) => {
                                     <td className={styles.product_venue}>{product.PLACE_NAME}</td>
                                     <td>
                                         <button className={styles.manage_button}>상품관리</button>
-                                        <button className={styles.edit_button}>수정</button>
                                     </td>
                                 </tr>
                             ))}
+                               </tbody>
+                </table>
                     </>
                 ) : (
                     <p>해당 카테고리에 대한 상품이 없습니다.</p>
                 )}
+             
             </div>
             <div className={styles.pagination}>
                 {pageCount > 0 && (

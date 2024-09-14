@@ -12,13 +12,13 @@ public class AdminProductDAO {
 	@Autowired
 	private SqlSession mybatis;
 	
-	public List<HashMap<String, Object>> getAllCurrentProducts(){
-		return mybatis.selectList("AdminProduct.getAllCurrentProducts");
+	public List<HashMap<String, Object>> getCurrentProductsByCategory(String category){
+		return mybatis.selectList("AdminProduct.getCurrentProductsByCategory", category);
 	}
-	public List<HashMap<String, Object>> getAllPastProducts(){
-		return mybatis.selectList("AdminProduct.getAllPastProducts");
+	public List<HashMap<String, Object>> getFutureProductsByCategory(String category){
+		return mybatis.selectList("AdminProduct.getFutureProductsByCategory", category);
 	}
-	public List<HashMap<String, Object>> getAllFutureProducts(){
-		return mybatis.selectList("AdminProduct.getAllFutureProducts");
+	public List<HashMap<String, Object>> getPastProductsByCategory(String category){
+		return mybatis.selectList("AdminProduct.getPastProductsByCategory", category);
 	}
 }
