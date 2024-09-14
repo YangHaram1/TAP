@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import styles from './ProductsManage.module.css';
-import { ProductsPast } from './ProductsPast/ProductsPast';
-import { ProductsFuture } from './ProductsFuture/ProductsFuture';
 import { ProductsCurrent } from './ProductsCurrent/ProductsCurrent';
 
 export const ProductsManage = () => {
@@ -12,9 +10,7 @@ export const ProductsManage = () => {
 
     // 카테고리 및 상품 상태에 따라 데이터를 표시
     const renderProducts = () => {
-        if (tap === 1) return <ProductsPast category={categories[category]} />;
-        if (tap === 2) return <ProductsFuture category={categories[category]} />;
-        return <ProductsCurrent category={categories[category]} />;
+        return <ProductsCurrent category={categories[category]} tap={tap} />;
     };
 
     return (

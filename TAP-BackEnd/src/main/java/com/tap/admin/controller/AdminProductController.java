@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.admin.services.AdminProductService;
@@ -17,10 +18,10 @@ public class AdminProductController {
 	@Autowired
 	private AdminProductService AdProServ;
 	
-
-//	// 발송완료 제외하고 주문 가져오기 
-//	@GetMapping
-//	public ResponseEntity<List<HashMap<String, Object>>> getAllCurrentProducts(){
-//		return ResponseEntity.ok(AdProServ.getAllCurrentProducts());
-//	}
+	// 카테고리별로 현재 제품을 가져오기
+	@GetMapping("/current")
+	public ResponseEntity<List<HashMap<String, Object>>> getProductsByCategory(@RequestParam String category) {
+		List<HashMap<String, Object>> products = AdProServ.getProductsByCategory(category);
+		return ResponseEntity.ok(products);
+	}
 }
