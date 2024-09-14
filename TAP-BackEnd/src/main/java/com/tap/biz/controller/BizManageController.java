@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.biz.services.BizManageService;
@@ -103,7 +103,14 @@ public class BizManageController {
 		return ResponseEntity.ok(bizManServ.getAllRecentApproved(user.getUsername()));
 	}
 	
-//	// 
+	 // 신청 취소를 업데이트하는 API
+    @PutMapping("/{applicationSeq}")
+    public ResponseEntity<Void> cancelRegistration(
+        @PathVariable("applicationSeq") Long applicationSeq) {
+        bizManServ.cancelRegistration(applicationSeq);
+        return ResponseEntity.ok().build();
+        
+    }
 
 	
 }

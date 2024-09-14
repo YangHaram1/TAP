@@ -27,6 +27,9 @@ public class BizManageDAO {
 	public List<HashMap<String, Object>> getAllRecentApproved(String id){
 		return mybatis.selectList("BizManage.getAllRecentApproved", id);
 	}
+	public void cancelRegistration(Long applicationSeq) {
+		mybatis.update("BizManage.cancelRegistration", applicationSeq);
+	}
 	
 	
 	public List<HashMap<String, Object>> getAllPoster(){

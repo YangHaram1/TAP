@@ -31,6 +31,14 @@ public class BizManageService {
 		return bizMandao.getAllRecentApproved(id);
 	}
 	
+	public void cancelRegistration(Long applicationSeq) {
+        bizMandao.cancelRegistration(applicationSeq);
+    }
+	
+	
+	
+	
+	
 
 	public List<HashMap<String,Object>> getAllPoster(){
 		return bizMandao.getAllPoster();

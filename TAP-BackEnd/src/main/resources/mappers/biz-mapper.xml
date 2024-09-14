@@ -45,6 +45,17 @@
 	<select id="getAllProduct" resultType="java.util.HashMap">
 		select * from apply where status = 'approved'
 	</select>
+	<insert id="createSale" parameterType="java.util.HashMap">
+	    INSERT INTO sale (sale_seq, application_seq, place_seat_level, sale_price, sale_rate, sale_approved)
+	    VALUES (sale_seq.nextval, #{application_seq}, #{place_seat_level}, #{discountedPrice}, #{discountRate}, '승인 대기')
+	</insert>
+	
+	
+	
+	
+	
+	
+	
 	<select id="getContent" resultType="com.tap.biz.dto.TestClobDTO">
 		select * from description 
 	</select>

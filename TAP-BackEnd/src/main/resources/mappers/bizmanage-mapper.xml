@@ -26,6 +26,7 @@
     JOIN place ON apply.place_seq = place.place_seq
     JOIN files ON apply.application_seq = files.files_parent_seq
     WHERE apply.status != '승인' 
+    	AND apply.status !='취소'
       AND files.files_type = 'poster'
       AND apply.id = #{id}
     ORDER BY apply.created_at DESC
@@ -109,5 +110,13 @@
 <select id="getAllPoster" resultType="java.util.HashMap">
 select * from poster where 
 </select>
+
+<update id="cancelRegistration">
+    UPDATE 
+	    	apply 
+	    SET 
+	    	status = '취소'
+	    WHERE application_seq = #{applicationSeq}
+	</update>
 
 </mapper>
