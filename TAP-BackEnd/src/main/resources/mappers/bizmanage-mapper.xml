@@ -161,4 +161,38 @@ ORDER BY MAX(s.sale_seq) DESC
 	    WHERE application_seq = #{applicationSeq}
 </update>
 
+<select id="getAllSaleRecentApproved" resultMap="TimestampResultMap">
+SELECT 
+    a.application_seq, 
+    a.id, 
+    a.name, 
+    a.place_seq, 
+    a.start_date, 
+    a.end_date, 
+    MIN(s.sale_rate) AS sale_rate,
+    s.sale_approved,
+    p.place_name,
+    MAX(s.sale_seq) AS sale_seq,
+    f.files_sysname
+FROM apply a
+JOIN sale s 
+    ON a.application_seq = s.application_seq
+JOIN place p
+    ON a.place_seq = p.place_seq
+LEFT JOIN files f
+    ON f.files_parent_seq = a.application_seq
+    AND f.files_type = 'poster'
+WHERE s.sale_approved = '승인 완료'
+GROUP BY 
+    a.application_seq, 
+    a.id, 
+    a.name, 
+    a.place_seq, 
+    a.start_date, 
+    a.end_date, 
+    s.sale_approved, 
+    p.place_name, 
+    f.files_sysname
+ORDER BY MAX(s.sale_seq) DESC
+</select>
 </mapper>

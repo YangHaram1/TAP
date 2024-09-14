@@ -41,7 +41,7 @@ public class BizManageService {
         bizMandao.cancelSaleRegistration(applicationSeq);
     }
 	public List<HashMap<String, Object>> getAllSaleRecentApproved(String id){
-		return bizMandao.getAllRecentApproved(id);
+		return bizMandao.getAllSaleRecentApproved(id);
 	}
 	
 	

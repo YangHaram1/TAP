@@ -1,5 +1,5 @@
 .container{
-    height: 2000px;
+    height: 100%;
     display:flex;
     /* flex 요소드링 너무 좁아지지 않게 설정하는 방법 */
     min-width:0;

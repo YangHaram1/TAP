@@ -135,7 +135,20 @@ public class BizManageController {
     }
     
     // 세일 신청 승인된 목록 리스트 
-    
+    @GetMapping("/sale/recent")
+	public ResponseEntity<List<HashMap<String, Object>>> getAllSaleRecentApproved(Principal principal){
+		if (principal == null) {
+			System.out.println("principal");
+			return null;
+
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		String id = user.getUsername();
+		
+		System.out.println("id는 : "+ user.getUsername());
+		return ResponseEntity.ok(bizManServ.getAllSaleRecentApproved(user.getUsername()));
+	}
     
 	
 }

@@ -72,6 +72,7 @@ export const WaitingSaleList =()=>{
                     <th>접수<br/>번호</th>
                     <th>상품정보</th>
                     <th>공연장 및 일시</th>
+                    <th>할인율</th>
                     <th>상태</th>
                     <th>신청 취소</th>
                 </tr>
@@ -94,6 +95,9 @@ export const WaitingSaleList =()=>{
                         <div className={styles.product_venue}>{product.PLACE_NAME}</div>
                         {/* <br/> */}
                         {formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}
+                    </td>
+                    <td>
+                        {product.SALE_RATE}%
                     </td>
                     <td className={styles.product_venue}>
                     {product.STATUS !=='반려' && (

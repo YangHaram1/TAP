@@ -722,7 +722,7 @@ export const EventApply = () => {
                         </table>
                         </div>
                  {/* 장르, 상품명, 관람등급 등 나머지 입력 폼 */}
-                 <div className={styles.tableWrapper2}>
+                 <div className={styles.tableWrapper}>
                         <table className={styles.table}>
                             <tbody>
                         <tr>
@@ -1008,7 +1008,7 @@ export const EventApply = () => {
                     </tbody>
                 </table>
             </div>
-
+            <div className={styles.tableWrapper}>
             <div className={styles.title}>
                 <p>상세 정보 입력</p>
             </div>
@@ -1019,9 +1019,6 @@ export const EventApply = () => {
                         <td>
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
                             <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
-                        </td>
-                        <td>
-
                         </td>
                     </tr>
                     { category === "1" &&  
@@ -1064,7 +1061,7 @@ export const EventApply = () => {
                    
                 </tbody>
             </table>
-        
+        </div>
                              
             <div className={styles.btnEnding}>
             <button onClick={handleSubmit} className={styles.btnEnd}>신청</button>

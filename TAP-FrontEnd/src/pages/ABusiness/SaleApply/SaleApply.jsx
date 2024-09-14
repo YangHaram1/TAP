@@ -90,7 +90,9 @@ export const SaleApply = () => {
 
   return (
     <div className={styles.container}>
-      <h2>상품 세일 등록</h2>
+      <div className={styles.header}>
+        <h2>상품 세일 등록</h2>
+      </div>
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <tbody>
@@ -148,20 +150,15 @@ export const SaleApply = () => {
                             </tr>
                           </thead>
                           <tbody>
-                          {productData.length > 0 ? (
-                            productData.map((item, index) => (
-                              <tr key={index}>
-                              <td>{item.PLACE_SEAT_LEVEL}</td>
-                              <td>{item.PRICE_SEAT}원</td>
-                            </tr>
-                      ))
-                    ) : (
-                      // <tr><td colSpan={2} style={{textAlign:"center"}}> 
-                      //   가격을 불러오세요
-                      // </td></tr>
-                      ""
-                    )}
-                    </tbody>
+                            {productData.length > 0 && 
+                              productData.map((item, index) => (
+                                <tr key={index}>
+                                  <td>{item.PLACE_SEAT_LEVEL}</td>
+                                  <td>{item.PRICE_SEAT}원</td>
+                                </tr>
+                              ))
+                            }
+                          </tbody>
                         </table>
                   </div>
                   <div className={styles.arrow}>
