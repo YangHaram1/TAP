@@ -1,0 +1,34 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    min-width: 485px;
+    max-width: 500px;
+    position: relative;
+    z-index: 1000;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+}

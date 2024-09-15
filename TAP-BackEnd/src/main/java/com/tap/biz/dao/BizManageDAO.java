@@ -27,6 +27,19 @@ public class BizManageDAO {
 	public List<HashMap<String, Object>> getAllRecentApproved(String id){
 		return mybatis.selectList("BizManage.getAllRecentApproved", id);
 	}
+	public void cancelRegistration(Long applicationSeq) {
+		mybatis.update("BizManage.cancelRegistration", applicationSeq);
+	}
+	// 세일 신청
+	public List<HashMap<String, Object>> getAllSaleWaiting(String id){
+		return mybatis.selectList("BizManage.getAllSaleWaiting", id);
+	}
+	public void cancelSaleRegistration(Long applicationSeq) {
+		mybatis.update("BizManage.cancelSaleRegistration", applicationSeq);
+	}
+	public List<HashMap<String, Object>> getAllSaleRecentApproved(String id){
+		return mybatis.selectList("BizManage.getAllSaleRecentApproved", id);
+	}
 	
 	
 	public List<HashMap<String, Object>> getAllPoster(){

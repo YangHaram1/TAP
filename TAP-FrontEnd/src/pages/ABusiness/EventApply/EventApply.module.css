@@ -1,11 +1,19 @@
-.container {
+/* .container {
     width: 100%;
-    max-width: 2000px;
     margin: 0 auto;
     padding: 20px;
+    margin-top:30px;
+    margin-bottom: 100px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
     border-radius: 8px;
+    overflow: hidden;
+} */
+.container{
+    width:100%;
+    height:100%;
+    /* padding: 0px 100px; */
+    /* background-color: beige; */
 }
 
 .header {
@@ -49,6 +57,7 @@
 .table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; 
 }
 
 .table td {
@@ -62,14 +71,17 @@
     background-color: #f2f2f2;
     width: 25%;
     font-weight: bold;
+    min-width: 150px; 
 }
 
 .table td:nth-child(2) {
     background-color: #fff;
 }
 
-.shortInput {
-    width: 150px !important;
+.contiainer .shortInput {
+    /* width: 150px !important; */
+    width: 150px;
+    min-width: 150px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -150,17 +162,19 @@
     align-items: center; 
     gap: 10px;
     width: 100%; 
-    justify-content: flex-start; 
+    justify-content: center; 
 }
 .btnEnd{
     background-color: pink;
     padding: 10px 20px; 
+    margin-top: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
+
 .btnEnd:hover{
-    background-color: green;
+    background-color: rgb(231, 189, 221);
 }
 /* ul li 앞에 점(기본 마커) 지우기 */
 .container ul {

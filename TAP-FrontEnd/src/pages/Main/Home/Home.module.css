@@ -2,6 +2,12 @@
     background-color: rgb(245, 232, 255);
     height: 600px;
     border-radius: 20px;
+    width: 100% !important;
+    overflow: auto;
+}
+
+.banner div {
+    position: relative;
 }
 
 

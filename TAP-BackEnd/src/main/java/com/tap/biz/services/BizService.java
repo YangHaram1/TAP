@@ -37,6 +37,21 @@ public class BizService {
 	public List<HashMap<String, Object>> getAllTeamLocation(){
 		return bizdao.getAllTeamLocation();
 	}
+	public List<HashMap<String, Object>> getAllSeats(){
+		return bizdao.getAllSeats();
+	}
+	public List<HashMap<String, Object>> getAllPrices(){
+		return bizdao.getAllPrices();
+	}
+	public List<HashMap<String, Object>> getProductByName(String name){
+		return bizdao.getProductByName(name);
+	}
+	public void createSale(List<HashMap<String, Object>> saleDataList) {
+        for (HashMap<String, Object> saleData : saleDataList) {
+            bizdao.createSale(saleData); 
+        }
+    }
+	
 	public List<TestClobDTO> getContent(){
 		return bizdao.getContent();
 	}

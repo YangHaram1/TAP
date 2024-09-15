@@ -38,6 +38,20 @@ public class BizDAO {
 	public List<HashMap<String, Object>> getAllTeamLocation(){
 		return mybatis.selectList("Biz.getAllTeamLocation");
 	}
+	public List<HashMap<String, Object>> getAllSeats(){
+		return mybatis.selectList("Biz.getAllSeats");
+	}
+	public List<HashMap<String, Object>> getAllPrices(){
+		return mybatis.selectList("Biz.getAllPrices");
+	}
+	public List<HashMap<String, Object>> getProductByName(String name){
+		return mybatis.selectList("Biz.getProductByName", name);
+	}
+	public void createSale(HashMap<String, Object> saleData) {
+		mybatis.insert("Biz.createSale", saleData);
+	}
+	
+	
 	public List<TestClobDTO> getContent(){
 		return mybatis.selectList("Biz.getContent");
 	}

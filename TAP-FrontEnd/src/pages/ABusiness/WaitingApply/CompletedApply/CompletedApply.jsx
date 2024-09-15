@@ -61,12 +61,12 @@ export const CompletedApply =()=>{
             <table>
                 <thead>
                 <tr>
-                    <th>접수번호</th>
+                    <th>접수<br/>번호</th>
                     <th>상품정보</th>
                     <th>공연장 및 일시</th>
                     <th>신청일</th>
                     <th>상태</th>
-                    <th>신청 취소</th>
+                    <th>승인일</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -105,15 +105,7 @@ export const CompletedApply =()=>{
                   )}
                     </td>
                     <td>
-                    {product.STATUS !== '반려' && (
-                        <button className={styles.manage_button} onClick={handleCancel}>신청 취소</button>
-                    )}
-                     {product.STATUS === '반려' && (
-                        <div className={styles.rejectReason}>
-                         {/* <span className={styles.tooltipIcon}><FaLightbulb size={20} /> </span> */}
-                         {/* <div className={styles.tooltipText}>{product.REJECTION_REASON} 반려 이유: </div> */}
-                       </div>
-                    )}
+                        {formatDate(product.updated_at)}
                     </td>
                     </tr>
                 ))}

@@ -33,3 +33,22 @@
   flex: 3 !important;
   padding: 0 !important;
 }
+
+.slick-dots {
+  display: flex !important;
+  gap: 50px !important;
+  top: 500px;
+  left: 500px;
+
+}
+
+.slick-track {}
+
+.slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 50px;
+  height: 100%;
+}

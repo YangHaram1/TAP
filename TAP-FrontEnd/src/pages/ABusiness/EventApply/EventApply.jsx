@@ -14,7 +14,7 @@ export const EventApply = () => {
     const navi = useNavigate();
 
     const [category, setCategory] = useState()
-    const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false); // New state variable
+    const [isRunningTimeEnabled, setIsRunningTimeEnabled] = useState(false);
    
     const [formData, setFormData] = useState({
         id: loginID, 
@@ -31,7 +31,8 @@ export const EventApply = () => {
         max_ticket: '', 
         away_team_seq: ''
     });
-
+    
+    const [seats, setSeats] = useState([]);
     const [selectedPlace, setSelectedPlace] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [categories, setCategories] = useState([]);
@@ -50,7 +51,6 @@ export const EventApply = () => {
     const [selectedExceptDay, setSelectedExceptDay] = useState("");
     const [scheduleExceptList, setScheduleExceptList] = useState([]);
  
-    const [content2, setContent2] = useState('');
     const contentRef = useRef(null);
     useEffect(() => {
         api.get(`/biz/application/category`).then((resp) => {
@@ -89,6 +89,10 @@ export const EventApply = () => {
         }).catch(() => {
             alert("이상 오류");
         });
+        api.get(`/biz/application/seats`).then(resp=>{
+            setSeats(resp.data);
+            console.log(resp.data)
+        })
 
         // api.get(`/biz/application/description`).then((resp) => {
         //     setContent(resp.data[1].description_content);
@@ -718,7 +722,7 @@ export const EventApply = () => {
                         </table>
                         </div>
                  {/* 장르, 상품명, 관람등급 등 나머지 입력 폼 */}
-                 <div className={styles.tableWrapper2}>
+                 <div className={styles.tableWrapper}>
                         <table className={styles.table}>
                             <tbody>
                         <tr>
@@ -785,12 +789,25 @@ export const EventApply = () => {
                                 </td>
                             </tr>
                         }
-                        <tr>
+                       <tr>
                             <td>좌석 등급 및 가격</td>
                             <td>
-                                {/* 장소 선택 시 자동 설정되게 */}
+                                {selectedPlace ? (
+                                    <ul>
+                                        {seats
+                                            .filter((seat) => seat.PLACE_SEQ.toString() === selectedPlace)
+                                            .map((seat, index) => (
+                                                <li key={index}>
+                                                    {seat.PLACE_SEAT_LEVEL} - {seat.PRICE_SEAT} 원
+                                                </li>
+                                            ))}
+                                    </ul>
+                                ) : (
+                                    '좌석 정보를 보려면 장소를 선택하세요.'
+                                )}
                             </td>
                         </tr>
+
                         <tr>
                             <td>일자</td>
                             <td>
@@ -871,31 +888,37 @@ export const EventApply = () => {
 
                             return (
                                 <ul key={index}>
-                                <li>
-                                    {schedule.schedule_day === '전체' ? '전체' : daysOfWeek[schedule.schedule_day]} - {schedule.schedule_time}
+                                <li> 
+                                    {schedule.schedule_day === "전체"
+                                                ? "전체"
+                                                : `${daysOfWeek[schedule.schedule_day]}요일`}{" "}
+                                            - {schedule.schedule_time}
                                     <br />
-                                    <input type="file" 
-                                    ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
-                                    onChange={handleCastingImageChange} />
-                                    <input
-                                    type="text"
-                                    placeholder="배우 이름"
-                                    ref={actorInputRef}
-                                    value={currentInputs.actorName}
-                                    onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
-                                    className={styles.shortInput}
-                                    />
-                                    <span className={styles.Gap}></span>
-                                    <input
-                                    type="text"
-                                    placeholder="역할"
-                                    ref={characInputRef}
-                                    value={currentInputs.role}
-                                    onChange={(e) => handleLocalRoleChange(scheduleKey, e.target.value)}
-                                    className={styles.shortInput}
-                                    />
-                                    <span className={styles.Gap}></span>
-                                    <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
+                                    {/*  */}
+                                    <div className={styles.file_upload_wrapper}>
+                                        <input id="file_upload_1" type="file" style={{display:"block"}}
+                                        ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
+                                        onChange={handleCastingImageChange} />
+                                        <input
+                                        type="text"
+                                        placeholder="배우 이름"
+                                        ref={actorInputRef}
+                                        value={currentInputs.actorName}
+                                        onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
+                                        className={styles.shortInput}
+                                        />
+                                        <span className={styles.Gap}></span>
+                                        <input
+                                        type="text"
+                                        placeholder="역할"
+                                        ref={characInputRef}
+                                        value={currentInputs.role}
+                                        onChange={(e) => handleLocalRoleChange(scheduleKey, e.target.value)}
+                                        className={styles.shortInput}
+                                        />
+                                        <span className={styles.Gap}></span>
+                                        <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
+                                    </div>
                                     <br />
                                     <ul>
                                     {castingData
@@ -985,7 +1008,7 @@ export const EventApply = () => {
                     </tbody>
                 </table>
             </div>
-
+            <div className={styles.tableWrapper}>
             <div className={styles.title}>
                 <p>상세 정보 입력</p>
             </div>
@@ -997,10 +1020,8 @@ export const EventApply = () => {
                             <p style={{color:"red", fontSize:"13px"}} > * 글자 입력만 가능합니다. 이미지 삽입시 신청 승인이 어렵습니다.</p>
                             <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
                         </td>
-                        <td>
-
-                        </td>
                     </tr>
+                    { category === "1" &&  
                     <tr>
                         <td>메인 포스터</td>
                         <td>
@@ -1027,6 +1048,7 @@ export const EventApply = () => {
                                
                         </td>
                     </tr>
+                    }
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>
@@ -1039,7 +1061,7 @@ export const EventApply = () => {
                    
                 </tbody>
             </table>
-        
+        </div>
                              
             <div className={styles.btnEnding}>
             <button onClick={handleSubmit} className={styles.btnEnd}>신청</button>

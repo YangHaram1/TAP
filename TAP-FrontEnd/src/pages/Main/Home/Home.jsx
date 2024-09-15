@@ -4,11 +4,14 @@ import { useState } from 'react'
 import { Caroucel } from '../../../components/Caroucel/Caroucel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faS, faStar } from '@fortawesome/free-solid-svg-icons'
+import Slide from './Slide/Slide'
 const Home = () => {
     const [images, setImages] = useState([])
     return (
         <div className={styles.container}>
-            <div className={styles.banner}></div>
+            <div className={styles.banner}>
+                <Slide></Slide>
+            </div>
             <div className={styles.ranking}>
                 <div className={styles.rankingTxt}>
                     <div className={styles.rTitle}>장르별 랭킹</div>

@@ -28,7 +28,7 @@ export const BizSideMenu =()=>{
     
     const [dropdown, setDropdown] = useState(() => {
         const savedState = localStorage.getItem('dropdownState');
-        return savedState ? JSON.parse(savedState) : { productApplication: false };
+        return savedState ? JSON.parse(savedState) : {  };
     });
 
     const handleMenuClick = (link, type) => {
@@ -47,7 +47,7 @@ export const BizSideMenu =()=>{
     useEffect(() => {
         const path = location.pathname;
         let newSelectedMenu = '';
-        let newDropdownState = { productApplication: false };
+        let newDropdownState = { };
     
         menus.forEach(menu => {
           if (path.startsWith(menu.link)) {

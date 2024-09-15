@@ -70,8 +70,7 @@ export const PastEvent=()=>{
                     <td className={styles.product_date}>{formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}</td>
                     <td className={styles.product_venue}>{product.PLACE_NAME} </td>
                     <td>
-                        <button className={styles.manage_button}>상품관리</button>
-                        <button className={styles.edit_button}>수정</button>
+                        <button className={styles.manage_button}>상품 정보</button>
                     </td>
                     </tr>
                 ))}
