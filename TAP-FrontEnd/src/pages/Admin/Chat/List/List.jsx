@@ -5,6 +5,8 @@ import { ChatsContext } from '../../../../context/ChatsContext';
 import { api } from '../../../../config/config';
 import { format } from 'date-fns';
 import Modal from './Modal/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell, faBellSlash, faComment, faCommentSlash, faExclamation, faSlash, faThumbtack } from '@fortawesome/free-solid-svg-icons';
 
 
 const List = () => {
@@ -16,13 +18,15 @@ const List = () => {
     const [group_chats, setGroup_chats] = useState([]);
     const [modalDisplay, setModalDisplay] = useState(null);
     const [countBookmark, setCountBookmark] = useState(-1);
+    const [list,setList]=useState([]);
 
+    const [oneTime,setOneTime]=useState(true);
     useEffect(() => {
 
         api.get(`/groupchat`).then((resp) => {
             if (resp != null) {
                 if (resp.data !== '' && resp.data !== 'error') {
-                    console.log(resp.data);
+                   // console.log(resp.data);
                     let count = -1;
 
                     (resp.data).forEach((temp) => {
@@ -76,10 +80,7 @@ const List = () => {
 
     const handleDoubleClick = (seq) => () => {
         if (isAuth) {
-            setChatNavi((prev) => {
-                setChatSeq(seq);
-                return 'chat';
-            });
+            setChatSeq(seq);
         }
     }
 
@@ -110,8 +111,17 @@ const List = () => {
             return false;
         });
         // setCount(countBookmark);
-        return sortedItems;
+        if(oneTime){//한번만 실행
+            setChatSeq(sortedItems[0].seq);
+            setOneTime(false);
+        }
+      
+        setList(sortedItems)
     }, [group_chats])
+    useEffect(()=>{
+        if(group_chats.length>0)
+        handleSort();
+    },[handleSort])
 
     const truncateHtmlText = (htmlString, maxLength) => {
         // HTML 문자열을 DOM 요소로 파싱
@@ -134,12 +144,11 @@ const List = () => {
         <React.Fragment>
             <div className={styles.container}>
                 <div className={styles.title}>
-                    사용자 목록
+                    User List
                 </div>
                 <div className={styles.contents}>
                     {
-
-                        handleSort().map((item, index) => {
+                        list.map((item, index) => {
                             let formattedTimestamp = '';
                             if (item.dto != null) {
                                 formattedTimestamp = format(new Date(item.dto.write_date), 'yyyy-MM-dd');
@@ -159,18 +168,15 @@ const List = () => {
                                     <div className={styles.room} onContextMenu={handleRightClick(index)} onDoubleClick={handleDoubleClick(item.seq)}>
                                         <div className={styles.message}>
                                             <div className={styles.name}>
-                                                <div style={{ flex: 3 }}>
+                                                <div className={styles.username}>
                                                     {item.mdto.id}{`(${item.mdto.name})`}
                                                 </div>
                                                 <div className={styles.bookmark}>
-                                                    {item.bookmark === 'Y' ? <i className="fa-solid fa-bookmark"></i> : false}
+                                                    {item.bookmark === 'Y' &&(<FontAwesomeIcon icon={faThumbtack}  className={styles.icon}/>) }
+                                                  
                                                 </div>
-                                                <div className={styles.size}>
-                                                    {item.size}
-                                                </div>
-
                                             </div>
-                                            <div style={{ display: "flex" }}>
+                                            <div>
                                                 <div className={styles.content} dangerouslySetInnerHTML={{ __html: (item.dto != null) ? truncatedText : '메세지가 없습니다' }}>
                                                 </div>
                                                 <div className={styles.unread}>
@@ -184,7 +190,7 @@ const List = () => {
                                                 {formattedTimestamp}
                                             </div>
                                             <div className={styles.alarm}>
-                                                {item.alarm === 'Y' ? (<i className="fa-solid fa-bell"></i>) : (<i className="fa-solid fa-bell-slash"></i>)}
+                                                {item.alarm === 'Y' ? (<FontAwesomeIcon icon={faBell} />) : (<FontAwesomeIcon icon={faBellSlash} />)}
                                             </div>
                                         </div>
                                     </div>

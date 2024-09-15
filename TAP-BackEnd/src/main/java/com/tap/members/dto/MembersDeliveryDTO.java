@@ -1,7 +1,5 @@
 package com.tap.members.dto;
 
-import java.sql.Timestamp;
-
 public class MembersDeliveryDTO {
 	//members만 있는 colume
 	private String id;
@@ -16,13 +14,7 @@ public class MembersDeliveryDTO {
 	private String member_id;
 	private String address;
 	private String detailed_address;
-	private int zipcode;
-	
-	//company한테만 있는 colume
-	private String companyName; //name
-	private String companyPhone; //phone
-	private int registration_number;
-	private Timestamp issue_date;
+	private String zipcode;
 	public String getId() {
 		return id;
 	}
@@ -89,39 +81,15 @@ public class MembersDeliveryDTO {
 	public void setDetailed_address(String detailed_address) {
 		this.detailed_address = detailed_address;
 	}
-	public int getZipcode() {
+	public String getZipcode() {
 		return zipcode;
 	}
-	public void setZipcode(int zipcode) {
+	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
-	public String getCompanyName() {
-		return companyName;
-	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-	public String getCompanyPhone() {
-		return companyPhone;
-	}
-	public void setCompanyPhone(String companyPhone) {
-		this.companyPhone = companyPhone;
-	}
-	public int getRegistration_number() {
-		return registration_number;
-	}
-	public void setRegistration_number(int registration_number) {
-		this.registration_number = registration_number;
-	}
-	public Timestamp getIssue_date() {
-		return issue_date;
-	}
-	public void setIssue_date(Timestamp issue_date) {
-		this.issue_date = issue_date;
-	}
 	public MembersDeliveryDTO(String id, String pw, String name, String phone, String email, String birth,
-			String gender, int delivery_seq, String member_id, String address, String detailed_address, int zipcode,
-			String companyName, String companyPhone, int registration_number, Timestamp issue_date) {
+			String gender, int delivery_seq, String member_id, String address, String detailed_address,
+			String zipcode) {
 		super();
 		this.id = id;
 		this.pw = pw;
@@ -135,15 +103,13 @@ public class MembersDeliveryDTO {
 		this.address = address;
 		this.detailed_address = detailed_address;
 		this.zipcode = zipcode;
-		this.companyName = companyName;
-		this.companyPhone = companyPhone;
-		this.registration_number = registration_number;
-		this.issue_date = issue_date;
 	}
 	public MembersDeliveryDTO() {
 		super();
 	}
 	
+	
+
 	
 	
 	

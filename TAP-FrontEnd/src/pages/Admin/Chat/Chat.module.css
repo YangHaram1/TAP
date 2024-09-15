@@ -1,43 +1,95 @@
-.container{
-    width: 100%;
+.container {
+    width: 1100px;
     height: 800px;
     display: flex;
     flex-direction: column;
-    border: 1px solid gray;
-    border-radius: 20px;
-   
+    border-radius: 30px;
+    /* background-image: url('/src/images/background2.jpg');
+    background-size: 1100px 800px; */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+
 }
 
-.header{
+.header {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    font-size: 20px;
-    border-bottom: 2px solid gray;
-    background-color: blueviolet;
-    color: white;
+    font-size: 45px;
+    color: rgb(49, 61, 78);
     border-radius: 20px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border: none;
 }
-.icon{
+
+.icon {
     width: 70px;
     height: 50px;
 }
-.body{
+
+.body {
     display: flex;
     flex: 7;
+    overflow: auto;
 }
-.list{
+
+.list {
+    display: flex;
+    flex: 1;
+    margin-top: 20px;
+    overflow: auto;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.chatapp {
     display: flex;
     flex-direction: column;
     flex: 1;
-    border-right: 1px solid gray;
+    background-color: #eee;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    margin: 20px;
+    overflow: auto;
+    background-size: 540px 700px;
+    color: white;
+    
 }
-.chatapp{
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+
+@font-face {
+    font-family: 'CWDangamAsac-Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/CWDangamAsac-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 스크롤바 전체 */
+::-webkit-scrollbar {
+    width: 10px;
+    /* 스크롤바 너비 */
+}
+
+/* 스크롤바 트랙 */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* 트랙 배경 */
+    border-radius: 10px;
+    /* 둥근 모서리 */
+}
+
+/* 스크롤바 핸들 */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    /* 스크롤바 핸들 색상 */
+    border-radius: 10px;
+    /* 핸들의 둥근 모서리 */
+}
+
+/* 스크롤바 핸들 hover 상태 */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* hover 상태에서 핸들 색상 */
 }

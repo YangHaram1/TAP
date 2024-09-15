@@ -20,6 +20,10 @@
 .Toastify__toast {
   padding: 0 !important;
 }
+.Toastify__toast img{
+  width: 100%;
+  height: 100%;
+}
 
 .Toastify__toast-icon {
   flex: 1 !important;
@@ -28,4 +32,23 @@
 .Toastify__toast-body div:nth-child(2) {
   flex: 3 !important;
   padding: 0 !important;
+}
+
+.slick-dots {
+  display: flex !important;
+  gap: 50px !important;
+  top: 500px;
+  left: 500px;
+
+}
+
+.slick-track {}
+
+.slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 50px;
+  height: 100%;
 }
