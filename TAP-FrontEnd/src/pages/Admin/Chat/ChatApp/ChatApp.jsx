@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import styles from './ChatApp.module.css';
+import { ChatsContext } from '../../../../context/ChatsContext';
 
 const ChatApp = () => {
+    const { setChatNavi, chatList } = useContext(ChatsContext);
+
+
+    useEffect(() => {
+        setChatNavi('admin')
+        console.log(`admin`)
+    }, [])
+
     return (
-        <React.Fragment>
-            <div className={styles.title}>
-                채팅기능
-            </div>
-            <div className={styles.contents}>
-                dsad
-            </div>
-        </React.Fragment>
+        <div className={styles.container} >
+            {
+                chatList
+            }
+        </div>
     )
 }
 export default ChatApp;

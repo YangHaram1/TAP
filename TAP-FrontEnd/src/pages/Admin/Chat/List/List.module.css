@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 10px;
     flex: 1;
+
 }
 .container button {
     width: 50px;
@@ -13,8 +14,10 @@
 }
 .title{
     flex: 1;
-    justify-content: center;
     align-items: center;
+    font-weight: 700;
+    font-size: 25px;
+    color: aquamarine;
     display: flex;
     border-bottom: 1px solid rgba(128, 128, 128, 0.493);
 }
@@ -27,6 +30,9 @@
 
 
 .room {
+    border-radius: 20px;
+    background-color: rgb(84, 123, 135);
+    min-height: 100px;
     display: flex;
     gap: 15px;
     width: 100%;
@@ -137,7 +143,7 @@
 
 
 
-@font-face {
+/* @font-face {
     font-family: 'Freesentation-9Black';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2') format('woff2');
     font-weight: 900;
@@ -148,4 +154,4 @@
     font-family: 'ONE-Mobile-POP';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
     font-style: normal;
-}
+} */

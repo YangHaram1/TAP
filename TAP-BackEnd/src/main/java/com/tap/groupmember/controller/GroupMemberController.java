@@ -45,6 +45,7 @@ public class GroupMemberController {
 
 		if (last_chat_seq != 0) {
 			serv.updateCheck(group_seq, loginID, last_chat_seq);
+			System.out.println(last_chat_seq);
 		} else if (type.equals("alarm")) {
 			serv.updateAlarm(group_seq, loginID);
 		} else if (type.equals("bookmark")) {
