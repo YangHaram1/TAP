@@ -7,7 +7,7 @@ import Chat from './Chat/Chat';
 import { ProductsManage } from './Products/ProductsManage/ProductsManage';
 import { Orders } from './Orders/Orders';
 import { ProductsRegister } from './Products/ProductsApply/ProductsRegister/ProductsRegister';
-import { SaleRegister } from './Products/ProductsApply/SaleRegister/Saleregister';
+import { SaleRegister } from './Products/ProductsApply/SaleRegister/SaleRegister';
 
 export const AdminContent =()=>{
     return(
