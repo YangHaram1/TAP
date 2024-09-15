@@ -8,15 +8,44 @@ import { Modal } from '../../../components/Modal/Modal';
 export const Orders=()=>{
 
     const [ orders, setOrders ]= useState([]);
-    const [ filtered, setFiltered] =useState(orders)
+    const [ filtered, setFiltered] =useState(orders);
+    // select 필터 위한 상태
+    const [ orderStatus, setOrderStatus] = useState('');
+    const [ shippingStatus, setShippingStatus] = useState('');
+
+    // 주문 모든 내역 가져오기 ( 기간 정해서 가져와야하낭..? 아 후순위 . 일단 다 가져오기)
     useEffect(()=>{
-        // 주문 모든 내역
         api.get(`admin/orders`).then((resp)=>{
             console.log(resp.data);
             setOrders(resp.data);
             setFiltered(resp.data);
         })
     },[])
+
+    // select 필터링 함수 
+    const applyFilters = () =>{
+        let filteredOrders = orders;
+
+        if(orderStatus){
+            filteredOrders = filteredOrders.filter(order => order.STATUS === orderStatus);
+        }
+        if(shippingStatus){
+            filteredOrders = filteredOrders.filter(order => order.DELIVERY_STATUS === shippingStatus)
+        }
+        setFiltered(filteredOrders);
+    }
+    // 주문 상태 선택 핸들러
+    const handleOrderStatusChange = (e) => {
+        setOrderStatus(e.target.value);
+        applyFilters(); // 필터링 적용
+    };
+
+    // 배송 상태 선택 핸들러
+    const handleShippingStatusChange = (e) => {
+        setShippingStatus(e.target.value);
+        applyFilters(); // 필터링 적용
+    };
+
 
     // checked Orders 처리 
     const [checkedOrders, setCheckedOrders] = useState([]);
@@ -109,32 +138,28 @@ export const Orders=()=>{
                             <th> <input type="checkbox" name='checkedAll' onClick={handleCheckAll} ref={allCheckRef}/></th>
                             <th>주문id</th>
                             <th>주문자</th>
-                            <th>상품명</th>
-                            <th>좌석 정보 요약</th>
+                            <th>상품명 좌석 정보</th>
                             <th>주문 총액</th>
                             <th>주문 날짜</th>
-                            <th>주문 상태</th>
-                            <th>배송 상태</th>
+                            <th>
+                                <select value={orderStatus} onChange={handleOrderStatusChange}>
+                                    <option value="">주문 상태</option>
+                                    <option value="결제">결제</option>
+                                    <option value="환불">환불</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select value={shippingStatus} onChange={handleShippingStatusChange}>
+                                    <option value="">배송 상태</option>
+                                    <option value="배송 준비중">배송 준비중</option>
+                                    <option value="발송 완료">발송 완료</option>
+                                    <option value="배송중">배송중</option>
+                                    <option value="배송 완료">배송 완료</option>
+                                </select>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* <tr>
-                            <td>
-                            <input
-                                        type="checkbox"
-                                        value={order.ORDER_SEQ}
-                                        onClick={handleCheckBox}
-                                        ref={el => (checkboxRef.current[i] = el)}
-                                    />
-                            </td>
-                            <td>1001</td>
-                            <td>정하윤</td>
-                            <td>오로라 오케슬라</td>
-                            <td>vip a 1열 15</td>
-                            <td>2024.09.06</td>
-                            <td>결제</td>
-                            <td>미발송</td>
-                        </tr> */}
                         {filtered.slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE).map((order, i) => (
                             <tr key={i}>
                                 <td>
@@ -147,8 +172,14 @@ export const Orders=()=>{
                                 </td>
                                 <td>{order.ORDER_SEQ}</td>
                                 <td>{order.CUSTOMER_NAME}</td>
-                                <td>{order.PRODUCT_NAME}</td>
-                                <td>{order.SEAT_INFO}</td>
+                                <td>
+                                    <div className={styles.proName}>
+                                    {order.PRODUCT_NAME}
+                                    </div>
+                                    <div className={styles.seatInfo}>
+                                    {order.SEAT_INFO}
+                                    </div>
+                                </td>
                                 <td>{order.TOTAL_PRICE}</td>
                                 <td>{order.ORDER_DATE}</td>
                                 <td>{order.ORDER_STATUS}</td>

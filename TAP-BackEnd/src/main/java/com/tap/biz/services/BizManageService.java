@@ -30,10 +30,20 @@ public class BizManageService {
 	public List<HashMap<String, Object>> getAllRecentApproved(String id){
 		return bizMandao.getAllRecentApproved(id);
 	}
-	
 	public void cancelRegistration(Long applicationSeq) {
         bizMandao.cancelRegistration(applicationSeq);
     }
+	// 세일 신청 
+	public List<HashMap<String, Object>> getAllSaleWaiting(String id){
+		return bizMandao.getAllSaleWaiting(id);
+	}
+	public void cancelSaleRegistration(Long applicationSeq) {
+        bizMandao.cancelSaleRegistration(applicationSeq);
+    }
+	public List<HashMap<String, Object>> getAllSaleRecentApproved(String id){
+		return bizMandao.getAllSaleRecentApproved(id);
+	}
+	
 	
 	
 	

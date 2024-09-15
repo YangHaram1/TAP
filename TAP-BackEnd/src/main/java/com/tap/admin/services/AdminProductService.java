@@ -13,13 +13,13 @@ public class AdminProductService {
 	@Autowired 
 	private AdminProductDAO adProdao;
 	
-	public List<HashMap<String, Object>> getAllCurrentProducts(){
-		return adProdao.getAllCurrentProducts();
+	public List<HashMap<String, Object>> getCurrentProductsByCategory(String category){
+		return adProdao.getCurrentProductsByCategory(category);
 	}
-	public List<HashMap<String, Object>> getAllPastProducts(){
-		return adProdao.getAllPastProducts();
+	public List<HashMap<String, Object>> getFutureProductsByCategory(String category){
+		return adProdao.getFutureProductsByCategory(category);
 	}
-	public List<HashMap<String, Object>> getAllFutureProducts(){
-		return adProdao.getAllFutureProducts();
+	public List<HashMap<String, Object>> getPastProductsByCategory(String category){
+		return adProdao.getPastProductsByCategory(category);
 	}
 }

@@ -1,4 +1,23 @@
-.container{
+/* .container{
     width: 100%;
     height: 100%;
+} */
+.container{
+    /* width: 100%;
+    height: 100%; */
+    flex-grow: 1; /* 남은 공간을 채움 */
+    width: calc(100% - 250px); /* 전체 너비에서 sideMenu 너비를 제외 */
+
+}
+.container {
+    width: 100%;
+    /* max-width: 2000px; */
+    margin: 0 auto;
+    padding: 20px;
+    margin-top:30px;
+    margin-bottom: 100px;
+    border: 1px solid #ddd;
+    /* background-color: #f9f9f9; */
+    border-radius: 8px;
+    overflow: hidden;
 }
