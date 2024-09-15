@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './PriceModal.module.css';
 import { url } from '../../config/config';
 import { Discount } from './Discount/Discount';
+import { OrderCheck } from './OrderCheck/OrderCheck';
 
 export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
 
@@ -63,7 +64,9 @@ export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
                     <div className={styles.main}>
                         <div className={styles.main_left}>
                            {
-                            tap === 1 ? <Discount/> : <></>
+                            tap === 1 ? <Discount/> 
+                            : tap === 2 ? <OrderCheck/> 
+                            :<></>
                            }
                         </div>
                         <div className={styles.main_right}>
