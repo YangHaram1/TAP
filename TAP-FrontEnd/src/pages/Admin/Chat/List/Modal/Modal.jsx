@@ -10,7 +10,7 @@ const Modal=({ modalRef, index, item, setGroup_chats, setCountBookmark })=>{
     const { setChatController } = useCheckList();
     
     const handleDelete = () => {
-        api.delete(`/groupmember?group_seq=${group_seq}`).then((resp) => {
+        api.delete(`/groupmember?groupSeq=${group_seq}`).then((resp) => {
             setGroup_chats((prev) => {
                 return (
                     prev.filter((temp) => {
@@ -20,14 +20,11 @@ const Modal=({ modalRef, index, item, setGroup_chats, setCountBookmark })=>{
                         return true;
                     })
                 )
-
             });
-            setCountBookmark((prevBookmark) => {
-              return prevBookmark-1;
-            })
-            ws.current.send("chatController");
-            setChatController();
-
+            // setCountBookmark((prevBookmark) => {
+            //   return prevBookmark-1;
+            // })
+            // setChatController();
         })
     }
 
@@ -75,6 +72,9 @@ const Modal=({ modalRef, index, item, setGroup_chats, setCountBookmark })=>{
                 <div className={styles.content} onClick={handleBookmark} >
                     {item.bookmark === 'Y' ? '즐겨찾기 해제' : '즐겨찾기 등록'}
                 </div>
+                {/* <div className={styles.content} onClick={handleBookmark} >
+                    회원 프로필
+                </div> */}
                 <div className={styles.content} onClick={()=>SweetAlert('warning','채팅방','채팅방을 나가시겠습니까?',handleDelete)}>
                     나가기
                 </div>

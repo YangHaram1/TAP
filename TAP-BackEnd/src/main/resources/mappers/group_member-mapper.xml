@@ -5,7 +5,7 @@
 <mapper namespace="GroupMember">
 	<insert id="insert">
 		insert into group_member
-		values(${group_seq},#{member_id},0,'N','N')
+		values(${group_seq},#{member_id},0,'Y','N')
 	</insert>
 
 	<insert id="insertAdmin">
