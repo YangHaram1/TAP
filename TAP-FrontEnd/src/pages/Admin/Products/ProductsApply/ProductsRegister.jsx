@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './ProductsRegister.module.css';
-import { RegisterByCategory } from './RegisterByCategory/RegisterByCategory';
+import { RegisterByCategory } from './ProductsRegister/RegisterByCategory/RegisterByCategory';
 
 export const ProductsRegister = () => {
     const [category, setCategory] = useState(0); // 카테고리 탭
@@ -21,7 +21,7 @@ export const ProductsRegister = () => {
     return (
         <div className={styles.container}>
             <div className={styles.product_table}>
-                <h2>판매 상품 내역</h2>
+                <h2>상품 신청 내역</h2>
 
                 {/* 카테고리 탭 버튼들 */}
                 <div className={styles.category_btns}>
@@ -42,13 +42,13 @@ export const ProductsRegister = () => {
                         onClick={() => setTap(0)}
                         className={tap === 0 ? styles.active : ''}
                     >
-                        현재 판매 상품
+                        신청 상품
                     </button>
                     <button
                         onClick={() => setTap(2)}
                         className={tap === 2 ? styles.active : ''}
                     >
-                        판매 예정 상품
+                        신청 처리 상품
                     </button>
                     <button
                         onClick={() => setTap(1)}
