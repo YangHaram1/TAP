@@ -35,12 +35,15 @@
 	join place on place.place_seq = seats.place_seq
 	</select>
 	<select id="getProductByName" resultType="java.util.HashMap">
-	select apply.application_seq, apply.name, seats.*, place.* from apply
-	join seats on apply.place_seq = seats.place_seq
-	join place on place.place_seq = seats.place_seq
-	WHERE apply.application_seq LIKE '%' || #{name} || '%'
-   OR apply.name LIKE '%' || #{name} || '%'
-	</select>
+	 select DISTINCT apply.application_seq, apply.name, seats.*, place.*, sale.sale_approved
+  from apply
+  join seats on apply.place_seq = seats.place_seq
+  join place on place.place_seq = seats.place_seq
+ join sale on apply.application_seq = sale.application_seq
+  WHERE (apply.application_seq LIKE '%' || #{name} || '%'
+   OR apply.name LIKE '%' || #{name} || '%')
+   AND apply.id = #{id}
+</select>
 	
 	<select id="getAllProduct" resultType="java.util.HashMap">
 		select * from apply where status = 'approved'

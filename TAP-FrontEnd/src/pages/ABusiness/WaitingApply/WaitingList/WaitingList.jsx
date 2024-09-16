@@ -79,7 +79,7 @@ export const WaitingList=()=>{
                     <th>공연장 및 일시</th>
                     <th>신청일</th>
                     <th>상태</th>
-                    <th>신청 취소</th>
+                    <th>신청<br/>취소</th>
                 </tr>
                 </thead>
                 <tbody>

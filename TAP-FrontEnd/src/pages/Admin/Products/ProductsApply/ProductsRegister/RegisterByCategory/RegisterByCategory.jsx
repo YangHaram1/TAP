@@ -1,28 +1,29 @@
-import { useEffect, useState } from 'react';
-import { api } from '../../../../../config/config';
-import { Pagination } from '../../../../../components/Pagination/Pagination';
-import styles from './ProducsCurrent.module.css';
-import { Navigate, useNavigate } from 'react-router-dom';
 
-export const ProductsCurrent = ({ category, tap }) => {
+import { useEffect, useState } from 'react';
+import styles from './RegisterByCategory.module.css';
+import { api } from '../../../../../../config/config';
+import { Pagination } from '../../../../../../components/Pagination/Pagination';
+import { useNavigate } from 'react-router-dom';
+
+export const RegisterByCategory =({ category, categoryName, tap })=>{
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null); // 선택된 상품 관리
     const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchProducts = async () => {
+            console.log(category)
             try {
-                // tap 값에 따라 서버 엔드포인트 결정
                 let productList = '';
                 if (tap === 0) {
-                    productList = `/admin/products/current?category=${category}`; // 현재 판매 중인 상품
+                    productList = `/admin/products/waiting?category=${category}`; // 상품신청대기 리스트 
                 } else if (tap === 1) {
-                    productList = `/admin/products/past?category=${category}`; // 판매 종료된 상품
-                } else if (tap === 2) {
-                    productList = `/admin/products/future?category=${category}`; // 판매 예정인 상품
-                }
+                    productList = `/admin/products/result?category=${category}`; // 상품신청처리완료 리스트
+                } 
 
                 const response = await api.get(productList);
+                console.log(response.data)
                 setProducts(response.data);
                 setFiltered(response.data);
             } catch (error) {
@@ -32,6 +33,25 @@ export const ProductsCurrent = ({ category, tap }) => {
 
         fetchProducts(); // 컴포넌트가 마운트될 때 데이터 가져오기
     }, [category, tap]); // 카테고리와 상품 상태가 변경될 때마다 다시 API 요청
+    
+    // tap 값에 따라 다른 버튼 텍스트 또는 동작을 설정
+    const renderManageButton = (product) => {
+        if (tap === 0) {
+            return (
+                <button className={styles.manage_button}>
+                    대기
+                </button>
+            );
+        } else if (tap === 1) {
+            return (
+                <button className={styles.manage_button}>
+                    {product.STATUS}
+                </button>
+            );
+        } 
+    };
+
+
 
     // 나머지 로직은 동일
     const formatDate = (dateString) => {
@@ -52,14 +72,15 @@ export const ProductsCurrent = ({ category, tap }) => {
         window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
 
+    
     // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
     const handleRowClick = (application_seq) => {
-        navigate(`/products/${application_seq}`);
+        navigate(`/products/apply/${application_seq}`);
     };
 
     return (
         <div className={styles.container}>
-            <h3>{category} - {tap === 0 ? "현재 판매 중" : tap === 1 ? "판매 종료" : "판매 예정"}</h3>
+            <h3>{categoryName} - {tap === 0 ? "상품 등록 승인 대기 중" : tap === 1 ? "상품 등록 처리 완료" : "승인 대기중"}</h3>
                 <div className={styles.product_table}>
                     
                 {filtered.length > 0 ? (
@@ -69,27 +90,22 @@ export const ProductsCurrent = ({ category, tap }) => {
                         {filtered
                             .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
                             .map((product, index) => (
-                                <tr key={index} 
+                                <tr key={index}
                                 onClick={() => handleRowClick(product.APPLICATION_SEQ)} // application_seq 전달
                                 className={styles.table_row}
                                 >
+                                    <td>신청번호 {product.APPLICATION_SEQ}</td>
+                                    <td> 사업자 </td>
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
-                                            <img
-                                                src={product.FILES_SYSNAME}
-                                                alt={product.FILES_ORINAME}
-                                                className={styles.product_image}
-                                            />
-                                            <span className={styles.status_tag}>
-                                            {tap === 0 ? "예매중" : tap === 1 ? "판매 종료" : "판매 예정"}
-                                            </span>
+                                         
                                         </div>
                                         <div className={styles.product_details}>
                                             <div className={styles.product_name}>
                                                 {product.NAME}
                                             </div>
                                             <div className={styles.product_sub_info}>
-                                                {product.SUB_CATEGORY_NAME} | {product.AGE_LIMIT} |{' '}
+                                                {product.AGE_LIMIT} |{' '}
                                                 {product.RUNNING_TIME} 분
                                             </div>
                                         </div>
@@ -98,9 +114,11 @@ export const ProductsCurrent = ({ category, tap }) => {
                                         {formatDate(product.start_date)}~ <br />
                                         {formatDate(product.end_date)}
                                     </td>
-                                    <td className={styles.product_venue}>{product.PLACE_NAME}</td>
+                                    <td className={styles.product_venue}>
+                                        {product.PLACE_NAME}
+                                    </td>
                                     <td>
-                                        <button className={styles.manage_button}>상품관리</button>
+                                        {renderManageButton(product)}
                                     </td>
                                 </tr>
                             ))}
@@ -121,6 +139,7 @@ export const ProductsCurrent = ({ category, tap }) => {
                     />
                 )}
             </div>
+
         </div>
     );
 };
