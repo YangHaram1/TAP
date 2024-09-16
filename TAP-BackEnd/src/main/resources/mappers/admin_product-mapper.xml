@@ -25,7 +25,7 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
+	where apply.status = '승인 완료' and files.files_type='poster'
 	and sub_category.sub_category_name = #{category}
 	and CURRENT_DATE BETWEEN apply.open_date and apply.end_date
 	order by apply.created_at desc
@@ -44,7 +44,7 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
+	where apply.status = '승인 완료' and files.files_type='poster'
 	and sub_category.sub_category_name = #{category}
 	and apply.open_date <![CDATA[>]]> CURRENT_DATE
 	order by apply.created_at desc
@@ -63,12 +63,55 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
+	where apply.status = '승인 완료' and files.files_type='poster'
 	and sub_category.sub_category_name = #{category}
 	and apply.end_date <![CDATA[<]]> CURRENT_DATE
 	order by apply.created_at desc
 	</select>
+	<!-- Sale  -->
+	<select id="getCountSaleWaiting" resultType="int">
+		SELECT COUNT(DISTINCT apply.application_seq)
+		FROM apply
+		JOIN sale ON sale.application_seq = apply.application_seq
+		WHERE sub_category_seq = #{category}
+		and sale.sale_approved = '승인 대기'
+	</select>
+	<select id="getCountSaleResult" resultType="int">
+		SELECT COUNT(DISTINCT apply.application_seq)
+		FROM apply
+		JOIN sale ON sale.application_seq = apply.application_seq
+		WHERE sub_category_seq = #{category}
+		and sale.sale_approved = '승인 완료'
+	</select>
+	<select id="getWaitingSaleByCategory" resultMap="TimestampResultMap">
+		WITH RankedSales AS (
+		    SELECT apply.*, sale.sale_rate, ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
+		    FROM apply
+		    JOIN sale ON apply.application_seq = sale.application_seq
+		    WHERE sale.sale_approved LIKE '%대기%' 
+		    and apply.sub_category_seq = #{category}
+		)
+		SELECT *
+		FROM RankedSales
+		WHERE rn = #{category}
+	</select>
+	<select id="getResultSaleByCategory" resultMap="TimestampResultMap">
+		WITH RankedSales AS (
+		    SELECT apply.*, sale.sale_rate, ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
+		    FROM apply
+		    JOIN sale ON apply.application_seq = sale.application_seq
+		    WHERE sale.sale_approved not LIKE '%대기%'
+		    and sale.sale_approved not LIKE '%취소%' 
+		    and apply.sub_category_seq = #{category}
+		)
+		SELECT *
+		FROM RankedSales
+		WHERE rn = #{category}
+	</select>
 	
+	
+	
+	<!-- Product -->	
 	<select id="getCountProductsWaiting" resultType="int">
 		select count(*) from apply 
 	    join sub_category 

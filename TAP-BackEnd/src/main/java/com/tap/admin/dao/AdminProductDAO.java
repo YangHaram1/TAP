@@ -21,6 +21,24 @@ public class AdminProductDAO {
 	public List<HashMap<String, Object>> getPastProductsByCategory(String category){
 		return mybatis.selectList("AdminProduct.getPastProductsByCategory", category);
 	}
+	// ----------------------
+	// Sale 상품 신청 갯수 
+	public int getCountSaleWaiting(String category){
+		return mybatis.selectOne("AdminProduct.getCountSaleWaiting", category);
+	}
+	public int getCountSaleResult(String category){
+		return mybatis.selectOne("AdminProduct.getCountSaleResult", category);
+	}
+	// Sale 신청 대기 상품 리스트 - 카테고리 별로
+	public List<HashMap<String, Object>> getWaitingSaleByCategory(String category){
+		return mybatis.selectList("AdminProduct.getWaitingSaleByCategory", category);
+	}
+	// Sale 신청 결과 상품 리스트 - 카테고리 별로 , 최근 3개월분 
+	public List<HashMap<String, Object>> getResultSaleByCategory(String category){
+		return mybatis.selectList("AdminProduct.getResultSaleByCategory", category);
+	}
+	
+	// -------------------
 	// 상품 신청 갯수 
 	public int getCountProductsWaiting(String category){
 		return mybatis.selectOne("AdminProduct.getCountProductsWaiting", category);

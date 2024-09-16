@@ -15,7 +15,8 @@ export const AdminSideMenu =()=>{
           name: "상품관리", link: "/products", type: "productManage", icon:FaCartPlus,
           submenus: [
             { name: "상품ㅎ관리", link: "/products/product" },
-            { name: "상품신청관리", link: "/products/apply" }
+            { name: "상품신청관리", link: "/products/apply" },
+            { name: "할인신청관리", link: "/products/apply/sale" }
           ]
         },
         { 

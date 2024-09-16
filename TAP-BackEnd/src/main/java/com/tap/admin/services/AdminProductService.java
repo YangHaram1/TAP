@@ -22,6 +22,32 @@ public class AdminProductService {
 	public List<HashMap<String, Object>> getPastProductsByCategory(String category){
 		return adProdao.getPastProductsByCategory(category);
 	}
+	//----------------
+	// 할인 신청 갯수 
+	public int getCountSaleWaiting(String category){
+		return adProdao.getCountSaleWaiting(category);
+	}
+	public int getCountSaleResult(String category){
+		return adProdao.getCountSaleResult(category);
+	}
+	// Sale 신청 대기 상품 리스트 - 카테고리 별로 
+	public List<HashMap<String, Object>> getWaitingSaleByCategory(String category){
+		return adProdao.getWaitingSaleByCategory(category);
+	}
+	// Sale 신청 결과 상품 리스트 - 카테고리 별로 , 최근 3개월분 
+	public List<HashMap<String, Object>> getResultSaleByCategory(String category){
+		return adProdao.getResultSaleByCategory(category);
+	}
+	// Sale  application_seq에 따른 상품 상세 정보 가져오기 
+	public List<HashMap<String, Object>> getSaleDetail(String application_seq){
+		return adProdao.getProductDetails(application_seq);
+	}
+	// Sale 상품 승인 처리하기 
+	public int approveSale(String applicationSeq){
+		return adProdao.approveProduct(applicationSeq);
+	}
+	
+	//----------------
 	// 상품 신청 갯수 
 	public int getCountProductsWaiting(String category){
 		return adProdao.getCountProductsWaiting(category);
