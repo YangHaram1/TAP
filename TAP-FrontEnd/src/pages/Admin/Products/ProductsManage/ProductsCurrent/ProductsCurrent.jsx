@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { api } from '../../../../../config/config';
 import { Pagination } from '../../../../../components/Pagination/Pagination';
 import styles from './ProducsCurrent.module.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const ProductsCurrent = ({ category, tap }) => {
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([]);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -50,6 +52,11 @@ export const ProductsCurrent = ({ category, tap }) => {
         window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
 
+    // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
+    const handleRowClick = (application_seq) => {
+        navigate(`/products/${application_seq}`);
+    };
+
     return (
         <div className={styles.container}>
             <h3>{category} - {tap === 0 ? "현재 판매 중" : tap === 1 ? "판매 종료" : "판매 예정"}</h3>
@@ -62,7 +69,10 @@ export const ProductsCurrent = ({ category, tap }) => {
                         {filtered
                             .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
                             .map((product, index) => (
-                                <tr key={index}>
+                                <tr key={index} 
+                                onClick={() => handleRowClick(product.APPLICATION_SEQ)} // application_seq 전달
+                                className={styles.table_row}
+                                >
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
                                             <img

@@ -68,4 +68,49 @@
 	and apply.end_date <![CDATA[<]]> CURRENT_DATE
 	order by apply.created_at desc
 	</select>
+	
+	<select id="getCountProductsWaiting" resultType="int">
+		select count(*) from apply 
+	    join sub_category 
+	    on apply.sub_category_seq = sub_category.sub_category_seq
+	    where apply.status like '%대기%'
+	    and sub_category.sub_category_seq = #{category}
+	</select>
+	<select id="getCountProductsResult" resultType="int">
+		select count(*) from apply 
+	    join sub_category 
+	    on apply.sub_category_seq = sub_category.sub_category_seq
+	    where apply.status not like '%대기%'
+	    and sub_category.sub_category_seq = #{category}
+	    AND apply.updated_at >= ADD_MONTHS(SYSDATE, -3)
+	</select>
+	
+	
+	<select id="getWaitingProductsByCategory" resultMap="TimestampResultMap">
+		SELECT * FROM APPLY
+		WHERE status like '%대기%'
+		and sub_category_seq = #{category}
+	</select>
+	<select id="getResultProductsByCategory" resultMap="TimestampResultMap">
+		SELECT * FROM APPLY
+		WHERE status not like '%대기%'
+		AND status != '취소'
+		AND sub_category_seq = #{category}
+		 AND updated_at >= ADD_MONTHS(SYSDATE, -3)
+	</select>
+	
+	
+	<select id="getProductDetails" resultMap="TimestampResultMap">
+		SELECT * FROM APPLY
+		WHERE application_seq = #{application_seq}
+	</select>
+	
+	<update id="approveProduct">
+	    UPDATE apply
+	    SET status = '승인 완료', 
+	    updated_at = sysdate
+	    WHERE application_seq = #{applicationSeq}
+	</update>
+	
+	
 </mapper>

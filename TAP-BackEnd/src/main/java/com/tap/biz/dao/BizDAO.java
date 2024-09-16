@@ -44,8 +44,11 @@ public class BizDAO {
 	public List<HashMap<String, Object>> getAllPrices(){
 		return mybatis.selectList("Biz.getAllPrices");
 	}
-	public List<HashMap<String, Object>> getProductByName(String name){
-		return mybatis.selectList("Biz.getProductByName", name);
+	public List<HashMap<String, Object>> getProductByName(String name, String id){
+		 return mybatis.selectList("Biz.getProductByName", new HashMap<String, Object>() {{
+		        put("name", name);
+		        put("id", id);
+		    }});
 	}
 	public void createSale(HashMap<String, Object> saleData) {
 		mybatis.insert("Biz.createSale", saleData);
