@@ -118,26 +118,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 		}
 
-//		if (message.getPayload().equals("chatController")) {
-//			broadcastMessage("chatController", list);
-//		}
-//		
-
-//			System.out.println("파일업로드 웹소켓");
-//			String jsonString = message.getPayload();
-//			Type mapType = new TypeToken<Map<String, Object>>() {
-//			}.getType();
-//			Map<String, Object> map = gson.fromJson(jsonString, mapType);
-//			String fileMessage = map.get("oriname") + "*" + map.get("sysname") + "*" + map.get("code");
-//			ChatDTO dto = null;
-//			if (map.get("dto") != null) {
-//				// dto 필드 자체가 LinkedTreeMap으로 변환되어 있으므로, 이를 다시 JSON 문자열로 변환한 후, ChatDTO로 변환
-//				String dtoJson = gson.toJson(map.get("dto"));
-//				dto = gson.fromJson(dtoJson, ChatDTO.class);
-//			}
-//			String json = gson.toJson(dto);
-//			broadcastMessage(json, list);
-
 	}
 
 	@Override

@@ -3,6 +3,13 @@
     height: 100%;
 }
 
+.containerClick {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.478);
+}
+
+
 .header {
     display: flex;
     gap: 10px;
@@ -34,4 +41,36 @@
     align-items: center;
     color: white;
     background-color: white;
+}
+.body{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.type{
+    display: flex;
+    gap: 5px;
+    padding-bottom: 5px;
+}
+.type div{
+    display: flex;
+    font-weight: 600;
+    font-size: 14px;
+}
+.contents{
+    display: flex;
+    font-size: 13px;
+    gap: 5px;
+}
+.address{
+    flex: 4;
+}
+.zipcode{
+    flex: 1;
+}
+.name{
+    flex: 1;
+}
+.phone{
+    flex: 1.5;
 }

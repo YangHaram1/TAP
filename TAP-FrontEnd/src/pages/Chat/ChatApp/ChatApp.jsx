@@ -74,7 +74,7 @@ const ChatApp = () => {
         if (isAuth) {
             const { chatSeq } = useCheckList.getState();
             if (chatSeq !== 0) {
-                if (chatNavi === 'chatapp') {
+                if (chatNavi === 'chatapp' &&role==='ROLE_USER') {
                     setStyles(userstyles);
 
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
@@ -82,7 +82,7 @@ const ChatApp = () => {
 
                     })
                 }
-                else if (chatNavi === 'admin') {
+                else if (chatNavi === 'admin' &&role==='ROLE_ADMIN') {
                     console.log('admin chat')
                     setStyles(adminStyles);
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
