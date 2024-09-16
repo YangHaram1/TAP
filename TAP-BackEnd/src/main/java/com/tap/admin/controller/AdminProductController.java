@@ -36,4 +36,32 @@ public class AdminProductController {
 		List<HashMap<String, Object>> products = AdProServ.getPastProductsByCategory(category);
 		return ResponseEntity.ok(products);
 	}
+	
+	// 신청- 카테고리별 신청 대기 상품 갯수
+	@GetMapping("/count/waiting")
+	public ResponseEntity<Integer> getCountProductsWaiting(@RequestParam String category) {
+		int count = AdProServ.getCountProductsWaiting(category);
+		return ResponseEntity.ok(count);
+	}
+	// 신청 - 카테고리별 신청 결과 상품 갯수 - 최근 1달간. 
+	@GetMapping("/count/result")
+	public ResponseEntity<Integer> getCountProductsResult(@RequestParam String category) {
+		int count = AdProServ.getCountProductsResult(category);
+		System.out.println(count);
+		System.out.println("카테고리"+category);
+		return ResponseEntity.ok(count);
+	}
+	// 신청 대기 상품 리스트 - 카테고리 별로 
+	@GetMapping("/waiting")
+	public ResponseEntity<List<HashMap<String, Object>>> getWaitingProductsByCategory(@RequestParam String category) {
+		List<HashMap<String, Object>> products = AdProServ.getWaitingProductsByCategory(category);
+		return ResponseEntity.ok(products);
+	}
+	// 신청 결과 상품 리스트 - 카테고리 별로 , 최근 3개월분 
+	@GetMapping("/result")
+	public ResponseEntity<List<HashMap<String, Object>>> getResultProductsByCategory(@RequestParam String category) {
+System.out.println(category);
+		List<HashMap<String, Object>> products = AdProServ.getResultProductsByCategory(category);
+		return ResponseEntity.ok(products);
+	}
 }

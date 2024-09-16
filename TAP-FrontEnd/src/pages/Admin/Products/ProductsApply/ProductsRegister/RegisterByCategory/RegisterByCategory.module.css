@@ -76,9 +76,9 @@
     border: none;
     padding: 5px 10px;
     margin: 2px;
-    cursor: pointer;
+    /* cursor: pointer; */
   }
   
-  .manage_button:hover, .edit_button:hover {
+  /* .manage_button:hover, .edit_button:hover {
     background-color: #0056b3;
-  }
+  } */

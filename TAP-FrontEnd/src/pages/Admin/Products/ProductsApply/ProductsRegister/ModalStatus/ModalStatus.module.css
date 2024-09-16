@@ -1,0 +1,131 @@
+/* 모달 컨테이너 */
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    /* margin: 100px auto; */
+    font-family: Arial, sans-serif;
+}
+
+/* 모달 헤더 */
+.container h2 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 모달 본문 */
+.container .p {
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 모달 내부의 버튼 섹션 */
+.modalActions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* 승인 및 반려 버튼 */
+.confirmButton, .rejectButton, .cancelButton {
+    padding: 12px 25px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+/* 승인 버튼 스타일 */
+.confirmButton {
+    background-color: #824caf;
+    color: white;
+}
+
+.confirmButton:hover {
+    background-color: #5b3779;
+}
+
+/* 반려 버튼 스타일 */
+.rejectButton {
+    background-color: #dd766f;
+    color: white;
+}
+
+.rejectButton:hover {
+    background-color: #9c4543;
+}
+
+/* 취소 버튼 스타일 */
+.cancelButton {
+    background-color: #ccc;
+    color: black;
+}
+
+.cancelButton:hover {
+    background-color: #bbb;
+}
+
+/* 반려 섹션 */
+.rejectSection {
+    margin-top: 30px;
+}
+
+/* 반려 사유 텍스트 영역 */
+.rejectSection textarea {
+    width: 90%;
+    height: 120px;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+/* 반려 버튼 스타일 */
+.rejectSection .rejectButton {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: #dd766f;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.rejectSection .rejectButton:hover {
+    background-color: #9c4543;
+}
+
+.rejectSection .rejectButton:disabled {
+    background-color: #e0e0e0;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* 미디어 쿼리: 모바일 최적화 */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        margin: 50px auto;
+        padding: 15px;
+    }
+
+    .confirmButton, .rejectButton, .cancelButton {
+        font-size: 12px;
+        padding: 10px 20px;
+    }
+
+    .rejectSection textarea {
+        height: 100px;
+    }
+}

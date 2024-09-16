@@ -1,11 +1,13 @@
 package com.tap.biz.controller;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +21,15 @@ import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.dto.TotalScheduleDTO;
 import com.tap.biz.services.BizService;
 import com.tap.files.dto.FilesDTO;
+import com.tap.members.service.MembersService;
 
 @RestController
 @RequestMapping("/biz/application")
 public class BizApplyController {
 	@Autowired
 	private BizService bizServ;
+	@Autowired
+	private MembersService mserv;
 	
 	@GetMapping("/category")
 	public ResponseEntity<List<HashMap<String, Object>>> getAllCategory(){
@@ -62,25 +67,27 @@ public class BizApplyController {
 	public ResponseEntity<List<HashMap<String, Object>>> getAllPrices(){
 		return ResponseEntity.ok(bizServ.getAllPrices());
 	}
+	
+	// 세일신청할때 상품명 가져오기 -- 내가 등록한 상품만 가져와야함..(principle 사용하기_
 	@GetMapping("/products")
-    public ResponseEntity<List<HashMap<String, Object>>> getProductByName(@RequestParam String name) {
-        return ResponseEntity.ok(bizServ.getProductByName(name));
+    public ResponseEntity<List<HashMap<String, Object>>> getProductByName(Principal principal, @RequestParam String nameOrNumber) {
+		if (principal == null) {
+			System.out.println("principal");
+			return null;
+		}
+		String username = principal.getName();
+		UserDetails user = mserv.loadUserByUsername(username);
+		String id = user.getUsername();
+		System.out.println("아이디 : " + user.getUsername());
+		System.out.println("name " + nameOrNumber);
+		return ResponseEntity.ok(bizServ.getProductByName(nameOrNumber, user.getUsername()));
     }
-
+	
+	// 세일 신청하기 
 	@PostMapping("/sale")
 	public ResponseEntity<List<HashMap<String, Object>>> insertSale(
 	    @RequestBody List<HashMap<String, Object>> saleDataList) {
-	    
-//	    // 데이터 처리
-//	    for (HashMap<String, Object> saleData : saleDataList) {
-//	        // saleData에서 application_seq, place_seat_level 등의 값을 추출하여 처리
-//	        System.out.println("application_seq: " + saleData.get("application_seq"));
-//	        System.out.println("place_seat_level: " + saleData.get("place_seat_level"));
-//	        System.out.println("sale_price: " + saleData.get("discountedPrice"));
-//	        System.out.println("sale_rate: " + saleData.get("discountRate"));
-//	    }
 	    bizServ.createSale(saleDataList);
-
 	    // 처리 후 응답 반환
 	    return ResponseEntity.ok(saleDataList);
 	}
@@ -134,8 +141,6 @@ public class BizApplyController {
 		bizServ.createApplyDescription(detailed, applicationSeq);
 
 	//////////////////////////////////////////////////	
-
-
 		
 		return ResponseEntity.ok(formData);
 	}
