@@ -23,4 +23,12 @@
 	<select id="selectById" resultType="com.tap.delivery.dto.DeliveryDTO">
 		select *from delivery where member_id=#{id}
 	</select>
+	
+	<select id="selectBySeq" resultType="com.tap.delivery.dto.DeliveryDTO">
+		select *from delivery where seq=(select delivery_seq from members where id=#{id})
+	</select>
+	
+	<delete id="delete">
+		delete delivery where seq=#{seq}
+	</delete>
 </mapper>

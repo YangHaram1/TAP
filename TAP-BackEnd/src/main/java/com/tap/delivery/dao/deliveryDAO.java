@@ -30,4 +30,14 @@ public class deliveryDAO {
 		return mybatis.selectList("Delivery.selectById",username);
 	}
 
+	public void deleteByArray(Integer integer) {
+		mybatis.delete("Delivery.delete",integer);
+		
+	}
+
+	public DeliveryDTO selectBySeq(String username) {
+		// TODO Auto-generated method stub
+		return mybatis.selectOne("Delivery.selectBySeq",username);
+	}
+
 }

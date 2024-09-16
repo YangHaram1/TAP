@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 
 const AddForm = ({ setCheck,setList }) => {
     const [data, setData] = useState({
+        seq:'',
         member_id: '',
         address: '',
         detailed_address: '',
@@ -17,7 +18,7 @@ const AddForm = ({ setCheck,setList }) => {
         api.post(`/delivery`,data).then((resp)=>{
             setCheck(false);
             setList((prev)=>{
-                return[...prev,data]
+                return[...prev,{...data,seq:resp.data}]
             })
             Swal.fire({
                 icon:'success',
@@ -30,7 +31,6 @@ const AddForm = ({ setCheck,setList }) => {
     const handleAddressSearch = () => {
         new window.daum.Postcode({
             oncomplete: function (data) {
-                console.log(data)
                 setData(prev => ({
                     ...prev,
                     zipcode: data.zonecode,
@@ -47,9 +47,9 @@ const AddForm = ({ setCheck,setList }) => {
         })
     }
 
-    useEffect(() => {
-        console.log(data);
-    }, [data])
+    // useEffect(() => {
+    //     console.log(data);
+    // }, [data])
     return (
         <div className={styles.container}>
             <div className={styles.input}>
