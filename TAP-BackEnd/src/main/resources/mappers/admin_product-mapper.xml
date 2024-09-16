@@ -98,4 +98,19 @@
 		AND sub_category_seq = #{category}
 		 AND updated_at >= ADD_MONTHS(SYSDATE, -3)
 	</select>
+	
+	
+	<select id="getProductDetails" resultMap="TimestampResultMap">
+		SELECT * FROM APPLY
+		WHERE application_seq = #{application_seq}
+	</select>
+	
+	<update id="approveProduct">
+	    UPDATE apply
+	    SET status = '승인 완료', 
+	    updated_at = sysdate
+	    WHERE application_seq = #{applicationSeq}
+	</update>
+	
+	
 </mapper>

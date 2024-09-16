@@ -8,6 +8,8 @@ import { ProductsManage } from './Products/ProductsManage/ProductsManage';
 import { Orders } from './Orders/Orders';
 import { SaleRegister } from './Products/ProductsApply/SaleRegister/SaleRegister';
 import { ProductsRegister } from './Products/ProductsApply/ProductsRegister';
+import { DetailProduct } from './DetailProducts/DetailProduct';
+import { DetailRegist } from './Products/ProductsApply/ProductsRegister/DetailRegist/DetailRegist';
 
 export const AdminContent =()=>{
     return(
@@ -16,6 +18,8 @@ export const AdminContent =()=>{
                 <Route path="/*" element={<Dash/>}/>
                 <Route path="/products/product/*" element={<ProductsManage/>}/>
                 <Route path="/products/apply/*" element={<ProductsRegister/>}/>
+                <Route path="/products/:application_seq" element={<DetailProduct />} />
+                <Route path="/products/apply/:application_seq" element={<DetailRegist />} />
                 <Route path="/products/apply/sale/*" element={<SaleRegister/>}/>
                 <Route path="/orders/user/*" element={<Orders/>}/>
                 <Route path="/members/user/*" element={<UserMem/>}/>

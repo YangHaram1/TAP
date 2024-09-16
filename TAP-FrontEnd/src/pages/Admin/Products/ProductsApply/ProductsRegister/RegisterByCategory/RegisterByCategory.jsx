@@ -3,15 +3,13 @@ import { useEffect, useState } from 'react';
 import styles from './RegisterByCategory.module.css';
 import { api } from '../../../../../../config/config';
 import { Pagination } from '../../../../../../components/Pagination/Pagination';
-import { Modal } from '../../../../../../components/Modal/Modal';
-import {ModalStatus} from './../ModalStatus/ModalStatus';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterByCategory =({ category, categoryName, tap })=>{
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-    const closeModal = () => setIsModalOpen(false);
     const [selectedProduct, setSelectedProduct] = useState(null); // 선택된 상품 관리
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -40,7 +38,7 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
     const renderManageButton = (product) => {
         if (tap === 0) {
             return (
-                <button className={styles.manage_button} onClick={()=> handleAdmin(product)}>
+                <button className={styles.manage_button}>
                     대기
                 </button>
             );
@@ -53,39 +51,6 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
         } 
     };
 
-    // 상품 관리 모달 띄우기
-    const handleAdmin = (product) => {
-        setSelectedProduct(product); // 선택된 상품 설정
-        setIsModalOpen(true); // 모달 열기
-    };
-    // 모달에서 승인 버튼 클릭 시 실행
-    const handleConfirmApproval = async () => {
-        try {
-            // // API 호출로 승인 상태 업데이트
-            // await api.post(`/admin/products/approve`, {
-            //     productId: selectedProduct.ID, // 상품 ID를 사용하여 승인 처리
-            // });
-            console.log(`${selectedProduct.NAME} 상품이 승인되었습니다.`);
-            setIsModalOpen(false); // 모달 닫기
-        } catch (error) {
-            console.error('승인 처리 중 오류 발생:', error);
-        }
-    };
-
-    // 모달에서 반려 버튼 클릭 시 실행
-    const handleReject = async (rejectionReason) => {
-        try {
-            // // API 호출로 반려 상태와 사유 업데이트
-            // await api.post(`/admin/products/reject`, {
-            //     productId: selectedProduct.ID, // 상품 ID
-            //     reason: rejectionReason, // 반려 사유
-            // });
-            console.log(`${selectedProduct.NAME} 상품이 반려되었습니다. 이유: ${rejectionReason}`);
-            setIsModalOpen(false); // 모달 닫기
-        } catch (error) {
-            console.error('반려 처리 중 오류 발생:', error);
-        }
-    };
 
 
     // 나머지 로직은 동일
@@ -107,6 +72,12 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
         window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
 
+    
+    // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
+    const handleRowClick = (application_seq) => {
+        navigate(`/products/apply/${application_seq}`);
+    };
+
     return (
         <div className={styles.container}>
             <h3>{categoryName} - {tap === 0 ? "상품 등록 승인 대기 중" : tap === 1 ? "상품 등록 처리 완료" : "승인 대기중"}</h3>
@@ -119,7 +90,10 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                         {filtered
                             .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
                             .map((product, index) => (
-                                <tr key={index}>
+                                <tr key={index}
+                                onClick={() => handleRowClick(product.APPLICATION_SEQ)} // application_seq 전달
+                                className={styles.table_row}
+                                >
                                     <td>신청번호 {product.APPLICATION_SEQ}</td>
                                     <td> 사업자 </td>
                                     <td className={styles.product_info}>
@@ -166,18 +140,6 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                 )}
             </div>
 
-          
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <div className={styles.modalForm}>
-                    <ModalStatus
-                        productName={selectedProduct?.NAME}
-                        onConfirm={handleConfirmApproval}
-                        onReject={handleReject}
-                        isModalOpen={isModalOpen} 
-                        setIsModalOpen={setIsModalOpen}
-                    />
-                </div>
-            </Modal>
         </div>
     );
 };

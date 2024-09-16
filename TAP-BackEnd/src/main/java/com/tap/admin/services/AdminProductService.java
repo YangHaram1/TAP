@@ -37,4 +37,15 @@ public class AdminProductService {
 	public List<HashMap<String, Object>> getResultProductsByCategory(String category){
 		return adProdao.getResultProductsByCategory(category);
 	}
+	
+	//  application_seq에 따른 상품 상세 정보 가져오기 
+	public List<HashMap<String, Object>> getProductDetails(String application_seq){
+		return adProdao.getProductDetails(application_seq);
+	}
+	// 상품 승인 처리하기 
+	public int approveProduct(String applicationSeq){
+		return adProdao.approveProduct(applicationSeq);
+	}
+	
+	
 }

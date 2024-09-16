@@ -81,8 +81,17 @@ export const SaleApply = () => {
   const handleCancel = () => {
     const userConfirmed = window.confirm("작성을 취소하시겠습니까?");
     if (userConfirmed) {
+      setProductNameOrNumber(''); 
+      setProductData([]);
+      setAllProducts([]);
+      setSelectedProduct(null);
+      setSeatInfo([]);
+      setDiscountRate('');
+      setDiscountedPrices([]);
+      setSearchedKeyword('');
+      window.scrollTo(0,0);
       console.log("작성이 취소되었습니다.");
-      navi('/');
+      // navi('/');/
     } else {
       console.log("작성이 계속됩니다.");
     }
@@ -117,12 +126,13 @@ export const SaleApply = () => {
                   value={productNameOrNumber}
                   onChange={(e) => setProductNameOrNumber(e.target.value)}
                 />
+                 <button onClick={handleSearch}>검색</button>
               </td>
             </tr>
             <tr>
               <td>검색</td>
               <td>
-                <button onClick={handleSearch}>검색</button>
+               
                 {searchedKeyword ? (
                   productData.length > 0 ? (
                     <ul>
