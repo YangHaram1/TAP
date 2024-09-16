@@ -1,0 +1,17 @@
+.container{
+    height: 50%;
+    width: 100%;
+    margin-left: 30px;
+}
+
+.container input{
+    margin: 10px;
+}
+
+.post_address{
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 200px;
+    width: 82%;
+    padding: 10px;
+}

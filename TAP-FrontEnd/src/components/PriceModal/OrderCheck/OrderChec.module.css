@@ -1,0 +1,32 @@
+.container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.side{
+    flex: 3;
+    /* border: 1px solid red; */
+    margin-left: 10px;
+}
+
+.side ul{
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+.side li{
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.side li:hover{
+    cursor: pointer;
+    color: blueviolet;
+    font-weight: 700;
+}
+
+.main{
+    flex:7;
+    /* border: 1px solid red; */
+}
