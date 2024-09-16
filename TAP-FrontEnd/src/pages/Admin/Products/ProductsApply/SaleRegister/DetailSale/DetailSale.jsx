@@ -19,10 +19,11 @@ export const DetailSale =()=>{
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await api.get(`/admin/products/apply`, {
+                const response = await api.get(`/admin/products/sale/apply`, {
                     params: { application_seq: application_seq } // 쿼리 파라미터로 전달
                 });
                 setProductDetails(response.data);
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching product details:', error);
             } finally {
@@ -57,13 +58,13 @@ export const DetailSale =()=>{
 
         if (confirmApprove) {
             try {
-                const response = await api.put(`/admin/products/apply/approve`, {
+                const response = await api.put(`/admin/products/sale/apply/approve`, {
                     application_seq: application_seq
                 });
 
                 if (response.status === 200) {
                     alert("상품이 성공적으로 승인되었습니다.");
-                    navigate('/products/apply');
+                    navigate('/products/apply/sale');
                 }
             } catch (error) {
                 console.error('Error approving product:', error);
@@ -76,17 +77,18 @@ export const DetailSale =()=>{
 
     return (
         <div>
-            <h2>등록 신청 상품 상세 정보</h2>
+            <h2>할인 신청 상품 상세 정보</h2>
             <ul>
-                {productDetails.map((product, index) => (
-                    <li key={index}>
-                        <p>상품명: {product.APPLICATION_SEQ}</p>
-                        <p>카테고리: {product.SUB_CATEGORY_NAME}</p>
-                        <p>연령 제한: {product.AGE_LIMIT}</p>
-                        <p>상영 시간: {product.RUNNING_TIME} 분</p>
-                        <p>상영 장소: {product.PLACE_NAME}</p>
+                {productDetails.length > 0 && (
+                    <li>
+                        <p>상품명: {productDetails[0].APPLICATION_SEQ}</p>
+                        <p>카테고리: {productDetails[0].SUB_CATEGORY_NAME}</p>
+                        <p>연령 제한: {productDetails[0].AGE_LIMIT}</p>
+                        <p>상영 시간: {productDetails[0].RUNNING_TIME} 분</p>
+                        <p>상영 장소: {productDetails[0].PLACE_NAME}</p>
+                        <p>할인율 : {productDetails[0].SALE_RATE}%</p>
                     </li>
-                ))}
+                )}
             </ul>
 
             <div className={styles.btn}>

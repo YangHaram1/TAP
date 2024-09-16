@@ -37,6 +37,15 @@ public class AdminProductDAO {
 	public List<HashMap<String, Object>> getResultSaleByCategory(String category){
 		return mybatis.selectList("AdminProduct.getResultSaleByCategory", category);
 	}
+	//  Sale application_seq에 따른 상품 상세 정보 가져오기 
+	public List<HashMap<String, Object>> getSaleDetail(String application_seq){
+		return mybatis.selectList("AdminProduct.getSaleDetail", application_seq);
+	}
+	
+	// Sale application_seq 신청 상품 승인처리해주기. 
+	public int approveSale(String applicationSeq){
+		return mybatis.update("AdminProduct.approveSale", applicationSeq);
+	}
 	
 	// -------------------
 	// 상품 신청 갯수 

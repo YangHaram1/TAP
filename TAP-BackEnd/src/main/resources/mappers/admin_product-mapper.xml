@@ -108,6 +108,18 @@
 		FROM RankedSales
 		WHERE rn = #{category}
 	</select>
+	<select id="getSaleDetail" resultMap="TimestampResultMap">
+		SELECT * FROM APPLY
+		JOIN sale on sale.application_seq  = apply.application_seq
+		WHERE apply.application_seq = #{application_seq}
+	</select>
+	
+	<update id="approveSale">
+	    UPDATE sale
+	    SET sale_approved = '승인 완료'
+	    WHERE application_seq = #{applicationSeq}
+	</update>
+	
 	
 	
 	

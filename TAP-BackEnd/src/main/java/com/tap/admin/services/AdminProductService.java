@@ -40,11 +40,11 @@ public class AdminProductService {
 	}
 	// Sale  application_seq에 따른 상품 상세 정보 가져오기 
 	public List<HashMap<String, Object>> getSaleDetail(String application_seq){
-		return adProdao.getProductDetails(application_seq);
+		return adProdao.getSaleDetail(application_seq);
 	}
 	// Sale 상품 승인 처리하기 
 	public int approveSale(String applicationSeq){
-		return adProdao.approveProduct(applicationSeq);
+		return adProdao.approveSale(applicationSeq);
 	}
 	
 	//----------------

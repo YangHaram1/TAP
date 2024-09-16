@@ -53,9 +53,6 @@ export const SaleByCategory =({ category, categoryName, tap })=>{
         } 
     };
 
-
-
-    // 나머지 로직은 동일
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('ko-KR', {
@@ -77,7 +74,7 @@ export const SaleByCategory =({ category, categoryName, tap })=>{
     
     // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
     const handleRowClick = (application_seq) => {
-        navigate(`/products/apply/${application_seq}`, { state: { tap } });
+        navigate(`/products/apply/sale/${application_seq}`, { state: { tap } });
     };
 
     return (
