@@ -20,6 +20,10 @@
 .Toastify__toast {
   padding: 0 !important;
 }
+.Toastify__toast img{
+  width: 100%;
+  height: 100%;
+}
 
 .Toastify__toast-icon {
   flex: 1 !important;

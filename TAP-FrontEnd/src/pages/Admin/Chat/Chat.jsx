@@ -3,15 +3,24 @@ import List from './List/List';
 import ChatApp from './ChatApp/ChatApp';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeadset } from '@fortawesome/free-solid-svg-icons';
+import chat from '../../../images/chat.png'
+import { useContext, useEffect } from 'react';
+import { ChatsContext } from '../../../context/ChatsContext';
 const Chat = () => {
+    const {chatAdminRef } = useContext(ChatsContext);
+    useEffect(()=>{
+        if (chatAdminRef.current) {
+            chatAdminRef.current.scrollTop = chatAdminRef.current.scrollHeight;
+        }
+    },[])
     return (
         <div className={styles.container}>
             <div className={styles.header}>
                 {/* <FontAwesomeIcon icon={faHeadset} className={styles.icon} /> */}
-                 ChatAdmin
+                <img src={chat} alt="" /> CHAT 
             </div>
             <div className={styles.body}>
-                <div className={styles.chatapp}>
+                <div className={styles.chatapp} ref={chatAdminRef}>
                     <ChatApp />
                 </div>
                 <div className={styles.list}>

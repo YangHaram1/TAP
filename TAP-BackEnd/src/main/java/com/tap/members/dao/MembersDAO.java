@@ -1,5 +1,6 @@
 package com.tap.members.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,13 @@ public class MembersDAO {
 	}
 	public List<String> selectByAdmin() throws Exception{
 		return mybatis.selectList("Members.selectByAdmin");
+	}
+
+	public int updateDeliverySeq(String username,int deliverySeq) {
+		Map<String, Object> map=new HashMap<>();
+		map.put("id", username);
+		map.put("seq", deliverySeq);
+		return mybatis.update("Members.updateDeliverySeq",map);
 	}
 	
 }

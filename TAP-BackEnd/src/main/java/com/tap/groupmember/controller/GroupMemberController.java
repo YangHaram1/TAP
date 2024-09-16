@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,7 @@ public class GroupMemberController {
 
 		if (last_chat_seq != 0) {
 			serv.updateCheck(group_seq, loginID, last_chat_seq);
+			System.out.println(last_chat_seq);
 		} else if (type.equals("alarm")) {
 			serv.updateAlarm(group_seq, loginID);
 		} else if (type.equals("bookmark")) {
@@ -52,6 +54,13 @@ public class GroupMemberController {
 		}
 		return ResponseEntity.ok().build();
 
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<Void> delete(int groupSeq) throws Exception{
+		
+		//그룹seq 다날리면됌
+		return ResponseEntity.ok().build();
 	}
 
 }

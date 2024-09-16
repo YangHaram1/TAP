@@ -18,7 +18,7 @@ const Delivery = () => {
                         나의 주소록
                     </div>
                     <div className={!check?styles.content:styles.contentReverse} onClick={()=>{hanldeCheck(false)}}>
-                        기본 주소록
+                        {/* 배송지 설정 */} 과거 배송지
                     </div>
                 </div>
                 <div>

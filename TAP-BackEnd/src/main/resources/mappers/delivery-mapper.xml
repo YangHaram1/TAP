@@ -4,9 +4,31 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Delivery">
 	<insert id="insert">
-		insert into delivery values(delivery_seq.nextval,#{member_id},#{address},#{detailed_address},#{zipcode})
-		<selectKey resultType="int" order="AFTER" keyProperty="delivery_seq">
+		insert into delivery
+		values(delivery_seq.nextval,#{member_id},#{address},#{detailed_address},#{zipcode},#{name},#{phone})
+		<selectKey resultType="int" order="AFTER"
+			keyProperty="delivery_seq">
 			select delivery_seq.currval from dual
 		</selectKey>
 	</insert>
+	<insert id="insertByMypage">
+		insert into delivery
+		values(delivery_seq.nextval,#{member_id},#{address},#{detailed_address},#{zipcode},#{name},#{phone})
+		<selectKey resultType="int" order="AFTER"
+			keyProperty="seq">
+			select delivery_seq.currval from dual
+		</selectKey>
+	</insert>
+	
+	<select id="selectById" resultType="com.tap.delivery.dto.DeliveryDTO">
+		select *from delivery where member_id=#{id}
+	</select>
+	
+	<select id="selectBySeq" resultType="com.tap.delivery.dto.DeliveryDTO">
+		select *from delivery where seq=(select delivery_seq from members where id=#{id})
+	</select>
+	
+	<delete id="delete">
+		delete delivery where seq=#{seq}
+	</delete>
 </mapper>

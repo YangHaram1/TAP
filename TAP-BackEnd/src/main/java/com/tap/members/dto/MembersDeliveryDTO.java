@@ -4,8 +4,6 @@ public class MembersDeliveryDTO {
 	//members만 있는 colume
 	private String id;
 	private String pw;
-	private String name;
-	private String phone;
 	private String email;
 	private String birth;
 	private String gender;
@@ -15,6 +13,9 @@ public class MembersDeliveryDTO {
 	private String address;
 	private String detailed_address;
 	private String zipcode;
+	private String name;
+	private String phone;
+	
 	public String getId() {
 		return id;
 	}

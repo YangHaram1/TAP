@@ -6,25 +6,29 @@ import { api } from '../../../../config/config';
 import { format } from 'date-fns';
 import Modal from './Modal/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faComment, faCommentSlash, faExclamation, faSlash, faThumbtack } from '@fortawesome/free-solid-svg-icons';
-
-
+import { faBell, faBellSlash, faComment, faCommentSlash, faExclamation, faSlash, faThumbtack } from '@fortawesome/free-solid-svg-icons';
+import m from '../../../../images/m.png'
+import f from '../../../../images/f.png'
+import Profile from './Profile/Profile';
+import MyEditor from '../MyEditor/MyEditor';
 const List = () => {
     const modalRef = useRef([]);
-
+    const editorRef=useRef(null);
     const { isAuth } = useAuthStore();
-    const { setChatSeq, chatController } = useCheckList();
+    const { setChatSeq, chatController, chatSeq } = useCheckList();
     const { setChatNavi, dragRef } = useContext(ChatsContext);
     const [group_chats, setGroup_chats] = useState([]);
     const [modalDisplay, setModalDisplay] = useState(null);
     const [countBookmark, setCountBookmark] = useState(-1);
+    const [list, setList] = useState([]);
 
+    const [oneTime, setOneTime] = useState(true);
     useEffect(() => {
 
         api.get(`/groupchat`).then((resp) => {
             if (resp != null) {
                 if (resp.data !== '' && resp.data !== 'error') {
-                    console.log(resp.data);
+                    // console.log(resp.data);
                     let count = -1;
 
                     (resp.data).forEach((temp) => {
@@ -42,9 +46,10 @@ const List = () => {
     }, [chatController])
 
     const handleRightClick = (index) => (e) => {
-        const x = e.clientX ;
-        const y = e.clientY;
         e.preventDefault();
+        const x = e.clientX;
+        const y = e.clientY;
+
         setModalDisplay((prev) => {
             if (prev != null) {
                 prev.style.display = 'none'
@@ -57,7 +62,7 @@ const List = () => {
     };
 
     const handleClick = (event) => {
-        if (event.button===0) { //왼쪽클릭
+        if (event.button === 0) { //왼쪽클릭
             setModalDisplay((prev) => {
                 if (prev != null) {
                     prev.style.display = 'none'
@@ -65,7 +70,7 @@ const List = () => {
                 return null;
             })
         }
-        
+
     }
     useEffect(() => {
         window.addEventListener('click', handleClick)
@@ -76,12 +81,9 @@ const List = () => {
         }
     }, [])
 
-    const handleDoubleClick = (seq) => () => {
+    const handleDoubleClick = (seq, index) => () => {
         if (isAuth) {
-            setChatNavi((prev) => {
-                setChatSeq(seq);
-                return 'chat';
-            });
+            setChatSeq(seq);
         }
     }
 
@@ -112,8 +114,17 @@ const List = () => {
             return false;
         });
         // setCount(countBookmark);
-        return sortedItems;
+        if (oneTime) {//한번만 실행
+            setChatSeq(sortedItems[0].seq);
+            setOneTime(false);
+        }
+
+        setList(sortedItems)
     }, [group_chats])
+    useEffect(() => {
+        if (group_chats.length > 0)
+            handleSort();
+    }, [handleSort])
 
     const truncateHtmlText = (htmlString, maxLength) => {
         // HTML 문자열을 DOM 요소로 파싱
@@ -136,12 +147,11 @@ const List = () => {
         <React.Fragment>
             <div className={styles.container}>
                 <div className={styles.title}>
-                    사용자 목록
+                    User List
                 </div>
                 <div className={styles.contents}>
                     {
-
-                        handleSort().map((item, index) => {
+                        list.map((item, index) => {
                             let formattedTimestamp = '';
                             if (item.dto != null) {
                                 formattedTimestamp = format(new Date(item.dto.write_date), 'yyyy-MM-dd');
@@ -158,41 +168,47 @@ const List = () => {
                             }
                             return (
                                 <React.Fragment key={index}>
-                                    <div className={styles.room} onContextMenu={handleRightClick(index)} onDoubleClick={handleDoubleClick(item.seq)}>
-                                        <div className={styles.message}>
-                                            <div className={styles.name}>
-                                                <div className={styles.username}>
-                                                    {item.mdto.id}{`(${item.mdto.name})`}
-                                                </div>
-                                                <div className={styles.bookmark}>
-                                                    {item.bookmark === 'Y' &&(<FontAwesomeIcon icon={faThumbtack}  className={styles.icon}/>) }
+                                    <div className={styles.room} onContextMenu={handleRightClick(index)} onDoubleClick={handleDoubleClick(item.seq, index)} >
+                                        <div className={chatSeq === item.seq ? styles.profileClick : styles.profile} >
+                                            <div className={styles.body}>
+                                                <div className={styles.name}>
+                                                    <div className={styles.username}>
+                                                        {item.mdto.id}{`(${item.mdto.name})`}
+                                                    </div>
+                                                    <div className={styles.bookmark}>
+                                                        {item.bookmark === 'Y' && (<FontAwesomeIcon icon={faThumbtack} className={styles.icon} />)}
+
+                                                    </div>
+                                                    <div className={styles.alarm}>
+                                                        {item.alarm === 'Y' ? (<FontAwesomeIcon icon={faBell} className={styles.icon} />) : (<FontAwesomeIcon icon={faBellSlash} className={styles.icon} />)}
+                                                    </div>
                                                   
                                                 </div>
                                             </div>
-                                            <div>
+                                            <div className={styles.message}>
                                                 <div className={styles.content} dangerouslySetInnerHTML={{ __html: (item.dto != null) ? truncatedText : '메세지가 없습니다' }}>
                                                 </div>
                                                 <div className={styles.unread}>
                                                     {item.unread > 0 && (<span>{item.unread}+</span>)}
                                                 </div>
-                                            </div>
-
-                                        </div>
-                                        <div style={{ display: "flex", gap: "10px", paddingRight: "10px" }}>
-                                            <div className={styles.write_date}>
-                                                {formattedTimestamp}
-                                            </div>
-                                            <div className={styles.alarm}>
-                                                {item.alarm === 'Y' ? (<FontAwesomeIcon icon={faBell} />) : (<FontAwesomeIcon icon={faSlash} />)}
+                                                <div className={styles.write_date}>
+                                                    {formattedTimestamp}
+                                                </div>
                                             </div>
                                         </div>
+                                        <div className={styles.avatar}>
+                                            <img src={item.mdto.gender === 'F' ? f : m} alt="" />
+                                        </div>
+                                        <Modal modalRef={modalRef} index={index} item={item} setGroup_chats={setGroup_chats} setCountBookmark={setCountBookmark} />
                                     </div>
-                                    {index === countBookmark && (<div className={styles.line}></div>)}
-                                    <Modal modalRef={modalRef} index={index} item={item} setGroup_chats={setGroup_chats} setCountBookmark={setCountBookmark} />
+                                    {/* {index === countBookmark && (<div className={styles.line}></div>)} */}
                                 </React.Fragment>
                             );
                         })
                     }
+                </div>
+                <div className={styles.editor}>
+                   <MyEditor editorRef={editorRef}/>
                 </div>
             </div>
         </React.Fragment>

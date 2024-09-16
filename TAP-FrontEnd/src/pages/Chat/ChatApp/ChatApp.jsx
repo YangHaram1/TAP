@@ -1,4 +1,5 @@
-import styles from './ChatApp.module.css';
+import userstyles from './ChatApp.module.css';
+import adminStyles from '../../Admin/Chat/ChatApp/ChatApp.module.css';
 import { useAuthStore, useCheckList, useNotification } from '../../../store/store';
 import React, { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { ChatsContext } from '../../../context/ChatsContext';
@@ -17,10 +18,11 @@ const ChatApp = () => {
     const editorRef = useRef(null);
     const chatRef = useRef(null);
     const [chats, setChats] = useState([]);
-    const [list, setList] = useState();
+    const [styles, setStyles] = useState(false);
+    //const [list, setList] = useState();
 
-    const { isAuth, loginID,role } = useAuthStore();
-    const { ws, setChatNavi, chatNavi, dragRef, chatAppRef } = useContext(ChatsContext);
+    const { isAuth, loginID, role } = useAuthStore();
+    const { chatAdminRef, ws, setChatNavi, chatNavi, dragRef, chatAppRef, chatList, setChatList } = useContext(ChatsContext);
     const { chatSeq, onMessage, setChatSeq, setChatController, } = useCheckList();
 
 
@@ -32,59 +34,79 @@ const ChatApp = () => {
                 let chat = JSON.parse(e.data);
                 const { chatSeq } = useCheckList.getState();
                 //메세지 온거에 맞게 group_seq 사용해서 멤버 list받기 이건 chatSeq 없이 채팅 꺼저있을떄를 위해서 해놈
-                if (chatSeq !==chat.group_seq ) {
+                if (chatSeq !== chat.group_seq) {
                     api.get(`/groupmember?groupSeq=${chat.group_seq}`).then((resp) => {
-                        console.log(resp.data)
                         if (chat.member_id !== loginID) {
                             resp.data.forEach((temp) => { //알림보내기 로직
                                 if (temp.member_id === loginID) {
-                                    if (temp.alarm === 'N') notify(chat);
+                                    if (temp.alarm === 'Y') {
+                                        notify(chat);
+                                    }
+                                    setChatController();
                                 }
                             })
                         }
                     })
-                    
+
                 }
                 else if (chat.group_seq === chatSeq) {
                     setChats((prev) => {
                         return [...prev, chat]
                     })
+                    api.patch(`/groupmember?group_seq=${chatSeq}&&last_chat_seq=${chat.seq}`).then((resp) => {
+                        setChatController();
+                    });
 
                 }
-                else{
+                else {
                     alert("에러입니다")
                     console.log(chat.group_seq)
                 }
-                setChatController();
+
 
             }
         }
+        setStyles(userstyles);
     }, [onMessage]);//chatNavi, 이거뻇음 일단
 
 
     useEffect(() => {
         if (isAuth) {
-            if (chatNavi === 'chatapp') {
-                const { chatSeq } = useCheckList.getState();
-                if (chatSeq !== 0) {
+            const { chatSeq } = useCheckList.getState();
+            if (chatSeq !== 0) {
+                if (chatNavi === 'chatapp' &&role==='ROLE_USER') {
+                    setStyles(userstyles);
+
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
                         setChats(resp.data);
+
                     })
+                }
+                else if (chatNavi === 'admin' &&role==='ROLE_ADMIN') {
+                    console.log('admin chat')
+                    setStyles(adminStyles);
+                    api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
+                        setChats(resp.data);
+                        api.patch(`/groupmember?group_seq=${chatSeq}&&last_chat_seq=${resp.data[resp.data.length - 1].seq}`).then((resp) => {
+                            setChatController();
+                        });
+                    })
+
                 }
             }
         }
-    }, [chatNavi])
+    }, [chatNavi, chatSeq])
 
 
     const notify = useCallback((item) => {
         const { maxCount, count, increment, decrement } = useNotification.getState();
         console.log("알림")
         let title;
-        if(role==='ROLE_ADMIN'){
-            title=`${item.member_id}님한테 상담메세지가 왔습니다`;
+        if (role === 'ROLE_ADMIN') {
+            title = `${item.member_id}님한테 상담메세지가 왔습니다`;
         }
-        else{
-            title='관리자 답변이 왔습니다.'
+        else {
+            title = '관리자 답변이 왔습니다.'
         }
         if (count < maxCount) {
             console.log("알림");
@@ -106,10 +128,26 @@ const ChatApp = () => {
 
     const handleToastOnclick = (item) => {
         setChatNavi((prev) => {
-            if (isAuth) dragRef.current.style.visibility = "visible";
-            console.log(`on click toast:${item.group_seq} `);
-            setChatSeq(item.group_seq);
-            return 'chatapp'
+            if(role==='ROLE_USER'){
+                console.log(`on click toast:${item.group_seq} `);
+                if (isAuth) {
+                    dragRef.current.style.visibility = "visible";
+                    chatAppRef.current.style.display = "flex";
+                    setChatSeq(item.group_seq);
+                    return 'chatapp';
+                }
+               
+            }else if(role==='ROLE_ADMIN'){
+                if (isAuth) {
+                    setChatSeq(item.group_seq);
+                    return 'admin';
+                }
+            }
+            else{
+                return '';
+            }
+          
+
         });
     }
 
@@ -130,9 +168,8 @@ const ChatApp = () => {
 
     //채팅 list 목록 출력
     const handleChatsData = useCallback(() => {
-        let count = 0;
 
-        setList(
+        setChatList(
             chats.map((item, index) => {
                 //---------------------------------------------// 날짜 로직 
                 const formattedTimestamp = format(new Date(item.write_date), 'a hh:mm').replace('AM', '오전').replace('PM', '오후');
@@ -180,17 +217,16 @@ const ChatApp = () => {
                                 {
                                     !idCheck && (<div className={styles.avatar}><img src={avatar} alt="" /></div>)
                                 }
-                                <div>
-                                    <div className={idCheck ? styles.nameReverse : styles.name}>{item.name}</div>
+                                <div className={styles.contents}>
+                                    {/* <div className={idCheck ? styles.nameReverse : styles.name}>{item.member_id}</div> */}
                                     <div className={idCheck ? styles.contentReverse : styles.content}>
                                         <div dangerouslySetInnerHTML={{ __html: ((fileCheck ? file : item.message)) }}
                                             className={idCheck ? styles.mboxReverse : styles.mbox} onClick={fileCheck ? () => SweetAlert('warning', '채팅방', '다운로드를 진행하시겠습니까?', () => handleDownload(item.message.split('*'))) : undefined}></div>
-                                        <div style={{ display: "flex" }}>
-                                            <div className={styles.date}>{formattedTimestamp}</div>
-                                        </div>
+                                        <div className={styles.date}>{formattedTimestamp}</div>
                                     </div>
                                 </div>
-                            </div>)}
+                            </div>)
+                        }
                     </React.Fragment>
                 );
             })
@@ -206,8 +242,11 @@ const ChatApp = () => {
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
+        if (chatAdminRef.current) {
+            chatAdminRef.current.scrollTop = chatAdminRef.current.scrollHeight;
+        }
 
-    }, [list]);
+    }, [chatList]);
     useEffect(() => { //스크롤 
         scrollBottom();
     }, [scrollBottom]);
@@ -216,7 +255,7 @@ const ChatApp = () => {
         <div className={styles.container} ref={chatAppRef}>
             <div className={styles.messages} ref={chatRef}>
                 {
-                    list
+                    chatList
                 }
             </div>
             <div className={styles.editor}>

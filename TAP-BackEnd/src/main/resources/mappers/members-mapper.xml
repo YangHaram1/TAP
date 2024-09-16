@@ -56,4 +56,8 @@
 	<update id="updatePwById">
 		update members set pw=#{pw} where id=#{id}
 	</update>
+	
+	<update id="updateDeliverySeq">
+	update members set delivery_seq=#{seq} where id=#{id}
+	</update>
 </mapper>
