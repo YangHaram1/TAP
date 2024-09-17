@@ -4,52 +4,26 @@ import styles from './MyEditor.module.css';
 // import './MyEditor.css';
 import Swal from 'sweetalert2';
 import { api, tinymce } from '../../../../config/config'
-import { ChatsContext } from '../../../../context/ChatsContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useCheckList } from '../../../../store/store';
-const MyEditor = ({ editorRef, height }) => {
-  const { ws } = useContext(ChatsContext);
+const MyEditor = ({ editorRef, height,setData }) => {
+
   const inputRef = useRef(null);
-  const fileRef=useRef(null);
   const { chatSeq } = useCheckList();
  
+  const handleEditorChange =(content) => {
+    setData((prev)=>{
+      return{ ...prev,content:content}
+    })
 
-  const handleFiles=()=>{
-    fileRef.current.click();
   }
+    
+
+
   const handleImages = () => {
     inputRef.current.click();
   }
-
-
-  //여기는 파일 업로드
-  const handleUpload=()=>{
-    const files = fileRef.current.files;
-    const formData = new FormData();
-    for (let index = 0; index < files.length; index++) {
-      formData.append("files", files[index]);
-    }
-
-    api.post(`/chatUpload/file?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
-      const array = resp.data;
-      for (let index = 0; index < array.length; index++) {
-        
-        const jsonString = JSON.stringify(array[index]);
-        ws.current.send(jsonString);
-
-      
-      }
-      console.log(array);
-
-      fileRef.current.value = '';
-
-    }).catch(error => {
-      console.error('There was an error posting the data!', error);
-    });
-
-  }
-
 
   //여기는 이미지 넣기
   const handleOnchange = () => {
@@ -63,7 +37,7 @@ const MyEditor = ({ editorRef, height }) => {
     api.post(`/chatUpload?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
       const array = resp.data;
       for (let index = 0; index < array.length; index++) {
-        const imageUrl = `<img src="${array[index]}" alt="uploaded image"  style="width: 50px; height: 30px; border-radius: 10px;"/>`;
+        const imageUrl = `<img src="${array[index]}" alt="uploaded image"  style="width: 100px; height: 100px; border-radius: 10px;"/>`;
         const prevContent = editorRef.current.getContent();
         editorRef.current.setContent(prevContent + imageUrl);
       }
@@ -74,9 +48,6 @@ const MyEditor = ({ editorRef, height }) => {
     });
   }
 
-
-
-
   //붙여넣기
   const handleImageUpload = async (file) => {
     try {
@@ -85,7 +56,7 @@ const MyEditor = ({ editorRef, height }) => {
       // 이미지 업로드
       const response = await api.post(`/chatUpload?group_seq=${chatSeq}`, formData);
       const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
-      const image = `<img src="${imageUrl}" alt="uploaded image"  style="width: 50px; height: 30px; border-radius: 10px;" />`;
+      const image = `<img src="${imageUrl}" alt="uploaded image"  style="width: 100px; height: 100px; border-radius: 10px;" />`;
       const prevContent = editorRef.current.getContent();
       editorRef.current.setContent(prevContent + image);
 
@@ -107,23 +78,19 @@ const MyEditor = ({ editorRef, height }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.file}>
-        <FontAwesomeIcon icon={faUpload} className={styles.icon} onClick={handleFiles} />
-        <FontAwesomeIcon icon={faCamera} className={styles.icon} onClick={handleImages} />
-      </div>
       <div className={styles.editor}>
         <Editor
           apiKey={tinymce}   
           onInit={(evt, editor) => {
             editorRef.current = editor;
           }}
+          onEditorChange={(content) => handleEditorChange(content)}
           init={{
             width: "auto",
             height: height,
-            max_height:height,
-            menubar: false,
-            plugins: 'wordcount anchor code image', //image
-            toolbar: false,
+            menubar: true,
+            plugins: 'fileupload wordcount anchor code', //image
+            toolbar: 'fileupload| forecolor backcolor  blocks fontfamily fontsize fontcolor | bold italic underline strikethrough | link image media table mergetags  | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat ',
             language: 'ko_KR',
             statusbar: false,
             file_picker_types: 'file image media',
@@ -151,31 +118,22 @@ const MyEditor = ({ editorRef, height }) => {
                   e.content = tempDiv.innerHTML;
                 }
               });
+              editor.ui.registry.addButton('fileupload', {
+                text: '📷',
+                onSetup: (buttonApi) => {
+                    setTimeout(() => {
+                        const button = document.querySelector('button[data-mce-name="fileupload"]');
+                        if (button) {
+                          button.classList.add(styles.editorBtn); // 원하는 클래스 추가
+                        }
+                      }, 0); // 렌더링 후에 실행되도록 setTimeout 사용
+                  },
+                onAction: (e) => {
+                    handleImages();
+                },
+              });
               editor.on('PastePostProcess', (e) => {
                 //console.log('After Paste:', e.node.innerHTML);
-              });
-              editor.on('keydown', (event) => {
-                if (event.key === 'Enter') {
-                  if (!event.shiftKey) {
-                    event.preventDefault(); // 기본 Enter 키 동작을 막음
-                    const message=editorRef.current.getContent();
-                    if (message !== '') {
-                      if (message.length > 1500) {
-                        Swal.fire({
-                          icon: 'error',
-                          title: "상담",
-                          text: '내용이 초과되었습니다.'
-                        })
-                      } else {
-                        const { chatSeq } = useCheckList.getState();
-                        const data = { group_seq: chatSeq, message:message,upload_seq:0 };
-                        const jsonString = JSON.stringify(data);
-                        ws.current.send(jsonString);
-                      }
-                    }
-                    editorRef.current.setContent('');
-                  }
-                }
               });
             }
           }}
@@ -184,7 +142,6 @@ const MyEditor = ({ editorRef, height }) => {
       </div>
       <div className={styles.hidden}>
         <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*"/>
-        <input type="file" className={styles.upload} name='files' ref={fileRef} onChange={handleUpload} multiple/>
       </div>
     </div>);
 };
