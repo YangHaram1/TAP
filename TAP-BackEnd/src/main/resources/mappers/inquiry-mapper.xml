@@ -5,6 +5,9 @@
 <mapper namespace="Inquiry">
 	<!-- 회원가입 등록 -->
 	<insert id="insert">
-		insert into inquiry values(inquiry_seq.nextval,#{member_id},#{name},#{email}.#{category},#{title},#{contents},sysdate)
+		insert into inquiry values(inquiry_seq.nextval,#{member_id},#{name},#{email},#{category},#{title},#{contents},sysdate)
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select inquiry_seq.currval from dual
+		</selectKey>
 	</insert>
 </mapper>

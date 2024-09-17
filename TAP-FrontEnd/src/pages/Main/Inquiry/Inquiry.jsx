@@ -9,33 +9,65 @@ import MyEditor from './MyEditor/MyEditor';
 import { api } from '../../../config/config';
 const Inquiry = () => {
     const editorRef = useRef(null);
+    const fileRef = useRef(null);
+
     const [check, setCheck] = useState([false, false]);
     const [checkAll, setCheckAll] = useState(false);
-    const fileRef = useRef();
     const [fileList, setFileList] = useState([]);
     const { name, isAuth } = useAuthStore();
     const [data, setData] = useState({
-        name: name,
+        name: '',
         email: '',
         category: '',
         title: '',
         contents: ''
     });
-
+    const [regexData, setRegexData] = useState({
+        email: false,
+        title: false,
+        contents: false
+    })
+    useEffect(() => {
+        setData((prev) => {
+            return { ...prev, name: name }
+        })
+    }, [name])
     //data
     // useEffect(()=>{
     //     console.log(data);
     // },[data])
+
     const handleData = (e) => {
         const { name, value } = e.target;
         setData((prev) => {
             return { ...prev, [name]: value }
         })
+        // console.log(`${name}:${value}`)
+
+        if (name === 'email') {
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+            setRegexData((prev) => {
+                return { ...prev, [name]: emailRegex.test(value) }
+            })
+
+        }
+        else if (name === 'title') {
+            const titleRegex = /^[a-zA-Z0-9가-힣ㄱ-ㅎ]{1,30}$/;
+            setRegexData((prev) => {
+                return { ...prev, [name]: titleRegex.test(value) }
+            })
+        }
     }
+    // useEffect(()=>{
+    //     console.log(regexData)
+    // },[regexData])
 
     const handleInputDelete = (e, type) => {
         setData((prev) => {
             return { ...prev, [type]: '' };
+        })
+        setRegexData((prev) => {
+            return { ...prev, [type]: false }
         })
     }
 
@@ -43,8 +75,8 @@ const Inquiry = () => {
 
     //체크박스
     const handleChange = (event) => {
-        setData((prev)=>{
-            return {...prev,category:event.target.value}
+        setData((prev) => {
+            return { ...prev, category: event.target.value }
         }); // 선택된 값을 상태로 업데이트
     };
 
@@ -120,9 +152,17 @@ const Inquiry = () => {
     // },[fileList])
 
     ///
-    const handleConfirm=()=>{
-        api.post(`/inquiry`,data).then((resp)=>{
-            
+    const handleConfirm = () => {
+        const formData = new FormData();
+
+        for (let index = 0; index < fileList.length; index++) {
+            formData.append("files", fileList[index]);
+        }
+        const jsonData = JSON.stringify(data) // 객체를 json 형식의 문자열로 바꿔주는 직렬화
+        formData.append('inquiry', jsonData)
+
+        api.post(`/inquiry`, formData).then((resp) => {
+
         })
     }
     return (
@@ -135,7 +175,7 @@ const Inquiry = () => {
                     이름 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <input type="text" placeholder='이름을 입력해주세요' value={data.name} name='name' onChange={handleData} disabled={isAuth ? true : false} />
+                    <input type="text" placeholder='이름을 입력해주세요' value={data.name || ''} name='name' onChange={handleData} disabled={isAuth ? true : false} />
                     {(<button className={!isAuth ? (data.name !== '' ? styles.cancel : styles.hidden) : styles.hidden} onClick={(e) => { handleInputDelete(e, 'email') }}>X</button>)}
                 </div>
             </div>
@@ -147,6 +187,9 @@ const Inquiry = () => {
                     <input type="text" placeholder='이메일을 입력해주세요.' value={data.email} name='email' onChange={handleData} />
                     {(<button className={data.email !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'email') }}>X</button>)}
 
+                </div>
+                <div>
+                    {data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (<span style={{ color: 'blue' }}>이메일 형식이 맞습니다.</span>) : (<span>이메일 형식을 맞춰주세요</span>))}
                 </div>
             </div>
             <div className={styles.contents}>
@@ -176,8 +219,14 @@ const Inquiry = () => {
                     <input type="text" placeholder='제목을 입력해주세요' name='title' value={data.title} onChange={handleData} />
                     {(<button className={data.title !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'title') }}>X</button>)}
                 </div>
-                <div style={{paddingRight:'40px'}}>
-                    <MyEditor editorRef={editorRef} height={'400px'}  setData={setData}/>
+                <div>
+                    {data.title === '' ? <span>30자 이내로 입력해주세요.</span> : (regexData.title ? (<span style={{ color: 'blue' }}>30자 이내 입니다.</span>) : (<span>30자 이내로 적어주세요</span>))}
+                </div>
+                <div style={{ paddingRight: '40px' }}>
+                    <MyEditor editorRef={editorRef} height={'400px'} setData={setData} setRegexData={setRegexData} />
+                </div>
+                <div>
+                    {data.contents === '' ? <span>내용을 입력해주세요.</span> : (regexData.contents ? (<span style={{ color: 'blue' }}>1000자 이내 입니다.</span>) : (<span>1000자 이내로 적어주세요</span>))}
                 </div>
 
 
@@ -187,7 +236,7 @@ const Inquiry = () => {
                     첨부 파일
                 </div>
                 <div className={styles.input} onClick={() => { fileRef.current.click(); }}>
-                    <input type='text' placeholder='파일을 등록해주세요' disabled={true} className={styles.none} ></input>
+                    <input type='text' placeholder='파일을 등록해주세요' disabled={true} className={styles.none} defaultValue={''} ></input>
                     <button className={styles.fileBtn} ><FontAwesomeIcon icon={faPaperclip} /></button>
                     <input type="file" multiple className={styles.file} ref={fileRef} onChange={handleFile} onClick={handleFileClick} />
                 </div>
@@ -253,7 +302,7 @@ const Inquiry = () => {
             <div className={styles.contents}>
                 <div className={styles.checkTitle}>
                     <div>
-                        <input type="checkbox" onChange={handleCheckAll} checked={checkAll}  className={styles.checkBox}/>
+                        <input type="checkbox" onChange={handleCheckAll} checked={checkAll} className={styles.checkBox} />
                     </div>
                     <div>
                         전체 동의
@@ -277,7 +326,7 @@ const Inquiry = () => {
                         </div>
                     </div>
                 </div>
-                <div className={checkAll?styles.confirmReverse:styles.confirm} onClick={handleConfirm}>
+                <div className={(checkAll && regexData.email && regexData.title && regexData.contents) ? styles.confirmReverse : styles.confirm} onClick={handleConfirm}>
                     <button>문의하기</button>
                 </div>
             </div>
