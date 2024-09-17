@@ -1,20 +1,35 @@
 import styles from './Slide.module.css'
-import React from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import './Slide.module.css'
 import { url } from '../../../../config/config'
+import banner1 from '../../../../images/240906114813_Y4000308.webp'
+import banner2 from '../../../../images/7f50bd2f-a4b8-42df-b6d1-6026c65c78af.jpg'
+import banner3 from '../../../../images/ai.png'
+import banner4 from '../../../../images/background.jpg'
+import banner5 from '../../../../images/background2.jpg'
+import banner6 from '../../../../images/background3.jpg'
+import banner7 from '../../../../images/background4.jpg'
+import React, { useState } from 'react'
+
 const Slide = () => {
     // CustomPaging 함수
     // CustomPaging 함수
+    const [slide, setSlide] = useState([
+        { img: banner1 },
+        { img: banner2 },
+        { img: banner3 },
+        { img: banner4 },
+        { img: banner5 },
+        { img: banner6 },
+        { img: banner7 },
+    ])
+    const [img, setImg] = useState()
     const CustomPaging = i => (
         <div className={styles.dotBox}>
             <div className={styles.customDot}>
-                <img
-                    src={`https://via.placeholder.com/50?text=Img${i + 1}`} // 이미지 URL을 슬라이드에 맞게 변경
-                    alt={`Thumbnail ${i + 1}`}
-                />
+                <img src={slide[i].img} alt={`Thumbnail ${i + 1}`} />
             </div>
         </div>
     )
@@ -31,39 +46,13 @@ const Slide = () => {
     return (
         <div className={styles.container}>
             <Slider {...settings} className={styles.slider}>
-                <div>
-                    {/* <img
-                        src="https://via.placeholder.com/800x400?text=Slide+1"
-                        alt="Slide 1"
-                    /> */}
-                    <img
-                        src={`${url}/31d8a1ec-913e-4808-8004-091734d77744`}
-                    ></img>
-                </div>
-                <div>
-                    <img
-                        src="https://via.placeholder.com/800x400?text=Slide+2"
-                        alt="Slide 2"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://via.placeholder.com/800x400?text=Slide+3"
-                        alt="Slide 3"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://via.placeholder.com/800x400?text=Slide+4"
-                        alt="Slide 4"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://via.placeholder.com/800x400?text=Slide+5"
-                        alt="Slide 5"
-                    />
-                </div>
+                {slide.map((item, index) => {
+                    return (
+                        <div>
+                            <img src={item.img}></img>
+                        </div>
+                    )
+                })}
             </Slider>
         </div>
     )
