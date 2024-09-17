@@ -22,6 +22,18 @@ public class AdminProductService {
 	public List<HashMap<String, Object>> getPastProductsByCategory(String category){
 		return adProdao.getPastProductsByCategory(category);
 	}
+	// 판매 중, 예정, 종료 상푸 ㅁ갯수 가져오기 
+	public int getCountCurrent(String category){
+		return adProdao.getCountCurrent(category);
+	}
+	public int getCountFuture(String category){
+		return adProdao.getCountFuture(category);
+	}
+	public int getCountPast(String category){
+		return adProdao.getCountPast(category);
+	}
+	
+	
 	//----------------
 	// 할인 신청 갯수 
 	public int getCountSaleWaiting(String category){

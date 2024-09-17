@@ -26,7 +26,7 @@
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
 	where apply.status = '승인 완료' and files.files_type='poster'
-	and sub_category.sub_category_name = #{category}
+	and sub_category.sub_category_seq = #{category}
 	and CURRENT_DATE BETWEEN apply.open_date and apply.end_date
 	order by apply.created_at desc
 	</select>
@@ -45,7 +45,7 @@
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
 	where apply.status = '승인 완료' and files.files_type='poster'
-	and sub_category.sub_category_name = #{category}
+	and sub_category.sub_category_seq = #{category}
 	and apply.open_date <![CDATA[>]]> CURRENT_DATE
 	order by apply.created_at desc
 	</select>
@@ -64,10 +64,34 @@
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
 	where apply.status = '승인 완료' and files.files_type='poster'
-	and sub_category.sub_category_name = #{category}
+	and sub_category.sub_category_seq = #{category}
 	and apply.end_date <![CDATA[<]]> CURRENT_DATE
 	order by apply.created_at desc
 	</select>
+	<select id="getCountCurrent" resultType="int">
+		SELECT COUNT(*)
+		FROM apply
+		where status = '승인 완료' 
+	and sub_category_seq = #{category}
+	and CURRENT_DATE BETWEEN open_date and end_date
+	order by apply.created_at desc
+	</select>
+		<select id="getCountFuture" resultType="int">
+		SELECT COUNT(*)
+		FROM apply
+		where status = '승인 완료' 
+	and sub_category_seq = #{category}
+	and open_date <![CDATA[>]]> CURRENT_DATE
+	</select>
+		<select id="getCountPast" resultType="int">
+		SELECT COUNT(*)
+		FROM apply
+		where status = '승인 완료' 
+	and sub_category_seq = #{category}
+	and end_date <![CDATA[<]]> CURRENT_DATE
+	</select>
+	
+	
 	<!-- Sale  -->
 	<select id="getCountSaleWaiting" resultType="int">
 		SELECT COUNT(DISTINCT apply.application_seq)

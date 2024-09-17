@@ -21,6 +21,28 @@ public class AdminProductController {
 	@Autowired
 	private AdminProductService AdProServ;
 	
+	// Count - 현재 상품 갯수
+	@GetMapping("/count/current")
+	public ResponseEntity<Integer> getCountCurrent(@RequestParam String category) {
+		int count = AdProServ.getCountCurrent(category);
+		return ResponseEntity.ok(count);
+	}
+	// Count - 예정 상품 갯수 
+	@GetMapping("/count/future")
+	public ResponseEntity<Integer> getCountFuture(@RequestParam String category) {
+		int count = AdProServ.getCountFuture(category);
+		System.out.println(count);
+		System.out.println("카테고리"+category);
+		return ResponseEntity.ok(count);
+	}
+	// Count - 종료 상품 갯수 
+	@GetMapping("/count/past")
+	public ResponseEntity<Integer> getCountPast(@RequestParam String category) {
+		int count = AdProServ.getCountPast(category);
+		System.out.println(count);
+		System.out.println("카테고리"+category);
+		return ResponseEntity.ok(count);
+	}
 	// 카테고리별로 현재 제품을 가져오기
 	@GetMapping("/current")
 	public ResponseEntity<List<HashMap<String, Object>>> getCurrentProductsByCategory(@RequestParam String category) {

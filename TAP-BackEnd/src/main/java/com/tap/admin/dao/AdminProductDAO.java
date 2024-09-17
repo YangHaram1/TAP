@@ -21,6 +21,18 @@ public class AdminProductDAO {
 	public List<HashMap<String, Object>> getPastProductsByCategory(String category){
 		return mybatis.selectList("AdminProduct.getPastProductsByCategory", category);
 	}
+	// 판매 갯수
+	public int getCountCurrent(String category){
+		return mybatis.selectOne("AdminProduct.getCountCurrent", category);
+	}
+	public int getCountFuture(String category){
+		return mybatis.selectOne("AdminProduct.getCountFuture", category);
+	}
+	public int getCountPast(String category){
+		return mybatis.selectOne("AdminProduct.getCountPast", category);
+	}
+	
+	
 	// ----------------------
 	// Sale 상품 신청 갯수 
 	public int getCountSaleWaiting(String category){
