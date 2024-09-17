@@ -182,8 +182,8 @@ function App() {
                             <Routes>
                                 <Route path="/*" element={<Main />} />
                                 <Route path="/login/*" element={<Login />} />
-                                    <Route path="/sign/*" element={<Sign />} />
-                                    <Route path="/mypage/*" element={<Mypage />} />
+                                <Route path="/sign/*" element={<Sign />} />
+                                <Route path="/mypage/*" element={<Mypage />} />
                             </Routes>
                         </>
                     ) : isAuth && role === 'ROLE_ADMIN' ? (
@@ -207,7 +207,7 @@ function App() {
                                 {/* <Header hasScrolled={hasScrolled} /> */}
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
-                                    <Route path="/mypage/*" element={<Mypage />}/>
+                                    <Route path="/mypage/*" element={<Mypage />} />
                                     <Route path="/sign/*" element={<Sign />} />
                                     <Route path='/grade/*' element={<Grade />} />
                                 </Routes>
