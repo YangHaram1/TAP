@@ -1,6 +1,6 @@
 import styles from './ModalOrder.module.css';
 
-export const ModalOrder=()=>{
+export const ModalOrder=({ resetCheckboxes,  checkedOrders})=>{
 
     return (
         <div className={styles.container}>
@@ -9,7 +9,7 @@ export const ModalOrder=()=>{
                 주문 발송 처리
             </div>
             <div className={styles.subtitle}>
-                    선택된 미발송 주문 건에 대해서, 
+                    {checkedOrders.length} 선택된 미발송 주문 건에 대해서, 
             </div>
             <div className={styles.changeStatus}>
                 <div className={styles.statusTitle}>

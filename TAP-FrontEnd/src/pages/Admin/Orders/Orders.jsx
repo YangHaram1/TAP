@@ -12,6 +12,12 @@ export const Orders=()=>{
     // select 필터 위한 상태
     const [ orderStatus, setOrderStatus] = useState('');
     const [ shippingStatus, setShippingStatus] = useState('');
+    // checked Orders 처리 
+    const [checkedOrders, setCheckedOrders] = useState([]);
+    const checkboxRef = useRef([]);
+    const allCheckRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalState, setModalState] = useState("");
 
     // 주문 모든 내역 가져오기 ( 기간 정해서 가져와야하낭..? 아 후순위 . 일단 다 가져오기)
     useEffect(()=>{
@@ -34,6 +40,7 @@ export const Orders=()=>{
         }
         setFiltered(filteredOrders);
     }
+
     // 주문 상태 선택 핸들러
     const handleOrderStatusChange = (e) => {
         setOrderStatus(e.target.value);
@@ -46,13 +53,6 @@ export const Orders=()=>{
         applyFilters(); // 필터링 적용
     };
 
-
-    // checked Orders 처리 
-    const [checkedOrders, setCheckedOrders] = useState([]);
-    const checkboxRef = useRef([]);
-    const allCheckRef = useRef(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalState, setModalState] = useState("");
     
     // checked Orders 처리 함수 
     const handleCheckAll =(e)=>{
@@ -64,7 +64,9 @@ export const Orders=()=>{
 
         checkboxRef.current.forEach((checkbox, i) => {
             const order = filtered[i + currentPage * PER_PAGE];
-            checkbox.checked = checked;
+            if (checkbox) { // checkbox가 null 또는 undefined가 아닌 경우에만 checked 속성 설정
+                checkbox.checked = checked;
+            }
         });
         setCheckedOrders(checked ? enabledValues : []);
     }
@@ -99,8 +101,9 @@ export const Orders=()=>{
     // =======================================================================================
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 5;
+    const PER_PAGE = 3;
     const pageCount = Math.ceil(filtered.length / PER_PAGE);
+    
     const handlePageChange = ({selected}) => {
         setCurrentPage(selected);
         setCheckedOrders([]); // 체크박스 상태 초기화
@@ -215,7 +218,7 @@ export const Orders=()=>{
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div className={styles.modalForm}>
-                    <ModalOrder/>
+                    <ModalOrder resetCheckboxes={resetCheckboxes}  checkedOrders={checkedOrders}/>
                 </div>
             </Modal>
         </div>
