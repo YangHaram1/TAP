@@ -21,6 +21,15 @@ public class AdminProductController {
 	@Autowired
 	private AdminProductService AdProServ;
 	
+	// 팝업 테스트 상품 공지사항 가져오기 
+	@GetMapping("/event_popup")
+	public ResponseEntity<String> getDescription(@RequestParam int application_seq) {
+	  System.out.println("공지사항 번호 : "+ application_seq);
+		return ResponseEntity.ok(AdProServ.getDescription(application_seq));
+	}
+
+	
+	
 	// Count - 현재 상품 갯수
 	@GetMapping("/count/current")
 	public ResponseEntity<Integer> getCountCurrent(@RequestParam String category) {
