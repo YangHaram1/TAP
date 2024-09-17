@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 const Member = () => {
     const { loginID } = useAuthStore();
     const [user, setUser] = useState({ email: '', phone: '' });
-    const [address,setAddress]=useState(null);
+    const [address,setAddress]=useState({});
     const [genderCheck, setGenderCheck] = useState(false);
     const [updateCheck, setUpdateCheck] = useState({ email: true, phone: true });
     const [data, setData] = useState({ id: '', email: '', phone: '',address:'',detailed_address:'',zipcode:'' });

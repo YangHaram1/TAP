@@ -1,7 +1,14 @@
 .container {
     width: 100%;
     height: 100px;
-
+    border: 1px solid black;
+    position: fixed;
+    display: flex;
+    z-index: 999;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+  
 }
 
 .containerfix {
@@ -17,11 +24,11 @@
 
 .header {
     display: flex;
-    /* background-color: rgb(234, 234, 235); */
+    width: 70vw;
     background-color: white;
-    /* color: white; */
     height: 100px;
     padding: 0 30px 0 30px;
+    gap: 20px;
 }
 
 .leftConts {

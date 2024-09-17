@@ -2,14 +2,19 @@
     background-color: rgb(245, 232, 255);
     height: 600px;
     border-radius: 20px;
-    width: 100% !important;
-    overflow: auto;
+    width: 100%;
+    display: flex;
+    margin-right: 500px;
 }
 
 .banner div {
     position: relative;
 }
-
+.view{
+    width: 70vw;
+    height: 100%;
+    margin: auto;
+}
 
 
 .ranking {
