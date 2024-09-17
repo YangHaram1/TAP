@@ -65,12 +65,17 @@
     padding: 10px 20px;
     border-radius: 25px;
     cursor: pointer;
+    background-color: white;
 }
 
-.sort:hover {
+.sortActive {
+    padding: 10px 20px;
     background-color: #9c43f8;
     border: 2px solid #9c43f8;
     color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .rankingImgs {
@@ -96,6 +101,9 @@
     background-color: black;
     border-radius: 10px;
     position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+
 
 }
 

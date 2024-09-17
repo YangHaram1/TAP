@@ -7,6 +7,94 @@ import { faS, faStar } from '@fortawesome/free-solid-svg-icons'
 import Slide from './Slide/Slide'
 const Home = () => {
     const [images, setImages] = useState([])
+    const [currentCategory, setCurrentCategory] = useState('musical')
+    const handleCategoryChange = category => {
+        setCurrentCategory(category)
+    }
+
+    const [musical, setMusical] = useState([
+        {
+            title: ' 뮤지컬 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 뮤지컬 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 뮤지컬 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 뮤지컬 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 뮤지컬 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+    ])
+
+    const [sport, setSport] = useState([
+        {
+            title: '스포츠 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 스포츠 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 스포츠 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 스포츠 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 스포츠  킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+    ])
+
+    const [concert, setConcert] = useState([
+        {
+            title: '콘서트 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 콘서트 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 콘서트 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 콘서트 킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+        {
+            title: ' 콘서트  킹키부츠',
+            subtitle: '블루스퀘어 신한카드홀',
+            writedate: '2024.9.7 ~ 11.10',
+        },
+    ])
     return (
         <div className={styles.container}>
             <div className={styles.banner}>
@@ -21,103 +109,123 @@ const Home = () => {
                         </div>
                     </div>
                     <div className={styles.rankingCategory}>
-                        <div className={styles.sort}>뮤지컬</div>
-                        <div className={styles.sort}>콘서트</div>
-                        <div className={styles.sort}>스포츠</div>
+                        <button
+                            onClick={() => {
+                                handleCategoryChange('musical')
+                            }}
+                            className={
+                                currentCategory === 'musical'
+                                    ? styles.sortActive
+                                    : styles.sort
+                            }
+                        >
+                            뮤지컬
+                        </button>
+                        <button
+                            onClick={() => {
+                                handleCategoryChange('concert')
+                            }}
+                            className={
+                                currentCategory === 'concert'
+                                    ? styles.sortActive
+                                    : styles.sort
+                            }
+                        >
+                            콘서트
+                        </button>
+                        <button
+                            onClick={() => {
+                                handleCategoryChange('sport')
+                            }}
+                            className={
+                                currentCategory === 'sport'
+                                    ? styles.sortActive
+                                    : styles.sort
+                            }
+                        >
+                            스포츠
+                        </button>
                     </div>
                     <div className={styles.rankingImgs}>
-                        <div className={styles.rank}>
-                            <div className={styles.rankImg}>
-                                <h1 className={styles.rankNum}>1</h1>
-                            </div>
-                            <div className={styles.rankTitle}>
-                                뮤지컬 '킹키부츠'
-                            </div>
-                            <div className={styles.rankSubTitle}>
-                                블루스퀘어 신한카드홀
-                            </div>
-                            <div className={styles.rankDate}>
-                                2024.9.7 ~ 11.10
-                            </div>
-                            <div className={styles.rankSub}>
-                                <span>단독판매</span>
-                            </div>
-                        </div>
-                        <div className={styles.rank}>
-                            <div className={styles.rankImg}>
-                                <h1 className={styles.rankNum}>2</h1>
-                            </div>
-                            <div className={styles.rankTitle}>
-                                뮤지컬 '킹키부츠'
-                            </div>
-                            <div className={styles.rankSubTitle}>
-                                블루스퀘어 신한카드홀
-                            </div>
-                            <div className={styles.rankDate}>
-                                2024.9.7 ~ 11.10
-                            </div>
-                            <div className={styles.rankSub}>
-                                <span>단독판매</span>
-                            </div>
-                        </div>
-                        <div className={styles.rank}>
-                            <div className={styles.rankImg}>
-                                <h1 className={styles.rankNum}>3</h1>
-                            </div>
-                            <div className={styles.rankTitle}>
-                                뮤지컬 '킹키부츠'
-                            </div>
-                            <div className={styles.rankSubTitle}>
-                                블루스퀘어 신한카드홀
-                            </div>
-                            <div className={styles.rankDate}>
-                                2024.9.7 ~ 11.10
-                            </div>
-                            <div className={styles.rankSub}>
-                                <span>단독판매</span>
-                            </div>
-                        </div>
-                        <div className={styles.rank}>
-                            <div className={styles.rankImg}>
-                                <h1 className={styles.rankNum}>4</h1>
-                            </div>
-                            <div className={styles.rankTitle}>
-                                뮤지컬 '킹키부츠'
-                            </div>
-                            <div className={styles.rankSubTitle}>
-                                블루스퀘어 신한카드홀
-                            </div>
-                            <div className={styles.rankDate}>
-                                2024.9.7 ~ 11.10
-                            </div>
-                            <div className={styles.rankSub}>
-                                <span>단독판매</span>
-                            </div>
-                        </div>
-                        <div className={styles.rank}>
-                            <div className={styles.rankImg}>
-                                <h1 className={styles.rankNum}>5</h1>
-                            </div>
-                            <div className={styles.rankTitle}>
-                                뮤지컬 '킹키부츠'
-                            </div>
-                            <div className={styles.rankSubTitle}>
-                                블루스퀘어 신한카드홀
-                            </div>
-                            <div className={styles.rankDate}>
-                                2024.9.7 ~ 11.10
-                            </div>
-                            <div className={styles.rankSub}>
-                                <span>단독판매</span>
-                            </div>
-                        </div>
+                        {currentCategory === 'musical' &&
+                            musical.map((item, index) => {
+                                return (
+                                    <div className={styles.rank} key={index}>
+                                        <div className={styles.rankImg}>
+                                            <h1 className={styles.rankNum}>
+                                                {index + 1}
+                                            </h1>
+                                        </div>
+                                        <div className={styles.rankTitle}>
+                                            {item.title}
+                                        </div>
+                                        <div className={styles.rankSubTitle}>
+                                            {item.subtitle}
+                                        </div>
+                                        <div className={styles.rankDate}>
+                                            {item.writedate}
+                                        </div>
+                                        <div className={styles.rankSub}>
+                                            <span>단독판매</span>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        {currentCategory === 'sport' &&
+                            sport.map((item, index) => {
+                                return (
+                                    <div className={styles.rank} key={index}>
+                                        <div className={styles.rankImg}>
+                                            <h1 className={styles.rankNum}>
+                                                {index + 1}
+                                            </h1>
+                                        </div>
+                                        <div className={styles.rankTitle}>
+                                            {item.title}
+                                        </div>
+                                        <div className={styles.rankSubTitle}>
+                                            {item.subtitle}
+                                        </div>
+                                        <div className={styles.rankDate}>
+                                            {item.writedate}
+                                        </div>
+                                        <div className={styles.rankSub}>
+                                            <span>단독판매</span>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        {currentCategory === 'concert' &&
+                            concert.map((item, index) => {
+                                return (
+                                    <div className={styles.rank} key={index}>
+                                        <div className={styles.rankImg}>
+                                            <h1 className={styles.rankNum}>
+                                                {index + 1}
+                                            </h1>
+                                        </div>
+                                        <div className={styles.rankTitle}>
+                                            {item.title}
+                                        </div>
+                                        <div className={styles.rankSubTitle}>
+                                            {item.subtitle}
+                                        </div>
+                                        <div className={styles.rankDate}>
+                                            {item.writedate}
+                                        </div>
+                                        <div className={styles.rankSub}>
+                                            <span>단독판매</span>
+                                        </div>
+                                    </div>
+                                )
+                            })}
                     </div>
                 </div>
                 <div className={styles.tOpen}>
                     <h2 className={styles.oTitle}>티켓 오픈</h2>
                     <div className={styles.oConts}>
-                        {/* 카드 케러셀 */}
-                        <Caroucel images={images} category={'art3'} />
+                        <div className={styles.oImgs}></div>
+                        <div className={styles.oBox}></div>
                     </div>
                 </div>
                 <div className={styles.sale}>
