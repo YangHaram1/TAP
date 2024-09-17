@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import styles from './ProductsRegister.module.css';
 import { RegisterByCategory } from './ProductsRegister/RegisterByCategory/RegisterByCategory';
 import { api } from '../../../../config/config';
+import { useAuthStore } from '../../../../store/store';
+import Popup from '../../Popup/Popup';
 
 export const ProductsRegister = () => {
     const [category, setCategory] = useState(0); // 카테고리 탭
@@ -47,6 +49,32 @@ export const ProductsRegister = () => {
     setTap(0); // 탭을 0으로 초기화
     };
 
+
+    // 팝업 테스트 
+    const [showPopup, setShowPopup] = useState(false);
+    const { loginID } = useAuthStore(); // 로그인 정보 가져오기
+  
+    useEffect(() => {
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD 형식
+      let hidePopup = null;
+  
+      // 로그인 상태에 따라 localStorage에서 팝업 숨김 상태 확인
+      if (loginID) {
+        hidePopup = localStorage.getItem(`hidePopup_${loginID}`); // 로그인 사용자
+      } else {
+        hidePopup = localStorage.getItem('hidePopup_guest'); // 비로그인 사용자
+      }
+  
+      // 팝업을 숨기지 않는 조건: 저장된 날짜가 오늘 날짜와 다를 경우에만 팝업을 표시
+      if (hidePopup !== today) {
+        setShowPopup(true);
+      }
+    }, [loginID]);
+  
+    const closePopup = () => {
+      setShowPopup(false); // 팝업 닫기
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.product_table}>
@@ -87,6 +115,8 @@ export const ProductsRegister = () => {
                 {/* 상품 리스트 */}
                 <div className={styles.detail_page}>
                     {renderProducts()}
+                    {/*  팝업 테스트  */}
+                    {showPopup && <Popup onClose={closePopup} />}
                 </div>
             </div>
         </div>
