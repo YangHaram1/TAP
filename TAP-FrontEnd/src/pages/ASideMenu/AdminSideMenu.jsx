@@ -34,7 +34,10 @@ export const AdminSideMenu =()=>{
         },
         {
            name: "관리자 1:1 상담", link: "/chat", type: "chatManage", icon:FaCartPlus,
-        }
+        },
+        {
+          name: "로그 관리", link: "/log", type: "logManage", icon:FaCartPlus,
+       }
     ];
     
     const [dropdown, setDropdown] = useState(() => {

@@ -12,6 +12,7 @@ import { DetailProduct } from './DetailProducts/DetailProduct';
 import { DetailRegist } from './Products/ProductsApply/ProductsRegister/DetailRegist/DetailRegist';
 import { SaleRegister } from './Products/ProductsApply/SaleRegister/SaleRegister';
 import { DetailSale } from './Products/ProductsApply/SaleRegister/DetailSale/DetailSale';
+import { Log } from './Log/Log';
 
 export const AdminContent =()=>{
     return(
@@ -28,6 +29,7 @@ export const AdminContent =()=>{
                 <Route path="/members/user/*" element={<UserMem/>}/>
                 <Route path="/members/biz/*" element={<BizMem/>}/>
                 <Route path='/chat/*' element={<Chat/>}/>
+                <Route path='/log/*' element={<Log/>}/>
             </Routes>
         </div>
     );
