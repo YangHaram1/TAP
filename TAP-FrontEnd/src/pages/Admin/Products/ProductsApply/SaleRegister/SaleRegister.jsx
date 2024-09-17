@@ -53,7 +53,7 @@ export const SaleRegister=()=>{
     return (
         <div className={styles.container}>
             <div className={styles.product_table}>
-                <h2>상품 신청 내역</h2>
+                <h2>할인 상품 신청 내역</h2>
 
                 {/* 카테고리 탭 버튼들 */}
                 <div className={styles.category_btns}>

@@ -45,7 +45,7 @@ export const DetailSale =()=>{
     }
 
     const handleBack = () => {
-        navigate('/products/apply');
+        navigate('/products/apply/sale');
     };
 
     const handleReject = () => {
