@@ -88,9 +88,9 @@ export const WaitingList=()=>{
                         <td className={styles.product_id}>
                             {product.APPLICATION_SEQ}
                         </td>
-                    <td className={styles.product_info}>
-                        <div className={styles.product_image_container}>
-                        <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
+                        <td className={styles.product_info}>
+                            <div className={styles.product_image_container}>
+                            <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
                         </div>
                         <div className={styles.product_details }>
                             <div className={styles.product_name}>{product.NAME}</div>
@@ -106,16 +106,16 @@ export const WaitingList=()=>{
                     </td>
                     <td className={styles.product_venue}>{formatDate(product.created_at)} </td>
                     <td className={styles.product_venue}>
-                    {product.STATUS !=='반려' && (
-                         <div className={styles.rejectReason}>
-                         <span>{product.STATUS} </span>
-                         </div>
-                    )}
-                     {product.STATUS === '반려' && (
-                    <div className={styles.rejectReason}>
-                      <span>반려</span>
-                    </div>
-                  )}
+                            {product.STATUS !=='반려' && (
+                                <div className={styles.rejectReason}>
+                                <span>{product.STATUS} </span>
+                                </div>
+                            )}
+                            {product.STATUS === '반려' && (
+                            <div className={styles.rejectReason}>
+                            <span>반려</span>
+                            </div>
+                        )}
                     </td>
                     <td>
                     {product.STATUS !== '반려' && (

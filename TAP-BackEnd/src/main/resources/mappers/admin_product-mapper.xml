@@ -190,6 +190,13 @@
 	    updated_at = sysdate
 	    WHERE application_seq = #{applicationSeq}
 	</update>
+	<update id="rejectProduct">
+	    UPDATE apply
+	    SET status = '승인 반려',
+	        reject_reason = #{rejectReason},
+	        updated_at = sysdate
+	    WHERE application_seq = #{applicationSeq}
+	</update>
 	
 	
 </mapper>

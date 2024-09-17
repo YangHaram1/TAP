@@ -84,6 +84,9 @@ public class AdminProductService {
 	public int approveProduct(String applicationSeq){
 		return adProdao.approveProduct(applicationSeq);
 	}
-	
+	// 싱품 반려 처리 하기 
+	public int rejectProduct(String applicationSeq, String rejectReason){
+		return adProdao.rejectProduct(applicationSeq, rejectReason);
+	}
 	
 }

@@ -2,6 +2,7 @@ package com.tap.admin.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,5 +85,13 @@ public class AdminProductDAO {
 	// application_seq 신청 상품 승인처리해주기. 
 	public int approveProduct(String applicationSeq){
 		return mybatis.update("AdminProduct.approveProduct", applicationSeq);
+	}
+	// 상품 반려 처리
+	public int rejectProduct(String applicationSeq, String rejectReason){
+		Map<String, Object> params = new HashMap<>();
+	    params.put("applicationSeq", applicationSeq);
+	    params.put("rejectReason", rejectReason);
+	    
+	    return mybatis.update("AdminProduct.rejectProduct", params);
 	}
 }

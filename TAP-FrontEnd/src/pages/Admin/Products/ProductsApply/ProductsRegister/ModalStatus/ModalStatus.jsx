@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import styles from './ModalStatus.module.css';
 import { api } from '../../../../../../config/config';
+import { useNavigate } from 'react-router-dom';
 
 export const ModalStatus = ({ onClose, applicationSeq }) => {
     const [rejectReason, setRejectReason] = useState(''); // 반려 사유 상태 관리
+    const maxChars = 500;
+    const navigate = useNavigate(); 
 
     const handleRejectConfirm = async () => {
         if (!rejectReason.trim()) {
@@ -20,6 +23,7 @@ export const ModalStatus = ({ onClose, applicationSeq }) => {
             if (response.status === 200) {
                 alert("상품이 성공적으로 반려되었습니다.");
                 onClose();  // 모달 닫기
+                navigate('/products/apply'); 
             }
         } catch (error) {
             console.error('Error rejecting product:', error);
@@ -39,8 +43,10 @@ export const ModalStatus = ({ onClose, applicationSeq }) => {
                         className={styles.textarea}
                         placeholder="반려 사유를 입력해 주세요."
                         value={rejectReason}
-                        onChange={(e) => setRejectReason(e.target.value)} // 반려 사유 업데이트
+                        onChange={(e) => setRejectReason(e.target.value)} // 반려 사유
+                        maxLength={maxChars} 
                     />
+                    <p>{rejectReason.length}/{maxChars} 글자</p> 
                     <button className={styles.btn} onClick={handleRejectConfirm}>확인</button>
                     <button className={styles.btn} onClick={onClose}>취소</button>
                 </div>
