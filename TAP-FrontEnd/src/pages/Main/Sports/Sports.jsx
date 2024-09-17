@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
+import { api } from '../../../config/config';
 import { Silde } from './Silde/Silde';
 import { MatchList } from './MatchList/MatchList';
 import { Side } from './Side/Side';
@@ -17,7 +18,25 @@ const teamLogos = [
 ];
 
 export const Sports = () => {
+  const [baseballMatches, setBaseballMatches] = useState([]);
+  const [soccerMatches, setSoccerMatches] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // 데이터 가져오기
+    const fetchData = async () => {
+      try {
+        const baseballResponse = await api.get('matchlist/baseball');
+        const soccerResponse = await api.get('matchlist/soccer');
+        setBaseballMatches(baseballResponse.data);
+        setSoccerMatches(soccerResponse.data);
+      } catch (error) {
+        console.error('Error fetching match data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleImageClick = (index) => {
     // 각 팀에 대한 페이지로 이동
@@ -37,10 +56,17 @@ export const Sports = () => {
       </div>
       <div className={styles.contentContainer}>
         <div className={styles.sideWrapper}>
-          <Side navigate={navigate} /> {/* navigate 전달 */}
+          <Side
+            baseballMatches={baseballMatches}
+            soccerMatches={soccerMatches}
+            navigate={navigate} // navigate 전달
+          />
         </div>
         <div className={styles.matchListWrapper}>
-          <MatchList />
+          <MatchList
+            baseballMatches={baseballMatches}
+            soccerMatches={soccerMatches}
+          />
         </div>
       </div>
     </div>
