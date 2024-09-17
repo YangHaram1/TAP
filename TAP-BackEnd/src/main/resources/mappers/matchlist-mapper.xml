@@ -25,6 +25,7 @@ LEFT JOIN
     PLACE place ON a.PLACE_SEQ = place.PLACE_SEQ            
 WHERE
     a.SUB_CATEGORY_SEQ = 3
+    order by start_date
   </select>
 
   <select id="getSoccerMatches" resultType="map">
