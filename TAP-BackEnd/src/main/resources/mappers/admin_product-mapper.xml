@@ -62,8 +62,8 @@
 	from apply
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
-	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인 완료' and files.files_type='poster'
+	left join files on apply.application_seq = files.files_parent_seq
+	where apply.status = '승인 완료' 
 	and sub_category.sub_category_seq = #{category}
 	and apply.end_date <![CDATA[<]]> CURRENT_DATE
 	order by apply.created_at desc
