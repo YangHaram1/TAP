@@ -11,3 +11,7 @@
 .container *{
     border: 1px solid black;
 }
+
+.pagination{
+    width:100%;
+}
