@@ -48,6 +48,18 @@ const Slide = () => {
                         alt="Slide 3"
                     />
                 </div>
+                <div>
+                    <img
+                        src="https://via.placeholder.com/800x400?text=Slide+4"
+                        alt="Slide 4"
+                    />
+                </div>
+                <div>
+                    <img
+                        src="https://via.placeholder.com/800x400?text=Slide+5"
+                        alt="Slide 5"
+                    />
+                </div>
             </Slider>
         </div>
     )
