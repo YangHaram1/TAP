@@ -18,6 +18,9 @@ export const Orders=()=>{
     const allCheckRef = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalState, setModalState] = useState("");
+    // 모달 열기/닫기
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     // 주문 모든 내역 가져오기 ( 기간 정해서 가져와야하낭..? 아 후순위 . 일단 다 가져오기)
     useEffect(()=>{
@@ -94,16 +97,14 @@ export const Orders=()=>{
 
     };
     // =======================================================================================
-    // 모달 열기/닫기
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    
 
     // =======================================================================================
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
     const PER_PAGE = 3;
     const pageCount = Math.ceil(filtered.length / PER_PAGE);
-    
+
     const handlePageChange = ({selected}) => {
         setCurrentPage(selected);
         setCheckedOrders([]); // 체크박스 상태 초기화
