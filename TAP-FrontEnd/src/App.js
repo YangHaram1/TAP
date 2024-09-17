@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
     const { login, isAuth, setAuth, role, token } = useAuthStore()
-    const { webSocketCheck,setWebSocketCheck ,setOnmessage} = useCheckList();
+    const { webSocketCheck, setWebSocketCheck, setOnmessage } = useCheckList();
     const { maxCount } = useNotification();
 
     const [hasScrolled, setHasScrolled] = useState(false)
@@ -149,41 +149,78 @@ function App() {
     return (
         <ChatsProvider>
             <Router>
-                <div className={styles.container}>
-                    {!isAuth ? (
+                {
+                    !isAuth ? (
                         <>
                             <Header hasScrolled={hasScrolled} />
-                            <Routes>
-                                <Route path="/*" element={<Main />} />
-                                <Route path="/login/*" element={<Login />} />
-                                <Route path="/sign/*" element={<Sign />} />
-                                <Route path="/mypage/*" element={<Mypage />} />
-                            </Routes>
                         </>
                     ) : isAuth && role === 'ROLE_ADMIN' ? (
                         <>
                             <AdminHeader hasScrolled={hasScrolled} />
-                            <Admin />
+
                         </>
                     ) : isAuth && role === 'ROLE_BIZ' ? (
                         <>
                             <AdminHeader hasScrolled={hasScrolled} />
-                            <Biz />
+
                         </>
                     ) : (
                         isAuth &&
                         role === 'ROLE_USER' && (
                             <>
                                 <Header hasScrolled={hasScrolled} />
+                            </>
+                        )
+                    )
+                }
+
+                <div className={styles.container}>
+                    {!isAuth ? (
+                        <>
+                            <Routes>
+                                <Route path="/*" element={<Main />} />
+                            </Routes>
+                            <div className={styles.view}>
+                                <Routes>
+                                    {/* <Header hasScrolled={hasScrolled} /> */}
+                                    <Route path="/login/*" element={<Login />} />
+                                    <Route path="/sign/*" element={<Sign />} />
+                                    <Route path="/mypage/*" element={<Mypage />} />
+                                </Routes>
+                            </div>
+                        </>
+                    ) : isAuth && role === 'ROLE_ADMIN' ? (
+                        <>
+                            {/* <AdminHeader hasScrolled={hasScrolled} /> */}
+                            <div className={styles.view}>
+                                <Admin />
+                            </div>
+                        </>
+                    ) : isAuth && role === 'ROLE_BIZ' ? (
+                        <>
+                            {/* <AdminHeader hasScrolled={hasScrolled} /> */}
+                            <div className={styles.view}>
+                                <Biz />
+                            </div>
+                        </>
+                    ) : (
+                        isAuth &&
+                        role === 'ROLE_USER' && (
+                            <>
+                                {/* <Header hasScrolled={hasScrolled} /> */}
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
-                                    <Route
-                                        path="/mypage/*"
-                                        element={<Mypage />}
-                                    />
-                                    <Route path="/sign/*" element={<Sign />} />
-                                    <Route path='/grade/*' element={<Grade />} />
                                 </Routes>
+                                <div className={styles.view}>
+                                    <Routes>
+                                        <Route
+                                            path="/mypage/*"
+                                            element={<Mypage />}
+                                        />
+                                        <Route path="/sign/*" element={<Sign />} />
+                                        <Route path='/grade/*' element={<Grade />} />
+                                    </Routes>
+                                </div>
                             </>
                         )
                     )}
@@ -194,9 +231,10 @@ function App() {
             <Route path='/mypage/*'element={<Mypage/>}/>
             <Route path='/buiz/*'element={<ABuiz/>}/>
           </Routes> */}
-                    <Footer />
+
                     {chat}
                 </div>
+                <Footer />
                 <ToastContainer
                     position="top-right"
                     autoClose={5000}

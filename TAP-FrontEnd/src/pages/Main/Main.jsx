@@ -21,22 +21,28 @@ const Main = () => {
             <div className={styles.body}>
                 <Routes>
                     <Route path="/" element={<Home></Home>} />
-                    <Route
-                        path="/musical"
-                        element={<Art category={'musical'} />}
-                    />
-                    <Route
-                        path="/concert"
-                        element={<Art category={'concert'} />}
-                    />
-                    <Route path="/detail" element={<Detail />} />
-                    <Route path="sports" element={<Sports />} />
-                    <Route path="/teamPage" element={<TeamPage />} />
-                    <Route path="/team/:teamId" element={<TeamPage />} />
-                    <Route path="/support" element={<Support />} />
-                    <Route path="/inquiry" element={<Inquiry />} />
-                    <Route path="/board" element={<Board />} />
                 </Routes>
+                <div className={styles.view}>
+                    <Routes>
+                        <Route
+                            path="/musical"
+                            element={<Art category={'musical'} />}
+                        />
+                        <Route
+                            path="/concert"
+                            element={<Art category={'concert'} />}
+                        />
+
+                        <Route path="/detail" element={<Detail />} />
+                        <Route path="sports" element={<Sports />} />
+                        <Route path="/teamPage" element={<TeamPage />} />
+                        <Route path="/team/:teamId" element={<TeamPage />} />
+                        <Route path="/support" element={<Support />} />
+                        <Route path="/inquiry" element={<Inquiry />} />
+                        <Route path="/board" element={<Board />} />
+
+                    </Routes>
+                </div>
             </div>
         </div>
     )
