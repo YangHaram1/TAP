@@ -11,6 +11,15 @@
 	    	<result property="open_date" column="open_date" javaType="java.sql.Timestamp" />
 	    	
 	</resultMap>
+	
+	<!-- 팝업 테스트 공지사항 가저오기 -->
+	<select id="getDescription" parameterType="int" resultType="String">
+		select event_popup_content from event_popup
+		where application_seq = #{application_seq}
+	</select>
+	
+	
+	
 	<select id="getCurrentProductsByCategory" resultMap="TimestampResultMap">
 		select apply.* , 
 	CAST(apply.created_at AS TIMESTAMP) AS created_at,

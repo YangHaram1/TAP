@@ -13,6 +13,11 @@ public class AdminProductService {
 	@Autowired 
 	private AdminProductDAO adProdao;
 	
+	// 팝업 테스트 상품 공지사항 가져오기 
+	public String getDescription(int application_seq) {
+		return adProdao.getDescription(application_seq);
+	}
+	
 	public List<HashMap<String, Object>> getCurrentProductsByCategory(String category){
 		return adProdao.getCurrentProductsByCategory(category);
 	}

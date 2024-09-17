@@ -13,6 +13,15 @@ public class AdminProductDAO {
 	@Autowired
 	private SqlSession mybatis;
 	
+	// 팝업 테스트 상품 공지사항 가져오기
+	public String getDescription(int application_seq) {
+		System.out.println("dao에서 번호 10?? : "+ application_seq);
+System.out.println("application_seq: " + application_seq + " (type: " + ((Object) application_seq).getClass().getSimpleName() + ")");
+		    
+	    return mybatis.selectOne("AdminProduct.getDescription", application_seq);
+	}
+
+	
 	public List<HashMap<String, Object>> getCurrentProductsByCategory(String category){
 		return mybatis.selectList("AdminProduct.getCurrentProductsByCategory", category);
 	}
