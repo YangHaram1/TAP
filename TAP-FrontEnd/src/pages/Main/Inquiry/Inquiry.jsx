@@ -4,13 +4,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faPaperclip, faSquareArrowUpRight } from '@fortawesome/free-solid-svg-icons';
 import { faFileLines } from '@fortawesome/free-regular-svg-icons';
 import Swal from 'sweetalert2';
+import { useAuthStore } from './../../../store/store';
+import MyEditor from './MyEditor/MyEditor';
 const Inquiry = () => {
+    const editorRef=useRef(null);
     const [selected, setSelected] = useState(''); // 초기값 설정
     const [check, setCheck] = useState([false, false]);
     const [checkAll, setCheckAll] = useState(false);
     const fileRef = useRef();
     const [fileList, setFileList] = useState([]);
+    const { name, isAuth } = useAuthStore();
+    const [data, setData] = useState({
+        name: name,
+        email: '',
+        category: '',
+        title: '',
+        contents: ''
+    });
 
+    //data
+    const handleData = (e) => {
+        const { name, value } = e.target;
+        setData((prev) => {
+            return { ...prev, [name]: value }
+        })
+    }
+
+    const handleInputDelete = (e, type) => {
+        setData((prev) => {
+            return { ...prev, [type]: '' };
+        })
+    }
+
+
+
+    //체크박스
     const handleChange = (event) => {
         setSelected(event.target.value); // 선택된 값을 상태로 업데이트
     };
@@ -96,12 +124,8 @@ const Inquiry = () => {
                     이름 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <div>
-                        <input type="text" />
-                    </div>
-                    <div>
-                        {true === '' ? '' : (<button className={styles.cancel} onClick={() => { }}>X</button>)}
-                    </div>
+                    <input type="text" placeholder='이름을 입력해주세요' value={data.name} name='name' onChange={handleData} disabled={isAuth ? true : false} />
+                    {(<button className={!isAuth ? (data.name !== '' ? styles.cancel : styles.hidden) : styles.hidden} onClick={(e) => { handleInputDelete(e, 'email') }}>X</button>)}
                 </div>
             </div>
             <div className={styles.contents}>
@@ -109,25 +133,9 @@ const Inquiry = () => {
                     답변 받을 이메일 주소 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <div>
-                        <input type="text" />
-                    </div>
-                    <div>
-                        {true === '' ? '' : (<button className={styles.cancel} onClick={() => { }}>X</button>)}
-                    </div>
-                </div>
-            </div>
-            <div className={styles.contents}>
-                <div className={styles.title}>
-                    답변 받을 휴대폰 번호 <span>*</span>
-                </div>
-                <div className={styles.input}>
-                    <div>
-                        <input type="text" />
-                    </div>
-                    <div>
-                        {true === '' ? '' : (<button className={styles.cancel} onClick={() => { }}>X</button>)}
-                    </div>
+                    <input type="text" placeholder='이메일을 입력해주세요.' value={data.email} name='email' onChange={handleData} />
+                    {(<button className={data.email !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'email') }}>X</button>)}
+
                 </div>
             </div>
             <div className={styles.contents}>
@@ -154,10 +162,11 @@ const Inquiry = () => {
                     문의 내용 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <input type="text" placeholder='제목을 입력해주세요' />
+                    <input type="text" placeholder='제목을 입력해주세요'  name='title' value={data.title} onChange={handleData}/>
+                    {(<button className={data.title !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'title') }}>X</button>)}
                 </div>
                 <div className={styles.input}>
-                    <input type="text" placeholder='문의 내용을 자세히 입력해주세요' />
+                   <MyEditor editorRef={editorRef} height={'400px'}/>
                 </div>
             </div>
             <div className={styles.contents}>
@@ -165,12 +174,8 @@ const Inquiry = () => {
                     첨부 파일
                 </div>
                 <div className={styles.input} onClick={() => { fileRef.current.click(); }}>
-                    <div>
-                        <input type='text' placeholder='파일을 등록해주세요' disabled={true} className={styles.none} ></input>
-                    </div>
-                    <div>
-                        {true === '' ? '' : (<button className={styles.fileBtn} ><FontAwesomeIcon icon={faPaperclip} /></button>)}
-                    </div>
+                    <input type='text' placeholder='파일을 등록해주세요' disabled={true} className={styles.none} ></input>
+                    <button className={styles.fileBtn} ><FontAwesomeIcon icon={faPaperclip} /></button>
                     <input type="file" multiple className={styles.file} ref={fileRef} onChange={handleFile} onClick={handleFileClick} />
                 </div>
                 <div className={styles.fileList}>
@@ -185,7 +190,7 @@ const Inquiry = () => {
                                         </div>
                                         <div className={styles.size}>
                                             <p>({formatFileSize(item.size)})</p>
-                                            <FontAwesomeIcon icon={faSquareArrowUpRight}/>
+                                            <FontAwesomeIcon icon={faSquareArrowUpRight} />
                                         </div>
                                         <div className={styles.fileX}>
                                             <button className={styles.fileDeleteBtn} onClick={() => deleteFile(index)}>x</button>
