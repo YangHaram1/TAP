@@ -1,6 +1,6 @@
 // DetailRegist 컴포넌트
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../../../../../config/config';
 import styles from './DetailRegist.module.css';
 import Modal from '../../../../Chat/List/Modal/Modal';
@@ -8,6 +8,8 @@ import { ModalStatus } from '../ModalStatus/ModalStatus';
 
 export const DetailRegist = () => {
     const { application_seq } = useParams(); // URL에서 application_seq를 가져옴
+    const { state } = useLocation(); // location에서 state 받아옴
+    const { tap } = state; // tap 값 추출
     const [productDetails, setProductDetails] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
@@ -90,9 +92,15 @@ export const DetailRegist = () => {
             </ul>
 
             <div className={styles.btn}>
-                <button onClick={handleApprove}>승인</button>
-                <button onClick={handleReject}>반려</button>
-                <button onClick={handleBack}>취소</button>
+                {tap === 0 ? (
+                    <>
+                        <button onClick={handleApprove}>승인</button>
+                        <button onClick={handleReject}>반려</button>
+                        <button onClick={handleBack}>취소</button>
+                    </>
+                ) : tap === 1 ? (
+                    <p>승인 완료 처리</p>
+                ) : null}
             </div>
           
             {isModalOpen && (

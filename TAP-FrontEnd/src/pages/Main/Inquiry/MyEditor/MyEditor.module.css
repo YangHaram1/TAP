@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
     display: flex;
-    border-top: 1px solid rgba(128, 128, 128, 0.404);
+    padding-top: 10px;
 }
 
 .file{
@@ -28,4 +28,18 @@
 .hidden{
     display: none;
     visibility: hidden;
+}
+.editorBtn{
+    display: flex;
+    width: 40px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.editorBtn span{
+    font-size: 30px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-bottom: 10px !important;
 }

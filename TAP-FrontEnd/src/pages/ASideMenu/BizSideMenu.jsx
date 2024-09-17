@@ -21,7 +21,6 @@ export const BizSideMenu =()=>{
           name: "상품신청", link: "/application", type: "productApplication", icon:FaCartPlus,
           submenus: [
             { name: "상품등록신청", link: "/application/registration" },
-            { name: "상품세일신청", link: "/application/sale" }
           ]
         },
     ];

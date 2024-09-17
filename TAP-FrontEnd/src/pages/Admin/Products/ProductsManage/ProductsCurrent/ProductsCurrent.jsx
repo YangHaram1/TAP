@@ -4,7 +4,7 @@ import { Pagination } from '../../../../../components/Pagination/Pagination';
 import styles from './ProducsCurrent.module.css';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-export const ProductsCurrent = ({ category, tap }) => {
+export const ProductsCurrent = ({ category, categoryName, tap }) => {
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const navigate = useNavigate(); 
@@ -23,6 +23,7 @@ export const ProductsCurrent = ({ category, tap }) => {
                 }
 
                 const response = await api.get(productList);
+                console.log(response.data)
                 setProducts(response.data);
                 setFiltered(response.data);
             } catch (error) {
@@ -43,6 +44,19 @@ export const ProductsCurrent = ({ category, tap }) => {
             weekday: 'short',
         });
     };
+    // 시, 분
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+    
 
     const [currentPage, setCurrentPage] = useState(0);
     const PER_PAGE = 3;
@@ -59,7 +73,7 @@ export const ProductsCurrent = ({ category, tap }) => {
 
     return (
         <div className={styles.container}>
-            <h3>{category} - {tap === 0 ? "현재 판매 중" : tap === 1 ? "판매 종료" : "판매 예정"}</h3>
+            <h3>{categoryName} - {tap === 0 ? "현재 판매 중" : tap === 1 ? "판매 종료" : "판매 예정"}</h3>
                 <div className={styles.product_table}>
                     
                 {filtered.length > 0 ? (
@@ -73,6 +87,7 @@ export const ProductsCurrent = ({ category, tap }) => {
                                 onClick={() => handleRowClick(product.APPLICATION_SEQ)} // application_seq 전달
                                 className={styles.table_row}
                                 >
+                                    <td>{product.APPLICATION_SEQ}</td>
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
                                             <img
@@ -94,11 +109,12 @@ export const ProductsCurrent = ({ category, tap }) => {
                                             </div>
                                         </div>
                                     </td>
+                                    <td>오픈:<br/> {formatTime(product.open_date)}</td>
                                     <td className={styles.product_date}>
+                                        {product.PLACE_NAME}<br/>
                                         {formatDate(product.start_date)}~ <br />
                                         {formatDate(product.end_date)}
                                     </td>
-                                    <td className={styles.product_venue}>{product.PLACE_NAME}</td>
                                     <td>
                                         <button className={styles.manage_button}>상품관리</button>
                                     </td>

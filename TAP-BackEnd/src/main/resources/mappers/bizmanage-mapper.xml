@@ -45,29 +45,35 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
+	where apply.status = '승인 완료' and files.files_type='poster'
 	and apply.id = #{id}
 	and apply.updated_at BETWEEN (CURRENT_DATE - INTERVAL '1' MONTH) AND CURRENT_DATE
 	order by apply.created_at desc
 </select>
 <select id="getAllCurrentApproved" resultMap="TimestampResultMap">
-	select apply.* , 
-	CAST(apply.created_at AS TIMESTAMP) AS created_at,
-	CAST(apply.end_date AS TIMESTAMP) AS end_date,
-	CAST(apply.start_date AS TIMESTAMP) AS start_date,
-	CAST(apply.open_date AS TIMESTAMP) AS open_date,
-	CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
-	sub_category.*, 
-	files.*,
-	PLACE.*
-	from apply
-	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
-	join place on apply.place_seq = place.place_seq
-	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
-	and apply.id = #{id}
-	and CURRENT_DATE BETWEEN apply.start_date and apply.end_date
-	order by apply.created_at desc
+		 WITH sale_ranked AS (
+    SELECT sale.*, 
+           ROW_NUMBER() OVER (PARTITION BY sale.application_seq ORDER BY sale.sale_seq) AS rn
+    FROM sale
+)
+SELECT apply.*, 
+       CAST(apply.created_at AS TIMESTAMP) AS created_at,
+       CAST(apply.end_date AS TIMESTAMP) AS end_date,
+       CAST(apply.start_date AS TIMESTAMP) AS start_date,
+       CAST(apply.open_date AS TIMESTAMP) AS open_date,
+       CAST(apply.updated_at AS TIMESTAMP) AS updated_at,
+       sub_category.*, 
+       files.*, 
+       place.*,  sale_ranked.sale_approved
+FROM apply
+JOIN sub_category ON apply.sub_category_seq = sub_category.sub_category_seq
+JOIN place ON apply.place_seq = place.place_seq
+JOIN files ON apply.application_seq = files.files_parent_seq
+LEFT JOIN sale_ranked ON sale_ranked.application_seq = apply.application_seq AND sale_ranked.rn = 1
+WHERE apply.status = '승인 완료'
+AND apply.id = #{id}
+AND CURRENT_DATE BETWEEN apply.start_date AND apply.end_date
+ORDER BY apply.created_at DESC
 </select>
 <select id="getAllFutureApproved" resultMap="TimestampResultMap">
 	select apply.* , 
@@ -83,12 +89,12 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
+	where apply.status = '승인 완료' and files.files_type='poster'
 	and apply.id = #{id}
 	and apply.start_date <![CDATA[>]]> CURRENT_DATE
 	order by apply.created_at desc
 </select>
-<select id="getAllPastApproved" resultMap="TimestampResultMap">
+<select id="getAllPast" resultMap="TimestampResultMap">
 	select apply.* , 
 	CAST(apply.created_at AS TIMESTAMP) AS created_at,
 	CAST(apply.end_date AS TIMESTAMP) AS end_date,
@@ -102,7 +108,7 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인' and files.files_type='poster'
+	where apply.status = '승인 완료' and files.files_type='poster'
 	and apply.id = #{id}
 	and apply.end_date <![CDATA[<]]> CURRENT_DATE
 	order by apply.created_at desc
