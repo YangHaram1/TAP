@@ -23,6 +23,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { host } from './config/config'
 import 'react-resizable/css/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
+import Home from './pages/Main/Home/Home'
 
 function App() {
     const { login, isAuth, setAuth, role, token } = useAuthStore()
@@ -177,17 +178,13 @@ function App() {
                 <div className={styles.container}>
                     {!isAuth ? (
                         <>
+                            {/* <Header hasScrolled={hasScrolled} /> */}
                             <Routes>
                                 <Route path="/*" element={<Main />} />
-                            </Routes>
-                            <div className={styles.view}>
-                                <Routes>
-                                    {/* <Header hasScrolled={hasScrolled} /> */}
-                                    <Route path="/login/*" element={<Login />} />
+                                <Route path="/login/*" element={<Login />} />
                                     <Route path="/sign/*" element={<Sign />} />
                                     <Route path="/mypage/*" element={<Mypage />} />
-                                </Routes>
-                            </div>
+                            </Routes>
                         </>
                     ) : isAuth && role === 'ROLE_ADMIN' ? (
                         <>
@@ -210,17 +207,11 @@ function App() {
                                 {/* <Header hasScrolled={hasScrolled} /> */}
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
+                                    <Route path="/mypage/*" element={<Mypage />}/>
+                                    <Route path="/sign/*" element={<Sign />} />
+                                    <Route path='/grade/*' element={<Grade />} />
                                 </Routes>
-                                <div className={styles.view}>
-                                    <Routes>
-                                        <Route
-                                            path="/mypage/*"
-                                            element={<Mypage />}
-                                        />
-                                        <Route path="/sign/*" element={<Sign />} />
-                                        <Route path='/grade/*' element={<Grade />} />
-                                    </Routes>
-                                </div>
+
                             </>
                         )
                     )}
