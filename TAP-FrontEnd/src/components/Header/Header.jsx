@@ -42,7 +42,7 @@ const Header = ({ hasScrolled }) => {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={hasScrolled?`${styles.container} ${styles.scroll}`:styles.container}>
             <div className={styles.header}>
                 <div className={styles.leftConts}>
                     <div className={styles.title} onClick={handleHome}>
