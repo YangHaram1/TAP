@@ -23,6 +23,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { host } from './config/config'
 import 'react-resizable/css/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
+import Home from './pages/Main/Home/Home'
 
 function App() {
     const { login, isAuth, setAuth, role, token } = useAuthStore()
