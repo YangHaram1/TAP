@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './CurrentEvent.module.css'
 import { api } from '../../../../config/config';
 import {Pagination} from '../../../../components/Pagination/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 export const CurrentEvent=()=>{
     const [events, setEvents] = useState([]);
     const [filtered, setFiltered] = useState(events);
-
+    const navigate = useNavigate();
 
     useEffect(()=>{
         // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
@@ -41,6 +42,11 @@ export const CurrentEvent=()=>{
         window.scrollTo(0,0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
 
+    const handleSaleApplyClick = (applicationSeq) => {
+        navigate(`/application/sale`, { state: { applicationSeq } });
+    };
+    
+
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
@@ -50,7 +56,7 @@ export const CurrentEvent=()=>{
                     <th>상품정보</th>
                     <th>일시</th>
                     <th>공연장</th>
-                    <th>상품관리/수정</th>
+                    <th>할인신청</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -71,8 +77,16 @@ export const CurrentEvent=()=>{
                     <td className={styles.product_date}>{formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}</td>
                     <td className={styles.product_venue}>{product.PLACE_NAME} </td>
                     <td>
-                        <button className={styles.manage_button}>상품관리</button>
-                        <button className={styles.edit_button}>수정</button>
+                        {/* SALE_APPROVED에 따른 조건부 표시 */}
+                        {product.SALE_APPROVED === '승인 대기' ? (
+                            <span className={styles.approval_pending}>신청중</span>
+                        ) : product.SALE_APPROVED === '승인 완료' ? (
+                            <span className={styles.approval_complete}>승인 완료</span>
+                        ) : (
+                            <button className={styles.manage_button}
+                                onClick={() => handleSaleApplyClick(product.APPLICATION_SEQ)}
+                            >할인 신청</button>
+                        )}
                     </td>
                     </tr>
                 ))}
