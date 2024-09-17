@@ -4,6 +4,7 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import './Slide.module.css'
+import { url } from '../../../../config/config'
 const Slide = () => {
     // CustomPaging 함수
     // CustomPaging 함수
@@ -31,10 +32,13 @@ const Slide = () => {
         <div className={styles.container}>
             <Slider {...settings} className={styles.slider}>
                 <div>
-                    <img
+                    {/* <img
                         src="https://via.placeholder.com/800x400?text=Slide+1"
                         alt="Slide 1"
-                    />
+                    /> */}
+                    <img
+                        src={`${url}/31d8a1ec-913e-4808-8004-091734d77744`}
+                    ></img>
                 </div>
                 <div>
                     <img
