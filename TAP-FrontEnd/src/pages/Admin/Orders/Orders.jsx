@@ -116,6 +116,18 @@ export const Orders=()=>{
         window.scrollTo(0,0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
 
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+
     return(
         <div className={styles.container}>
             <h2>주문관리</h2>
@@ -136,6 +148,7 @@ export const Orders=()=>{
                     <thead>
                         <tr>
                             <th> <input type="checkbox" name='checkedAll' onClick={handleCheckAll} ref={allCheckRef}/></th>
+                            <th>주문번호</th>
                             <th>주문id</th>
                             <th>주문자</th>
                             <th>상품명 좌석 정보</th>
@@ -171,19 +184,20 @@ export const Orders=()=>{
                                     />
                                 </td>
                                 <td>{order.ORDER_SEQ}</td>
-                                <td>{order.CUSTOMER_NAME}</td>
+                                <td>{order.MEMBER_ID}</td>
+                                <td>{order.NAME}</td>
                                 <td>
                                     <div className={styles.proName}>
-                                    {order.PRODUCT_NAME}
+                                    {order.APPLY_NAME}
                                     </div>
                                     <div className={styles.seatInfo}>
                                     {order.SEAT_INFO}
                                     </div>
                                 </td>
                                 <td>{order.TOTAL_PRICE}</td>
-                                <td>{order.ORDER_DATE}</td>
-                                <td>{order.ORDER_STATUS}</td>
-                                <td>{order.SHIPPING_STATUS}</td>
+                                <td>{formatTime(order.order_date)}</td>
+                                <td>{order.STATUS}</td>
+                                <td>{order.DELIVERY_STATUS}</td>
                             </tr>
                         ))}
                     </tbody>

@@ -10,13 +10,11 @@
 <select id="getAllOrders" resultMap="TimestampResultMap">
 select 
  CAST(orders.order_date AS TIMESTAMP) AS order_date,
- CAST(members.join_date AS TIMESTAMP) AS join_date,
-orders.*, apply.name, members.*, book.*, section.*
+ CAST(members.join_date AS TIMESTAMP) AS join_date, 
+ members.name, book.*, orders.*, apply.name as apply_name
 from orders 
 join members on members.id = orders.member_id
 join apply on apply.application_seq = orders.application_seq
 join book on orders.order_seq = book.order_seq
-join section on section.section_seq = book.section_seq
-WHERE ORDERS.DELIVERY_STATUS = 'not shipped'
 </select>
 </mapper>
