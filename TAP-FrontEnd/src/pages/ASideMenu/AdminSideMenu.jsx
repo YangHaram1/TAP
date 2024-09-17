@@ -15,7 +15,8 @@ export const AdminSideMenu =()=>{
           name: "상품관리", link: "/products", type: "productManage", icon:FaCartPlus,
           submenus: [
             { name: "상품ㅎ관리", link: "/products/product" },
-            { name: "상품신청관리", link: "/products/apply" }
+            { name: "상품신청관리", link: "/products/apply" },
+            { name: "할인신청관리", link: "/products/apply/sale" }
           ]
         },
         { 
@@ -33,7 +34,10 @@ export const AdminSideMenu =()=>{
         },
         {
            name: "관리자 1:1 상담", link: "/chat", type: "chatManage", icon:FaCartPlus,
-        }
+        },
+        {
+          name: "로그 관리", link: "/log", type: "logManage", icon:FaCartPlus,
+       }
     ];
     
     const [dropdown, setDropdown] = useState(() => {

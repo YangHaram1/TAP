@@ -35,13 +35,13 @@
 	join place on place.place_seq = seats.place_seq
 	</select>
 	<select id="getProductByName" resultType="java.util.HashMap">
-	 select DISTINCT apply.application_seq, apply.name, seats.*, place.*, sale.sale_approved
+	 select DISTINCT apply.application_seq, apply.name, seats.*, place.*
   from apply
   join seats on apply.place_seq = seats.place_seq
   join place on place.place_seq = seats.place_seq
- join sale on apply.application_seq = sale.application_seq
   WHERE (apply.application_seq LIKE '%' || #{name} || '%'
    OR apply.name LIKE '%' || #{name} || '%')
+    and apply.status = '승인 완료'
    AND apply.id = #{id}
 </select>
 	
