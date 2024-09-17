@@ -5,12 +5,14 @@
     width: 100%;
     display: flex;
     margin-right: 500px;
+    margin-top: 5px;
 }
 
 .banner div {
     position: relative;
 }
-.view{
+
+.view {
     width: 70vw;
     height: 100%;
     margin: auto;
@@ -91,8 +93,18 @@
 .rankImg {
     flex: 6;
     cursor: pointer;
-    background-color: beige;
+    background-color: black;
+    border-radius: 10px;
+    position: relative;
 
+}
+
+.rankNum {
+    color: white;
+    position: absolute;
+    left: 20px;
+    bottom: -10px;
+    font-size: 40px;
 }
 
 .rankTitle {
