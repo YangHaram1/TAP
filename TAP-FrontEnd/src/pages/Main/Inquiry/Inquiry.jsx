@@ -6,9 +6,9 @@ import { faFileLines } from '@fortawesome/free-regular-svg-icons';
 import Swal from 'sweetalert2';
 import { useAuthStore } from './../../../store/store';
 import MyEditor from './MyEditor/MyEditor';
+import { api } from '../../../config/config';
 const Inquiry = () => {
-    const editorRef=useRef(null);
-    const [selected, setSelected] = useState(''); // 초기값 설정
+    const editorRef = useRef(null);
     const [check, setCheck] = useState([false, false]);
     const [checkAll, setCheckAll] = useState(false);
     const fileRef = useRef();
@@ -23,6 +23,9 @@ const Inquiry = () => {
     });
 
     //data
+    // useEffect(()=>{
+    //     console.log(data);
+    // },[data])
     const handleData = (e) => {
         const { name, value } = e.target;
         setData((prev) => {
@@ -40,7 +43,9 @@ const Inquiry = () => {
 
     //체크박스
     const handleChange = (event) => {
-        setSelected(event.target.value); // 선택된 값을 상태로 업데이트
+        setData((prev)=>{
+            return {...prev,category:event.target.value}
+        }); // 선택된 값을 상태로 업데이트
     };
 
     const handleChangeCheck = (e) => {
@@ -114,6 +119,12 @@ const Inquiry = () => {
     //     console.log(fileList)
     // },[fileList])
 
+    ///
+    const handleConfirm=()=>{
+        api.post(`/inquiry`,data).then((resp)=>{
+            
+        })
+    }
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -143,7 +154,7 @@ const Inquiry = () => {
                     문의 유형 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <select className={styles.select} value={selected} onChange={handleChange}>
+                    <select className={styles.select} value={data.category} onChange={handleChange}>
                         <option value="예매">예매</option>
                         <option value="할인">할인</option>
                         <option value="결제/수수료">결제/수수료</option>
@@ -162,12 +173,14 @@ const Inquiry = () => {
                     문의 내용 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <input type="text" placeholder='제목을 입력해주세요'  name='title' value={data.title} onChange={handleData}/>
+                    <input type="text" placeholder='제목을 입력해주세요' name='title' value={data.title} onChange={handleData} />
                     {(<button className={data.title !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'title') }}>X</button>)}
                 </div>
-                <div className={styles.input}>
-                   <MyEditor editorRef={editorRef} height={'400px'}/>
+                <div style={{paddingRight:'40px'}}>
+                    <MyEditor editorRef={editorRef} height={'400px'}  setData={setData}/>
                 </div>
+
+
             </div>
             <div className={styles.contents}>
                 <div className={styles.title}>
@@ -240,7 +253,7 @@ const Inquiry = () => {
             <div className={styles.contents}>
                 <div className={styles.checkTitle}>
                     <div>
-                        <input type="checkbox" onChange={handleCheckAll} checked={checkAll} />
+                        <input type="checkbox" onChange={handleCheckAll} checked={checkAll}  className={styles.checkBox}/>
                     </div>
                     <div>
                         전체 동의
@@ -249,7 +262,7 @@ const Inquiry = () => {
                 <div className={styles.check}>
                     <div className={styles.check1}>
                         <div>
-                            <input type="checkbox" onChange={handleChangeCheck} checked={check[0]} name='0' />
+                            <input type="checkbox" onChange={handleChangeCheck} checked={check[0]} className={styles.checkBox} name='0' />
                         </div>
                         <div>
                             {`(필수) 개인정보 수집 - 이용동의 >`}
@@ -257,12 +270,15 @@ const Inquiry = () => {
                     </div>
                     <div className={styles.check2}>
                         <div>
-                            <input type="checkbox" onChange={handleChangeCheck} checked={check[1]} name='1' />
+                            <input type="checkbox" onChange={handleChangeCheck} checked={check[1]} className={styles.checkBox} name='1' />
                         </div>
                         <div>
                             {`(필수) 개인정보 제 3자 제공 동의 >`}
                         </div>
                     </div>
+                </div>
+                <div className={checkAll?styles.confirmReverse:styles.confirm} onClick={handleConfirm}>
+                    <button>문의하기</button>
                 </div>
             </div>
         </div>
