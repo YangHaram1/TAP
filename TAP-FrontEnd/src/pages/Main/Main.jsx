@@ -40,7 +40,6 @@ const Main = () => {
                         <Route path="/support" element={<Support />} />
                         <Route path="/inquiry" element={<Inquiry />} />
                         <Route path="/board" element={<Board />} />
-
                     </Routes>
                 </div>
             </div>
