@@ -1,6 +1,7 @@
 package com.tap.inquiry.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,9 @@ public class InquiryService {
 		String bucketName = "exam-attachment-study";
 		// 파일유효아이디
 		String sysname = "inquiry" + "/" + UUID.randomUUID().toString();
+		
 		if(files!=null) {
+			int seq=dao.insert(dto);
 			for (MultipartFile file : files) {
 				if (file.getSize() == 0) {
 					continue;
@@ -46,7 +49,7 @@ public class InquiryService {
 				// 실제 gcs에 업로드 하는 코드
 				storage.create(blobInfo, file.getBytes());
 
-				int seq=dao.insert(dto);
+				
 				
 				// DB 저장
 				FilesDTO fdto = new FilesDTO();
@@ -65,5 +68,15 @@ public class InquiryService {
 		
 		
 		
+	}
+
+
+	public List<InquiryDTO> selectById(String username) {
+		return dao.selectById(username);
+	}
+
+
+	public InquiryDTO selectBySeq(int seq) {
+		return dao.selectBySeq(seq);
 	}
 }

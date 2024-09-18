@@ -1,10 +1,9 @@
-import styles from './Member.module.css'
-import img1 from '../../../images/logo192.png'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { api } from '../../../config/config'
-import Company from '../Company/Company'
-import Swal from 'sweetalert2'
+import styles from './Member.module.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../../../config/config';
+import Swal from 'sweetalert2';
+
 const Member = () => {
     const [member, setMember] = useState({
         id: '',
@@ -18,269 +17,362 @@ const Member = () => {
         zipcode: '',
         address: '',
         detailed_address: '',
-    })
+    });
 
-    const [idAvailable, setIdAvailable] = useState(false) // 아이디 상태
-    const [emailAvailable, setEmailAvailable] = useState(false) // 이메일 상태
-    const [checkIdStatus, setCheckIdStatus] = useState('')
+    const [idAvailable, setIdAvailable] = useState(false);
+    const [emailAvailable, setEmailAvailable] = useState(false);
+    const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증 상태
+    const [verificationCode, setVerificationCode] = useState('');
+    const navi = useNavigate();
 
     const handleAddChange = e => {
-        const { name, value } = e.target
-        setMember(prev => ({ ...prev, [name]: value }))
-    }
+        const { name, value } = e.target;
+        setMember(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleAddressSearch = () => {
         new window.daum.Postcode({
             oncomplete: function (data) {
-                console.log(data)
                 setMember(prev => ({
                     ...prev,
                     zipcode: data.zonecode,
                     address: data.address,
-                }))
+                }));
             },
-        }).open()
-    }
+        }).open();
+    };
 
-    // 아이디 중복 체크
     const handleIdCheck = async () => {
-        const id = member.id
+        const id = member.id;
         try {
-            const resp = await api.get(`/members/id/${id}`)
-            console.log(resp.data)
+            const resp = await api.get(`/members/id/${id}`);
             if (resp.data === 0) {
                 Swal.fire({
                     icon: 'success',
                     title: '회원가입',
-                    text: '사용 가능한 아이디',
-                })
-                setIdAvailable(true)
+                    text: '사용 가능한 아이디입니다.',
+                });
+                setIdAvailable(true);
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: '회원가입',
-                    text: '사용 불가능한 이메일',
-                })
-                setIdAvailable(false)
+                    text: '사용 불가능한 아이디입니다.',
+                });
+                setIdAvailable(false);
             }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
                 title: '회원가입',
                 text: '아이디 중복 검사 중 오류가 발생했습니다.',
-            })
-            setIdAvailable(false)
+            });
+            setIdAvailable(false);
         }
-    }
+    };
 
-    // 이메일 중복 체크
     const handleEmailCheck = async () => {
-        const email = member.email
+        const email = member.email;
         try {
-            const resp = await api.get(`/members/email/${email}`)
+            const resp = await api.get(`/members/email/${email}`);
             if (resp.data === 0) {
                 Swal.fire({
                     icon: 'success',
                     title: '회원가입',
-                    text: '사용 가능한 이메일',
-                })
-                setEmailAvailable(true)
+                    text: '사용 가능한 이메일입니다.',
+                });
+                setEmailAvailable(true);
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: '회원가입',
-                    text: '사용 불가능한 이메일',
-                })
-                setEmailAvailable(false)
+                    text: '사용 불가능한 이메일입니다.',
+                });
+                setEmailAvailable(false);
             }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
                 title: '회원가입',
                 text: '이메일 중복 검사 중 오류가 발생했습니다.',
-            })
-            setEmailAvailable(false)
+            });
+            setEmailAvailable(false);
         }
-    }
+    };
 
-    // 회원가입 처리
+    const handleRequestEmailVerification = async () => {
+        const email = member.email;
+        // 이메일 중복 검사
+        try {
+            const resp = await api.get(`/members/email/${email}`);
+            if (resp.data === 0) { // 이메일이 사용 가능할 때
+                await api.post(`/members/requestEmailVerification/${email}`);
+                Swal.fire({
+                    icon: 'info',
+                    title: '이메일 인증',
+                    text: '인증 코드가 이메일로 전송되었습니다.',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '이메일 인증',
+                    text: '이미 등록된 이메일입니다.',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '이메일 인증',
+                text: '이메일 인증 요청 중 오류가 발생했습니다.',
+            });
+        }
+    };
+
+    const handleVerificationCodeChange = e => {
+        setVerificationCode(e.target.value);
+    };
+
+    const handleVerifyEmail = async () => {
+        try {
+            const resp = await api.post(`/members/verifyEmail`, {
+                email: member.email,
+                code: verificationCode,
+            });
+            if (resp.data === 'verified') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '이메일 인증',
+                    text: '이메일 인증이 완료되었습니다.',
+                });
+                setIsEmailVerified(true);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '이메일 인증',
+                    text: '유효하지 않은 인증 코드입니다.',
+                });
+                setIsEmailVerified(false);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '이메일 인증',
+                text: '이메일 인증 검증 중 오류가 발생했습니다.',
+            });
+            setIsEmailVerified(false);
+        }
+    };
+
     const handleAdd = async () => {
         try {
-            await api.post(`/members`, member)
+            await api.post(`/members/registerUser`, member, {
+                params: {
+                    verificationCode: verificationCode
+                }
+            });
             Swal.fire({
                 icon: 'success',
                 title: '회원가입',
-                text: '회원가입 성공',
-            })
-            navi('/login')
+                text: '회원가입이 완료되었습니다.',
+            });
+            navi('/login');
         } catch (error) {
             Swal.fire({
                 icon: 'error',
                 title: '회원가입',
-                text: '회원가입 실패',
-            })
+                text: '회원가입 중 오류가 발생했습니다.',
+            });
         }
-    }
+    };
+
     const handleSubmit = async e => {
-        e.preventDefault() // 기본 폼 제출 동작을 막음
+        e.preventDefault(); // 기본 폼 제출 동작을 막음
 
         if (!idAvailable) {
             Swal.fire({
                 icon: 'error',
                 title: '회원가입',
-                text: '아이디 중복 체크를 해주세요',
-            })
-            return
+                text: '아이디 중복 체크를 해주세요.',
+            });
+            return;
         }
 
-        if (!emailAvailable) {
+        if (!isEmailVerified) {
             Swal.fire({
                 icon: 'error',
                 title: '회원가입',
-                text: '이메일 중복 체크를 해주세요',
-            })
-            return
+                text: '이메일 인증을 해주세요.',
+            });
+            return;
         }
-        // 아이디, 이메일 사용 가능할 때만 회원가입 처리
-        await handleAdd()
-    }
 
-    useEffect(() => {
-        console.log(member)
-    }, [member]) // 새로고침될때 + member 값이 변할 때 마다 실행
+        if (!isEmailVerified) {
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '이메일 인증을 완료해 주세요.',
+            });
+            return;
+        }
 
-    const navi = useNavigate()
+        if (member.pw !== member.rePw) {
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '비밀번호가 일치하지 않습니다.',
+            });
+            return;
+        }
+
+        // 아이디, 이메일 사용 가능하고 이메일 인증 완료된 경우에만 회원가입 처리
+        await handleAdd();
+    };
 
     return (
         <div className={styles.container}>
             <div className={styles.signConts}>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>
-                        아이디
-                        <button
-                            onClick={handleIdCheck}
-                            className={styles.checkBtn}
-                        >
-                            아이디 중복 검사
-                        </button>
+              
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>
+                            아이디
+                            <button
+                                type="button"
+                                onClick={handleIdCheck}
+                                className={styles.checkBtn}
+                            >
+                                아이디 중복 검사
+                            </button>
+                        </div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="text"
+                                placeholder="아이디를 입력하세요"
+                                name="id"
+                                onChange={handleAddChange}
+                                value={member.id}
+                            />
+                        </div>
                     </div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            placeholder="아이디는 어쩌고 저쩌고"
-                            name="id"
-                            onChange={handleAddChange}
-                            value={member.id}
-                        />
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>비밀번호</div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="password"
+                                placeholder="비밀번호를 입력하세요"
+                                name="pw"
+                                onChange={handleAddChange}
+                                value={member.pw}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>비밀번호</div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            placeholder="아이디는 어쩌고 저쩌고"
-                            name="pw"
-                            onChange={handleAddChange}
-                            value={member.pw}
-                        />
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>비밀번호 확인</div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="password"
+                                placeholder="비밀번호를 다시 입력하세요"
+                                name="rePw"
+                                onChange={handleAddChange}
+                                value={member.rePw}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>비밀번호 확인</div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            placeholder="아이디는 어쩌고 저쩌고"
-                            name="rePw"
-                            onChange={handleAddChange}
-                            value={member.rePw}
-                        />
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>이름</div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="text"
+                                placeholder="이름을 입력하세요"
+                                name="name"
+                                onChange={handleAddChange}
+                                value={member.name}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>이름</div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            placeholder="아이디는 어쩌고 저쩌고"
-                            name="name"
-                            onChange={handleAddChange}
-                            value={member.name}
-                        />
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>
+                            이메일
+                            <button
+                                type="button"
+                                onClick={handleRequestEmailVerification}
+                                className={styles.checkBtn}
+                            >
+                                이메일 인증 요청
+                            </button>
+                        </div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="email"
+                                placeholder="이메일을 입력하세요"
+                                name="email"
+                                onChange={handleAddChange}
+                                value={member.email}
+                            />
+                            {isEmailVerified ? (
+                                <div className={styles.success}>이메일 인증 완료</div>
+                            ) : (
+                                <div className={styles.inputTxt}>
+                                    인증 코드 입력:
+                                    <input
+                                        type="text"
+                                        onChange={handleVerificationCodeChange}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleVerifyEmail}
+                                    >
+                                        인증 코드 확인
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>
-                        이메일
-                        <button
-                            onClick={handleEmailCheck}
-                            className={styles.checkBtn}
-                        >
-                            이메일 인증
-                        </button>
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>생년월일</div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="text"
+                                placeholder="생년월일을 입력하세요"
+                                name="birth"
+                                onChange={handleAddChange}
+                                value={member.birth}
+                            />
+                        </div>
                     </div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            placeholder="아이디는 어쩌고 저쩌고"
-                            name="email"
-                            onChange={handleAddChange}
-                            value={member.email}
-                        />
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>성별</div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="radio"
+                                id="male"
+                                name="gender"
+                                value="M"
+                                onChange={handleAddChange}
+                            />
+                            <label htmlFor="male">남성</label>
+                            <input
+                                type="radio"
+                                id="female"
+                                name="gender"
+                                value="F"
+                                onChange={handleAddChange}
+                            />
+                            <label htmlFor="female">여성</label>
+                        </div>
                     </div>
-
-                    {/* <div>
-                        <button className={styles.emailBtn}>이메일 인증</button>
-                    </div> */}
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>생년월일</div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            name="birth"
-                            value={member.birth}
-                            onChange={handleAddChange}
-                            placeholder="아이디는 어쩌고 저쩌고"
-                        />
+                    <div className={styles.signCont}>
+                        <div className={styles.subTitle}>전화번호</div>
+                        <div className={styles.inputTxt}>
+                            <input
+                                type="text"
+                                placeholder="전화번호를 입력하세요"
+                                name="phone"
+                                onChange={handleAddChange}
+                                value={member.phone}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>성별</div>
-                    <div className={styles.checkBox}>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="M"
-                            id="male"
-                            checked={member.gender === 'M'}
-                            onChange={handleAddChange}
-                        />
-                        <label htmlFor="male">남자</label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="F"
-                            id="female"
-                            checked={member.gender === 'F'}
-                            onChange={handleAddChange}
-                        />
-                        <label htmlFor="female">여자</label>
-                    </div>
-                </div>
-                <div className={styles.signCont}>
-                    <div className={styles.subTitle}>휴대폰</div>
-                    <div className={styles.inputTxt}>
-                        <input
-                            type="text"
-                            placeholder="아이디는 어쩌고 저쩌고"
-                            name="phone"
-                            onChange={handleAddChange}
-                            value={member.phone}
-                        />
-                    </div>
-                </div>
-                <div className={styles.signCont}>
+                    <div className={styles.signCont}>
                     <div className={styles.subTitle}>우편번호</div>
                     <div className={styles.inputZipCode}>
                         <input
@@ -322,12 +414,14 @@ const Member = () => {
                         />
                     </div>
                 </div>
-            </div>
-
-            <div className={styles.btn}>
+                    </div>
+                    <div className={styles.btn}>
                 <button onClick={handleSubmit}>회원가입</button>
             </div>
-        </div>
-    )
-}
-export default Member
+
+            </div>
+
+    );
+};
+
+export default Member;

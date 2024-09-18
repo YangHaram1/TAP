@@ -1,0 +1,139 @@
+.container{
+    width: 100%;
+    height: 100%;
+}
+.container p{
+    margin: 0;
+}
+.list{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-left: 30px;
+}
+.dto{
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+    padding-bottom: 30px;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.2);
+    flex-direction: column;
+
+}
+.status{
+    border-radius: 20px;
+    width: 70px;
+    background-color: rgba(137, 43, 226, 0.14);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    color: rgb(129, 0, 249);
+    font-weight: 600;
+    height: 50%;
+}
+
+.body{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.title{
+    font-size: 20px;
+    font-weight: 600;
+}
+.contents{
+    display: flex;
+    gap: 10px;
+    color: gray;
+}
+
+
+.fileList {
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+.fileContent {
+    display: flex;
+   
+
+}
+
+.fileInfo {
+    display: flex;
+    border: 1px solid rgba(128, 128, 128, 0.596);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    gap: 10px;
+    cursor: pointer;
+}
+.fileName{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: blue;
+    gap: 10px;
+}
+.detail{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+}
+.detailTitle{
+  
+    font-weight: 600;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.inquiry{
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+  
+}
+.q{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.473);
+    border-radius: 50%;
+}
+.inquiryBody{
+    background-color: rgba(137, 43, 226, 0.153);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+ 
+   width: 100%;
+}
+.contentDate{
+    color: gray;
+}
+.reply{
+    display: flex;
+    gap: 20px;
+}
+.a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    width: 50px;
+    height: 50px;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 50%;
+}

@@ -1,5 +1,7 @@
 package com.tap.inquiry.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,13 @@ public class InquiryDAO {
 	public int insert(InquiryDTO dto) {
 		 mybatis.insert("Inquiry.insert",dto);
 		 return dto.getSeq();
+	}
+	public List<InquiryDTO> selectById(String username) {
+	
+		return mybatis.selectList("Inquiry.selectById",username);
+	}
+	public InquiryDTO selectBySeq(int seq) {
+		return mybatis.selectOne("Inquiry.selectBySeq",seq);
 	}
 
 }

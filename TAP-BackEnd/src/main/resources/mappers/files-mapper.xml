@@ -7,4 +7,8 @@
 	<insert id="insert">
 		insert into files values(files_seq.nextval, #{files_oriname}, #{files_sysname}, #{files_type}, #{files_from}, ${files_parent_seq})
 	</insert>
+	
+	<select id="selectByParentSeq" resultType="com.tap.files.dto.FilesDTO">
+		select *from files where files_parent_seq=#{parentSeq} and files_type='inquiry'
+	</select>
 </mapper>

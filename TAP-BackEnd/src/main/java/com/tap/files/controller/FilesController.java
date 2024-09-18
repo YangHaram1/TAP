@@ -2,12 +2,12 @@ package com.tap.files.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +23,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.tap.files.dto.FilesDTO;
 import com.tap.files.service.FilesService;
+import com.tap.inquiry.dto.InquiryDTO;
 
 @RestController
 @RequestMapping("/file")
@@ -79,6 +80,13 @@ public class FilesController {
 		header.add(HttpHeaders.CONTENT_TYPE, blob.getContentType());//MediaType.APPLICATION_OCTET_STREAM_VALUE
 		return ResponseEntity.ok().headers(header).contentLength(blob.getSize()).body(resource);
 
+	}
+	
+	@GetMapping("/{parentSeq}")
+	ResponseEntity<List<FilesDTO>> get(@PathVariable int parentSeq) throws Exception {
+		
+		List<FilesDTO> list =fServ.selectByParentSeq(parentSeq);
+		return ResponseEntity.ok(list);
 	}
 
 }
