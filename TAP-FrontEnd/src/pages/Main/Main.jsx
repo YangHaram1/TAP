@@ -8,7 +8,7 @@ import { Detail } from './Art/Detail/Detail'
 import Home from './Home/Home'
 import Support from '../Support/Support'
 import Board from './../Board/Board'
-import Inquiry from './Inquiry/Inquiry';
+import Inquiry from './Inquiry/Inquiry'
 
 const Main = () => {
     const navi = useNavigate()
@@ -19,7 +19,7 @@ const Main = () => {
                 <Header></Header>
             </div>
             <Routes>
-                <Route path='/' element={<Home></Home>} />
+                <Route path="/" element={<Home></Home>} />
             </Routes>
             <div className={styles.body}>
                 <div className={styles.view}>
@@ -42,8 +42,7 @@ const Main = () => {
                     </Routes>
                 </div>
             </div>
-
-        </div >
+        </div>
     )
 }
 export default Main
