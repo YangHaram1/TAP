@@ -94,7 +94,7 @@ export const SaleByCategory =({ category, categoryName, tap })=>{
                                 className={styles.table_row}
                                 >
                                     <td>신청번호 {product.APPLICATION_SEQ}</td>
-                                    <td> 사업자 </td>
+                                    <td> {product.COMPANY_NAME} </td>
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
                                         <img
