@@ -132,3 +132,10 @@
       padding: 6px 10px;
   }
 }
+
+.no_products {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}

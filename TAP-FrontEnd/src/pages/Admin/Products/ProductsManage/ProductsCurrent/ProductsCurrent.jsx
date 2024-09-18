@@ -124,7 +124,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                 </table>
                     </>
                 ) : (
-                    <p>해당 카테고리에 대한 상품이 없습니다.</p>
+                    <p className={styles.no_products}>해당 카테고리에 대한 상품이 없습니다.</p>
                 )}
              
             </div>

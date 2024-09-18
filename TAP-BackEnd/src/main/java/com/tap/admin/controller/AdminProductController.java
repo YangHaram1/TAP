@@ -24,8 +24,17 @@ public class AdminProductController {
 	// 팝업 테스트 상품 공지사항 가져오기 
 	@GetMapping("/event_popup")
 	public ResponseEntity<String> getDescription(@RequestParam int application_seq) {
-	  System.out.println("공지사항 번호 : "+ application_seq);
-		return ResponseEntity.ok(AdProServ.getDescription(application_seq));
+//	  System.out.println("공지사항 번호 : "+ application_seq);
+//		return ResponseEntity.ok(AdProServ.getDescription(application_seq));
+		//
+		 String description = AdProServ.getDescription(application_seq);
+
+	    if (description == null || description.isEmpty()) {
+	        // 데이터가 없을 때 204 No Content 반환
+	        return ResponseEntity.noContent().build();
+	    }
+
+	    return ResponseEntity.ok(description);
 	}
 
 	

@@ -5,26 +5,26 @@ import { api } from '../../../config/config';
 export const Dash=()=>{
     
     useEffect(()=>{
-        // 상품등록 건수 | created_at : 오늘, status: '승인 대기' 인 상품등록 건수 
-        // 상품세일 건수 | sale_approved : '승인 대기' 인 상품세일 건수 
-        // 배송 준비중 갯수 | delivery_status : '배송 준비중' 
-        api.get(`/admin/dash/getapply`)
-        api.get(`/admin/dash/getsale`)
-        api.get(`/admin/dash/getdelivery`)
+        // // 상품등록 건수 | created_at : 오늘, status: '승인 대기' 인 상품등록 건수 
+        // // 상품세일 건수 | sale_approved : '승인 대기' 인 상품세일 건수 
+        // // 배송 준비중 갯수 | delivery_status : '배송 준비중' 
+        // api.get(`/admin/dash/getapply`)
+        // api.get(`/admin/dash/getsale`)
+        // api.get(`/admin/dash/getdelivery`)
         
-        // 상품 등록 갯수 | updated_at : 오늘인 상품 갯수 
-        // 상품 세일 승인 갯수 | sale_approved : '승인 완료' 갯수
-        // 주문 - 배송 | delievery_status: '발송 완료' 갯수
-        api.get(`/admin/dash/getapplytoday`)
-        api.get(`/admin/dash/getsaletoday`)
-        api.get(`/admin/dash/getdeliverytoday`)
+        // // 상품 등록 갯수 | updated_at : 오늘인 상품 갯수 
+        // // 상품 세일 승인 갯수 | sale_approved : '승인 완료' 갯수
+        // // 주문 - 배송 | delievery_status: '발송 완료' 갯수
+        // api.get(`/admin/dash/getapplytoday`)
+        // api.get(`/admin/dash/getsaletoday`)
+        // api.get(`/admin/dash/getdeliverytoday`)
         
-        // 주문 - 오늘 주문 | order_date : 오늘 + 총 금액
-        api.get(`/admin/dash/getorder`)
-        // 주문 | status : '환불' 인 건수 + 총 금액 
-        api.get(`/admin/dash/getrefund`)
-        // 카테고리 별 주문 건수  - group by 로 하면 카테고리 별 카운트 가져올 수 있나?
-        api.get(`admin/dash/getordercount`)
+        // // 주문 - 오늘 주문 | order_date : 오늘 + 총 금액
+        // api.get(`/admin/dash/getorder`)
+        // // 주문 | status : '환불' 인 건수 + 총 금액 
+        // api.get(`/admin/dash/getrefund`)
+        // // 카테고리 별 주문 건수  - group by 로 하면 카테고리 별 카운트 가져올 수 있나?
+        // api.get(`admin/dash/getordercount`)
     })
 
 
