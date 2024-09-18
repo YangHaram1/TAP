@@ -1,0 +1,260 @@
+
+
+.container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.member_info{
+    /* justify-content: flex-start; /* 요소 간의 간격을 균등하게 분배 */
+    /* align-items: center;  */
+    padding: 20px 40px;
+    background-color: #f0f4f8;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+.coltitle{
+    /* background-color: #12ac57; */
+    width: 90%;
+    padding-top:10px;
+}
+.coltitle_row{
+    display: flex;
+    height: 45px;
+}
+.column{
+    /* background-color: pink; */
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-right:20px;
+    font-size: large;
+    
+}
+.inputBox1{
+    /* background-color: black; */
+    width:70%;
+    display: flex;
+    flex-direction: column;
+}
+.inputBox{
+    /* background-color: black; */
+    width:70%;
+    display: flex;
+}
+.select1{
+    /* background-color: coral; */
+    display: flex;
+    flex:1;
+    padding: 5px 0px;
+}
+.selectStatus{
+    /* background-color: #3498db; */
+    width: 200px;
+}
+.inputBox .typeBox {
+    flex:0.15;
+    margin:2px;
+
+}
+.inputBox .typeInput{
+    flex:0.5;
+    margin:2px;
+}
+.inputBox .dateBox{
+    /* background-color: #2c3e50; */
+    flex:0.4;
+    display: flex;
+    padding: 5px 0px;
+}
+.inputBox .dateBox input{
+   width: 100%;
+   margin:2px;
+}
+.inputBox .dateBtn{
+    /* background-color: #e75757; */
+    flex:0.3;
+    display: flex;
+    align-items: center;
+    padding: 5px 0px;
+}
+.inputBox .dateBtn button{
+    background-color: #90bbe6;
+    border:none;
+    border-radius: 7px;
+    flex:1;
+    height: 85%;
+    margin-left: 2px;
+}
+.inputBox .dateBtn button:hover{
+    cursor: pointer;
+    background-color: rgb(166, 211, 250);
+}
+
+
+
+/* 검색, 초기화 버튼 */
+.BoxBtn{
+    /* background-color: gold; */
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    margin: 10px 0;
+}
+.BoxBtn button{
+    width: 70px;
+    height: 30px;
+    background-color: #a19bf8;
+    border: none;
+    border-radius: 4px;
+}
+.BoxBtn button:hover{
+    cursor: pointer;
+}
+
+
+.funcBtn{
+    padding-top:20px;
+    flex:0.5;
+    display: flex;
+    padding-left: 30px;
+    padding-bottom:15px;
+    width: 95%;
+    justify-content: center;
+    align-items: center;
+    /* background-color: pink; */
+}
+
+.col_button{
+    flex: 1;
+    padding-left: 100px;
+}
+.searchWrapper{
+    flex:1;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 100px;
+}
+.searchWrapper input{
+    height: 35px;
+    width: 220px;
+    margin-right: 10px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+
+.funcBtn select{
+    height: 35px;
+    width: 200px;
+    margin-left: 20px;
+    
+}
+.funcBtn button{
+    /* flex:0.1; */
+    width: 100px;
+    height: 35px;
+    justify-content:bottom;
+    margin-left: 20px;
+    padding: 5px 0 5px 0;
+    background-color: #a6c76c;
+    border: none;
+    color: white;
+    font-size: 13px;
+    /* padding: 3.5px; */
+    border-radius: 3px;
+    letter-spacing: -1px;
+}
+.funcBtn button:hover{
+    cursor: pointer;
+}
+
+
+/* ===================================================== */
+.body{
+    /* border: 1px solid black; */
+    /* height: 75%; */
+    flex:6;
+    padding: 0 25px;
+}
+.tableWrapper{
+    flex:8.5;
+    display: flex;
+    justify-content: center;
+    min-width: 1200px;
+}
+
+.table{
+    /* width: 100%;
+    height: 100%; */
+    width: 85%; /* 테이블의 고정 너비를 설정 */
+    height: 100%;
+    table-layout: fixed; /* 테이블의 열 너비를 고정 */
+}
+
+.table thead td:nth-child(1){
+    width:20%;    /* 접속시간 너비 */
+}
+.table thead td:nth-child(2) {
+    width: 10%; /* 아이디 열의 너비 */
+}
+
+.table thead td:nth-child(3) {
+    width: 15%; /* 이름(부서) 열의 너비 */
+}
+.table thead td:nth-child(4) {
+    width: 15%; /* 로그상태 열의 너비 */
+}
+.table thead td:nth-child(5) {
+    width: 15%; /* 접속ip 열의 너비 */
+}
+
+
+
+.theadtd{
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* .table tbody tr:hover {
+    background-color: #e3f8eed8;
+    cursor: pointer;
+} */
+
+
+
+.modalForm {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination{
+    flex:4;
+    padding-bottom: 80px;
+}
+
+.loading{
+    width:100%;
+    height: 100%;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+   font-size: large;
+   padding: 10px 0px;
+}

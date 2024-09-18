@@ -95,8 +95,13 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                                                 alt={product.FILES_ORINAME}
                                                 className={styles.product_image}
                                             />
-                                            <span className={styles.status_tag}>
-                                            {tap === 0 ? "예매중" : tap === 1 ? "판매 종료" : "판매 예정"}
+                                            <span 
+                                                className={`${styles.status_tag} ${tap === 0 
+                                                    ? styles.status_tag_booking 
+                                                    : tap === 1 
+                                                    ? styles.status_tag_sold_out 
+                                                    : styles.status_tag_upcoming}`}>
+                                                {tap === 0 ? "예매중" : tap === 1 ? "판매 종료" : "판매 예정"}
                                             </span>
                                         </div>
                                         <div className={styles.product_details}>
@@ -124,7 +129,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                 </table>
                     </>
                 ) : (
-                    <p>해당 카테고리에 대한 상품이 없습니다.</p>
+                    <p className={styles.no_products}>해당 카테고리에 대한 상품이 없습니다.</p>
                 )}
              
             </div>

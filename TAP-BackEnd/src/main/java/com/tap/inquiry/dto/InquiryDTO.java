@@ -10,7 +10,8 @@ public class InquiryDTO {
 	private String category;
 	private String title;
 	private String contents;
-	private Timestamp write_data;
+	private Timestamp write_date;
+	private int status;
 	public int getSeq() {
 		return seq;
 	}
@@ -53,14 +54,23 @@ public class InquiryDTO {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	public Timestamp getWrite_data() {
-		return write_data;
+	public Timestamp getWrite_date() {
+		return write_date;
 	}
-	public void setWrite_data(Timestamp write_data) {
-		this.write_data = write_data;
+	public void setWrite_date(Timestamp write_date) {
+		this.write_date = write_date;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public InquiryDTO() {
+		super();
 	}
 	public InquiryDTO(int seq, String member_id, String name, String email, String category, String title,
-			String contents, Timestamp write_data) {
+			String contents, Timestamp write_date, int status) {
 		super();
 		this.seq = seq;
 		this.member_id = member_id;
@@ -69,11 +79,11 @@ public class InquiryDTO {
 		this.category = category;
 		this.title = title;
 		this.contents = contents;
-		this.write_data = write_data;
+		this.write_date = write_date;
+		this.status = status;
 	}
-	public InquiryDTO() {
-		super();
-	}
+	
+	
 	
 	
 }

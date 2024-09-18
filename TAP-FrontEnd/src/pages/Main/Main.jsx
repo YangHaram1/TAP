@@ -9,6 +9,7 @@ import Home from './Home/Home'
 import Support from '../Support/Support'
 import Board from './../Board/Board'
 import Inquiry from './Inquiry/Inquiry'
+import MyInquiry from './MyInquiry/MyInquiry';
 
 const Main = () => {
     const navi = useNavigate()
@@ -38,6 +39,7 @@ const Main = () => {
                         <Route path="/team/:teamId" element={<TeamPage />} />
                         <Route path="/support" element={<Support />} />
                         <Route path="/inquiry" element={<Inquiry />} />
+                        <Route path="/myinquiry/*" element={<MyInquiry />} />
                         <Route path="/board" element={<Board />} />
                     </Routes>
                 </div>

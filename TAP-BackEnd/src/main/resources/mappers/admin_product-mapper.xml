@@ -118,8 +118,10 @@
 	</select>
 	<select id="getWaitingSaleByCategory" resultMap="TimestampResultMap">
 		WITH RankedSales AS (
-		    SELECT apply.*, sale.sale_rate, ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
+		    SELECT apply.*, sale.sale_rate, files.*, 
+		    ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
 		    FROM apply
+		    JOIN files ON files.files_parent_seq = apply.application_seq
 		    JOIN sale ON apply.application_seq = sale.application_seq
 		    WHERE sale.sale_approved LIKE '%대기%' 
 		    and apply.sub_category_seq = #{category}
@@ -129,13 +131,15 @@
 		WHERE rn = #{category}
 	</select>
 	<select id="getResultSaleByCategory" resultMap="TimestampResultMap">
-		WITH RankedSales AS (
-		    SELECT apply.*, sale.sale_rate, ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
+		 WITH RankedSales AS (
+		    SELECT apply.*, sale.sale_rate, files.*, 
+		           ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
 		    FROM apply
 		    JOIN sale ON apply.application_seq = sale.application_seq
-		    WHERE sale.sale_approved not LIKE '%대기%'
-		    and sale.sale_approved not LIKE '%취소%' 
-		    and apply.sub_category_seq = #{category}
+		    JOIN files ON files.files_parent_seq = apply.application_seq
+		    WHERE sale.sale_approved NOT LIKE '%대기%'
+		      AND sale.sale_approved NOT LIKE '%취소%'
+		      AND apply.sub_category_seq = #{category}
 		)
 		SELECT *
 		FROM RankedSales
@@ -175,16 +179,20 @@
 	
 	
 	<select id="getWaitingProductsByCategory" resultMap="TimestampResultMap">
-		SELECT * FROM APPLY
-		WHERE status like '%대기%'
-		and sub_category_seq = #{category}
+		 SELECT apply.*, files.files_sysname FROM APPLY
+ join files on files.files_parent_seq = apply.application_seq
+		WHERE apply.status like '%대기%'
+        and files.files_type = 'poster'
+		and apply.sub_category_seq = #{category}
 	</select>
 	<select id="getResultProductsByCategory" resultMap="TimestampResultMap">
-		SELECT * FROM APPLY
-		WHERE status not like '%대기%'
-		AND status != '취소'
-		AND sub_category_seq = #{category}
-		 AND updated_at >= ADD_MONTHS(SYSDATE, -3)
+		SELECT apply.*, files.files_sysname FROM APPLY
+		join files on files.files_parent_seq = apply.application_seq
+		WHERE apply.status not like '%대기%'
+		AND apply.status != '취소'
+		and files.files_type = 'poster'
+		AND APPLY.sub_category_seq = #{category}
+		 AND APPLY.updated_at >= ADD_MONTHS(SYSDATE, -3)
 	</select>
 	
 	
@@ -204,6 +212,13 @@
 	    SET status = '승인 반려',
 	        reject_reason = #{rejectReason},
 	        updated_at = sysdate
+	    WHERE application_seq = #{applicationSeq}
+	</update>
+	
+	<update id="rejectSale">
+	    UPDATE sale
+	    SET sale_approved = '승인 반려',
+	        reject_reason = #{rejectReason}
 	    WHERE application_seq = #{applicationSeq}
 	</update>
 	
