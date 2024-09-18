@@ -43,8 +43,8 @@ public class BizService {
 	public List<HashMap<String, Object>> getAllPrices(){
 		return bizdao.getAllPrices();
 	}
-	public List<HashMap<String, Object>> getProductByName(String name){
-		return bizdao.getProductByName(name);
+	public List<HashMap<String, Object>> getProductByName(String name, String id){
+		return bizdao.getProductByName(name, id);
 	}
 	public void createSale(List<HashMap<String, Object>> saleDataList) {
         for (HashMap<String, Object> saleData : saleDataList) {

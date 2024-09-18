@@ -93,4 +93,9 @@ public class MembersService implements UserDetailsService{
 		return dao.selectByAdmin();
 	}
 
+	public int updateDeliverySeq(String username,int deliverySeq) {
+		return dao.updateDeliverySeq(username,deliverySeq);
+		
+	}
+
 }

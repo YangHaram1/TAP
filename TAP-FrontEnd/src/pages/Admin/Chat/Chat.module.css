@@ -7,8 +7,6 @@
     /* background-image: url('/src/images/background2.jpg');
     background-size: 1100px 800px; */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-
-
 }
 
 .header {
@@ -24,7 +22,10 @@
     border-bottom-right-radius: 0;
     border: none;
 }
-
+.header img{
+    width: 90px;
+    height: 100%;
+}
 .icon {
     width: 70px;
     height: 50px;
@@ -41,8 +42,10 @@
     flex: 1;
     margin-top: 20px;
     overflow: auto;
+    margin: 20px;
     background-color: white;
     border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .chatapp {

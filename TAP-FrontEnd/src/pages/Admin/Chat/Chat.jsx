@@ -3,6 +3,7 @@ import List from './List/List';
 import ChatApp from './ChatApp/ChatApp';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeadset } from '@fortawesome/free-solid-svg-icons';
+import chat from '../../../images/chat.png'
 import { useContext, useEffect } from 'react';
 import { ChatsContext } from '../../../context/ChatsContext';
 const Chat = () => {
@@ -16,7 +17,7 @@ const Chat = () => {
         <div className={styles.container}>
             <div className={styles.header}>
                 {/* <FontAwesomeIcon icon={faHeadset} className={styles.icon} /> */}
-                 CHAT 
+                <img src={chat} alt="" /> CHAT 
             </div>
             <div className={styles.body}>
                 <div className={styles.chatapp} ref={chatAdminRef}>

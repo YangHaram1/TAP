@@ -1,21 +1,22 @@
 .container{
-    position: absolute;
+    position: fixed;
     width: 100px; /* 사이드바의 너비 */
     overflow: auto;
-    background-color: #333;
-    color: white;
+   background-color: white;
+    color: black;
     padding: 10px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
     display: none;
     flex-direction: column;
-    gap: 5px; 
+    gap: 10px; 
     z-index: 9999;
+    border-radius: 10px;
 }
 .content{
-    font-size: 12px;
+    font-size: 15px;
     cursor: pointer;
 }
 .content:hover{
-    background-color: wheat;
     color: red;
+    border: 1px solid red;
 }

@@ -2,3 +2,35 @@
     width: 100%;
     height: 100%;
 }
+.header {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 8px solid rgba(128, 128, 128, 0.148);
+}
+.header button{
+    color: red;
+    background-color: white;
+    border: 1px solid red;
+    height: 35px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.header div:nth-child(1) {
+    display: flex;
+    font-size: 12px;
+    justify-content: flex-start;
+    align-items: center;
+    color: gray;
+    flex: 2;
+}
+
+.header div:nth-child(2) {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: white;
+    background-color: white;
+}

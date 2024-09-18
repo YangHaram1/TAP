@@ -1,6 +1,6 @@
 import styles from './Chat.module.css';
 import { useContext, useEffect } from 'react';
-import { useAuthStore } from '../../store/store';
+import { useAuthStore, useCheckList } from '../../store/store';
 import { ChatsContext } from '../../context/ChatsContext';
 import Home from './Home/Home';
 import AI from './AI/AI';
@@ -10,6 +10,7 @@ import { faBan, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
     const { chatNavi, ws, setChatNavi, dragRef, chatAppRef } = useContext(ChatsContext);
+    const {setChatSeq}=useCheckList();
     const { loginID } = useAuthStore;
 
 
@@ -41,9 +42,12 @@ const Chat = ({ websocketRef, draggableRef, setDisabled }) => {
         dragRef.current.style.visibility = 'hidden';
         chatAppRef.current.style.display = "none";
         setChatNavi('');
+        setChatSeq(0);
+        
     }
     const handleRotate = () => {
         setChatNavi('');
+        setChatSeq(0);
         chatAppRef.current.style.display = "none";
     }
 

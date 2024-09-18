@@ -824,29 +824,33 @@ export const EventApply = () => {
                             <td>시작시간( 스케쥴 테이블에 )</td>
                             <td>
                                 <div  className={styles.timeAdd}>
-                                <select className={styles.shortInput} value={selectedDay} 
-                                //  disabled={!isCategorySelected || !isSubCategorySelected}
-                                onChange={(e) => setSelectedDay(e.target.value)}
-                                // disabled={isDisabled && selectedDay !== "전체"} 
-                                disabled={isDisabled}
-                                >
-                                    <option value="">요일</option>
-                                    {weekdays.map((day, index) => (
-                                    <option key={index} value={day === "전체" ? "전체" : day}
-                                    disabled={isDisabled && day !== "전체"} 
+                                    요일: 
+                                    <select className={styles.shortInput} value={selectedDay} 
+                                    //  disabled={!isCategorySelected || !isSubCategorySelected}
+                                    onChange={(e) => setSelectedDay(e.target.value)}
+                                    // disabled={isDisabled && selectedDay !== "전체"} 
+                                    disabled={isDisabled}
                                     >
-                                        {day === "전체" ? "전체" : daysOfWeek[day]}
-                                    </option>
-                                    ))}
-                                </select>
-                                <span className={styles.Gap}></span>
-                                시간: 
-                                <input type="time" step="300" required className={styles.shortInput} 
-                                value={selectedTime} 
-                                disabled={!formData.start_date || !formData.end_date}
-                                onChange={(e) => setSelectedTime(e.target.value)}></input>
-                                <span className={styles.Gap}></span>
-                                <button onClick={handleAddSchedule} className={styles.btnInput}>추가</button>
+                                        <option value="">요일</option>
+                                        {weekdays.map((day, index) => (
+                                        <option key={index} value={day === "전체" ? "전체" : day}
+                                        disabled={isDisabled && day !== "전체"} 
+                                        >
+                                            {day === "전체" ? "전체" : daysOfWeek[day]}
+                                        </option>
+                                        ))}
+                                    </select>
+                                    </div>
+                                    <span className={styles.Gap}></span>
+                                    <div className={styles.timeAdd}>
+                                    시간: 
+                                    
+                                    <input type="time" step="300" required className={styles.shortInput} 
+                                    value={selectedTime} 
+                                    disabled={!formData.start_date || !formData.end_date}
+                                    onChange={(e) => setSelectedTime(e.target.value)}></input>
+                                    <span className={styles.Gap}></span>
+                                    <button onClick={handleAddSchedule} className={styles.btnInput}>추가</button>
                                 </div>
                                 <ul>
                                     {scheduleList.map((schedule, index) => (

@@ -1,25 +1,44 @@
-.container{
-    width:100%;
-    height:100%;
-    /* padding: 0px 100px; */
-    /* background-color: beige; */
-}
-.header{
-    padding: 30px 50px 10px 50px;
+.container {
+  width: 100%;
+  padding: 0px 20px;
+  max-width: 1200px; /* max-width 조정 */
+  margin: 0 auto; /* 중앙 정렬 */
 }
 
-/* *{border: 1px solid black;} */
+.header {
+  padding: 20px 0;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
 
-.product_table{
-    width:100%;
-   
+/* 테이블 영역 */
+.product_table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
 }
-.product_table table{
-    width:100%;
-    border:1px solid gray;
+
+.product_table table {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-spacing: 0;
 }
+
 .product_table table thead tr th {
-    background-color: pink;
+  background-color: #f4f4f4;
+  padding: 12px 8px;
+  font-size: 16px;
+  color: #333;
+  text-align: left;
+}
+
+.product_table table td {
+  border: 1px solid #ddd;
+  padding: 12px 8px;
+  font-size: 14px;
+  color: #555;
+  vertical-align: middle;
 }
 .product_table table thead tr th:nth-child(1){
   width:5%;
@@ -42,103 +61,95 @@
 .product_table table thead tr th:nth-child(7){
   width:10%;
 }
-.product_table table td{
-    border:1px solid gray;
-    text-align: center;
-}
-.product_info{
-    display: flex;
-    align-items: center;
+
+.product_info {
+  display: flex;
+  align-items: center;
 }
 
 .product_image_container {
-    position: relative;
-    margin-right: 10px;
-   
+  position: relative;
+  margin-right: 20px;
+  width: 120px; /* 이미지 너비 조정 */
+  height: 120px; /* 이미지 높이 조정 */
+}
+
+.product_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px; /* 이미지에 약간의 둥근 모서리 추가 */
+}
+
+.status_tag {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #f4b400;
+  color: white;
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 4px; /* 태그 모서리 둥글게 */
+}
+
+.product_details {
+  text-align: left;
+  flex: 1; /* 내용이 차지하는 영역을 유연하게 조정 */
+}
+
+.product_name {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.product_sub_info {
+  font-size: 14px;
+  color: #888;
+}
+
+.product_date, .product_venue {
+  font-size: 14px;
+  text-align: left;
+  color: #333;
+  width: 150px;
+  padding-left: 10px;
+}
+
+.manage_button, .edit_button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-top: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.manage_button:hover, .edit_button:hover {
+  background-color: #0056b3;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .product_table {
+      width: 100%;
   }
-  .product_image {
-    width: 100px;
-    /* height: 100px; */
-    object-fit: cover;
+
+  .product_image_container {
+      width: 80px;
+      height: 80px;
   }
-  
+
   .product_details {
-    text-align: left;
-    /* background-color: black; */
+      font-size: 14px;
   }
-  
-  .product_name {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .product_sub_info {
-    color: gray;
-  }
-  
-  .product_date, .product_venue {
-    font-size: 14px;
-    width:150px
-  }
-  
+
   .manage_button, .edit_button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    margin: 2px;
-    cursor: pointer;
+      font-size: 12px;
+      padding: 6px 10px;
   }
-  
-  .manage_button:hover, .edit_button:hover {
-    background-color: #0056b3;
-  }
-
-
-  /* 반려 사유 툴팁 */
-  /* WaitingList.module.css */
-.rejectReason {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .tooltipIcon {
-    margin-left: 5px;
-    cursor: pointer;
-    color: rgb(153, 52, 212); /* 아이콘 색상 */
-  }
-  
-  .tooltipText {
-    visibility: hidden;
-    width: 200px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; /* 위로 표시 */
-    left: 50%;
-    margin-left: -100px; /* 중앙 정렬 */
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .tooltipText::after {
-    content: "";
-    position: absolute;
-    top: 100%; /* 화살표를 아래에 위치 */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-  }
-  
-  /* 툴팁 표시 */
-  .rejectReason:hover .tooltipText {
-    visibility: visible;
-    opacity: 1;
-  }
-  
+}

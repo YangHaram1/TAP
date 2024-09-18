@@ -58,7 +58,7 @@ public class BizManageController {
 	}
 	// 판매 종료 상품
 		@GetMapping("/past")
-		public ResponseEntity<List<HashMap<String, Object>>> getAllPastApproved(Principal principal){
+		public ResponseEntity<List<HashMap<String, Object>>> getAllPast(Principal principal){
 			if (principal == null) {
 				System.out.println("principal");
 				return null;
@@ -69,7 +69,7 @@ public class BizManageController {
 			
 			
 			System.out.println("id는 : "+ user.getUsername());
-			return ResponseEntity.ok(bizManServ.getAllPastApproved(user.getUsername()));
+			return ResponseEntity.ok(bizManServ.getAllPast(user.getUsername()));
 		}
 	
 

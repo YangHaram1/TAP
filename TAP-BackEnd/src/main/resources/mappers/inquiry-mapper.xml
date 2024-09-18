@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Inquiry">
+	<!-- 회원가입 등록 -->
+	<insert id="insert">
+		insert into inquiry values(inquiry_seq.nextval,#{member_id},#{name},#{email},#{category},#{title},#{contents},sysdate)
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select inquiry_seq.currval from dual
+		</selectKey>
+	</insert>
+</mapper>

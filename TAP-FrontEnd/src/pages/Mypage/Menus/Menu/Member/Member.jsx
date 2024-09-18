@@ -10,13 +10,13 @@ import Swal from 'sweetalert2';
 const Member = () => {
     const { loginID } = useAuthStore();
     const [user, setUser] = useState({ email: '', phone: '' });
+    const [address,setAddress]=useState({});
     const [genderCheck, setGenderCheck] = useState(false);
     const [updateCheck, setUpdateCheck] = useState({ email: true, phone: true });
-    const [data, setData] = useState({ id: '', email: '', phone: '' });
+    const [data, setData] = useState({ id: '', email: '', phone: '',address:'',detailed_address:'',zipcode:'' });
     const emailRef = useRef();
     const phoneRef = useRef();
     useEffect(() => {
-        const id = loginID;
         api.get(`/members`).then((resp) => {
             setUser(resp.data)
             if (user.gender === 'F') {
@@ -26,6 +26,9 @@ const Member = () => {
             }
             setData({ id: resp.data.id, email: resp.data.email, phone: resp.data.phone });
         });
+        api.get(`/delivery/default`).then((resp) => {
+            setAddress(resp.data)
+        })
     }, [])
 
     const handleDefault = () => {
@@ -106,6 +109,12 @@ const Member = () => {
                     <div>
                         기본주소
                     </div>
+                    <div>
+                        상세주소
+                    </div>
+                    <div>
+                        우편코드
+                    </div>
                 </div>
                 <div className={styles.contents}>
                     <div>
@@ -141,7 +150,13 @@ const Member = () => {
                         <input type="checkbox" checked={genderCheck} className={styles.checkBox} disabled />여자
                     </div>
                     <div>
-                        일단 이부분 고민중
+                      {address.address}
+                    </div>
+                    <div>
+                        {address.detailed_address}
+                    </div>
+                    <div>
+                        {address.zipcode}
                     </div>
                 </div>
 

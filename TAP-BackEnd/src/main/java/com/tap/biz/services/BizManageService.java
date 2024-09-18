@@ -20,8 +20,8 @@ public class BizManageService {
 	public List<HashMap<String, Object>> getAllFutureApproved(String id){
 		return bizMandao.getAllFutureApproved(id);
 	}
-	public List<HashMap<String, Object>> getAllPastApproved(String id){
-		return bizMandao.getAllPastApproved(id);
+	public List<HashMap<String, Object>> getAllPast(String id){
+		return bizMandao.getAllPast(id);
 	}
 	
 	public List<HashMap<String, Object>> getAllWaiting(String id){

@@ -2,14 +2,21 @@
     background-color: rgb(245, 232, 255);
     height: 600px;
     border-radius: 20px;
-    width: 100% !important;
-    overflow: auto;
+    width: 100%;
+    display: flex;
+    margin-right: 500px;
+    margin-top: 5px;
 }
 
 .banner div {
     position: relative;
 }
 
+.view {
+    width: 70vw;
+    height: 100%;
+    margin: auto;
+}
 
 
 .ranking {
@@ -58,12 +65,17 @@
     padding: 10px 20px;
     border-radius: 25px;
     cursor: pointer;
+    background-color: white;
 }
 
-.sort:hover {
+.sortActive {
+    padding: 10px 20px;
     background-color: #9c43f8;
     border: 2px solid #9c43f8;
     color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .rankingImgs {
@@ -86,8 +98,21 @@
 .rankImg {
     flex: 6;
     cursor: pointer;
-    background-color: beige;
+    background-color: black;
+    border-radius: 10px;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
 
+
+}
+
+.rankNum {
+    color: white;
+    position: absolute;
+    left: 20px;
+    bottom: -10px;
+    font-size: 40px;
 }
 
 .rankTitle {
@@ -128,10 +153,16 @@
 
 /* 티켓오픈 */
 .tOpen {
-    height: 600px;
+    min-height: 600px;
     /* background-color: bisque; */
     display: flex;
     flex-direction: column;
+    background-color: #8037cb;
+    /* color: white; */
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+
 }
 
 .oTitle {
@@ -143,10 +174,87 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
+    gap: 12px;
 }
 
 .oConts {
     flex: 4;
+    /* background-color: red; */
+    display: flex;
+    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+
+}
+
+.oCont {
+    flex: 1;
+    display: flex;
+    border-radius: 10px;
+    min-height: 200px;
+    background-color: white;
+
+}
+
+.oImgs {
+    flex: 2;
+    background-color: rgb(220, 220, 220);
+    border-radius: 10px;
+}
+
+.oBox {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+
+
+}
+
+.oBox div {
+    display: flex;
+    align-items: center;
+}
+
+.badge {
+    flex: 1;
+    border: 2px solid #ff7262;
+    /* padding: 5px; */
+    border-radius: 10px;
+    font-weight: bold;
+    width: 80px;
+    /* height: 40px; */
+    display: flex;
+    justify-content: center;
+    color: #ff7262;
+    font-size: 12px;
+
+}
+
+.release {
+    flex: 1;
+    font-weight: bold;
+    color: #8037cb;
+    font-size: 16px;
+}
+
+.title {
+    flex: 2;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.subTitle {
+    flex: 1;
+    font-size: 18px;
+    color: #5b5b5b;
+
+}
+
+.rSubTitle {
+    flex: 1;
 }
 
 .sale {

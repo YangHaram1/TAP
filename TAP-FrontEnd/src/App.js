@@ -23,10 +23,11 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { host } from './config/config'
 import 'react-resizable/css/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
+import Home from './pages/Main/Home/Home'
 
 function App() {
     const { login, isAuth, setAuth, role, token } = useAuthStore()
-    const { webSocketCheck,setWebSocketCheck ,setOnmessage} = useCheckList();
+    const { webSocketCheck, setWebSocketCheck, setOnmessage } = useCheckList();
     const { maxCount } = useNotification();
 
     const [hasScrolled, setHasScrolled] = useState(false)
@@ -149,10 +150,35 @@ function App() {
     return (
         <ChatsProvider>
             <Router>
+                {
+                    !isAuth ? (
+                        <>
+                            <Header hasScrolled={hasScrolled} />
+                        </>
+                    ) : isAuth && role === 'ROLE_ADMIN' ? (
+                        <>
+                            <AdminHeader hasScrolled={hasScrolled} />
+
+                        </>
+                    ) : isAuth && role === 'ROLE_BIZ' ? (
+                        <>
+                            <AdminHeader hasScrolled={hasScrolled} />
+
+                        </>
+                    ) : (
+                        isAuth &&
+                        role === 'ROLE_USER' && (
+                            <>
+                                <Header hasScrolled={hasScrolled} />
+                            </>
+                        )
+                    )
+                }
+
                 <div className={styles.container}>
                     {!isAuth ? (
                         <>
-                            <Header hasScrolled={hasScrolled} />
+                            {/* <Header hasScrolled={hasScrolled} /> */}
                             <Routes>
                                 <Route path="/*" element={<Main />} />
                                 <Route path="/login/*" element={<Login />} />
@@ -162,28 +188,30 @@ function App() {
                         </>
                     ) : isAuth && role === 'ROLE_ADMIN' ? (
                         <>
-                            <AdminHeader hasScrolled={hasScrolled} />
-                            <Admin />
+                            {/* <AdminHeader hasScrolled={hasScrolled} /> */}
+                            <div className={styles.view}>
+                                <Admin />
+                            </div>
                         </>
                     ) : isAuth && role === 'ROLE_BIZ' ? (
                         <>
-                            <AdminHeader hasScrolled={hasScrolled} />
-                            <Biz />
+                            {/* <AdminHeader hasScrolled={hasScrolled} /> */}
+                            <div className={styles.view}>
+                                <Biz />
+                            </div>
                         </>
                     ) : (
                         isAuth &&
                         role === 'ROLE_USER' && (
                             <>
-                                <Header hasScrolled={hasScrolled} />
+                                {/* <Header hasScrolled={hasScrolled} /> */}
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
-                                    <Route
-                                        path="/mypage/*"
-                                        element={<Mypage />}
-                                    />
+                                    <Route path="/mypage/*" element={<Mypage />} />
                                     <Route path="/sign/*" element={<Sign />} />
                                     <Route path='/grade/*' element={<Grade />} />
                                 </Routes>
+
                             </>
                         )
                     )}
@@ -194,9 +222,10 @@ function App() {
             <Route path='/mypage/*'element={<Mypage/>}/>
             <Route path='/buiz/*'element={<ABuiz/>}/>
           </Routes> */}
-                    <Footer />
+
                     {chat}
                 </div>
+                <Footer />
                 <ToastContainer
                     position="top-right"
                     autoClose={5000}

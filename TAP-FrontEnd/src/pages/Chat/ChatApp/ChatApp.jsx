@@ -36,11 +36,13 @@ const ChatApp = () => {
                 //메세지 온거에 맞게 group_seq 사용해서 멤버 list받기 이건 chatSeq 없이 채팅 꺼저있을떄를 위해서 해놈
                 if (chatSeq !== chat.group_seq) {
                     api.get(`/groupmember?groupSeq=${chat.group_seq}`).then((resp) => {
-                        console.log(resp.data)
                         if (chat.member_id !== loginID) {
                             resp.data.forEach((temp) => { //알림보내기 로직
                                 if (temp.member_id === loginID) {
-                                    if (temp.alarm === 'Y') notify(chat);
+                                    if (temp.alarm === 'Y') {
+                                        notify(chat);
+                                    }
+                                    setChatController();
                                 }
                             })
                         }
@@ -60,7 +62,7 @@ const ChatApp = () => {
                     alert("에러입니다")
                     console.log(chat.group_seq)
                 }
-             
+
 
             }
         }
@@ -72,20 +74,20 @@ const ChatApp = () => {
         if (isAuth) {
             const { chatSeq } = useCheckList.getState();
             if (chatSeq !== 0) {
-                if (chatNavi === 'chatapp') {
+                if (chatNavi === 'chatapp' &&role==='ROLE_USER') {
                     setStyles(userstyles);
-                  
-                        api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
-                            setChats(resp.data);
-                           
-                        })                
+
+                    api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
+                        setChats(resp.data);
+
+                    })
                 }
-                else if (chatNavi === 'admin') {
+                else if (chatNavi === 'admin' &&role==='ROLE_ADMIN') {
                     console.log('admin chat')
                     setStyles(adminStyles);
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
                         setChats(resp.data);
-                        api.patch(`/groupmember?group_seq=${chatSeq}&&last_chat_seq=${resp.data[resp.data.length-1].seq}`).then((resp) => {
+                        api.patch(`/groupmember?group_seq=${chatSeq}&&last_chat_seq=${resp.data[resp.data.length - 1].seq}`).then((resp) => {
                             setChatController();
                         });
                     })
@@ -126,10 +128,26 @@ const ChatApp = () => {
 
     const handleToastOnclick = (item) => {
         setChatNavi((prev) => {
-            if (isAuth) dragRef.current.style.visibility = "visible";
-            console.log(`on click toast:${item.group_seq} `);
-            setChatSeq(item.group_seq);
-            return 'chatapp'
+            if(role==='ROLE_USER'){
+                console.log(`on click toast:${item.group_seq} `);
+                if (isAuth) {
+                    dragRef.current.style.visibility = "visible";
+                    chatAppRef.current.style.display = "flex";
+                    setChatSeq(item.group_seq);
+                    return 'chatapp';
+                }
+               
+            }else if(role==='ROLE_ADMIN'){
+                if (isAuth) {
+                    setChatSeq(item.group_seq);
+                    return 'admin';
+                }
+            }
+            else{
+                return '';
+            }
+          
+
         });
     }
 

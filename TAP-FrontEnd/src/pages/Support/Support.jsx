@@ -3,16 +3,33 @@ import styles from './Support.module.css';
 import { ChatsContext } from '../../context/ChatsContext';
 import { useContext } from 'react';
 import { useAuthStore } from './../../store/store';
+import { useNavigate } from 'react-router-dom';
+import SweetAlert from './../../components/SweetAlert/SweetAlert';
 const Support = () => {
     const list = [{ title: '1:1 문의하기', text: '자세한 상담이 가능해요', img: 'null' },
     { title: '내 문의내역 보기', text: '문의한 내용을 확인해보세요', img: 'null' },
     { title: 'TAP집사 상담하기', text: 'TAP집사가 상담을 도와드릴게요', img: 'null' }
     ];
+    const navi =useNavigate();
     const {isAuth}=useAuthStore();
     const {dragRef}=useContext(ChatsContext);
     const handleChat=()=>{
         if(isAuth)
         dragRef.current.style.visibility = 'visible';
+    }
+    const handleInquiry=()=>{
+        if(isAuth){
+            navi('/inquiry')
+        }
+        else{
+            SweetAlert(
+                'warning',
+                '고객센터',
+                '로그인을 해주세요',
+                () => navi('/login'),
+               null
+            )
+        }
     }
     return (
 
@@ -24,7 +41,7 @@ const Support = () => {
                 {
                     list.map((item, index) => {
                         return (
-                            <div className={styles.content} key={index} onClick={index===2?(handleChat):undefined}>
+                            <div className={styles.content} key={index} onClick={index===2?(handleChat): (index===0)?(handleInquiry):undefined}>
                                 <div className={styles.div1}>
                                     <img src={item.img} alt="" className={styles.img} />
                                 </div>
