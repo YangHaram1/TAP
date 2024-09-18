@@ -11,7 +11,7 @@
 select 
  CAST(orders.order_date AS TIMESTAMP) AS order_date,
  CAST(members.join_date AS TIMESTAMP) AS join_date, 
- members.name, book.*, orders.*, apply.name as apply_name
+ members.name, book.*, orders.*, apply.name as apply_name, apply.sub_category_seq
 from orders 
 join members on members.id = orders.member_id
 join apply on apply.application_seq = orders.application_seq

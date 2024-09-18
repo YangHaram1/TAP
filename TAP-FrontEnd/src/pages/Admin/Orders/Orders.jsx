@@ -23,7 +23,14 @@ export const Orders = () => {
     const [modalState, setModalState] = useState("");
 
     // 모달 열기/닫기
-    const openModal = () => setIsModalOpen(true);
+    // const openModal = () => setIsModalOpen(true);
+    const openModal = () => {
+        if (checkedOrders.length === 0) {
+            alert('주문을 선택해주세요.');
+            return;
+        }
+        setIsModalOpen(true);
+    };
     const closeModal = () => setIsModalOpen(false);
 
     // 주문 모든 내역 가져오기
@@ -107,7 +114,7 @@ export const Orders = () => {
 
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 3;
+    const PER_PAGE = 2;
     const pageCount = Math.ceil(filtered.length / PER_PAGE);
 
     const handlePageChange = ({ selected }) => {
@@ -135,7 +142,20 @@ export const Orders = () => {
             minute: '2-digit',
         });
     };
-
+    const getCategoryName = (seq) => {
+        switch (seq) {
+          case 1:
+            return "뮤지컬";
+          case 2:
+            return "콘서트";
+          case 3:
+            return "야구";
+          case 4:
+            return "축구";
+          default:
+            return "알 수 없음";
+        }
+      };
     return (
         <div className={styles.container}>
             <h2>주문관리</h2>
@@ -169,7 +189,7 @@ export const Orders = () => {
                             <th>
                                 <select value={shippingStatus} onChange={handleShippingStatusChange}>
                                     <option value="">배송 상태</option>
-                                    <option value="배송 준비중">배송 준비중</option>
+                                    <option value="미발송">미발송</option>
                                     <option value="발송 완료">발송 완료</option>
                                     <option value="배송중">배송중</option>
                                     <option value="배송 완료">배송 완료</option>
@@ -191,6 +211,7 @@ export const Orders = () => {
                                 <td>{order.ORDER_SEQ}</td>
                                 <td>{order.MEMBER_ID}</td>
                                 <td>{order.NAME}</td>
+                                <td>{getCategoryName(order.SUB_CATEGORY_SEQ)}</td>
                                 <td>
                                     <div className={styles.proName}>
                                         {order.APPLY_NAME}
