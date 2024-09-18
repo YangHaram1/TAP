@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DetailDTO;
 
@@ -22,6 +23,18 @@ public class DetailDAO {
 	
 	public List<CastingDTO> getCasting(int seq){
 		return mybatis.selectList("Detail.getCasting",seq);
+	}
+	
+	public List<String> getDays(int seq) {
+		return mybatis.selectList("Detail.getDays",seq);
+	}
+	
+	public List<String> getTimes(int seq) {
+		return mybatis.selectList("Detail.getTimes",seq);
+	}
+	
+	public List<ScheduleAndCastingDTO> getCastingAndDate(int seq) {
+		return mybatis.selectList("Detail.getCastingAndDate",seq);
 	}
 
 }

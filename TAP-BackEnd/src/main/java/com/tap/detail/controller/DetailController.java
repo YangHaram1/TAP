@@ -15,6 +15,7 @@ import com.tap.company.service.CompanyService;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DescriptionDTO;
 import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.DescriptionService;
 import com.tap.detail.service.DetailService;
@@ -56,13 +57,15 @@ public class DetailController {
 		List<CastingDTO> casting = dServ.getCasting(seq);
 		//회사정보
 		try {
-			memberData = mServ.selectById(mainData.getId());
-			companyData = cServ.getCompanyData(mainData.getId());
+			memberData = mServ.selectById(mainData.getId()); // 기본 정보(이메일, 대표이름)
+			companyData = cServ.getCompanyData(mainData.getId()); // 사업체 정보
 		}catch(Exception e) {
 			System.out.println("회사정보 불러오기 오류 발생");
 		}
 		//회차정보
-		
+		List<String> days = dServ.getDays(seq);
+		List<String> times = dServ.getTimes(seq);
+		List<ScheduleAndCastingDTO> castingAndDate = dServ.getCastingAndDate(seq);
 		
 		map.put("mainData", mainData);
 		map.put("description", description);
@@ -70,8 +73,9 @@ public class DetailController {
 		map.put("casting",casting);
 		map.put("memberData", memberData);
 		map.put("companyData", companyData);
-		
-		
+		map.put("times", times);
+		map.put("days", days);
+		map.put("castingAndDate", castingAndDate);
 		
 		return map;
 		

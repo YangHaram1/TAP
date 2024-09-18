@@ -39,4 +39,41 @@
 		ORDER BY casting_role
 	</select>
 	
+	<select id="getDays" resultType="String">
+		SELECT DISTINCT TO_CHAR(schedule_day, 'DAY') AS days FROM schedule where application_seq=#{seq}
+	</select>
+	
+	<select id="getTimes" resultType="String">
+		SELECT DISTINCT TO_CHAR(schedule_time, 'HH24:MI') AS times FROM schedule where application_seq=#{seq}
+	</select>
+	
+	<select id="getCastingAndDate" resultType="com.tap.detail.dto.ScheduleAndCastingDTO">
+		select 
+		    datas.schedule_day, 
+		    datas.schedule_time, 
+		    datas.days, 
+		    datas.day_number, 
+		    datas.times,
+		    c.casting_name,
+		    c.casting_role,
+		    c.file_sysname
+		from
+		(SELECT s.*, 
+		       TO_CHAR(s.schedule_day, 'DAY') AS days,
+		       CASE 
+		           WHEN TO_CHAR(s.schedule_day, 'D') = '1' THEN 0
+		           ELSE TO_NUMBER(TO_CHAR(s.schedule_day, 'D')) - 1 
+		       END AS day_number,
+		       TO_CHAR(s.schedule_time, 'HH24:MI') AS times
+		FROM schedule s
+		WHERE s.application_seq = #{seq}
+		ORDER BY schedule_day) datas 
+		left join casting c on datas.day_number = c.SCHEDULE_DAY and datas.schedule_time= c.schedule_time
+		WHERE c.application_seq = #{seq}
+		ORDER BY datas.schedule_day, datas.schedule_time, c.casting_role
+	</select>
+	
+	
+	
+	
 </mapper>

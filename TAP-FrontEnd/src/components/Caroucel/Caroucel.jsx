@@ -23,7 +23,7 @@ export const Caroucel = ({category, images})=>{
 
     //setting1 useeffect ( 화면 출력 카드수, 카드 간격, 카드 높이)
     useEffect(() => {
-      console.log(category);
+      // console.log(category);
         if (category === "art1") {
           setSettings({
             chevronWidth: 40,
@@ -52,18 +52,18 @@ export const Caroucel = ({category, images})=>{
     //setting2 useeffect ( 카드 전환 설정)  
     useEffect(() => {
       if (autoPlay) {
-        console.log("category", category);
+        // console.log("category", category);
         const interval = setInterval(() => {
-        //   setActiveItemIndex((prevIndex) => (prevIndex + 1) % images.length);
-          setActiveItemIndex((prevIndex) => (prevIndex + 1) % 7);
+          setActiveItemIndex((prevIndex) => (prevIndex + 1) % images.length);
+          // setActiveItemIndex((prevIndex) => (prevIndex + 1) % 7);
         }, 3000); // 1초마다 슬라이드 전환  
         return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 제거
       }
-    }, [autoPlay/*, images.length*/]);
+    }, [autoPlay, images.length]);
 
     // 클릭 시 세부 페이지 이동 => 상품 번호만 보내주면 됨.
     const handleMove = (seq)=>{
-      console.log("상품번호", seq);
+      // console.log("상품번호", seq);
       navi("/detail", { state: { seq } });
     }
 
@@ -90,9 +90,8 @@ export const Caroucel = ({category, images})=>{
                         <div className={styles.overlay}></div> {/* 오버레이 추가 */}
                         <h2>{image.name}</h2>
                         <p>{image.place_name}</p>
-                        <p>{format(new Date(image.start_date), 'yyyy-MM-dd')} - 
-                        {format(new Date(image.end_date), 'yyyy-MM-dd')}</p>
-                        {console.log(image.application_seq)}
+                        <p>{format(new Date(image.start_date), 'yyyy.MM.dd')} - &nbsp; 
+                        {format(new Date(image.end_date), 'yyyy.MM.dd')}</p>
                     </div>
                     );
                   }) 

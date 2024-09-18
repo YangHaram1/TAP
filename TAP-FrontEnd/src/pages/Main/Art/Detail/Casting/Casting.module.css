@@ -42,6 +42,7 @@
     width: 100%;
     margin-top: 40px;
     margin-bottom: 60px;
+    border-collapse: collapse
 }
 
 .casting_table thead{
@@ -49,10 +50,35 @@
     background-color: lightgray;
 }
 
+.casting_table th{
+    border: 1px solid gray;
+}
+
 .casting_table tr{
     height: 40px;
     text-align: center;
 }
+
+.casting_table tr:hover{
+    background-color: rgb(233, 229, 229);
+}
+
+.casting_table td{
+    height: 35px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 1px solid lightgray;
+}
+
+.casting_table table th:first-child,
+.casting_table table td:first-child {
+	border-left: 0;
+}
+.casting_table table th:last-child,
+.casting_table table td:last-child {
+	border-right: 0;
+}
+
 
 
 
