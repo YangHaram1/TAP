@@ -34,11 +34,14 @@ export const Orders = () => {
     const closeModal = () => setIsModalOpen(false);
 
     // 주문 모든 내역 가져오기
-    useEffect(() => {
+    const fetchOrders = () => {
         api.get(`admin/orders`).then((resp) => {
             setOrders(resp.data);
             setFiltered(resp.data);
         });
+    };
+    useEffect(() => {
+        fetchOrders();  // 주문 내역 가져오기
     }, []);
 
     // select 필터링 함수 
@@ -60,6 +63,8 @@ export const Orders = () => {
     useEffect(() => {
         applyFilters();  // 상태 변경 시 필터링 적용
     }, [orderStatus, shippingStatus, orders]);
+
+  
 
     // 주문 상태 선택 핸들러
     const handleOrderStatusChange = (e) => {
@@ -247,7 +252,11 @@ export const Orders = () => {
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div className={styles.modalForm}>
-                    <ModalOrder resetCheckboxes={resetCheckboxes} checkedOrders={checkedOrders} onClose={closeModal} />
+                    <ModalOrder resetCheckboxes={resetCheckboxes} 
+                    checkedOrders={checkedOrders} 
+                    onClose={closeModal}
+                    fetchOrders={fetchOrders} 
+                     />
                 </div>
             </Modal>
         </div>

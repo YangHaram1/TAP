@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from './ModalOrder.module.css';
 import { api } from '../../../../config/config';
 
-export const ModalOrder = ({ resetCheckboxes, checkedOrders, onClose }) => {
+export const ModalOrder = ({ resetCheckboxes, checkedOrders, onClose, fetchOrders  }) => {
     const [newStatus, setNewStatus] = useState('발송'); // 기본값을 '발송'으로 설정
 
     // 주문 상태 변경 요청 함수
@@ -20,6 +20,7 @@ export const ModalOrder = ({ resetCheckboxes, checkedOrders, onClose }) => {
                 alert('주문 상태가 성공적으로 업데이트되었습니다.');
                 resetCheckboxes(); // 체크박스 리셋
                 onClose(); // 모달 닫기
+                fetchOrders();
             }
         } catch (error) {
             console.error('Error updating order status:', error);
