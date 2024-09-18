@@ -94,7 +94,7 @@ const Login = () => {
                     localStorage.removeItem('loginId')
                 }
                 setAuth(decoded)
-                navi('/')
+                navi(-1)
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')

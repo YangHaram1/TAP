@@ -7,10 +7,11 @@ import Swal from 'sweetalert2';
 import { useAuthStore } from './../../../store/store';
 import MyEditor from './MyEditor/MyEditor';
 import { api } from '../../../config/config';
+import { useNavigate } from 'react-router-dom';
 const Inquiry = () => {
     const editorRef = useRef(null);
     const fileRef = useRef(null);
-
+    const navi =useNavigate();
     const [check, setCheck] = useState([false, false]);
     const [checkAll, setCheckAll] = useState(false);
     const [fileList, setFileList] = useState([]);
@@ -52,7 +53,7 @@ const Inquiry = () => {
 
         }
         else if (name === 'title') {
-            const titleRegex = /^[a-zA-Z0-9가-힣ㄱ-ㅎ]{1,30}$/;
+            const titleRegex =  /^.{1,30}$/;
             setRegexData((prev) => {
                 return { ...prev, [name]: titleRegex.test(value) }
             })
@@ -162,7 +163,14 @@ const Inquiry = () => {
         formData.append('inquiry', jsonData)
 
         api.post(`/inquiry`, formData).then((resp) => {
-
+            
+            Swal.fire({
+                icon: 'success',
+                title: '문의',
+                text: '정상적으로 문의가 등록 되었습니다.'
+            })
+            navi('/support');
+            
         })
     }
     return (
@@ -244,7 +252,7 @@ const Inquiry = () => {
                     {
                         fileList.map((item, index) => {
                             return (
-                                <div className={styles.fileContent}>
+                                <div className={styles.fileContent} key={index}>
                                     <div className={styles.fileInfo}>
                                         <div className={styles.fileName}>
                                             <FontAwesomeIcon icon={faFileLines} />
@@ -288,7 +296,7 @@ const Inquiry = () => {
                 <div className={styles.detail}>
                     <ul>
                         <li>
-                            <p>로그인 후 등록한 문의에 한해 인터파크 고객센터 "내 문의내역" 에서 확인할 수 있어요.</p>
+                            <p>로그인 후 등록한 문의에 한해 TAP 고객센터 "내 문의내역" 에서 확인할 수 있어요.</p>
                         </li>
                         <li>
                             <p>비회원 문의 또는 로그인 하지 않은 상태의 1:1 문의 답변은 메일로만 전달되니 회원이시라면 로그인 후 문의해주세요.</p>
@@ -305,7 +313,7 @@ const Inquiry = () => {
                         <input type="checkbox" onChange={handleCheckAll} checked={checkAll} className={styles.checkBox} />
                     </div>
                     <div>
-                        전체 동의
+                        전체 동의 <span>*</span>
                     </div>
                 </div>
                 <div className={styles.check}>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Reply">
+	<insert id="insert">
+		
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select reply_seq.currval from dual
+		</selectKey>
+	</insert>
+	
+	<select id="selectByParentSeq" resultType="com.tap.reply.dto.ReplyDTO">
+		select *from reply where parent_seq=${parentSeq}
+	</select>
+</mapper> 
