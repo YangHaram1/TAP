@@ -155,6 +155,7 @@ export const Orders = () => {
                             <th>주문번호</th>
                             <th>주문id</th>
                             <th>주문자</th>
+                            <th>카테고리</th>
                             <th>상품명 좌석 정보</th>
                             <th>주문 총액</th>
                             <th>주문 날짜</th>
