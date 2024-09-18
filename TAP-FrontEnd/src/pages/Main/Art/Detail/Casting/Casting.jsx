@@ -1,13 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Casting.module.css'
+import { api } from '../../../../../config/config';
 
-export const Casting = ()=> {
+export const Casting = ({castings, seq})=> {
 
-    // const [color, setColor] = useState("rgba(0, 0, 0, 0)");
+    // 카테고리별 색깔 변화
     const [colors, setColors] = useState(Array(7).fill("rgba(0, 0, 0, 0)"));
     const [times, setTimes] = useState(Array(10).fill("rgba(0, 0, 0, 0)"));
     const [casting, setCasting] = useState(Array(30).fill("rgba(0, 0, 0, 0)")); 
 
+
+    console.log("캐스팅",castings);
+
+    // useEffect(()=>{
+    //     api.get(`/detail/casting/${seq}`)
+    //     .then((resp)=>{
+    //         console.log("캐스팅 데이터",resp.data);
+    //     })
+    //     .catch(()=>{
+
+    //     })
+    // },[])
+
+
+    //=========================요일 관련=====================================
     // 요일 색깔 상태 변화
     const handleColor = (index) => {
         // 검색 조건 추가 axios 추가 필요
@@ -18,6 +34,8 @@ export const Casting = ()=> {
         );
     };
 
+
+    //=========================회차 관련=====================================
     // 회차 색깔 상태 변화
     const handleTimes = (index)=>{
         // 검색 조건 추가 axios 추가 필요
@@ -28,7 +46,9 @@ export const Casting = ()=> {
         );
     }
 
-    // 회차 색깔 상태 변화
+
+     //=========================캐스팅 인물 관련=====================================
+    // 캐스팅 상태 변화
     const handleCastings = (index)=>{
         // 검색 조건 추가 axios 추가 필요
         setCasting(prevCast =>
@@ -68,9 +88,9 @@ export const Casting = ()=> {
                 <div className={styles.box}>
                     <div className={styles.box_title}>캐스팅</div>
                     <div className={`${styles.box_content} ${styles.casting_btns}`}>
-                    {["최재림", "김준수","최재림", "김준수","최재림", "김준수","최재림", "김준수","최재림", "김준수","최재림", "김준수" ].map((day, index) => (
+                    { castings.map((cast, index) => (
                         <button key={index} onClick={() => handleCastings(index)} style={{ background: casting[index] }}>
-                            {day}
+                            {cast.casting_name}
                         </button>
                     ))}
                     </div>

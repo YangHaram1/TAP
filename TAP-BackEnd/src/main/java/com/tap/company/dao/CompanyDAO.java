@@ -19,5 +19,9 @@ public class CompanyDAO {
 
 	}
 	
+	public CompanyDTO getCompanyData(String id) {
+		return mybatis.selectOne("Company.selectById",id);
+	}
+	
 	
 }

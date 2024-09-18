@@ -173,14 +173,14 @@ export const Caroucel = ({category, images})=>{
             {
               images.map((image)=>{
                 return(
-                  <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                  <div className={styles.poster}>
-                    <img src={image.files_sysname}></img>
+                  <div key={image.application_seq} style={{ height: settings.height}} className={styles.card}>
+                    <div className={styles.poster}>
+                      <img src={image.files_sysname}></img>
+                    </div>
+                    <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>{format(new Date(image.start_date), 'MM.dd(EEE) HH:mm', { locale: ko })}</p>
+                    <p style={{fontSize:"18px", fontWeight:"600"}}>{image.name}</p>
+                    <p>{image.place_name}</p>
                   </div>
-                  <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>{format(new Date(image.start_date), 'MM.dd(EEE) HH:mm', { locale: ko })}</p>
-                  <p style={{fontSize:"18px", fontWeight:"600"}}>{image.name}</p>
-                  <p>{image.place_name}</p>
-              </div>
                 );
               })
             }

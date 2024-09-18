@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Detail">
+	<select id="getDetailData" resultType="com.tap.detail.dto.DetailDTO">
+		select 
+		    a.name,
+		    p.place_name,
+		    a.id,
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date,
+		    a.running_time,
+		    a.running_intertime,  
+		    a.status,
+		    a.age_limit,
+		    f.files_sysname,
+		    a.max_ticket,
+		    a.place_seq
+	    from apply a 
+	    left outer join place p on a.place_seq = p.place_seq 
+	    left outer join files f on a.application_seq = f.files_parent_seq 
+	    where a.application_seq=#{seq}
+	</select>
+	
+	<select id="getPriceByPlaceSeq" resultType="com.tap.detail.dto.SeatsDTO">
+		select * from seats where place_seq=#{place_seq} order by 1
+	</select>
+	
+	<select id="getCasting" resultType="com.tap.detail.dto.CastingDTO">
+		SELECT 
+		    casting_name, 
+		    casting_role, 
+		    MIN(file_sysname) AS file_sysname
+		FROM casting
+		WHERE application_seq = #{seq}
+		GROUP BY casting_name, casting_role
+		ORDER BY casting_role
+	</select>
+	
+</mapper>

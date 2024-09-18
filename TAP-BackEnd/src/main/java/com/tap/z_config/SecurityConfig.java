@@ -43,6 +43,10 @@ public class SecurityConfig {
 			request.requestMatchers(HttpMethod.GET,"/members/id/{id}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/email/{email}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/findId/{name}/{email}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/artlist/{category}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/artlist/openContents/{category}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/artlist/getTap").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/genre/{category}").permitAll();
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
 		}) 
