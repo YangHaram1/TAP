@@ -168,6 +168,18 @@ public class AdminProductController {
         
         return ResponseEntity.ok(result); // 성공 시 200 OK와 결과 반환
     }
+    
+    // Sale 신청 반려 처리 해주기 
+    @PutMapping("/sale/reject")
+    public ResponseEntity<Integer> rejectSale(@RequestBody Map<String, String> requestBody) {
+        String applicationSeq = requestBody.get("application_seq");
+        String rejectReason = requestBody.get("reject_reason");
+        
+        // 반려 처리 로직 (DB 업데이트 등)
+        int result = AdProServ.rejectSale(applicationSeq, rejectReason);
+        
+        return ResponseEntity.ok(result); // 성공 시 200 OK와 결과 반환
+    }
 
 
 }
