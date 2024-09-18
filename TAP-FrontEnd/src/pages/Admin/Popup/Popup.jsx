@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../../../store/store';
-import styles from './Popup.module.css'
+import styles from './Popup.module.css';
 import { api } from '../../../config/config';
 
 const Popup = ({ onClose }) => {
@@ -8,27 +8,21 @@ const Popup = ({ onClose }) => {
   const [description, setDescription] = useState(''); // 상품 공지사항 저장하기
   const [loading, setLoading] = useState(true);
 
-    // HTML 태그 제거 함수
-    const stripHTML = (html) => {
-        return html.replace(/<\/?[^>]+(>|$)/g, ""); // 정규 표현식을 사용하여 태그 제거
-      };
-
-// 상품 공지사항 가져오기 
-const fetchDescription = async () => {
+  // 상품 공지사항 가져오기 
+  const fetchDescription = async () => {
     try {
-        const response = await api.get(`/admin/products/event_popup?application_seq=1016`);
-        setDescription(stripHTML(response.data));
-        setLoading(false);
+      const response = await api.get(`/admin/products/event_popup?application_seq=1039`);
+      setDescription(response.data); // HTML을 그대로 사용하도록 수정
+      setLoading(false);
     } catch (error) {
-        console.error('Error description:', error);
-        setLoading(false);
+      console.error('Error description:', error);
+      setLoading(false);
     }
-};
+  };
 
-
-useEffect(() => {
+  useEffect(() => {
     fetchDescription(); // 컴포넌트가 마운트될 때 데이터 가져오기
-}, []);
+  }, []);
 
   const handleDoNotShowToday = () => {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 오늘 날짜 저장
@@ -43,19 +37,24 @@ useEffect(() => {
   };
 
   return (
-    <div className={styles.overlay} >
+    <div className={styles.overlay}>
       <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose}>X</button>
+        <button className={styles.closeButton} onClick={onClose}>
+          &times;
+        </button>
         <div className={styles.popupBody}>
-          <h2>Popup Window</h2>
+          <h2 className={styles.leftAlign}>예매 안내</h2> {/* h2 왼쪽 정렬 */}
+          <hr />
           {loading ? (
-            <p>Loading...</p> 
+            <p>Loading...</p>
           ) : (
-            <p>{description}</p> // 가져온 데이터를 화면에 표시
+            <div className={styles.descriptionText} dangerouslySetInnerHTML={{ __html: description }} />
           )}
-          <button className={styles.doNotShowButton} onClick={handleDoNotShowToday}>
-            오늘 하루 보지 않기
-          </button>
+          <div className={styles.checkboxContainer}>
+            <button className={styles.doNotShowButton} onClick={handleDoNotShowToday}>
+              오늘 하루 보지 않기
+            </button>
+          </div>
         </div>
       </div>
     </div>
