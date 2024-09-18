@@ -98,7 +98,10 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                                     <td> 사업자 </td>
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
-                                         
+                                        <img
+                                                src={product.FILES_SYSNAME}
+                                                className={styles.product_image_container}
+                                            />
                                         </div>
                                         <div className={styles.product_details}>
                                             <div className={styles.product_name}>
@@ -126,7 +129,7 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                 </table>
                     </>
                 ) : (
-                    <p>해당 카테고리에 대한 상품이 없습니다.</p>
+                    <p className={styles.no_products}>해당 카테고리에 대한 상품이 없습니다.</p>
                 )}
              
             </div>

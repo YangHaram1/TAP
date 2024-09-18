@@ -23,15 +23,25 @@ export const Orders = () => {
     const [modalState, setModalState] = useState("");
 
     // 모달 열기/닫기
-    const openModal = () => setIsModalOpen(true);
+    // const openModal = () => setIsModalOpen(true);
+    const openModal = () => {
+        if (checkedOrders.length === 0) {
+            alert('주문을 선택해주세요.');
+            return;
+        }
+        setIsModalOpen(true);
+    };
     const closeModal = () => setIsModalOpen(false);
 
     // 주문 모든 내역 가져오기
-    useEffect(() => {
+    const fetchOrders = () => {
         api.get(`admin/orders`).then((resp) => {
             setOrders(resp.data);
             setFiltered(resp.data);
         });
+    };
+    useEffect(() => {
+        fetchOrders();  // 주문 내역 가져오기
     }, []);
 
     // select 필터링 함수 
@@ -54,6 +64,8 @@ export const Orders = () => {
         applyFilters();  // 상태 변경 시 필터링 적용
     }, [orderStatus, shippingStatus, orders]);
 
+  
+
     // 주문 상태 선택 핸들러
     const handleOrderStatusChange = (e) => {
         setOrderStatus(e.target.value);
@@ -66,22 +78,28 @@ export const Orders = () => {
         applyFilters(); // 필터링 적용
     };
 
-    // 체크박스 처리 함수
+    // 체크박스 처리 
     const handleCheckAll = (e) => {
         const checked = e.target.checked;
-
+    
+        // "미발송" 상태인 주문만 선택
         const enabledValues = filtered
             .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
+            .filter(order => order.DELIVERY_STATUS === '미발송')  // 미발송 상태만 필터링
             .map(order => order.ORDER_SEQ);
-
+    
         checkboxRef.current.forEach((checkbox, i) => {
             const order = filtered[i + currentPage * PER_PAGE];
-            if (checkbox) {
+            if (checkbox && order.DELIVERY_STATUS === '미발송') {
                 checkbox.checked = checked;
+            } else if (checkbox && order.DELIVERY_STATUS !== '미발송') {
+                checkbox.checked = false; // 미발송이 아닌 주문은 선택되지 않도록 체크 해제
             }
         });
-        setCheckedOrders(checked ? enabledValues : []);
+    
+        setCheckedOrders(checked ? enabledValues : []); // 미발송 상태인 주문만 checkedOrders에 저장
     };
+    
 
     const handleCheckBox = (e) => {
         const { value, checked } = e.target;
@@ -107,7 +125,7 @@ export const Orders = () => {
 
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 3;
+    const PER_PAGE = 4;
     const pageCount = Math.ceil(filtered.length / PER_PAGE);
 
     const handlePageChange = ({ selected }) => {
@@ -135,7 +153,20 @@ export const Orders = () => {
             minute: '2-digit',
         });
     };
-
+    const getCategoryName = (seq) => {
+        switch (seq) {
+          case 1:
+            return "뮤지컬";
+          case 2:
+            return "콘서트";
+          case 3:
+            return "야구";
+          case 4:
+            return "축구";
+          default:
+            return "알 수 없음";
+        }
+      };
     return (
         <div className={styles.container}>
             <h2>주문관리</h2>
@@ -155,6 +186,7 @@ export const Orders = () => {
                             <th>주문번호</th>
                             <th>주문id</th>
                             <th>주문자</th>
+                            <th>카테고리</th>
                             <th>상품명 좌석 정보</th>
                             <th>주문 총액</th>
                             <th>주문 날짜</th>
@@ -168,7 +200,7 @@ export const Orders = () => {
                             <th>
                                 <select value={shippingStatus} onChange={handleShippingStatusChange}>
                                     <option value="">배송 상태</option>
-                                    <option value="배송 준비중">배송 준비중</option>
+                                    <option value="미발송">미발송</option>
                                     <option value="발송 완료">발송 완료</option>
                                     <option value="배송중">배송중</option>
                                     <option value="배송 완료">배송 완료</option>
@@ -185,11 +217,13 @@ export const Orders = () => {
                                         value={order.ORDER_SEQ}
                                         onClick={handleCheckBox}
                                         ref={el => (checkboxRef.current[i] = el)}
+                                        disabled={order.DELIVERY_STATUS !== '미발송'}
                                     />
                                 </td>
                                 <td>{order.ORDER_SEQ}</td>
                                 <td>{order.MEMBER_ID}</td>
                                 <td>{order.NAME}</td>
+                                <td>{getCategoryName(order.SUB_CATEGORY_SEQ)}</td>
                                 <td>
                                     <div className={styles.proName}>
                                         {order.APPLY_NAME}
@@ -218,7 +252,11 @@ export const Orders = () => {
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div className={styles.modalForm}>
-                    <ModalOrder resetCheckboxes={resetCheckboxes} checkedOrders={checkedOrders} />
+                    <ModalOrder resetCheckboxes={resetCheckboxes} 
+                    checkedOrders={checkedOrders} 
+                    onClose={closeModal}
+                    fetchOrders={fetchOrders} 
+                     />
                 </div>
             </Modal>
         </div>

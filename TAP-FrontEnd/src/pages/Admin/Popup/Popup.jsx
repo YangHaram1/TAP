@@ -9,16 +9,35 @@ const Popup = ({ onClose }) => {
   const [loading, setLoading] = useState(true);
 
   // 상품 공지사항 가져오기 
+  // const fetchDescription = async () => {
+  //   try {
+  //     const response = await api.get(`/admin/products/event_popup?application_seq=1039`);
+  //     setDescription(response.data); // HTML을 그대로 사용하도록 수정
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error('Error description:', error);
+  //     setLoading(false);
+  //   }
+  // };
+  // appliation_seq에 맞는 공지사항이 없을 경우 고려 (서버에서도 처리함)
   const fetchDescription = async () => {
     try {
-      const response = await api.get(`/admin/products/event_popup?application_seq=1039`);
-      setDescription(response.data); // HTML을 그대로 사용하도록 수정
-      setLoading(false);
+        const response = await api.get(`/admin/products/event_popup?application_seq=1039`);
+
+        if (response.status === 204) {
+            // 데이터가 없으면 팝업 표시 안 함
+            onClose(); 
+            return;
+        }
+
+        setDescription(response.data); // HTML 데이터를 그대로 사용
+        setLoading(false);
     } catch (error) {
-      console.error('Error description:', error);
-      setLoading(false);
+        console.error('Error fetching description:', error);
+        setLoading(false);
     }
-  };
+};
+
 
   useEffect(() => {
     fetchDescription(); // 컴포넌트가 마운트될 때 데이터 가져오기
