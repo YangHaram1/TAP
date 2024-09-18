@@ -42,7 +42,13 @@ const Header = ({ hasScrolled }) => {
     }
 
     return (
-        <div className={hasScrolled?`${styles.container} ${styles.scroll}`:styles.container}>
+        <div
+            className={
+                hasScrolled
+                    ? `${styles.container} ${styles.scroll}`
+                    : styles.container
+            }
+        >
             <div className={styles.header}>
                 <div className={styles.leftConts}>
                     <div className={styles.title} onClick={handleHome}>
@@ -53,6 +59,7 @@ const Header = ({ hasScrolled }) => {
                             type="search"
                             placeholder="콘서트, 뮤지컬, 스포츠로 찾아보세요."
                         />
+
                         <FontAwesomeIcon
                             icon={faMagnifyingGlass}
                             className={styles.faMagnifyingGlass}
@@ -78,6 +85,7 @@ const Header = ({ hasScrolled }) => {
                             icon={faHouseUser}
                             className={styles.myPage}
                         />
+                        {/* <span>MyPage</span> */}
                     </div>
                 </div>
             </div>

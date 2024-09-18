@@ -16,11 +16,11 @@ export const TeamMain = ({ matches, selectedTeam }) => {
           <div key={index} className={styles.timeSchedule}>
             <div className={styles.scheduleDateTime}>
               <div className={styles.date}>
-                {new Date(match.date).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}
-                ({new Date(match.date).toLocaleDateString('ko-KR', { weekday: 'short' })})
+                {new Date(match.START_DATE).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}
+                ({new Date(match.START_DATE).toLocaleDateString('ko-KR', { weekday: 'short' })})
               </div>
               <div className={styles.time}>
-                {match.time || '18:30'}
+                {match.START_DATE.split(' ')[1] || '18:30'}
               </div>
             </div>
 
@@ -28,13 +28,13 @@ export const TeamMain = ({ matches, selectedTeam }) => {
               <div className={styles.team1}>
                 <a href="#" style={{ cursor: 'default' }}>
                   <img
-                    src={match.homeTeamLogo || 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png'}
+                    src={match.HOME_TEAM_LOGO || 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB004.png'}
                     onError={(e) => e.target.src = '//ticketimage.interpark.com/Play/image/small/NoImage.gif'}
-                    alt={selectedTeam || match.homeTeam || '홈 팀'}
+                    alt={selectedTeam || match.HOME_TEAM_NAME || '홈 팀'}
                   />
                 </a>
                 <a href="#" className={styles.teamName} style={{ cursor: 'default' }}>
-                  {selectedTeam || match.homeTeam || '홈 팀'}
+                  {selectedTeam || match.HOME_TEAM_NAME || '홈 팀'}
                 </a>
               </div>
 
@@ -43,19 +43,19 @@ export const TeamMain = ({ matches, selectedTeam }) => {
               <div className={styles.team2}>
                 <a href="#" style={{ cursor: 'default' }}>
                   <img
-                    src={match.opponentLogo || 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB009.png'}
+                    src={match.AWAY_TEAM_LOGO || 'http://ticketimage.interpark.com/TicketImage/sports/web/small/PB009.png'}
                     onError={(e) => e.target.src = '//ticketimage.interpark.com/Play/image/small/NoImage.gif'}
-                    alt={match.opponent || '상대 팀'}
+                    alt={match.AWAY_TEAM_NAME || '상대 팀'}
                   />
                 </a>
                 <a href="#" className={styles.teamName} style={{ cursor: 'default' }}>
-                  {match.opponent || '상대 팀'}
+                  {match.AWAY_TEAM_NAME || '상대 팀'}
                 </a>
               </div>
             </div>
 
             <div className={styles.ground}>
-              <span>{match.homeGround || '경기장'}</span>
+              <span>{match.PLACE_NAME || '경기장'}</span>
             </div>
 
             <div className={styles.btns}>

@@ -158,6 +158,7 @@
     height: 50px;
     border: 1px solid rgba(128, 128, 128, 0.249);
     background-color: white;
+    pointer-events: none;
 
 }
 

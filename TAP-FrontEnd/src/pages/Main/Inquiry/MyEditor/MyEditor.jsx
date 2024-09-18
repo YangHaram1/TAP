@@ -4,21 +4,23 @@ import styles from './MyEditor.module.css';
 // import './MyEditor.css';
 import Swal from 'sweetalert2';
 import { api, tinymce } from '../../../../config/config'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useCheckList } from '../../../../store/store';
-const MyEditor = ({ editorRef, height,setData }) => {
+const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
 
   const inputRef = useRef(null);
   const { chatSeq } = useCheckList();
- 
-  const handleEditorChange =(content) => {
-    setData((prev)=>{
-      return{ ...prev,content:content}
+
+  const handleEditorChange = (content) => {
+    setData((prev) => {
+      return { ...prev, contents: content }
+    })
+    const contentsRegex =  /^.{1,1000}$/;
+    setRegexData((prev) => {
+      return { ...prev, contents: contentsRegex.test(content) }
     })
 
   }
-    
+
 
 
   const handleImages = () => {
@@ -41,7 +43,7 @@ const MyEditor = ({ editorRef, height,setData }) => {
         const prevContent = editorRef.current.getContent();
         editorRef.current.setContent(prevContent + imageUrl);
       }
-     
+
       inputRef.current.value = '';
     }).catch(error => {
       console.error('There was an error posting the data!', error);
@@ -80,7 +82,7 @@ const MyEditor = ({ editorRef, height,setData }) => {
     <div className={styles.container}>
       <div className={styles.editor}>
         <Editor
-          apiKey={tinymce}   
+          apiKey={tinymce}
           onInit={(evt, editor) => {
             editorRef.current = editor;
           }}
@@ -89,7 +91,7 @@ const MyEditor = ({ editorRef, height,setData }) => {
             width: "auto",
             height: height,
             menubar: true,
-            plugins: 'fileupload wordcount anchor code', //image
+            plugins: 'wordcount anchor code', //image
             toolbar: 'fileupload| forecolor backcolor  blocks fontfamily fontsize fontcolor | bold italic underline strikethrough | link image media table mergetags  | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat ',
             language: 'ko_KR',
             statusbar: false,
@@ -121,15 +123,15 @@ const MyEditor = ({ editorRef, height,setData }) => {
               editor.ui.registry.addButton('fileupload', {
                 text: '📷',
                 onSetup: (buttonApi) => {
-                    setTimeout(() => {
-                        const button = document.querySelector('button[data-mce-name="fileupload"]');
-                        if (button) {
-                          button.classList.add(styles.editorBtn); // 원하는 클래스 추가
-                        }
-                      }, 0); // 렌더링 후에 실행되도록 setTimeout 사용
-                  },
+                  setTimeout(() => {
+                    const button = document.querySelector('button[data-mce-name="fileupload"]');
+                    if (button) {
+                      button.classList.add(styles.editorBtn); // 원하는 클래스 추가
+                    }
+                  }, 0); // 렌더링 후에 실행되도록 setTimeout 사용
+                },
                 onAction: (e) => {
-                    handleImages();
+                  handleImages();
                 },
               });
               editor.on('PastePostProcess', (e) => {
@@ -141,7 +143,7 @@ const MyEditor = ({ editorRef, height,setData }) => {
         />
       </div>
       <div className={styles.hidden}>
-        <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*"/>
+        <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*" />
       </div>
     </div>);
 };

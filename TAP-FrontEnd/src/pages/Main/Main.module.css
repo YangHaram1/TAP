@@ -6,23 +6,21 @@
     /* gap: 50px; */
 }
 
-.view{
+.view {
     width: 70vw;
     height: 100%;
     margin: auto;
 }
+
 .menus {
     display: flex;
-    /* background-color: aquamarine; */
-    gap: 60px;
-    padding: 0 20px;
+    gap: 80px;
+    padding: 5px 20px;
     font-weight: bold;
     /* justify-content: space-evenly; */
-    margin-bottom: 10px;
     width: 70vw;
     height: 100%;
     margin: auto;
-    justify-content: space-evenly;
     align-items: center;
 
 }

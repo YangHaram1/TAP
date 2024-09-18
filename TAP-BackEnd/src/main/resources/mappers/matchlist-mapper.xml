@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MatchList">
+
+   
+  <select id="getBaseballMatches" resultType="map" parameterType="map">
+SELECT
+    TO_CHAR(a.START_DATE, 'MM-DD HH24:MI') AS START_DATE,  
+    TO_CHAR(a.END_DATE, 'MM-DD HH24:MI') AS END_DATE,     
+    TO_CHAR(a.OPEN_DATE, 'MM-DD HH24:MI') AS OPEN_DATE,    
+    place.PLACE_NAME AS PLACE_NAME,                        
+    home_team.TEAM_NAME AS HOME_TEAM_NAME,
+    home_team.LOGO_IMAGE AS HOME_TEAM_LOGO,            
+    away_team.TEAM_NAME AS AWAY_TEAM_NAME,
+    away_team.LOGO_IMAGE AS AWAY_TEAM_LOGO             
+FROM
+    APPLY a
+LEFT JOIN
+    TEAM home_team ON a.PLACE_SEQ = home_team.PLACE_SEQ
+LEFT JOIN
+    TEAM away_team ON a.AWAY_TEAM_SEQ = away_team.TEAM_SEQ
+LEFT JOIN
+    PLACE place ON a.PLACE_SEQ = place.PLACE_SEQ            
+WHERE
+    a.SUB_CATEGORY_SEQ = 3
+    order by start_date
+  </select>
+
+  <select id="getSoccerMatches" resultType="map">
+    SELECT
+      a.START_DATE,
+      a.END_DATE,
+      a.OPEN_DATE,
+      a.PLACE_SEQ,
+      home_team.TEAM_NAME AS HOME_TEAM_NAME,
+      away_team.TEAM_NAME AS AWAY_TEAM_NAME
+    FROM APPLY a
+    LEFT OUTER JOIN TEAM home_team ON a.PLACE_SEQ = home_team.PLACE_SEQ
+    LEFT OUTER JOIN TEAM away_team ON a.AWAY_TEAM_SEQ = away_team.TEAM_SEQ
+    WHERE a.SUB_CATEGORY_SEQ = 4
+  </select>
+
+
+</mapper>
