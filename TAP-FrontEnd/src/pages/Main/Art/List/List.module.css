@@ -18,7 +18,7 @@
 .card{
     display: flex;
     flex-direction: column;
-    height: 370px;
+    height: 450px;
     width: 19%;
     /* border: 1px solid black;  */
     justify-content: end;
@@ -26,23 +26,9 @@
     border-radius: 5px;
 }
 
-.card a{
-    /* margin-left: 10px; */
-    /* color: black; */
-    border: 0px;
-    width: 92%;
-    height: 96%;
-    text-decoration: none;
-    /* border: 1px solid black;  */
-    /* background-color: gray; */
-    border-radius: 5px;
-    margin-bottom: 10px;
-    /* transition: transform 0.3s ease;  */
-}
-
 .poster{
     width: 100%;
-    height: 70%;
+    height: 65%;
     margin-top:15px;
     margin-bottom: 15px;
     display: flex;
@@ -58,4 +44,11 @@
     border-radius: 5px;
 }
 
+.empty_content{
+    min-height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 

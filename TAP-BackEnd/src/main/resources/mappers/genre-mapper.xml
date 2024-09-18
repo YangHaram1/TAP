@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Genre">
+	<select id="selectByCategory" resultType="com.tap.artlist.dto.GenreDTO">
+		select * from genre where sub_category_seq=#{category} order by 1
+	</select>
+</mapper>

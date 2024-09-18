@@ -19,6 +19,13 @@ export const Detail = ()=>{
     const { seq } = location.state || {};  // 전달된 state가 있으면 가져옴
     const [tap, setTap] = useState(0);
 
+    // =================== 상품 상세 정보 ===================
+    useEffect(()=>{
+        alert(seq+"번 상품 상세정보입니다.");
+    },[seq])
+
+
+
     // =================== 캘린더 관련 멤버 변수 =================== 
     const [selectedDate, setSelectedDate] = useState(new Date());
     // 달력 표시 범위 (지금의 경우 9월달만 있기 때문에 화살표가 비활성화 됨)

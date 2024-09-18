@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import ItemsCarousel from 'react-items-carousel';
 import styles from './Caroucel.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faChevronRight,faChevronLeft 
-} from '@fortawesome/free-solid-svg-icons'
+import {faChevronRight,faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom';
 import { url } from '../../config/config';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 export const Caroucel = ({category, images})=>{
 
@@ -63,6 +63,7 @@ export const Caroucel = ({category, images})=>{
 
     // 클릭 시 세부 페이지 이동 => 상품 번호만 보내주면 됨.
     const handleMove = (seq)=>{
+      console.log("상품번호", seq);
       navi("/detail", { state: { seq } });
     }
 
@@ -82,37 +83,21 @@ export const Caroucel = ({category, images})=>{
                 infiniteLoop={true} // 무제한 반복
               //   disableSwipe={true} // 스와이프 가능 유무
               >
-      
-              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
-                  <h2>상품명</h2>
-                  <p>세종대학교 대양홀</p>
-                  <p>2024.09.04 - 2024.09.27</p>
-              </div>
-              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
-                  <h2>상품명</h2>
-                  <p>세종대학교 대양홀</p>
-                  <p>2024.09.04 - 2024.09.27</p>
-              </div>
-              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
-                  <h2>상품명</h2>
-                  <p>세종대학교 대양홀</p>
-                  <p>2024.09.04 - 2024.09.27</p>
-              </div>
-              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
-                  <h2>상품명</h2>
-                  <p>세종대학교 대양홀</p>
-                  <p>2024.09.04 - 2024.09.27</p>
-              </div>
-              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
-                  <h2>상품명</h2>
-                  <p>세종대학교 대양홀</p>
-                  <p>2024.09.04 - 2024.09.27</p>
-              </div>
-              <div onClick={()=>{handleMove(1)}} style={{ height: settings.height, background: "url('/logo192.png') no-repeat center/cover" }} className={styles.card}>
-                  <h2>상품명</h2>
-                  <p>세종대학교 대양홀</p>
-                  <p>2024.09.04 - 2024.09.27</p>
-              </div>
+                {
+                  images.map((image)=>{
+                    return(
+                    <div key={image.application_seq} onClick={()=>{handleMove(`${image.application_seq}`)}} style={{ height: settings.height, background: `url(${image.files_sysname}) no-repeat center/cover`, color:'white' }} className={styles.card}>
+                        <div className={styles.overlay}></div> {/* 오버레이 추가 */}
+                        <h2>{image.name}</h2>
+                        <p>{image.place_name}</p>
+                        <p>{format(new Date(image.start_date), 'yyyy-MM-dd')} - 
+                        {format(new Date(image.end_date), 'yyyy-MM-dd')}</p>
+                        {console.log(image.application_seq)}
+                    </div>
+                    );
+                  }) 
+                }
+             
               </ItemsCarousel>
             </div>
           );
@@ -184,57 +169,21 @@ export const Caroucel = ({category, images})=>{
               chevronWidth={settings.chevronWidth}
               infiniteLoop={false} // 무제한 반복
             >
-    
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                <div className={styles.poster}>
-                  <img src={`${url}/31d8a1ec-913e-4808-8004-091734d77744`}></img>
-                </div>
-                <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
-                <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
-                <p>캐러셀2-1</p>
-            </div>
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
-                </div>
-                <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
-                <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
-                <p>캐러셀2-1</p>
-            </div>
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
-                </div>
-                <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
-                <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
-                <p>캐러셀2-1</p>
-            </div>
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
-                </div>
-                <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
-                <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
-                <p>캐러셀2-1</p>
-            </div>
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
-                </div>
-                <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
-                <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
-                <p>캐러셀2-1</p>
-            </div>
-            <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
-                <div className={styles.poster}>
-                  <img src='/logo192.png'></img>
-                </div>
-                <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>09.03(월) 14:00 </p>
-                <p style={{fontSize:"18px", fontWeight:"600"}}>뮤지컬 &lt;킹키부츠&gt; </p>
-                <p>캐러셀2-1</p>
-            </div>
 
-           
+            {
+              images.map((image)=>{
+                return(
+                  <div style={{ height: settings.height, /*background: "url('/logo192.png') no-repeat center/cover" */}} className={styles.card}>
+                  <div className={styles.poster}>
+                    <img src={image.files_sysname}></img>
+                  </div>
+                  <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>{format(new Date(image.start_date), 'MM.dd(EEE) HH:mm', { locale: ko })}</p>
+                  <p style={{fontSize:"18px", fontWeight:"600"}}>{image.name}</p>
+                  <p>{image.place_name}</p>
+              </div>
+                );
+              })
+            }
             </ItemsCarousel>
           </div>
         );
