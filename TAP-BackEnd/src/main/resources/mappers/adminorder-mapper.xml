@@ -17,4 +17,10 @@ join members on members.id = orders.member_id
 join apply on apply.application_seq = orders.application_seq
 join book on orders.order_seq = book.order_seq
 </select>
+
+<update id="updateOrderStatusSingle">
+    UPDATE orders
+    SET delivery_status = #{newStatus}
+    WHERE order_seq = #{orderSeq}
+</update>
 </mapper>

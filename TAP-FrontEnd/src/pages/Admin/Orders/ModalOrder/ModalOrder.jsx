@@ -7,22 +7,24 @@ export const ModalOrder = ({ resetCheckboxes, checkedOrders, onClose }) => {
 
     // 주문 상태 변경 요청 함수
     const updateOrderStatus = async () => {
-        // try {
-        //     // 선택된 주문 번호와 새 상태를 서버로 전송
-        //     const response = await api.put('/admin/orders/update_status', {
-        //         orderSeqs: checkedOrders,
-        //         status: newStatus,
-        //     });
+        console.log('선택된 주문 번호:', checkedOrders); // checkedOrders 값 확인
 
-        //     if (response.status === 200) {
-        //         alert('주문 상태가 성공적으로 업데이트되었습니다.');
-        //         resetCheckboxes(); // 체크박스 리셋
-        //         onClose(); // 모달 닫기
-        //     }
-        // } catch (error) {
-        //     console.error('Error updating order status:', error);
-        //     alert('주문 상태 업데이트 중 오류가 발생했습니다.');
-        // }
+        try {
+            // 선택된 주문 번호를 서버로 전송하여 상태를 "발송 완료"로 업데이트
+            const response = await api.put('/admin/orders/update_status', {
+                orderSeqs: checkedOrders, // 체크된 주문 목록
+                newStatus: '발송 완료' // 상태를 "발송 완료"로 고정
+            });
+
+            if (response.status === 200) {
+                alert('주문 상태가 성공적으로 업데이트되었습니다.');
+                resetCheckboxes(); // 체크박스 리셋
+                onClose(); // 모달 닫기
+            }
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            alert('주문 상태 업데이트 중 오류가 발생했습니다.');
+        }
     };
 
     return (
@@ -40,7 +42,6 @@ export const ModalOrder = ({ resetCheckboxes, checkedOrders, onClose }) => {
                 <div className={styles.statusSelect}>
                     <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
                         <option value="발송">발송</option>
-                        <option value="주문 취소">주문 취소</option>
                     </select>
                 </div>
             </div>

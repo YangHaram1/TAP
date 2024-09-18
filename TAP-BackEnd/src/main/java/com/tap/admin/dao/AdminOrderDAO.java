@@ -15,4 +15,14 @@ public class AdminOrderDAO {
 	public List<HashMap<String, Object>> getAllOrders(){
 		return mybatis.selectList("AdminOrder.getAllOrders");
 	}
+	
+	public void updateOrderStatus(List<Integer> orderSeqs, String newStatus) {
+        for (Integer orderSeq : orderSeqs) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("orderSeq", orderSeq);
+            params.put("newStatus", newStatus);
+
+            mybatis.update("AdminOrder.updateOrderStatusSingle", params);
+        }
+    }
 }

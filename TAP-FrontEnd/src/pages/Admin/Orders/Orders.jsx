@@ -73,22 +73,7 @@ export const Orders = () => {
         applyFilters(); // 필터링 적용
     };
 
-    // 체크박스 처리 함수
-    // const handleCheckAll = (e) => {
-    //     const checked = e.target.checked;
-
-    //     const enabledValues = filtered
-    //         .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
-    //         .map(order => order.ORDER_SEQ);
-
-    //     checkboxRef.current.forEach((checkbox, i) => {
-    //         const order = filtered[i + currentPage * PER_PAGE];
-    //         if (checkbox) {
-    //             checkbox.checked = checked;
-    //         }
-    //     });
-    //     setCheckedOrders(checked ? enabledValues : []);
-    // };
+    // 체크박스 처리 
     const handleCheckAll = (e) => {
         const checked = e.target.checked;
     
@@ -135,7 +120,7 @@ export const Orders = () => {
 
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 2;
+    const PER_PAGE = 4;
     const pageCount = Math.ceil(filtered.length / PER_PAGE);
 
     const handlePageChange = ({ selected }) => {
@@ -262,7 +247,7 @@ export const Orders = () => {
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div className={styles.modalForm}>
-                    <ModalOrder resetCheckboxes={resetCheckboxes} checkedOrders={checkedOrders} />
+                    <ModalOrder resetCheckboxes={resetCheckboxes} checkedOrders={checkedOrders} onClose={closeModal} />
                 </div>
             </Modal>
         </div>
