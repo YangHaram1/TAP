@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../../../../config/config";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from './DetailSale.module.css';
-import { ModalStatus } from "../../ProductsRegister/ModalStatus/ModalStatus";
+import { ModalSale } from "../ModalSale/ModalSale";
 
 export const DetailSale =()=>{
     const { application_seq } = useParams(); // URL에서 application_seq를 가져옴
@@ -104,7 +104,7 @@ export const DetailSale =()=>{
             </div>
           
             {isModalOpen && (
-            <ModalStatus onClose={closeModal} applicationSeq={selectedProduct} />
+            <ModalSale onClose={closeModal} applicationSeq={selectedProduct} />
         )}
         
         </div>

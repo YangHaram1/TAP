@@ -1,0 +1,81 @@
+/* DetailSale.module.css */
+
+/* 컨테이너 스타일 */
+.container div {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 리스트 스타일 */
+.container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.container ul li {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.container ul li p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin: 8px 0;
+}
+
+.container ul li p strong {
+    color: #333;
+}
+
+/* 버튼 스타일 */
+.btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.container button {
+    background-color: #6a0dad; /* 보라색 계열 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.container button:hover {
+    background-color: #5a0ca0; /* 호버 시 더 진한 보라색 */
+    transform: translateY(-2px); /* 호버 시 살짝 위로 올라가는 효과 */
+}
+
+.container button:active {
+    transform: translateY(0); /* 클릭 시 다시 원래 위치로 */
+}
+
+/* 승인 완료 처리 텍스트 */
+.container p {
+    font-size: 18px;
+    color: #6a0dad; /* 보라색 */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+

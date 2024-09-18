@@ -94,4 +94,8 @@ public class AdminProductService {
 		return adProdao.rejectProduct(applicationSeq, rejectReason);
 	}
 	
+	// Sale 싱품 반려 처리 하기 
+	public int rejectSale(String applicationSeq, String rejectReason){
+		return adProdao.rejectSale(applicationSeq, rejectReason);
+	}
 }
