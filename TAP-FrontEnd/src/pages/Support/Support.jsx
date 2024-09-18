@@ -31,6 +31,20 @@ const Support = () => {
             )
         }
     }
+    const handleMyInquiry=()=>{
+        if(isAuth){
+            navi('/myinquiry')
+        }
+        else{
+            SweetAlert(
+                'warning',
+                '고객센터',
+                '로그인을 해주세요',
+                () => navi('/login'),
+               null
+            )
+        }
+    }
     return (
 
         <div className={styles.container}>
@@ -41,7 +55,7 @@ const Support = () => {
                 {
                     list.map((item, index) => {
                         return (
-                            <div className={styles.content} key={index} onClick={index===2?(handleChat): (index===0)?(handleInquiry):undefined}>
+                            <div className={styles.content} key={index} onClick={index===2?(handleChat): (index===0)?(handleInquiry):(handleMyInquiry)}>
                                 <div className={styles.div1}>
                                     <img src={item.img} alt="" className={styles.img} />
                                 </div>

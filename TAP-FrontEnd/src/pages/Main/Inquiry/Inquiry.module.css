@@ -25,8 +25,18 @@
 
 .container span {
     color: red;
+    font-size: 12px;
+    padding-left: 10px;
 }
 
+.title span{
+    font-size: 15px !important;
+    text-align: center;
+}
+.checkTitle span{
+    text-align: center;
+    font-size: 15px !important;
+}
 .container ul {
     margin: 0;
     color: gray;
