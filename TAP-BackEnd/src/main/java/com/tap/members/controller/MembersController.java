@@ -1,6 +1,9 @@
 package com.tap.members.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tap.email.service.EmailService;
 import com.tap.members.dto.MembersDTO;
 import com.tap.members.dto.MembersDeliveryDTO;
 import com.tap.members.service.MembersService;
@@ -24,103 +29,158 @@ import com.tap.members.service.MembersService;
 @RequestMapping("/members")
 public class MembersController {
 
-	@Autowired
-	private MembersService mserv;
+    // 이메일과 인증 코드를 임시 저장하는 HashMap
+    private Map<String, String> verificationCodes = new HashMap<>();
+    
+    @Autowired
+    private MembersService mserv;
 
-	@Autowired
-	private PasswordEncoder pe;
+    @Autowired
+    private PasswordEncoder pe;
+    @Autowired
+    private EmailService emailService;  // EmailService를 주입받습니다.
 
-	// 회원가입 아이디 중복 검사
-	@GetMapping("/id/{id}")
-	public ResponseEntity<Integer> selectById(@PathVariable String id) throws Exception {
-		int checkId = mserv.checkId(id); // 1 or 0
-		return ResponseEntity.ok(checkId);
-	}
+    // 이메일로 인증 코드 전송
+    @PostMapping("/requestEmailVerification/{email}")
+    public ResponseEntity<String> requestEmailVerification(@PathVariable("email") String userEmail) {
+        try {
+            // 인증 코드 생성 및 저장
+            String verificationCode = UUID.randomUUID().toString().substring(0, 8);
+            verificationCodes.put(userEmail, verificationCode);  // 이메일과 인증 코드 저장
 
-	// 회원가입 이메일 중복 검사
-	@GetMapping("/email/{email}")
-	public ResponseEntity<Integer> selectByEmail(@PathVariable String email) throws Exception {
-		int checkEmail = mserv.checkEmail(email); // 1 or 0
-		return ResponseEntity.ok(checkEmail);
-	}
+            // 이메일 전송
+            emailService.sendVerificationEmail(userEmail, verificationCode);
 
-	// 아이디 찾기
-	@GetMapping("/findId/{name}/{email}")
-	public ResponseEntity<String> findId(@PathVariable String name, @PathVariable String email) throws Exception {
-		String findId = mserv.findId(name, email);
-		System.out.println(name);
-		System.out.println(email);
-		return ResponseEntity.ok(findId);
+            return ResponseEntity.ok("이메일 인증 코드가 전송되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
+    }
 
-	}
+    @PostMapping("/verifyEmail")
+    public ResponseEntity<String> verifyEmail(@RequestBody Map<String, String> request) {
+        try {
+            String userEmail = request.get("email");
+            String verificationCode = request.get("code");
 
-	@GetMapping
-	public ResponseEntity<MembersDTO> selectById(Principal principal) throws Exception {
-		if (principal == null) {
-			System.out.println("principal");
-			return ResponseEntity.ok(null);
-		}
-		String username = principal.getName();
-		UserDetails user = mserv.loadUserByUsername(username);
+            // 저장된 코드와 입력된 코드 비교
+            String storedCode = verificationCodes.get(userEmail);
 
-		return ResponseEntity.ok(mserv.selectById(user.getUsername()));
-	}
+            if (storedCode != null && storedCode.equals(verificationCode)) {
+                return ResponseEntity.ok("verified");
+            } else {
+                return ResponseEntity.badRequest().body("유효하지 않은 인증 코드입니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
+    }
 
-	@PutMapping
-	public ResponseEntity<String> update(@RequestBody MembersDTO dto) throws Exception {
-		System.out.println(dto.getId());
-		int check = mserv.updateMember(dto);
-		if (check > 0) {
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID: " + dto.getId());
-		}
-	}
+    // 회원가입 아이디 중복 검사
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Integer> selectById(@PathVariable String id) throws Exception {
+        int checkId = mserv.checkId(id); // 1 or 0
+        return ResponseEntity.ok(checkId);
+    }
 
-	@PutMapping("/{pw}")
-	public ResponseEntity<String> updatePw(Principal principal, @PathVariable String pw) throws Exception {
-		if (principal == null) {
-			System.out.println("principal");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
-		}
-		String username = principal.getName();
-		UserDetails user = mserv.loadUserByUsername(username);
+    // 회원가입 이메일 중복 검사
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Integer> selectByEmail(@PathVariable String email) throws Exception {
+        int checkEmail = mserv.checkEmail(email); // 1 or 0
+        return ResponseEntity.ok(checkEmail);
+    }
 
-		String encode = pe.encode(pw);
+    // 아이디 찾기
+    @GetMapping("/findId/{name}/{email}")
+    public ResponseEntity<String> findId(@PathVariable String name, @PathVariable String email) throws Exception {
+        String findId = mserv.findId(name, email);
+        return ResponseEntity.ok(findId);
+    }
 
-		int check = mserv.updatePwById(user.getUsername(), encode);
-		if (check > 0) {
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID:");
-		}
-	}
+    @GetMapping
+    public ResponseEntity<MembersDTO> selectById(Principal principal) throws Exception {
+        if (principal == null) {
+            return ResponseEntity.ok(null);
+        }
+        String username = principal.getName();
+        UserDetails user = mserv.loadUserByUsername(username);
 
-	// 회원가입 등록
-	@PostMapping
-	public ResponseEntity<String> signUp(@RequestBody MembersDeliveryDTO dto) throws Exception {
-		String encode = pe.encode(dto.getPw());
-		dto.setPw(encode);
-		mserv.signUp(dto);
-		return ResponseEntity.ok().build();
-	}
+        return ResponseEntity.ok(mserv.selectById(user.getUsername()));
+    }
 
-	@PatchMapping("/{deliverySeq}")
-	public ResponseEntity<String> updateDeliverySeq(Principal principal, @PathVariable int deliverySeq)
-			throws Exception {
-		if (principal == null) {
-			System.out.println("principal");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
-		}
-		String username = principal.getName();
-		int check=mserv.updateDeliverySeq(username,deliverySeq);
-		
-		if (check > 0) {
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID:");
-		}
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody MembersDTO dto) throws Exception {
+        int check = mserv.updateMember(dto);
+        if (check > 0) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID: " + dto.getId());
+        }
+    }
 
-	}
+    @PutMapping("/{pw}")
+    public ResponseEntity<String> updatePw(Principal principal, @PathVariable String pw) throws Exception {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+        }
+        String username = principal.getName();
+        UserDetails user = mserv.loadUserByUsername(username);
 
+        String encode = pe.encode(pw);
+
+        int check = mserv.updatePwById(user.getUsername(), encode);
+        if (check > 0) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID:");
+        }
+    }
+
+    // 회원가입 등록
+    @PostMapping("/registerUser")
+    public ResponseEntity<String> signUp(@RequestBody MembersDeliveryDTO dto,@RequestParam("verificationCode") String verificationCode) throws Exception {
+    	 try {
+    	        // 이메일 인증 여부 확인
+    	        if (!verificationCodes.containsKey(dto.getEmail())) {
+    	            return ResponseEntity.badRequest().body("이메일 인증이 완료되지 않았습니다.");
+    	        }
+
+    	        // 인증 코드 확인
+    	        String storedCode = verificationCodes.get(dto.getEmail());
+    	        if (storedCode == null || !storedCode.equals(verificationCode)) {
+    	            return ResponseEntity.badRequest().body("유효하지 않은 인증 코드입니다.");
+    	        }
+
+    	        // 패스워드 인코딩
+    	        String encodedPassword = pe.encode(dto.getPw());
+    	        dto.setPw(encodedPassword);
+
+    	        // 회원가입 처리
+    	        mserv.signUp(dto);
+
+    	        // 회원가입 성공
+    	        return ResponseEntity.ok().build();
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+    	    }
+    }
+
+    @PatchMapping("/{deliverySeq}")
+    public ResponseEntity<String> updateDeliverySeq(Principal principal, @PathVariable int deliverySeq)
+            throws Exception {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+        }
+        String username = principal.getName();
+        int check = mserv.updateDeliverySeq(username, deliverySeq);
+        
+        if (check > 0) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found for ID:");
+        }
+    }
 }
