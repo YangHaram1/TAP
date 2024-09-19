@@ -25,7 +25,8 @@
     JOIN sub_category ON apply.sub_category_seq = sub_category.sub_category_seq
     JOIN place ON apply.place_seq = place.place_seq
     JOIN files ON apply.application_seq = files.files_parent_seq
-    WHERE apply.status != '승인' 
+    WHERE apply.status != '승인 완료' 
+    AND apply.status !='승인 반려'
     	AND apply.status !='취소'
       AND files.files_type = 'poster'
       AND apply.id = #{id}
@@ -45,7 +46,8 @@
 	join sub_category on apply.sub_category_seq = sub_category.sub_category_seq
 	join place on apply.place_seq = place.place_seq
 	join files on apply.application_seq = files.files_parent_seq
-	where apply.status = '승인 완료' and files.files_type='poster'
+	where apply.status = '승인 완료'  or apply.status='승인 반려'
+	and files.files_type='poster'
 	and apply.id = #{id}
 	and apply.updated_at BETWEEN (CURRENT_DATE - INTERVAL '1' MONTH) AND CURRENT_DATE
 	order by apply.created_at desc

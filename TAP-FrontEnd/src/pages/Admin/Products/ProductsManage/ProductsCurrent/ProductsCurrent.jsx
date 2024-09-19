@@ -121,7 +121,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                                         {formatDate(product.end_date)}
                                     </td>
                                     <td>
-                                        <button className={styles.manage_button}>상품관리</button>
+                                        <button className={styles.manage_button}>상품상세</button>
                                     </td>
                                 </tr>
                             ))}
