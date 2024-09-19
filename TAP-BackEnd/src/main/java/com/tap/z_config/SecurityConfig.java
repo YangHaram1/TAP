@@ -39,7 +39,7 @@ public class SecurityConfig {
 		.authorizeHttpRequests(request->{
 			request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
 			request.requestMatchers(HttpMethod.GET,"/board").permitAll();
-			request.requestMatchers(HttpMethod.POST,"/members").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/registerUser").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/id/{id}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/email/{email}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/findId/{name}/{email}").permitAll();

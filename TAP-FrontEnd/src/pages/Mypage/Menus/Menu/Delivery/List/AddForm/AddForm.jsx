@@ -14,6 +14,20 @@ const AddForm = ({ setCheck,setList }) => {
         name: '',
         phone: ''
     });
+    const [regexData, setRegexData] = useState({
+        name:false,
+        phone: false,
+        address:false,
+        detailed_address:false,
+        zipcode:false
+    })
+    const [checkAll, setCheckAll] = useState();
+    useEffect(() => {
+        const allTrue = Object.values(regexData).every(value => value === true);
+        setCheckAll(allTrue)
+        //  console.log(regexData)
+    }, [regexData])
+
     const handleConfirm = () => {
         api.post(`/delivery`,data).then((resp)=>{
             setCheck(false);
@@ -77,7 +91,7 @@ const AddForm = ({ setCheck,setList }) => {
                         상세주소
                     </div>
                     <div className={styles.content2}>
-                        <input type="text" value={data.detailed_address} name='detailed_address' onChange={handleChange} />
+                        <input type="text" value={data.detailed_address} placeholder='상세주소를 입력해주세요.' name='detailed_address' onChange={handleChange} />
                     </div>
                 </div>
                 <div className={styles.contents}>
@@ -85,7 +99,7 @@ const AddForm = ({ setCheck,setList }) => {
                         수령인
                     </div>
                     <div className={styles.content2}>
-                        <input type="text" name='name' value={data.name} onChange={handleChange} />
+                        <input type="text" name='name' value={data.name} onChange={handleChange} placeholder='받으실분 성함을 입력해주세요.'/>
                     </div>
                 </div>
                 <div className={styles.contents}>
@@ -93,11 +107,11 @@ const AddForm = ({ setCheck,setList }) => {
                         휴대폰번호
                     </div>
                     <div className={styles.content2}>
-                        <input type="text" placeholder='-포함 입력' name='phone' value={data.phone} onChange={handleChange} />
+                        <input type="text" placeholder='ex) 010-1111-1111' name='phone' value={data.phone} onChange={handleChange} />
                     </div>
                 </div>
                 <div className={styles.contents}>
-                    <Mybutton setcheck={setCheck} handleConfirm={handleConfirm} />
+                    <Mybutton setcheck={setCheck} handleConfirm={handleConfirm} checkAll={checkAll} />
                 </div>
             </div>
         </div>

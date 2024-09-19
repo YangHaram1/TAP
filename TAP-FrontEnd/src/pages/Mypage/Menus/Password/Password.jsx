@@ -65,9 +65,9 @@ const Password = ({ setCheckPw }) => {
                     </div>
                     {pw === '' ? '' : (<button className={styles.pwCancel} onClick={() => { setPw('') }}>X</button>)}
                 </div>
-                {pw !== '' ? '' : (<div className={styles.pwDetail}>비밀번호를 입력해주세요</div>)}
+                { (<div className={pw!==''?styles.none:styles.pwDetail}>비밀번호를 입력해주세요</div>)}
             </div>
-            <Mybutton handleConfirm={handleConfirm}/>
+            <Mybutton handleConfirm={handleConfirm} checkAll={pw} />
         </React.Fragment>
     )
 }

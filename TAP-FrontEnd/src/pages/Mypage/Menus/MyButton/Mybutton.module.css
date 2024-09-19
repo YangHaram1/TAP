@@ -42,3 +42,19 @@
    
     
 }
+
+.none{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.none button{
+    background-color: gray;
+    border: none;
+    color: white;
+    pointer-events: none;
+   
+}
