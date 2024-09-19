@@ -269,11 +269,7 @@ const Member = () => {
 
     const handleAdd = async () => {
         try {
-            await api.post(`/members/registerUser`, member, {
-                params: {
-                    verificationCode: verificationCode,
-                },
-            })
+            await api.post(`/members/registerUser`, member)
             Swal.fire({
                 icon: 'success',
                 title: '회원가입',
@@ -375,7 +371,7 @@ const Member = () => {
                     <div className={styles.inputTxt}>
                         <input
                             type="password"
-                            placeholder=" 영어 대소문자 특수문자 숫자 각 1개이상 포함하고
+                            placeholder="영어 대소문자 특수문자 숫자 각 1개이상 포함하고
                                 8자 이상"
                             name="pw"
                             onChange={handleAddChange}
@@ -575,7 +571,7 @@ const Member = () => {
                             type="text"
                             value={member.zipcode}
                             disabled={true}
-                            placeholder="아이디는 어쩌고 저쩌고"
+                            placeholder="우편번호 찾기를 해주세요."
                         />
                         <div>
                             <button
@@ -596,7 +592,7 @@ const Member = () => {
                             type="text"
                             value={member.address}
                             disabled={true}
-                            placeholder="아이디는 어쩌고 저쩌고"
+                            placeholder=""
                         />
                     </div>
                 </div>
@@ -610,7 +606,7 @@ const Member = () => {
                             name="detailed_address"
                             value={member.detailed_address}
                             onChange={handleAddChange}
-                            placeholder=""
+                            placeholder="상세 주소를 입력해주세요."
                         />
                     </div>
                 </div>
