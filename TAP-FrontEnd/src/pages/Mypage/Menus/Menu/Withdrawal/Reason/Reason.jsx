@@ -102,7 +102,7 @@ const Reason = ({ checkDetail, handleCheck }) => {
                     <input type="checkbox" checked={check[5]} onChange={(e) => handleChecked(5)} />  고객 대응 불만족
                 </div>
             </div>
-            <Mybutton handleConfirm={handleConfirm} setcheck={null} title={'탈퇴'} />
+            <Mybutton handleConfirm={handleConfirm} setcheck={null} title={'탈퇴'} checkAll={true} />
         </div>
     )
 }

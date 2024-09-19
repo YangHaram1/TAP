@@ -1,6 +1,6 @@
 import styles from './Mybutton.module.css';
 import { useNavigate } from 'react-router-dom';
-const Mybutton=({handleConfirm,setcheck,title})=>{
+const Mybutton=({handleConfirm,setcheck,title,checkAll})=>{
     const navi=useNavigate();
     const handleCancel = () => {
         if(setcheck!=null){
@@ -16,7 +16,7 @@ const Mybutton=({handleConfirm,setcheck,title})=>{
         <div className={styles.cancel}>
             <button onClick={handleCancel}>취소</button>
         </div>
-        <div className={styles.confirm}>
+        <div className={(checkAll!==undefined)?checkAll?styles.confirm:styles.none:styles.none}>
             <button onClick={handleConfirm}>{title||'확인'}</button>
         </div>
     </div>

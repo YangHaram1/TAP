@@ -71,12 +71,12 @@ const Header = ({ hasScrolled }) => {
                     <div className={styles.headerMenu} onClick={handleLogin}>
                         {isAuth ? '로그아웃' : '로그인'}
                     </div>
-                    <div
+                    {!isAuth&&(<div
                         className={`${styles.headerMenu} ${styles.sign}`}
                         onClick={handleSign}
                     >
                         회원가입
-                    </div>
+                    </div>)}
                     <div
                         className={`${styles.headerMenu} ${styles.faHouseUser}`}
                         onClick={handleMypage}

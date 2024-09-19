@@ -58,13 +58,14 @@
 .title .logo {
     width: 100px;
     height: 40px;
+    cursor: pointer;
 
 }
 
 .search {
     background-color: white;
     width: 500px;
-    height: 50px;
+    height: 40px;
     border-radius: 50px;
     border: 2px solid #b6a4e5;
     position: relative;
@@ -92,14 +93,14 @@
     top: 50%;
     transform: translateY(-50%);
     background-color: #8037cb;
-    padding: 17px;
+    padding: 16px;
     border-radius: 100%;
     margin-left: 100px;
     position: absolute;
     right: -4px;
     color: white;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 15px;
 }
 
 .headerMenus {

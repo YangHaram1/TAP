@@ -50,6 +50,13 @@ public class InquiryController {
 		return ResponseEntity.ok(list);
 	}
 	
+	@GetMapping("/admin")
+	ResponseEntity<List<InquiryDTO>> getAll() throws Exception {
+	
+		List<InquiryDTO> list =serv.selectAll();
+		return ResponseEntity.ok(list);
+	}
+	
 	@GetMapping("/{seq}")
 	ResponseEntity<InquiryDTO> get(@PathVariable int seq) throws Exception {
 	

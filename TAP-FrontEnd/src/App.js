@@ -207,6 +207,7 @@ function App() {
                                 {/* <Header hasScrolled={hasScrolled} /> */}
                                 <Routes>
                                     <Route path="/*" element={<Main />} />
+                                    {/* <Route path="/login/*" element={<Login />} /> */}
                                     <Route path="/mypage/*" element={<Mypage />} />
                                     <Route path="/sign/*" element={<Sign />} />
                                     <Route path='/grade/*' element={<Grade />} />

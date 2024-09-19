@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const Inquiry = () => {
     const editorRef = useRef(null);
     const fileRef = useRef(null);
-    const navi =useNavigate();
+    const navi = useNavigate();
     const [check, setCheck] = useState([false, false]);
     const [checkAll, setCheckAll] = useState(false);
     const [fileList, setFileList] = useState([]);
@@ -19,15 +19,17 @@ const Inquiry = () => {
     const [data, setData] = useState({
         name: '',
         email: '',
-        category: '',
+        category: '선택',
         title: '',
         contents: ''
     });
     const [regexData, setRegexData] = useState({
         email: false,
         title: false,
-        contents: false
+        contents: false,
+        category: false
     })
+
     useEffect(() => {
         setData((prev) => {
             return { ...prev, name: name }
@@ -53,7 +55,7 @@ const Inquiry = () => {
 
         }
         else if (name === 'title') {
-            const titleRegex =  /^.{1,30}$/;
+            const titleRegex = /^.{1,30}$/;
             setRegexData((prev) => {
                 return { ...prev, [name]: titleRegex.test(value) }
             })
@@ -79,6 +81,15 @@ const Inquiry = () => {
         setData((prev) => {
             return { ...prev, category: event.target.value }
         }); // 선택된 값을 상태로 업데이트
+        if (event.target.value !== '선택')
+            setRegexData((prev) => {
+                return { ...prev, category: true }
+            })
+        else {
+            setRegexData((prev) => {
+                return { ...prev, category: false }
+            })
+        }
     };
 
     const handleChangeCheck = (e) => {
@@ -114,12 +125,27 @@ const Inquiry = () => {
     //파일
     const handleFile = (e) => {
         const files = fileRef.current.files;
-
         setFileList((prev) => {
             const temp = [...prev];
             for (let index = 0; index < files.length; index++) {
                 if (temp.length > 4) break;
-                temp.push(files[index]);
+                const split=formatFileSize(files[index].size).split(' ');
+                const size=parseInt(split[0],10);
+                const str=split[1];
+                if(str==='MB'){
+                    if(size<=10)  temp.push(files[index]);
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: '파일',
+                            text: '10MB 이하로 업로드 해주세요.'
+                        })
+                    }
+                }
+                else {
+                    temp.push(files[index]);
+                }
+              
             }
             return temp
         })
@@ -144,8 +170,8 @@ const Inquiry = () => {
     // 파일 크기를 읽기 쉽게 변환하는 함수 (KB, MB) - 반올림 포함
     const formatFileSize = (size) => {
         if (size < 1024) return `${size} bytes`;
-        if (size < 1024 * 1024) return `${Math.round(size / 1024)}KB`; // 정수로 반올림
-        return `${Math.round(size / (1024 * 1024))}MB`; // 정수로 반올림
+        if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`; // 정수로 반올림
+        return `${Math.round(size / (1024 * 1024))} MB`; // 정수로 반올림
     };
 
     // useEffect(()=>{
@@ -163,14 +189,14 @@ const Inquiry = () => {
         formData.append('inquiry', jsonData)
 
         api.post(`/inquiry`, formData).then((resp) => {
-            
+
             Swal.fire({
                 icon: 'success',
                 title: '문의',
                 text: '정상적으로 문의가 등록 되었습니다.'
             })
             navi('/support');
-            
+
         })
     }
     return (
@@ -197,7 +223,7 @@ const Inquiry = () => {
 
                 </div>
                 <div>
-                    {data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (<span style={{ color: 'blue' }}>이메일 형식이 맞습니다.</span>) : (<span>이메일 형식을 맞춰주세요</span>))}
+                    {data.email === '' ? <span>이메일을 입력해주세요.</span> : (regexData.email ? (<span style={{ color: 'blue' }}>이메일 형식이 맞습니다.</span>) : (<span>이메일 형식에 맞게 입력해주세요.</span>))}
                 </div>
             </div>
             <div className={styles.contents}>
@@ -206,6 +232,7 @@ const Inquiry = () => {
                 </div>
                 <div className={styles.input}>
                     <select className={styles.select} value={data.category} onChange={handleChange}>
+                        <option value="선택">선택</option>
                         <option value="예매">예매</option>
                         <option value="할인">할인</option>
                         <option value="결제/수수료">결제/수수료</option>
@@ -216,8 +243,9 @@ const Inquiry = () => {
                         <option value="기타">기타</option>
                     </select>
                     <FontAwesomeIcon icon={faCaretDown} className={styles.icon} />
+                    
                 </div>
-
+                {data.category === '선택' ? <span>선택해 주세요.</span> : (regexData.category ? (<span style={{ color: 'blue' }}>선택 완료되었습니다.</span>) : (<span>이메일 형식에 맞게 입력해주세요.</span>))}
             </div>
             <div className={styles.contents}>
                 <div className={styles.title}>
@@ -280,10 +308,7 @@ const Inquiry = () => {
                             <p>10MB 이내의 모든 이미지 및 PDF, TXT, MS office 문서 및 zip파일을 업로드해주세요.</p>
                         </li>
                         <li>
-                            <p>첨부 파일 형식 및 내용이 1:1 문의 내용과 맞지 않는 경우(비방, 음란, 고유식별정보 포함 등) 관리자에</p>
-                        </li>
-                        <li>
-                            <p>의해 자동 삭제 될 수 있습니다.</p>
+                            <p>첨부 파일 형식 및 내용이 1:1 문의 내용과 맞지 않는 경우(비방, 음란, 고유식별정보 포함 등) 관리자에 의해 자동 삭제 될 수 있습니다.</p>
                         </li>
                     </ul>
                 </div>
@@ -334,7 +359,7 @@ const Inquiry = () => {
                         </div>
                     </div>
                 </div>
-                <div className={(checkAll && regexData.email && regexData.title && regexData.contents) ? styles.confirmReverse : styles.confirm} onClick={handleConfirm}>
+                <div className={(checkAll && regexData.email && regexData.title && regexData.contents && regexData.category) ? styles.confirmReverse : styles.confirm} onClick={handleConfirm}>
                     <button>문의하기</button>
                 </div>
             </div>

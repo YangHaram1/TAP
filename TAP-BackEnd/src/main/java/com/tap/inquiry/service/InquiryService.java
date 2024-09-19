@@ -79,4 +79,9 @@ public class InquiryService {
 	public InquiryDTO selectBySeq(int seq) {
 		return dao.selectBySeq(seq);
 	}
+
+
+	public List<InquiryDTO> selectAll() {
+		return dao.selectAll();
+	}
 }
