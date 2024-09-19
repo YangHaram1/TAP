@@ -5,6 +5,10 @@
     flex-direction: column;
     margin: auto;
 }
+.container span{
+    color: red;
+    width: 100%;
+}
 .title{
     display: flex;
     padding: 10px;
@@ -62,6 +66,7 @@
 }
 .update div{
     flex: 1;
+    width: 100%;
 }
 .update button{
     border-radius: 50px;
@@ -72,11 +77,16 @@
     font-weight: 800;
 
 }
-.update div:nth-child(2){
+
+.span{
     display: flex;
-    justify-content: flex-end;
+    flex: 1;
+}
+.updateBtn{
+    display: flex;
+    justify-content: flex-end !important;
     align-items: center;
-    padding-right: 30px;
+    flex: 1;
 }
 .btnCancel{
     color: red;

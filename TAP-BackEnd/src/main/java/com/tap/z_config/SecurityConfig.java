@@ -48,6 +48,7 @@ public class SecurityConfig {
 			request.requestMatchers(HttpMethod.GET,"/artlist/getTap").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/genre/{category}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/detail/{seq}").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/requestEmailVerification/{email}").permitAll();
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
 		}) 

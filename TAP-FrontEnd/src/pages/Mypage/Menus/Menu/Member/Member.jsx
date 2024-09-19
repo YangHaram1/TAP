@@ -10,12 +10,17 @@ import Swal from 'sweetalert2';
 const Member = () => {
     const { loginID } = useAuthStore();
     const [user, setUser] = useState({ email: '', phone: '' });
-    const [address,setAddress]=useState({});
+    const [address, setAddress] = useState({});
     const [genderCheck, setGenderCheck] = useState(false);
     const [updateCheck, setUpdateCheck] = useState({ email: true, phone: true });
-    const [data, setData] = useState({ id: '', email: '', phone: '',address:'',detailed_address:'',zipcode:'' });
+    const [data, setData] = useState({ id: '', email: '', phone: '', address: '', detailed_address: '', zipcode: '' });
     const emailRef = useRef();
     const phoneRef = useRef();
+    const [regexData, setRegexData] = useState({
+        email: true,
+        phone: true
+    })
+    const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증 상태
     useEffect(() => {
         api.get(`/members`).then((resp) => {
             setUser(resp.data)
@@ -69,6 +74,8 @@ const Member = () => {
         setData((prev) => {
             return { ...prev, [name]: value }
         })
+        setRegexData({ email: true,
+            phone: true});
     }
 
     const handelData = (e) => {
@@ -76,6 +83,20 @@ const Member = () => {
         setData((prev) => {
             return { ...prev, [name]: value };
         })
+
+        if (name === 'email') {
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+            setRegexData((prev) => {
+                return { ...prev, [name]: emailRegex.test(value) }
+            })
+
+        }
+        else if (name === 'phone') {
+            const phoneRegex = /^010-\d{4}-\d{4}$/;
+            setRegexData((prev) => {
+                return { ...prev, [name]: phoneRegex.test(value) }
+            })
+        }
     }
 
     return (
@@ -124,19 +145,29 @@ const Member = () => {
                         {user.name}
                     </div>
                     <div className={styles.update}>
-                        <div>
-                            <input type="text" value={data.phone} disabled={updateCheck.phone} onChange={handelData} ref={phoneRef} name='phone' />
+                        <div style={{ display: 'flex', flexDirection: "column" }}>
+                            <div>
+                                <input type="text" value={data.phone} disabled={updateCheck.phone} onChange={handelData} ref={phoneRef} name='phone' />
+                            </div>
+                            <div className={styles.span}>
+                                {data.phone === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.phone ? (<span style={{ color: 'blue' }}>번호 형식이 맞습니다.</span>) : (<span>{`ex) 010-1111-1111`}</span>))}
+                            </div>
                         </div>
-                        <div>
-                            {updateCheck.phone && (<button onClick={() => handleUpdateCheck(phoneRef)}  className={styles.btnUpdate}>수정</button>)}
+                        <div className={styles.updateBtn}>
+                            {updateCheck.phone && (<button onClick={() => handleUpdateCheck(phoneRef)} className={styles.btnUpdate}>수정</button>)}
                             {!updateCheck.phone && (<button onClick={() => handleUpdateCancel(phoneRef)} className={styles.btnCancel}>취소</button>)}
                         </div>
                     </div>
                     <div className={styles.update}>
-                        <div>
-                            <input type="text" value={data.email} disabled={updateCheck.email} onChange={handelData} ref={emailRef} name='email' />
+                        <div style={{ display: 'flex', flexDirection: "column" }}>
+                            <div>
+                                <input type="text" value={data.email} disabled={updateCheck.email} onChange={handelData} ref={emailRef} name='email' />
+                            </div>
+                            <div className={styles.span}>
+                                {data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (<span style={{ color: 'blue' }}>이메일 형식이 맞습니다.</span>) : (<span>이메일 형식을 맞춰주세요</span>))}
+                            </div>
                         </div>
-                        <div>
+                        <div className={styles.updateBtn}>
                             {updateCheck.email && (<button onClick={() => handleUpdateCheck(emailRef)} className={styles.btnUpdate}>수정</button>)}
                             {!updateCheck.email && (<button onClick={() => handleUpdateCancel(emailRef)} className={styles.btnCancel}>취소</button>)}
                         </div>
@@ -150,7 +181,7 @@ const Member = () => {
                         <input type="checkbox" checked={genderCheck} className={styles.checkBox} disabled />여자
                     </div>
                     <div>
-                      {address.address}
+                        {address.address}
                     </div>
                     <div>
                         {address.detailed_address}
@@ -161,7 +192,7 @@ const Member = () => {
                 </div>
 
             </div>
-            <Mybutton handleConfirm={handleConfirm} setcheck={null}/>
+            <Mybutton handleConfirm={handleConfirm} setcheck={null} />
         </div>
     )
 }
