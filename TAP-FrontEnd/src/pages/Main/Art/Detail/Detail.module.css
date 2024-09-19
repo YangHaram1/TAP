@@ -131,7 +131,8 @@
 
 .time{
     display: flex;
-    justify-content: space-around;
+    width: 100%;
+    justify-content: start;
 }
 
 .time_bubble{
@@ -144,6 +145,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 10px;
 }
 
 .selected{

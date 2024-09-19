@@ -1,6 +1,6 @@
 import styles from './ProductData.module.css'
 
-export const ProductData = ()=> {
+export const ProductData = ({member, company, mainData, casting})=> {
     return (
         <div className={styles.container}>
             <div className={styles.com_info}>
@@ -16,29 +16,33 @@ export const ProductData = ()=> {
                     <tbody>
                         <tr>
                             <th>주최/기획</th>
-                            <td>어쩌구저쩌구</td>
+                            <td>{company.name}</td>
                             <th>고객문의</th>
-                            <td>1588-1235</td>
+                            <td>{company.phone}</td>
                         </tr>
                         <tr>
                             <th>공연시간</th>
-                            <td>150분(인터미션 : 20분)</td>
+                            <td>{mainData.running_time}분(인터미션 : {mainData.running_intertime}분)</td>
                             <th>관람등급</th>
-                            <td>만 7세 이상 관람 가능</td>
+                            <td>{mainData.age_limit} 
+                                { mainData.age_limit.startsWith("전") ? " " : " 이상 "
+                                }관람 가능</td>
                         </tr>
                         <tr>
                             <th>주연</th>
-                            <td>어쩌구,저쩌구,어쩌구,저쩌구,어쩌구,저쩌구,어쩌구,저쩌구
-                                ,어쩌구,저쩌구,어쩌구,저쩌구,어쩌구,저쩌구,어쩌구,저쩌구
-                                ,어쩌구,저쩌구,어쩌구,저쩌구,어쩌구,저쩌구</td>
+                            <td>{casting.map((cast,index)=>{
+                                return(
+                                    <span key={index}>{cast.casting_name} {casting.length-1 === index ?"" : ","} </span>
+                                );
+                            })}</td>
                             <th>공연장소</th>
-                            <td>블루스퀘어 신한카드 홀</td>
+                            <td>{mainData.place_name}</td>
                         </tr>
                         <tr>
                             <th>예매수수료</th>
                             <td>장당 2,000원</td>
                             <th>배송료</th>
-                            <td>현장수령 무료 (배송불가요..?)</td>
+                            <td>3,200원 (현장수령 무료)</td>
                         </tr>
                         <tr>
                             <th>유효기간/이용조건</th>
@@ -114,23 +118,23 @@ export const ProductData = ()=> {
                     <tbody>
                         <tr>
                             <th>상호</th>
-                            <td>어쩌구저쩌구</td>
+                            <td>{company.name}</td>
                             <th>대표자명</th>
-                            <td>1588-1235</td>
+                            <td>{member.name}</td>
                         </tr>
                         <tr>
                             <th>사업자등록번호</th>
-                            <td>220-87-43278</td>
+                            <td>{company.registration_number}</td>
                             <th>E-mail</th>
-                            <td>test@email.com</td>
+                            <td>{member.email}</td>
                         </tr>
                         <tr>
                             <th>연락처</th>
-                            <td colSpan={3}> 1588-1234 </td>
+                            <td colSpan={3}> {company.phone} </td>
                         </tr>
                         <tr>
                             <th>주소</th>
-                            <td colSpan={3}> 서울특별시 강남구 논현로154길 </td>
+                            <td colSpan={3}> {company.address} {company.detailed_address}</td>
                         </tr>
                     </tbody>
                 </table>

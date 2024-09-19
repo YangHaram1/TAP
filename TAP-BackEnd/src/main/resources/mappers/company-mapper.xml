@@ -8,4 +8,8 @@
 		insert into company values(#{member_id},#{address},#{detailed_address},#{name},#{phone},#{registration_number},#{zipcode},sysdate)
 	</insert>
 	
+	<select id="selectById" resultType="com.tap.company.dto.CompanyDTO">
+		select * from company where member_id=#{id}
+	</select>
+	
 </mapper>

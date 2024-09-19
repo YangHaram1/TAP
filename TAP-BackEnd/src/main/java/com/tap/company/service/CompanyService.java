@@ -64,5 +64,9 @@ public class CompanyService {
 		dao.signUp(cdto);
 
 	}
+	
+	public CompanyDTO getCompanyData(String id) {
+		return dao.getCompanyData(id);
+	}
 
 }
