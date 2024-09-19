@@ -18,4 +18,8 @@
 	<select id="selectBySeq" resultType="com.tap.inquiry.dto.InquiryDTO">
 		select *from inquiry where seq = #{seq}
 	</select>
+	
+	<select id="selectAll" resultType="com.tap.inquiry.dto.InquiryDTO">
+		select *from inquiry order by status desc
+	</select>
 </mapper>
