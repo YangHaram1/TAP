@@ -21,6 +21,10 @@ const Member = () => {
         phone: true
     })
     const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증 상태
+    const [verificationCode, setVerificationCode] = useState('');
+    const [emailAvailable, setEmailAvailable] = useState(false);
+
+    
     useEffect(() => {
         api.get(`/members`).then((resp) => {
             setUser(resp.data)
@@ -98,6 +102,99 @@ const Member = () => {
             })
         }
     }
+
+    //이메일
+    const handleEmailCheck = async () => {
+        const email = data.email;
+        try {
+            const resp = await api.get(`/members/email/${email}`);
+            if (resp.data === 0) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '회원가입',
+                    text: '사용 가능한 이메일입니다.',
+                });
+                setEmailAvailable(true);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입',
+                    text: '사용 불가능한 이메일입니다.',
+                });
+                setEmailAvailable(false);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '이메일 중복 검사 중 오류가 발생했습니다.',
+            });
+            setEmailAvailable(false);
+        }
+    };
+
+    const handleRequestEmailVerification = async () => {
+        const email = data.email;
+        // 이메일 중복 검사
+        try {
+            const resp = await api.get(`/members/email/${email}`);
+            if (resp.data === 0) { // 이메일이 사용 가능할 때
+                await api.post(`/members/requestEmailVerification/${email}`);
+                Swal.fire({
+                    icon: 'info',
+                    title: '이메일 인증',
+                    text: '인증 코드가 이메일로 전송되었습니다.',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '이메일 인증',
+                    text: '이미 등록된 이메일입니다.',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '이메일 인증',
+                text: '이메일 인증 요청 중 오류가 발생했습니다.',
+            });
+        }
+    };
+
+    const handleVerificationCodeChange = e => {
+        setVerificationCode(e.target.value);
+    };
+    const handleVerifyEmail = async () => {
+        try {
+            const resp = await api.post(`/members/verifyEmail`, {
+                email: data.email,
+                code: verificationCode,
+            });
+            if (resp.data === 'verified') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '이메일 인증',
+                    text: '이메일 인증이 완료되었습니다.',
+                });
+                setIsEmailVerified(true);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '이메일 인증',
+                    text: '유효하지 않은 인증 코드입니다.',
+                });
+                setIsEmailVerified(false);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '이메일 인증',
+                text: '이메일 인증 검증 중 오류가 발생했습니다.',
+            });
+            setIsEmailVerified(false);
+        }
+    };
+
 
     return (
         <div className={styles.container}>

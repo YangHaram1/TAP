@@ -191,14 +191,14 @@ export const Orders = () => {
                             <th>주문 총액</th>
                             <th>주문 날짜</th>
                             <th>
-                                <select value={orderStatus} onChange={handleOrderStatusChange}>
+                                <select value={orderStatus} onChange={handleOrderStatusChange} className={styles.select}> 
                                     <option value="">주문 상태</option>
                                     <option value="결제">결제</option>
                                     <option value="환불">환불</option>
                                 </select>
                             </th>
                             <th>
-                                <select value={shippingStatus} onChange={handleShippingStatusChange}>
+                                <select value={shippingStatus} onChange={handleShippingStatusChange} className={styles.select}>
                                     <option value="">배송 상태</option>
                                     <option value="미발송">미발송</option>
                                     <option value="발송 완료">발송 완료</option>
