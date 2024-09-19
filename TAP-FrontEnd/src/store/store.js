@@ -33,3 +33,22 @@ export const useNotification =create((set)=>({
     decrement: () => set((state) => ({ count: Math.max(state.count - 1, 0) })),
 
 }));
+
+/*지연*/
+export const useOrder = create((set)=>({
+    date:null,
+    time:null,
+    seq:null,
+    setDate: (date) => {
+        console.log("Setting date:", date); // 로그 추가
+        set(() => ({date: date}));
+    },
+    setTime: (time) => {
+        console.log("Setting time:", time); // 로그 추가
+        set({ time: time });
+    },
+    setSeq: (seq) => {
+        console.log("Setting seq:", seq); // 로그 추가
+        set(() => ({seq: seq}));
+    },
+}))

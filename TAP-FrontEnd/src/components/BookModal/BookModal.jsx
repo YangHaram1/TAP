@@ -3,36 +3,82 @@ import styles from './BookModal.module.css';
 import { PreventMacro } from './PreventMacro/PreventMacro';
 import { api } from '../../config/config';
 import { PriceModal } from '../PriceModal/PriceModal';
+import Swal from 'sweetalert2';
+import { useOrder } from '../../store/store';
+import { format } from 'date-fns';
 
-export const BookModal = ({ isOpen, onClose }) =>{
+export const BookModal = ({ isOpen, onClose, mainData }) =>{
 
     const [macroModal, setMacroModal] = useState(true);
 
-    let placeShape = '직선형';
+    // let placeShape = '직선형';
     // let placeShape = '원형';
-    let sections = ['section1','section2','section3'];
     let maxTicket = 6;
-    const [seats, setSeats] = useState({row:0,col:0}); 
-    const [section, setSection] = useState("");
+    const [seats, setSeats] = useState({}); 
+    
     const [selectedSeats, setSelectedSeats] = useState([]); // 선택된 좌석 상태
     const [priceModal, setPriceModal] = useState(false);
-    const [seatsLevel, setSeatsLevel] = useState([{level:"VIP", price:150000}, {level:"R", price:130000}, {level:"S", price:110000}, {level:"A", price:90000}])
 
-    // seq => 상품 번호
-    // 상품 번호로 해당 공연장 가져오기
-    // 현재 예매 좌석 정보도 가져와야 함.
-    // 그러기 위해서는 orders 테이블 에서 상품정보코드로 상품명 조회해서 목록 추출 후
-    // 해당 배열을 book에 있는 예매 정보에 join해서 가지고 와야함.
+    const {date, time, seq} = useOrder();
+    const [dateList, setDateList] = useState([]);
+    const [timeList, setTimeList] = useState([]);
+    
 
-    // api.get(`/place/{seq}`)
-    // .then(()=>{
-    //     // place에 대한 정보 -> 좌석 모양, 총 좌석 수 
-    //     // section에 대한 정보 -> 섹션 수, 섹션 별 행,열 수
-    // })
-    // .catch(()=>{
+    //==============================좌석 관련 세팅 ==============================
+    const [shape, setShape] = useState("");
+    const [selectSection, setSelectSection] = useState({});
+    const [section, setSection] = useState([]);
+    const [sectionInnerData, setSectionInnerDate] = useState([]);
+    const [seatsLevel, setSeatsLevel] = useState([]); // 좌석 등급, 등급별가격 
 
-    // })
-    // 장소 (총좌석수, 좌석 모양) -> 
+    // 등급 추가 시 색깔 지정해줘야 함.
+    const getBackgroundColor = (grade) => {
+        // console.log("grade", grade);
+        switch (grade) {
+            case 'VIP석':
+                return 'sandybrown';
+            case 'R석':
+                return 'silver';
+            case 'S석':
+                return 'plum';
+            case 'A석':
+                return 'lightblue';
+            case '스탠딩석':
+                return 'forestGreen';
+            default:
+                return 'lightgray';
+        }
+    };
+
+    useEffect(()=>{
+        if(mainData !== null){
+        api.get(`/order/${mainData.place_seq}`)
+        .then((resp)=>{
+            console.log("좌석 예약 정보",resp.data);
+            // 상태 값이 변경될 때만 업데이트
+            if (resp.data.section[0].place_shape !== shape) {
+                setShape(resp.data.section[0].place_shape); // 공연장 모양
+            }
+            if (resp.data.section !== section) {
+                setSection(resp.data.section); // 섹션 정보
+            }
+            if (resp.data.sectionInnerData !== sectionInnerData) {
+                setSectionInnerDate(resp.data.sectionInnerData); // 섹션 세부 정보
+            }
+            if(resp.data.seats){
+                const newSeatsLevel = resp.data.seats.map(seat => ({
+                    grade: seat.place_seat_level,  // 좌석 등급
+                    price: seat.price_seat,          // 좌석 가격
+                    color: getBackgroundColor(seat.place_seat_level)
+                }));
+                setSeatsLevel(newSeatsLevel); 
+            }
+            // 최대 예매수 추가로 뽑아와야함.
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }},[mainData])
 
 
     //======================== 매크로 모달 활성화 ======================
@@ -46,42 +92,42 @@ export const BookModal = ({ isOpen, onClose }) =>{
     const handleCloseBookModal = () => {
         setMacroModal(true);   // PreventMacro 모달을 다시 열리도록 상태 초기화
         onClose();             // 부모로부터 받은 onClose로 BookModal 닫음
-        console.log("전체 페이지 닫히는 중",macroModal);
+        // console.log("전체 페이지 닫히는 중",macroModal);
     }
 
     //======================== 좌석 세팅 ======================
 
     // 우측 상단 섹션(층수) 선택 시 좌측 세부 좌석이 바뀜
-    const handleSection =(section)=>{
+    const handleSection =(section_seq)=>{
         //받아온 section 값을 통해 섹션 데이터 확인
-        setSection(section);
+        setSelectSection(section_seq);
 
-        if(section === 'section1'){
-            setSeats({row:10, col:5});
-            console.log(section,seats);
-        }else if(section === 'section2'){
-            setSeats({row:15, col:10});
-            console.log(section,seats);
-        }else if(section === 'section3'){
-            setSeats({row:10, col:15});
-            console.log(section,seats);
-        }else{
-            setSeats({row:1, col:1});
-            console.log(section,seats);
+        // console.log("선택된 섹션 정보",section_seq);
+        const selectedSection = section.find(section => section.section_seq === section_seq);
+
+        console.log(selectSection);
+        if (selectedSection) {
+            setSeats({
+                row: selectedSection.selection_row,
+                col: selectedSection.selection_col
+            });
         }
+        // console.log(seats);
     }
 
     // 좌석 선택 코드
     const toggleSeatSelection = (row, col) => {
         // 최대 예매 수
         const seatId = `${row}-${col}`; // 좌석 ID 생성
-        if (selectedSeats.includes(seatId)) {
+        const seatGrade = getSeatGrade(row, col);
+
+        if (selectedSeats.some(seat => seat.seatId === seatId)) {
             // 이미 선택된 좌석이라면 해제
-            setSelectedSeats(selectedSeats.filter(seat => seat !== seatId));
+            setSelectedSeats(selectedSeats.filter(seat => seat.seatId !== seatId));
         } else {
             // 선택되지 않은 좌석이라면 추가
             if(selectedSeats.length < maxTicket){
-            setSelectedSeats([...selectedSeats, seatId]);
+                setSelectedSeats([...selectedSeats, { seatId, grade: seatGrade }]);
             }else{
                 alert("최대 예매수를 초과하였습니다.");
                 console.log(selectedSeats);
@@ -93,35 +139,88 @@ export const BookModal = ({ isOpen, onClose }) =>{
 
     useEffect(()=>{
         setSelectedSeats([]);
-    },[section, macroModal]);
+    },[selectSection, macroModal]);
 
-    const getBackgroundColor = (level) => {
-        switch (level) {
-            case 'VIP':
-                return 'gold';
-            case 'R':
-                return 'silver';
-            case 'S':
-                return 'brown';
-            case 'A':
-                return 'lightblue';
-            default:
-                return 'lightgray';
+    
+
+    const generateSeats = () => {
+        let seatButtons = [];
+        for (let i = 0; i < seats.row; i++) {
+            let rowButtons = [];
+            for (let j = 0; j < seats.col; j++) {
+                const seatId = `${i + 1}-${j + 1}`;
+                const seatGrade = getSeatGrade(i + 1, j + 1);
+                const isSelected = selectedSeats.some(seat => seat.seatId === seatId);
+                
+                rowButtons.push(
+                    <button
+                        key={seatId}
+                        className={styles.seat_btn}
+                        style={{ backgroundColor: isSelected ? 'red' : getBackgroundColor(seatGrade) }}
+                        onClick={() => toggleSeatSelection(i + 1, j + 1)}
+                    >
+                        {j + 1}
+                    </button>
+                );
+            }
+            seatButtons.push(
+                <div key={`row-${i}`} className={styles.row}>
+                    <p>{i + 1}행</p>
+                    {rowButtons}
+                </div>
+            );
         }
+        return seatButtons;
     };
 
-    if (!isOpen) return null;
+    const getSeatGrade = (row, col) => {
+        // console.log("찾는 정보",row,col);
+        const seatGradeData = sectionInnerData.find(data =>
+            row === data.seat_row && // 좌석의 행 번호가 일치해야 함
+            col >= data.seat_col_start && // 좌석의 열 번호가 시작 열 번호보다 크거나 같아야 함
+            col <= data.seat_col_end && // 좌석의 열 번호가 끝 열 번호보다 작거나 같아야 함
+            data.section_seq === selectSection // 선택된 섹션과 일치해야 함
+        );
+        return seatGradeData ? seatGradeData.seat_grade : '기타';
+    };
 
-    //======================== 다음 페이지() 세팅 ======================
+    //============================== 날짜 세팅 ==============================
 
-    const handlePriceModal = ()=>{
-        setPriceModal(true);
+    useEffect(()=>{
+        api.get(`/order/getDate?seq=${seq}`)
+        .then((resp)=>{
+            console.log("상품번호",seq);
+            console.log(resp.data.dateList);
+            setDateList(resp.data.dateList);
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
+    },[seq]);
+
+    //======================== 다음 페이지 세팅 ======================
+
+    const handlePriceModal = async()=>{
+        if(selectedSeats.length < 1){
+            await Swal.fire(
+                { 
+                  icon: 'warning',
+                  title: '좌석을 선택해주세요.',
+                  showConfirmButton: false,
+                  timer: 1500
+                }
+            )
+        }else{
+            setPriceModal(true);
+        }
         // onClose();
     }
 
     const handleClosePriceModal = ()=>{
         setPriceModal(false);
     }
+
+    if (!isOpen) return null;
 
     return(
         <div className={styles.overlay}>
@@ -135,13 +234,18 @@ export const BookModal = ({ isOpen, onClose }) =>{
                         STEP 2
                     </div>
                     <div className={styles.header_middle}>
-                        <p><span style={{fontSize:"18px", fontWeight:"700"}}> 뮤지컬 &lt;킹키부츠&gt;</span><span style={{color:"lightgray", fontSize:"12px"}}>&nbsp;&nbsp;| 블루스퀘어홀</span></p>
+                        <p><span style={{fontSize:"18px", fontWeight:"700"}}>{mainData.name}</span><span style={{color:"lightgray", fontSize:"12px"}}>&nbsp;&nbsp;| {mainData.place_name}</span></p>
                         <div className={styles.header_middle_select}>
                             <p>선택한 날짜</p> &nbsp;
                             <select>
-                                <option>2024년 09월 10일(수)</option>
-                                <option>2024년 09월 11일(목)</option>
-                                <option>2024년 09월 12일(금)</option>
+                                {
+                                    dateList.map((date, index)=>{
+                                        return(
+                                            <option key={index} value={`${date.SCHEDULE_DATE} (${date.DAY})`}>{date.SCHEDULE_DATE} ({date.DAY})</option>
+                                        );
+                                    })
+                                }
+
                             </select>&nbsp;
                             <select>
                                 <option>12시 00분</option>
@@ -160,34 +264,7 @@ export const BookModal = ({ isOpen, onClose }) =>{
                     {/* 여기 컴포넌트를 갈아 끼워야 됨 */}
 
                     <div className={styles.main_left}>
-                        {(() => {
-                            let buttons = [];
-                            for (let i = 0; i < seats.row; i++) {
-                                let rowButtons = [];
-                                for (let j = 0; j < seats.col; j++) {
-                                    const seatId = `${i}-${j}`; // 좌석 ID
-                                    const isSelected = selectedSeats.includes(seatId); // 좌석 선택 여부
-
-                                    rowButtons.push(
-                                        <button
-                                            key={seatId}
-                                            className={styles.seat_btn}
-                                            style={{ backgroundColor: isSelected ? 'red' : 'lightgray' }} // 선택된 좌석만 빨간색
-                                            onClick={() => toggleSeatSelection(i, j)}
-                                        >
-                                            {j + 1}
-                                        </button>
-                                    );
-                                }
-                                buttons.push(
-                                    <div key={`row-${i}`} className={styles.row}>
-                                        <p>{i + 1}행</p>
-                                        {rowButtons}
-                                    </div>
-                                );
-                            }
-                            return buttons;
-                        })()}
+                        {generateSeats()}
                     </div>
                     <div className={styles.main_right}>
                         <div className={styles.main_right_header}>
@@ -196,20 +273,25 @@ export const BookModal = ({ isOpen, onClose }) =>{
                         <div className={styles.main_right_section}>
                             <div className={styles.main_right_section_img}>
                             {
-                                sections.map((section, i)=>{
-                                    return(<button key={i} className={styles.section_btns} onClick={()=>{handleSection(section)}}>{section}</button>);
+                                shape === '직선형' ?
+                                section.map((section, i)=>{
+                                    return(<button key={i} className={styles.section_btns} onClick={()=>{handleSection(section.section_seq)}}>{section.section_name}</button>);
                                 })
-                           }
+                                : //원형일 때
+                                section.map((section, i)=>{
+                                    return(<button key={i} className={styles.section_btns_circle} onClick={()=>{handleSection(section.section_seq)}}>{section.section_name}</button>);
+                                })
+                            }
                             </div>
                         </div>
                         <div className={styles.seats_level}>
                             <div className={styles.seats_level_text}> 좌석 등급 / 잔여석 </div>
                             
                             <div className={styles.seats_level_box}>
-                            {seatsLevel.map((level, i) => (
+                            {seatsLevel.map((grade, i) => (
                                 <div key={i} className={styles.level_box_data}>
-                                    <div className={styles.seats_level_color} style={{ backgroundColor: getBackgroundColor(level.level) }}></div>
-                                    {level.level}석 {level.price.toLocaleString()}원
+                                    <div className={styles.seats_level_color} style={{ backgroundColor: getBackgroundColor(grade.grade) }}></div>
+                                    {grade.grade} {grade.price.toLocaleString()}원
                                 </div>
                             ))}
                             </div>
@@ -231,15 +313,15 @@ export const BookModal = ({ isOpen, onClose }) =>{
                             <div className={styles.seat_selected_main}>
                                 <div className={styles.seat_selected_header}>
                                     <div className={styles.seat_selected_header_text1}>좌석등급</div>
-                                    <div className={styles.seat_selected_header_text2}>좌석번호</div>
+                                    <div className={styles.seat_selected_header_text2}>좌석번호(구역-행-열)</div>
                                 </div>
                                 <div className={styles.seat_selected_content}>
                                 {
                                     selectedSeats.map((seat)=>{
                                         return(
                                             <div className={styles.seat_selected_content_box}>
-                                                <div className={styles.seat_selected_content_text1}>level</div>
-                                                <div className={styles.seat_selected_content_text2}>{seat}</div>
+                                                <div className={styles.seat_selected_content_text1}>{seat.grade}</div>
+                                                <div className={styles.seat_selected_content_text2}>{selectSection}-{seat.seatId}</div>
                                             </div>
                                         );
                                     })
@@ -252,12 +334,9 @@ export const BookModal = ({ isOpen, onClose }) =>{
                         </div>
                     </div>
                 </div>
-                { priceModal && <PriceModal isOpen={priceModal} onClose={handleClosePriceModal} onBookClose={handleCloseBookModal}/>}
+                 <PriceModal isOpen={priceModal} onClose={handleClosePriceModal} onBookClose={handleCloseBookModal}/>
             </div>
             )}
-
-                {/* ui 구성하는 동안은 매크로 방지 제거 */}
-                
         </div>
     );
 

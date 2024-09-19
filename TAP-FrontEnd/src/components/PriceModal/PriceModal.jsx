@@ -28,7 +28,8 @@ export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
         // BookModal 연결
         if(tap === 1){
             // BookModal 연결
-            alert("북모달 나올 예정");
+            onClose();
+            // alert("북모달 나올 예정");
         }else{
             setTap(tap-1);
         }
