@@ -79,11 +79,12 @@ export const Dash=()=>{
             y: {
                 beginAtZero: true, // Y축 0부터 시작
                 grid: {
-                    color: 'rgba(0, 0, 0, 0.1)', // Y축 그리드 색상
+                    color: 'transparent', // Y축 그리드 색상
                 },
                 ticks: {
                     color: '#000', // Y축 눈금 색상
                 },
+                max: Math.max(...orderCounts.map((category) => category.ORDER_COUNT)) + 2,
             },
         },
     };
@@ -162,7 +163,7 @@ export const Dash=()=>{
                     <h2>오늘 총 금액 </h2>
                 </div>
                 <div className={styles.order}>
-                    <h2>막대그래프 (카테고리별 주문 건수 )</h2>
+                    <h2>카테고리별 주문 건수</h2>
                     <Bar data={barChartData} options={barChartOptions} />
                 </div>
             </div>
