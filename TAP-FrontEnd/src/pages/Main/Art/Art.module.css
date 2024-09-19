@@ -57,6 +57,12 @@
     width: 100%;
 }
 
+.nonContents{
+    width: 100%;
+    height: 100%;
+    color: blueviolet;
+}
+
 .btns{
     display: flex;
     justify-content: space-around;
