@@ -34,6 +34,7 @@
 	
 	<select id="getDate" resultType="map">
 		select 
+		DISTINCT
 		    TO_CHAR(schedule_day, 'YYYY-MM-DD') AS schedule_date,
 		    CASE TO_CHAR(schedule_day, 'D')
 		        WHEN '1' THEN '일'
@@ -44,7 +45,19 @@
 		        WHEN '6' THEN '금'
 		        WHEN '7' THEN '토'
 		    END as day
-		from SCHEDULE where application_seq=#{seq}
+		from SCHEDULE where application_seq=#{seq} and SCHEDULE_DAY > sysdate 
 		order by 1
 	</select>
+	
+	<select id="getTime" resultType="String">
+		select times from(
+			select 
+			    TO_CHAR(schedule_day, 'YYYY-MM-DD') AS schedule_date,
+			    TO_CHAR(schedule_time, 'HH24:MI') AS times
+			from SCHEDULE where application_seq=#{seq})
+		where schedule_date = #{date} order by times
+	</select>
+	
+	
+	
 </mapper>

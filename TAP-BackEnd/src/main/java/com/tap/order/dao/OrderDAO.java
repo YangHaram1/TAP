@@ -28,4 +28,8 @@ public class OrderDAO {
 		return mybatis.selectList("Order.getDate",seq);
 	}
 	
+	public List<String> getTime(Map<String,Object> map){
+		return mybatis.selectList("Order.getTime",map);
+	}
+	
 }

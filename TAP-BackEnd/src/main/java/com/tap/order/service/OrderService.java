@@ -27,4 +27,8 @@ public class OrderService {
 	public List<Map<String, Object>> getDate(int seq){
 		return oDao.getDate(seq);
 	}
+	
+	public List<String> getTime(Map<String,Object> map){
+		return oDao.getTime(map);
+	}
 }

@@ -38,7 +38,11 @@ export const useNotification =create((set)=>({
 export const useOrder = create((set)=>({
     date:null,
     time:null,
-    seq:null,
+    seq:null, // 공연번호
+    storageSection:null,
+    storageSeats:[],
+    mainData:null,
+    seatPrices:[],
     setDate: (date) => {
         console.log("Setting date:", date); // 로그 추가
         set(() => ({date: date}));
@@ -51,4 +55,20 @@ export const useOrder = create((set)=>({
         console.log("Setting seq:", seq); // 로그 추가
         set(() => ({seq: seq}));
     },
+    setStorageSeats: (seats) =>{
+        console.log("Setting seats:",seats);
+        set(()=>({ storageSeats: seats }))
+    },
+    setStorageSection:(section)=>{
+        console.log("Setting section:", section); // 로그 추가
+        set({ storageSection: section });
+    },
+    setMainData:(mainData)=>{
+        console.log("Setting mainData:", mainData); // 로그 추가
+        set({ mainData: mainData });
+    },
+    setSeatPrices:(seatPrices)=>{
+        console.log("Setting seatPrices:", seatPrices); // 로그 추가
+        set({ seatPrices: seatPrices });
+    }
 }))
