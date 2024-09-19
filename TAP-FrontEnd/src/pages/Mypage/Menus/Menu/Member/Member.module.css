@@ -5,6 +5,10 @@
     flex-direction: column;
     margin: auto;
 }
+.container span{
+    color: red;
+    width: 100%;
+}
 .title{
     display: flex;
     padding: 10px;
@@ -61,7 +65,7 @@
     gap: 10px;
 }
 .update div{
-    flex: 1;
+    width: 100%;
 }
 .update button{
     border-radius: 50px;
@@ -72,11 +76,23 @@
     font-weight: 800;
 
 }
-.update div:nth-child(2){
+
+.input{
+    border-radius: 20px;
+    border: 1px solid rgba(128, 128, 128, 0.525)
+}
+
+.span{
     display: flex;
-    justify-content: flex-end;
+    flex: 2;
+    font-size: 11px;
+}
+.updateBtn{
+    display: flex;
+    justify-content: flex-end !important;
     align-items: center;
-    padding-right: 30px;
+    flex: 0.3 !important;
+    gap: 5px;
 }
 .btnCancel{
     color: red;
@@ -90,7 +106,26 @@
 }
 
 
+.inputTxt{
+    padding: 15px;
+    padding-top: 0;
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.inputTxt input{
+    border-radius: 20px;
+}
+.inputTxt button{
+    border: 1px solid red;
+    border-radius: 10px;
+    height: 30px;
+    font-weight: 600;
+    background-color: white;
+    color: red;
 
+}
 
 
 /* 기본 체크박스 숨기기 */

@@ -112,15 +112,15 @@
 }
 
 /* 체크박스 스타일 */
-input[type='checkbox'] {
+.container input[type='checkbox'] {
     width: 16px;
     height: 16px;
 }
 
-/* 모달 폼 스타일 */
-/* .modalForm {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-} */
+
+.select{
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    font-weight: 600;
+}

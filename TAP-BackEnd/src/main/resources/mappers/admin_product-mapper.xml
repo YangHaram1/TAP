@@ -117,26 +117,28 @@
 		and sale.sale_approved = '승인 완료'
 	</select>
 	<select id="getWaitingSaleByCategory" resultMap="TimestampResultMap">
-		WITH RankedSales AS (
-		    SELECT apply.*, sale.sale_rate, files.*, 
-		    ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
-		    FROM apply
-		    JOIN files ON files.files_parent_seq = apply.application_seq
-		    JOIN sale ON apply.application_seq = sale.application_seq
-		    WHERE sale.sale_approved LIKE '%대기%' 
-		    and apply.sub_category_seq = #{category}
-		)
-		SELECT *
-		FROM RankedSales
-		WHERE rn = #{category}
+	WITH RankedSales AS (
+	    SELECT apply.*,  apply.name AS apply_name, sale.sale_rate, files.*, company.name AS company_name,
+	           ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
+	    FROM apply
+	    JOIN files ON files.files_parent_seq = apply.application_seq
+	    JOIN sale ON apply.application_seq = sale.application_seq
+	    JOIN company ON company.member_id = apply.id
+	    WHERE sale.sale_approved LIKE '%대기%'
+	    AND apply.sub_category_seq = #{category}
+	)
+	SELECT *
+	FROM RankedSales
+	WHERE rn =#{category}
 	</select>
 	<select id="getResultSaleByCategory" resultMap="TimestampResultMap">
 		 WITH RankedSales AS (
-		    SELECT apply.*, sale.sale_rate, files.*, 
+		    SELECT apply.*,  apply.name AS apply_name, sale.sale_rate, files.*, company.name AS company_name,
 		           ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
 		    FROM apply
 		    JOIN sale ON apply.application_seq = sale.application_seq
 		    JOIN files ON files.files_parent_seq = apply.application_seq
+		    JOIN company ON company.member_id = apply.id
 		    WHERE sale.sale_approved NOT LIKE '%대기%'
 		      AND sale.sale_approved NOT LIKE '%취소%'
 		      AND apply.sub_category_seq = #{category}
@@ -179,15 +181,19 @@
 	
 	
 	<select id="getWaitingProductsByCategory" resultMap="TimestampResultMap">
-		 SELECT apply.*, files.files_sysname FROM APPLY
- join files on files.files_parent_seq = apply.application_seq
+	 SELECT apply.*, files.files_sysname , COMPANY.NAME AS company_name
+		 FROM APPLY
+ 		join files on files.files_parent_seq = apply.application_seq
+         JOIN company ON company.member_id = apply.id
 		WHERE apply.status like '%대기%'
         and files.files_type = 'poster'
 		and apply.sub_category_seq = #{category}
 	</select>
 	<select id="getResultProductsByCategory" resultMap="TimestampResultMap">
-		SELECT apply.*, files.files_sysname FROM APPLY
+		SELECT apply.*, files.files_sysname , COMPANY.NAME AS company_name
+		 FROM APPLY
 		join files on files.files_parent_seq = apply.application_seq
+		JOIN company ON company.member_id = apply.id
 		WHERE apply.status not like '%대기%'
 		AND apply.status != '취소'
 		and files.files_type = 'poster'
