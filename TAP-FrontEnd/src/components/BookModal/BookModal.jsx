@@ -11,23 +11,21 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
 
     const [macroModal, setMacroModal] = useState(true);
 
-    // let placeShape = '직선형';
-    // let placeShape = '원형';
-    let maxTicket = 6;
     const [seats, setSeats] = useState({}); 
+    const [maxTicket, setMaxTicket] = useState(0);
     
     const [selectedSeats, setSelectedSeats] = useState([]); // 선택된 좌석 상태
     const [priceModal, setPriceModal] = useState(false);
 
-    const {date, time, seq} = useOrder();
+    const {date, time, seq, setDate, setTime, setStorageSeats, setStorageSection} = useOrder(); //저장소 데이터
     const [dateList, setDateList] = useState([]);
     const [timeList, setTimeList] = useState([]);
     
 
     //==============================좌석 관련 세팅 ==============================
     const [shape, setShape] = useState("");
-    const [selectSection, setSelectSection] = useState({});
-    const [section, setSection] = useState([]);
+    const [selectSection, setSelectSection] = useState({}); // 선택한층
+    const [section, setSection] = useState([]); // 1층, 2층
     const [sectionInnerData, setSectionInnerDate] = useState([]);
     const [seatsLevel, setSeatsLevel] = useState([]); // 좌석 등급, 등급별가격 
 
@@ -54,8 +52,11 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
         if(mainData !== null){
         api.get(`/order/${mainData.place_seq}`)
         .then((resp)=>{
-            console.log("좌석 예약 정보",resp.data);
+            console.log("좌석 예약 정보",resp.data, mainData);
             // 상태 값이 변경될 때만 업데이트
+            
+                setMaxTicket(mainData.max_ticket);
+            
             if (resp.data.section[0].place_shape !== shape) {
                 setShape(resp.data.section[0].place_shape); // 공연장 모양
             }
@@ -187,7 +188,8 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
     //============================== 날짜 세팅 ==============================
 
     useEffect(()=>{
-        api.get(`/order/getDate?seq=${seq}`)
+        if(seq !== null){
+            api.get(`/order/getDate?seq=${seq}`)
         .then((resp)=>{
             console.log("상품번호",seq);
             console.log(resp.data.dateList);
@@ -196,7 +198,22 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
         .catch((err)=>{
             console.log(err);
         });
+        }
     },[seq]);
+
+    useEffect(()=>{
+        if(seq !== null && date !== null){
+        api.get(`/order/getTime?date=${date}&seq=${seq}`)
+        .then((resp)=>{
+            console.log("날짜 받고있는중",resp.data);
+            console.log(resp.data);
+            setTimeList(resp.data);
+        })
+        .catch((err)=>{
+            console.log(err);
+        }); 
+    }
+    },[date])
 
     //======================== 다음 페이지 세팅 ======================
 
@@ -211,6 +228,8 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
                 }
             )
         }else{
+            setStorageSeats(selectedSeats);
+            setStorageSection(selectSection);
             setPriceModal(true);
         }
         // onClose();
@@ -237,7 +256,7 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
                         <p><span style={{fontSize:"18px", fontWeight:"700"}}>{mainData.name}</span><span style={{color:"lightgray", fontSize:"12px"}}>&nbsp;&nbsp;| {mainData.place_name}</span></p>
                         <div className={styles.header_middle_select}>
                             <p>선택한 날짜</p> &nbsp;
-                            <select>
+                            <select value={date || ''} onChange={(e) => setDate(e.target.value)}>
                                 {
                                     dateList.map((date, index)=>{
                                         return(
@@ -245,11 +264,15 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
                                         );
                                     })
                                 }
-
                             </select>&nbsp;
-                            <select>
-                                <option>12시 00분</option>
-                                <option>19시 00분</option>
+                            <select value={time || ''} onChange={(e) => setTime(e.target.value)}>
+                                {
+                                    timeList.map((time, index)=>{
+                                        return(
+                                            <option key={index} value={`${time}`}>{time}</option>
+                                        );
+                                    })
+                                }
                             </select>
 
                         </div>

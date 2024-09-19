@@ -158,15 +158,6 @@ export const Detail = ()=>{
 
     const isBookModalOpen = async ()=>{
         if(token !== null){
-
-            // const selectedDateStr = format(selectedDate, 'yyyy-MM-dd (EEE)',{locale:ko});
-            // const sysdateStr = format(new Date(), 'yyyy-MM-dd (EEE)',{locale:ko});
-            // if(sysdateStr !== selectedDateStr){
-            //     console.log("날짜 데이터 저장되는 중");
-            //     await setDate(selectedDateStr);
-            // }
-            // await setTime(selectedTime);
-
             if(date == null || time == null){
                 await Swal.fire(
                     { 

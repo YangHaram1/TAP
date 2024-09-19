@@ -55,5 +55,19 @@ public class OrderController {
 		return ResponseEntity.ok(map);
 	}
 	
+	@GetMapping("/getTime")
+	public List<String> getTime(@RequestParam String date, @RequestParam int seq){
+			
+		String onlyDate = date.substring(0, 10);
+		System.out.println(onlyDate);
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("date",onlyDate);
+		map.put("seq", seq);
+		
+		List<String> timeList = oServ.getTime(map);
+		return timeList;		
+	}  
+	
 
 }
