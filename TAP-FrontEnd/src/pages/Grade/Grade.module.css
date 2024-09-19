@@ -1,26 +1,29 @@
-.container{
+.container {
     width: 70vw;
     min-height: 1000px;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    height: 100%;
+    margin: auto;
+    padding-bottom: 20px;
+}
 
-       
-        height: 100%;
-        margin: auto;
-}
-.container{
+.container {
     box-sizing: border-box;
-    
+
 }
-.container p{
+
+.container p {
     margin: 0;
     white-space: pre;
 }
-.container span{
+
+.container span {
     color: red;
 }
-.title{
+
+.title {
     font-size: 20px;
     font-weight: 900;
     padding-bottom: 10px;
@@ -28,25 +31,28 @@
     border-bottom: 5px solid rgba(128, 128, 128, 0.419);
 }
 
-.header{
+.header {
     background-image: url('/src/images/background.jpg');
     display: flex;
     flex: 2;
     margin-top: 5px;
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
-.logo{
+
+.logo {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.logo img{
+
+.logo img {
     width: 150px;
     height: 150px;
-    
+
 }
-.info{
+
+.info {
     flex: 4;
     display: flex;
     flex-direction: column;
@@ -55,41 +61,47 @@
     align-items: flex-start;
     gap: 10px;
     font-size: 12px;
-    
+
 }
-.infoTitle{
+
+.infoTitle {
     font-size: 14px;
     font-weight: 600;
 }
-.infoDate{
+
+.infoDate {
     color: rgb(214, 205, 205);
     font-size: 11px;
 }
-.infoBtn{
+
+.infoBtn {
     padding-top: 5px;
 }
-.infoBtn button{
+
+.infoBtn button {
     border: none;
     background-color: none;
     color: blue;
     cursor: pointer;
     font-size: 12px;
     height: 30px;
-  
+
 }
 
-.body{
+.body {
     flex: 1;
     display: flex;
     padding-top: 10px;
     padding-bottom: 10px;
 }
-.bodyTitle{
+
+.bodyTitle {
     flex: 1;
     font-size: 15px;
     font-weight: 600;
 }
-.bodyDate{
+
+.bodyDate {
     flex: 2;
     font-size: 11px;
     color: gray;
@@ -98,21 +110,23 @@
     align-items: flex-end;
 }
 
-.contents{
+.contents {
     flex: 5;
     display: flex;
     flex-direction: column;
     border: 1px solid gray;
     background-image: url('/src/images/background.jpg');
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
-.contents div:nth-child(1){
+
+.contents div:nth-child(1) {
     display: flex;
     padding-bottom: 10px;
-  
+
 
 }
-.content{
+
+.content {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -121,20 +135,22 @@
     gap: 10px;
     font-size: 12px;
     color: gray;
-   
+
 }
-.content img{
+
+.content img {
     width: 150px;
 }
 
-.bodyBtn{
+.bodyBtn {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-top: 10px;
     padding-bottom: 20px;
 }
-.bodyBtn button{
+
+.bodyBtn button {
     width: 180px;
     height: 40px;
     background-color: red;
@@ -144,7 +160,7 @@
     cursor: pointer;
 }
 
-.coupon{
+.coupon {
     display: flex;
     flex-direction: column;
     font-size: 12px;
@@ -152,44 +168,51 @@
     padding-bottom: 10px;
     padding-top: 10px;
 }
-.coupon div{
+
+.coupon div {
     flex: 1;
 }
-.couponTitle{
+
+.couponTitle {
     display: flex;
     gap: 10px;
     font-size: 13px;
     padding-bottom: 5px;
 }
-.couponTitle strong{
+
+.couponTitle strong {
     font-size: 15px;
 }
-.couponDetail{
+
+.couponDetail {
     display: flex;
     color: gray;
 }
 
-.gContents{
+.gContents {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding-top: 10px;
 }
-.gTitle{
+
+.gTitle {
     font-size: 15px;
     font-weight: 700;
     padding-bottom: 5px;
 
     flex: 1;
 }
-.gradeGraph{
+
+.gradeGraph {
     padding-top: 10px;
     display: flex;
     flex-direction: column;
     padding-bottom: 20PX;
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
-.gDetail{
+
+.gDetail {
     font-size: 12px;
     color: gray;
 }
@@ -197,27 +220,29 @@
 
 
 
-.footer{
+.footer {
     display: flex;
     flex-direction: column;
     border-left: 1px solid gray;
     border-top: 1px solid gray;
     min-height: 200px;
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
-.footer span{
+
+.footer span {
     color: gray;
     font-size: 10px;
 }
 
-.fHeader{
+.fHeader {
     flex: 1;
     display: flex;
     justify-content: space-evenly;
     background-color: rgba(128, 128, 128, 0.211);
     border-bottom: 1px solid rgba(128, 128, 128, 0.564);
 }
-.fHeader div{
+
+.fHeader div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -226,17 +251,19 @@
     flex: 1;
     border-right: 1px solid gray;
 }
-.fHeader div:nth-child(1){
+
+.fHeader div:nth-child(1) {
     flex: 0.5;
 }
 
-.fBody{
+.fBody {
     display: flex;
     flex: 2;
     border-bottom: 1px solid rgba(128, 128, 128, 0.564);
 }
-.ceil{
-    
+
+.ceil {
+
     display: flex;
     flex: 1;
     justify-content: center;
@@ -244,8 +271,9 @@
     border-right: 1px solid gray;
     flex-direction: column;
 }
-.ceilT{
-   
+
+.ceilT {
+
     border-right: 1px solid gray;
     display: flex;
     flex: 0.5;
