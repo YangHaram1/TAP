@@ -56,6 +56,12 @@ public class MembersService implements UserDetailsService{
 		System.out.println(email);
 		return dao.findId(name, email);
 	}
+	public boolean updatePassword(String id, String newPassword) throws Exception {
+	    int updateCount = dao.updatePasswordByEmail(id, newPassword);
+	    System.out.println(updateCount);
+	    return updateCount > 0;
+	}
+	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		User user=null;
