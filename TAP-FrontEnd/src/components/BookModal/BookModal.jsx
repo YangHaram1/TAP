@@ -5,9 +5,8 @@ import { api } from '../../config/config';
 import { PriceModal } from '../PriceModal/PriceModal';
 import Swal from 'sweetalert2';
 import { useOrder } from '../../store/store';
-import { format } from 'date-fns';
 
-export const BookModal = ({ isOpen, onClose, mainData }) =>{
+export const BookModal = ({ isOpen, onClose}) =>{
 
     const [macroModal, setMacroModal] = useState(true);
 
@@ -17,7 +16,7 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
     const [selectedSeats, setSelectedSeats] = useState([]); // 선택된 좌석 상태
     const [priceModal, setPriceModal] = useState(false);
 
-    const {date, time, seq, setDate, setTime, setStorageSeats, setStorageSection} = useOrder(); //저장소 데이터
+    const {date, time, seq, setDate, setTime, setStorageSeats, setStorageSection, mainData} = useOrder(); //저장소 데이터
     const [dateList, setDateList] = useState([]);
     const [timeList, setTimeList] = useState([]);
     
@@ -105,8 +104,6 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
 
         // console.log("선택된 섹션 정보",section_seq);
         const selectedSection = section.find(section => section.section_seq === section_seq);
-
-        console.log(selectSection);
         if (selectedSection) {
             setSeats({
                 row: selectedSection.selection_row,
@@ -340,9 +337,9 @@ export const BookModal = ({ isOpen, onClose, mainData }) =>{
                                 </div>
                                 <div className={styles.seat_selected_content}>
                                 {
-                                    selectedSeats.map((seat)=>{
+                                    selectedSeats.map((seat, index)=>{
                                         return(
-                                            <div className={styles.seat_selected_content_box}>
+                                            <div className={styles.seat_selected_content_box} key={index}>
                                                 <div className={styles.seat_selected_content_text1}>{seat.grade}</div>
                                                 <div className={styles.seat_selected_content_text2}>{selectSection}-{seat.seatId}</div>
                                             </div>

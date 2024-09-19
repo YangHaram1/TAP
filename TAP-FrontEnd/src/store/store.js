@@ -41,6 +41,8 @@ export const useOrder = create((set)=>({
     seq:null, // 공연번호
     storageSection:null,
     storageSeats:[],
+    mainData:null,
+    seatPrices:[],
     setDate: (date) => {
         console.log("Setting date:", date); // 로그 추가
         set(() => ({date: date}));
@@ -60,5 +62,13 @@ export const useOrder = create((set)=>({
     setStorageSection:(section)=>{
         console.log("Setting section:", section); // 로그 추가
         set({ storageSection: section });
+    },
+    setMainData:(mainData)=>{
+        console.log("Setting mainData:", mainData); // 로그 추가
+        set({ mainData: mainData });
+    },
+    setSeatPrices:(seatPrices)=>{
+        console.log("Setting seatPrices:", seatPrices); // 로그 추가
+        set({ seatPrices: seatPrices });
     }
 }))

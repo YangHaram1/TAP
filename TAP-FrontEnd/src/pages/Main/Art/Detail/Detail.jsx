@@ -26,8 +26,7 @@ export const Detail = ()=>{
     const {token} = useAuthStore();
 
     // =================== 상품 상세 정보 ===================
-    const [mainData, setMainData] = useState(null);
-    const [seatPrices, setSeatPrices] = useState([]);
+    // const [mainData, setMainData] = useState(null);
     const [description, setDescription] = useState({}); 
     const [casting, setCasting] = useState([]);
     // const [schedules, setSchedules] = useState([]);
@@ -37,7 +36,7 @@ export const Detail = ()=>{
     const [castingAndDate, setCastingAndDate] = useState([]);
     const [company, setCompany] = useState({});
     const [member,setMember] = useState({});
-    const {setDate, setTime, setSeq, date, time} = useOrder();
+    const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices} = useOrder();
     
     
     useEffect(()=>{
@@ -318,7 +317,7 @@ export const Detail = ()=>{
                 </div>
             </div>
 
-            <BookModal isOpen={bookModal} onClose={closeBookModal} mainData={mainData}/>
+            <BookModal isOpen={bookModal} onClose={closeBookModal}/>
 
 
         </div>
