@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 900;
+    z-index: 1000;
 }
 
 .modal {
@@ -19,7 +19,7 @@
     width: 57vw;
     position: relative;
     height: 87vh;
-    z-index: 901;
+    z-index: 1001;
 }
 
 .header{
@@ -147,7 +147,22 @@
     justify-content: center; */
 }
 
+.section_btns_circle{
+    min-height: 35px;
+    height: 120px;
+    max-height: 120px;
+    border: 1px solid black;
+    width: 35%;
+    /* display: flex;
+    justify-content: center; */
+}
+
 .section_btns:hover{
+    cursor: pointer;
+    background-color: gray;
+}
+
+.section_btns_circle:hover{
     cursor: pointer;
     background-color: gray;
 }
@@ -217,7 +232,7 @@
 }
 
 .seat_selected_main{
-    height: 74%;
+    height: 73%;
     width: 90%;
     border: 1px solid black;
     text-indent: 10px;
@@ -261,6 +276,7 @@
 
 .seat_selected_content_box{
     display: flex;
+    border-bottom: 1px solid gray;
 }
 
 .seat_number{
