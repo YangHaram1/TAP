@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminDash">
+<resultMap id="TimestampResultMap" type="java.util.HashMap">
+    	<result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
+    	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
+</resultMap>
+<select id="getOrderCountByCategory" resultMap="TimestampResultMap">
+SELECT 
+    sub_category.sub_category_seq, 
+    sub_category.sub_category_name, 
+    COALESCE(COUNT(orders.order_seq), 0) AS order_count
+FROM 
+    sub_category
+LEFT JOIN apply ON sub_category.sub_category_seq = apply.sub_category_seq
+LEFT JOIN orders ON apply.application_seq = orders.application_seq
+GROUP BY 
+    sub_category.sub_category_seq, 
+    sub_category.sub_category_name
+</select>
+
+<update id="updateOrderStatusSingle">
+    UPDATE orders
+    SET delivery_status = #{newStatus}
+    WHERE order_seq = #{orderSeq}
+</update>
+</mapper>
