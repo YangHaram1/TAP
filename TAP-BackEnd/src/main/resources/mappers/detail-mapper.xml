@@ -25,7 +25,7 @@
 	</select>
 	
 	<select id="getPriceByPlaceSeq" resultType="com.tap.detail.dto.SeatsDTO">
-		select * from seats where place_seq=#{place_seq} order by 1
+		select * from seats where place_seq=#{place_seq} order by PRICE_SEAT desc
 	</select>
 	
 	<select id="getCasting" resultType="com.tap.detail.dto.CastingDTO">
@@ -72,8 +72,5 @@
 		WHERE c.application_seq = #{seq}
 		ORDER BY datas.schedule_day, datas.schedule_time, c.casting_role
 	</select>
-	
-	
-	
 	
 </mapper>

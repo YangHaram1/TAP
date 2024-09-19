@@ -1,9 +1,9 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Detail.module.css'
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'; // solid 아이콘
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { api, url } from '../../../../config/config';
+import { api } from '../../../../config/config';
 import { useEffect, useState } from 'react';
 import { Notice } from './Notice/Notice';
 import { ProductData } from './ProductData/ProductData';
@@ -11,16 +11,19 @@ import { Casting } from './Casting/Casting';
 import { Write } from './Write/Write';
 import { Calender } from '../../../../components/Calender/Calender';
 import { BookModal } from '../../../../components/BookModal/BookModal';
-// import { format } from 'date-fns';
 import { format, parseISO, isSameDay } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { useAuthStore, useOrder } from '../../../../store/store';
+import Swal from 'sweetalert2';
 
 
 export const Detail = ()=>{
 
     const location = useLocation();
+    const navi = useNavigate();
     const { seq } = location.state || {};  // 전달된 state가 있으면 가져옴
     const [tap, setTap] = useState(0);
-
+    const {token} = useAuthStore();
 
     // =================== 상품 상세 정보 ===================
     const [mainData, setMainData] = useState(null);
@@ -34,11 +37,11 @@ export const Detail = ()=>{
     const [castingAndDate, setCastingAndDate] = useState([]);
     const [company, setCompany] = useState({});
     const [member,setMember] = useState({});
-
+    const {setDate, setTime, setSeq, date, time} = useOrder();
     
     
     useEffect(()=>{
-        alert(seq+"번 상품 상세정보입니다.");
+        // alert(seq+"번 상품 상세정보입니다.");
         api.get(`/detail/${seq}`)
         .then((resp)=>{
             console.log("상품 상세정보 확인",resp.data);
@@ -52,6 +55,7 @@ export const Detail = ()=>{
             setTimes(resp.data.times);
             const processedData = processCastingData(resp.data.castingAndDate);
             setCastingAndDate(processedData);
+            setSeq(seq);
         })
         .catch((err)=>{
             console.log(err);
@@ -68,11 +72,18 @@ export const Detail = ()=>{
     const [selectedDate, setSelectedDate] = useState(new Date());
     // 달력 표시 범위 (지금의 경우 9월달만 있기 때문에 화살표가 비활성화 됨)
     //format(new Date(image.end_date), 'yyyy-MM-dd')
-    const minDate = mainData?.start_date ? new Date(mainData.start_date) : new Date();
+    const today = new Date();
+    // today.setHours(0, 0, 0, 0); // 오늘 날짜의 시간을 00:00:00으로 설정
+
+    const startDate = mainData?.start_date ? new Date(mainData.start_date) : today;
+    const minDate = startDate > today ? startDate : today;
     const maxDate = mainData?.end_date ? new Date(mainData.end_date) : new Date();
     // 활성화 시킬 날짜 설정
     const periods = [];
-    const scheduleDays = Object.keys(castingAndDate).map(dateStr => new Date(dateStr)).sort((a, b) => a - b);
+    const scheduleDays = Object.keys(castingAndDate)
+    .map(dateStr => new Date(dateStr))
+    .filter(date => date >= today)
+    .sort((a, b) => a - b);
 
     for (let i = 0; i < scheduleDays.length; i++) {
         const start = scheduleDays[i];
@@ -85,26 +96,6 @@ export const Detail = ()=>{
         periods.push({ start, end });
     }
 
-    // useEffect(() => {
-    //     // selectedDate를 ISO 형식으로 변환
-    //     const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
-
-    //     // castingAndDate에서 selectedDateStr과 일치하는 날짜를 찾고 times를 추출
-    //     const dateStr = Object.keys(castingAndDate).find(dateStr => {
-    //         // 키에서 시간 부분을 제거하고 비교
-    //         const formattedDateStr = new Date(dateStr).toISOString().split('T')[0];
-    //         return formattedDateStr === selectedDateStr;
-    //     });
-
-    //     if (dateStr) {
-    //         const timesSet = new Set(Object.keys(castingAndDate[dateStr]));
-    //         setPart(Array.from(timesSet));
-    //         console.log("Available times: ", timesSet);  // 확인을 위한 콘솔 출력
-    //     } else {
-    //         setPart([]);
-    //         console.log("No matching data for selected date.", dateStr);  // 확인을 위한 콘솔 출력
-    //     }
-    // }, [selectedDate, castingAndDate]);
 
     useEffect(() => {
         // selectedDate를 문자열로 변환
@@ -120,11 +111,20 @@ export const Detail = ()=>{
         if (dateStr) {
             const timesSet = new Set(Object.keys(castingAndDate[dateStr]));
             setPart(Array.from(timesSet));
-            console.log("Available times: ", timesSet);  // 확인을 위한 콘솔 출력
+            // console.log("Available times: ", timesSet);  // 확인을 위한 콘솔 출력
         } else {
             setPart([]);
-            console.log("No matching data for selected date.");  // 확인을 위한 콘솔 출력
+            // console.log("No matching data for selected date.");  // 확인을 위한 콘솔 출력
         }
+
+
+        const selectedinputStr = format(selectedDate, 'yyyy-MM-dd (EEE)',{locale:ko});
+        const sysdateStr = format(new Date(), 'yyyy-MM-dd (EEE)',{locale:ko});
+        if(sysdateStr !== selectedinputStr){
+            console.log("날짜 데이터 저장되는 중");
+            setDate(selectedinputStr);
+        }
+
     }, [selectedDate, castingAndDate]);
 
 
@@ -133,11 +133,12 @@ export const Detail = ()=>{
 
     const handleTime = (time) => {
         setSelectedTime(time);
+        setTime(time);
     }
 
-    useEffect(()=>{
-        console.log("선택한 날짜 : ",selectedDate);
-    },[selectedDate])
+    // useEffect(()=>{
+    //     console.log("선택한 날짜 : ",selectedDate, selectedTime);
+    // },[selectedDate, selectedTime])
 
     // =================== 에매 모달창 멤버 변수 ===================
     const [bookModal, setBookModal] = useState(false);
@@ -155,8 +156,42 @@ export const Detail = ()=>{
         };
     }, [bookModal]);
 
-    const isBookModalOpen = ()=>{
-        setBookModal(true);
+    const isBookModalOpen = async ()=>{
+        if(token !== null){
+
+            // const selectedDateStr = format(selectedDate, 'yyyy-MM-dd (EEE)',{locale:ko});
+            // const sysdateStr = format(new Date(), 'yyyy-MM-dd (EEE)',{locale:ko});
+            // if(sysdateStr !== selectedDateStr){
+            //     console.log("날짜 데이터 저장되는 중");
+            //     await setDate(selectedDateStr);
+            // }
+            // await setTime(selectedTime);
+
+            if(date == null || time == null){
+                await Swal.fire(
+                    { 
+                      icon: 'warning',
+                      title: '날짜 및 회차를 선택해주세요.',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }
+                );
+            }else{
+                console.log("데이터 확인",date, time);
+                setBookModal(true);
+            }
+            
+        }else{
+            await Swal.fire(
+                { 
+                  icon: 'warning',
+                  title: '로그인 후 예매가 가능합니다.',
+                  showConfirmButton: false,
+                  timer: 1500
+                }
+            );
+            navi('/login');
+        }
     }
 
     const closeBookModal=()=>{
@@ -173,18 +208,9 @@ export const Detail = ()=>{
             const time = item.times;
             const day = item.days;
 
-            if (!result[date]) {
-                result[date] = {};
-            }
-
-            if (!result[date][time]) {
-                result[date][time]= {};
-            }
-
-            if (!result[date][time][day]) {
-                result[date][time][day]= {};
-            }
-
+            if (!result[date]) {result[date] = {};}
+            if (!result[date][time]) {result[date][time]= {};}
+            if (!result[date][time][day]) {result[date][time][day]= {};}
             result[date][time][day][role] = name;
             });
         return result;
@@ -235,7 +261,7 @@ export const Detail = ()=>{
                                             seatPrices.map((price)=>{
                                                 return(
                                                     <div className={styles.data_sub_content} key={price.price_seq}>
-                                                        <span style={{ color: "gray" }}>{price.place_seat_level}</span><span> &nbsp;{price.price_seat}원</span>
+                                                        <span style={{ color: "gray" }}>{price.place_seat_level}</span><span> &nbsp;{price.price_seat.toLocaleString()}원</span>
                                                     </div>
                                                 );
                                             })
@@ -273,16 +299,16 @@ export const Detail = ()=>{
             {/* 예매 섹션 */}
             <div className={styles.right}>
                 <div className={styles.bubble}>
-                    <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 1.</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
+                    <div className={styles.text}><span style={{color:"blueviolet", fontWeight:600, fontSize:"20px"}}>Step 1.</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
                     <div className={styles.calendar}>
                         <Calender minDate={minDate} maxDate={maxDate} periods = {periods} setSelectedDate = {setSelectedDate} selectedDate={selectedDate}/>
                     </div>
-                    <div className={styles.text}><span style={{color:"purple", fontWeight:600, fontSize:"20px"}}>Step 2.</span><span style={{fontWeight:600, fontSize:"19px"}}> 회차 선택</span></div>
+                    <div className={styles.text}><span style={{color:"blueviolet", fontWeight:600, fontSize:"20px"}}>Step 2.</span><span style={{fontWeight:600, fontSize:"19px"}}> 회차 선택</span></div>
                     <div className={styles.time}>
                         {
                             part.map((part, index)=>{
                                 return(
-                                    <div className={`${styles.time_bubble} ${selectedTime === part ? styles.selected : ''}`} onClick={() => handleTime(part)}>
+                                    <div key={index} className={`${styles.time_bubble} ${selectedTime === part ? styles.selected : ''}`} onClick={() => handleTime(part)}>
                                         {index+1}회 {part}
                                     </div>
                                 );
@@ -301,7 +327,7 @@ export const Detail = ()=>{
                 </div>
             </div>
 
-            <BookModal isOpen={bookModal} onClose={closeBookModal}/>
+            <BookModal isOpen={bookModal} onClose={closeBookModal} mainData={mainData}/>
 
 
         </div>
