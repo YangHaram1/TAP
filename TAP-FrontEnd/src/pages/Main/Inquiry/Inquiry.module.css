@@ -100,14 +100,14 @@
     border-radius: 50%;
     position: relative;
     right: 40px;
-    top: 15px;
+    top: 10px;
     height: 30px;
-    width: 20px;
+    width: 30px;
     font-size: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999;
+    z-index: 700;
 }
 
 .contents input {  

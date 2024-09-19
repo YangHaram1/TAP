@@ -106,7 +106,7 @@ const Guide = ({ checkDetail, handleCheck }) => {
                    <p> 회원 탈퇴 시 적립금 및 지급된 혜택은 소멸되어 재가입에 따른 복구가 불가하며 5년간 기존 아이디의 재사용 불가 및 <span>7일이내 동일명의의 본인인증 불가</span> 에 대한 사항에 동의 합니다.</p>
                 </div>
             </div>
-            <Mybutton handleConfirm={handleConfirm} setcheck={null} title={'동의'}/>
+            <Mybutton handleConfirm={handleConfirm} setcheck={null} title={'동의'} checkAll={check}/>
         </div>
     )
 }

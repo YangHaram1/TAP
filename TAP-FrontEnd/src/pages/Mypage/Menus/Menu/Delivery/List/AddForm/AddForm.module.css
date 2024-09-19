@@ -28,18 +28,40 @@
     flex: 1;
     font-weight: 600;
 }
+.container span{
+    color: red;
+    font-size: 10px;
+}
+
 
 
 .content2{
     display: flex;
     flex: 3;
     gap: 10px;
+  
 }
 .content2 input{
     width: 90%;
     height: 20px;
     border-radius: 20px;
-    box-shadow:  0px 4px 8px rgba(0, 0, 0, 0.1);
+   
+}
+
+.content3{
+    display: flex;
+    flex: 3;
+    flex-direction: column;
+}
+.content3 input{
+    width: 90%;
+    height: 20px;
+    border-radius: 20px;
+   
+}
+
+.content3 span{
+    padding-left: 5px;
 }
 
 .addressBtn{
