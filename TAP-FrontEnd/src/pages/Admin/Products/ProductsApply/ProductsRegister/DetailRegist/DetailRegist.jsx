@@ -87,7 +87,13 @@ export const DetailRegist = () => {
 
     return (
         <div className={styles.container}>
-            <h2>승인 완료 상품</h2>
+            <h2>
+            {productDetails.length > 0 && productDetails[0].STATUS === '승인 완료'
+                ? '승인 완료 상품'
+                : productDetails[0].STATUS === '승인 반려'
+                ? '승인 반려 상품'
+                : '승인 대기 상품'}
+        </h2>
             <table className={styles.detailTable}>
             {productDetails.map((product, index) => (
                 <tbody key={index}>
@@ -115,11 +121,28 @@ export const DetailRegist = () => {
                             <strong>신청일:</strong> {formatDate(product.created_at)}
                         </td>
                     </tr>
+                    {product.STATUS === '승인 완료' && (
                     <tr>
                         <td colSpan="2">
                             <strong>승인일:</strong> {formatDate(product.updated_at)}
                         </td>
                     </tr>
+                    )}
+                    {product.STATUS === '승인 반려' && (
+                        <tr>
+                            <td colSpan="2">
+                                <strong>반려일:</strong> {formatDate(product.updated_at)}
+                            </td>
+                        </tr>
+                    )}
+                       {/* 반려 이유 추가 */}
+                    {product.STATUS === '승인 반려' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>반려 이유:</strong> {product.REJECT_REASON || ''}
+                        </td>
+                    </tr>
+                    )}
                     <tr>
                         <td colSpan="2">
                             <strong>일자:</strong> {formatDate(product.start_date)} ~ {formatDate(product.end_date)}

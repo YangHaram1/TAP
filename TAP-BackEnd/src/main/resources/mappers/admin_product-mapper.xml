@@ -133,7 +133,7 @@
 	</select>
 	<select id="getResultSaleByCategory" resultMap="TimestampResultMap">
 		 WITH RankedSales AS (
-		    SELECT apply.*,  apply.name AS apply_name, sale.sale_rate, files.*, company.name AS company_name,
+		    SELECT apply.*,  apply.name AS apply_name, SALE.SALE_APPROVED, sale.sale_rate, files.*, company.name AS company_name,
 		           ROW_NUMBER() OVER (PARTITION BY apply.application_seq ORDER BY sale.sale_rate) AS rn
 		    FROM apply
 		    JOIN sale ON apply.application_seq = sale.application_seq
@@ -150,6 +150,7 @@
 	<select id="getSaleDetail" resultMap="TimestampResultMap">
 		SELECT * FROM APPLY
 		JOIN sale on sale.application_seq  = apply.application_seq
+		JOIN files on files.files_parent_seq = apply.application_seq
 		WHERE apply.application_seq = #{application_seq}
 	</select>
 	
