@@ -50,8 +50,14 @@ export const Dash=()=>{
             {
                 label: '카테고리별 주문 건수',
                 data: orderCounts.map((category) => category.ORDER_COUNT), // 카테고리별 주문 건수 배열
-                backgroundColor: 'rgba(75, 192, 192, 0.6)', // 막대 색상
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 
+                [
+                    'pink',  // 첫 번째 카테고리 색상
+                    'yellow',  // 두 번째 카테고리 색상
+                    '#ADD8E6',  // 세 번째 카테고리 색상
+                    'purple'   // 네 번째 카테고리 색상
+                ], 
+                borderColor: 'transparent',
                 borderWidth: 1,
             },
         ],
@@ -61,7 +67,7 @@ export const Dash=()=>{
     const barChartOptions = {
         plugins: {
             legend: {
-                display: false, // 범례 비활성화
+                display: false,
             },
         },
         scales: {
@@ -83,6 +89,9 @@ export const Dash=()=>{
                 },
                 ticks: {
                     color: '#000', // Y축 눈금 색상
+                    callback: function(value) {
+                        return orderCounts.map((category) => category.ORDER_COUNT).includes(value) ? value : null;
+                    },
                 },
                 max: Math.max(...orderCounts.map((category) => category.ORDER_COUNT)) + 2,
             },
