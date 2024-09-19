@@ -18,13 +18,21 @@ const Member = () => {
     const phoneRef = useRef();
     const [regexData, setRegexData] = useState({
         email: true,
+        emailAvailable: false,
+        isEmailVerified: true,
         phone: true
     })
     const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증 상태
     const [verificationCode, setVerificationCode] = useState('');
-    const [emailAvailable, setEmailAvailable] = useState(false);
+    const [checkAll, setCheckAll] = useState();
 
-    
+    useEffect(() => {
+        const allTrue = Object.values(regexData).every(value => value === true);
+        setCheckAll(allTrue)
+        console.log(regexData)
+    }, [regexData])
+
+
     useEffect(() => {
         api.get(`/members`).then((resp) => {
             setUser(resp.data)
@@ -42,6 +50,12 @@ const Member = () => {
 
     const handleDefault = () => {
         setUpdateCheck({ email: true, phone: true });
+        setRegexData({
+            email: true,
+            emailAvailable: false,
+            isEmailVerified: true,
+            phone: true
+        });
     }
 
     const handleConfirm = () => {
@@ -78,8 +92,12 @@ const Member = () => {
         setData((prev) => {
             return { ...prev, [name]: value }
         })
-        setRegexData({ email: true,
-            phone: true});
+        setRegexData({
+            email: true,
+            emailAvailable: false,
+            isEmailVerified: true,
+            phone: true
+        });
     }
 
     const handelData = (e) => {
@@ -93,6 +111,9 @@ const Member = () => {
             setRegexData((prev) => {
                 return { ...prev, [name]: emailRegex.test(value) }
             })
+            setRegexData((prev) => {
+                return { ...prev, isEmailVerified: false }
+            })
 
         }
         else if (name === 'phone') {
@@ -103,39 +124,8 @@ const Member = () => {
         }
     }
 
-    //이메일
-    const handleEmailCheck = async () => {
-        const email = data.email;
-        try {
-            const resp = await api.get(`/members/email/${email}`);
-            if (resp.data === 0) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '회원가입',
-                    text: '사용 가능한 이메일입니다.',
-                });
-                setEmailAvailable(true);
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: '회원가입',
-                    text: '사용 불가능한 이메일입니다.',
-                });
-                setEmailAvailable(false);
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: '회원가입',
-                text: '이메일 중복 검사 중 오류가 발생했습니다.',
-            });
-            setEmailAvailable(false);
-        }
-    };
-
     const handleRequestEmailVerification = async () => {
         const email = data.email;
-        // 이메일 중복 검사
         try {
             const resp = await api.get(`/members/email/${email}`);
             if (resp.data === 0) { // 이메일이 사용 가능할 때
@@ -145,6 +135,9 @@ const Member = () => {
                     title: '이메일 인증',
                     text: '인증 코드가 이메일로 전송되었습니다.',
                 });
+                setRegexData((prev) => {
+                    return { ...prev, emailAvailable: true }
+                })
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -164,6 +157,7 @@ const Member = () => {
     const handleVerificationCodeChange = e => {
         setVerificationCode(e.target.value);
     };
+
     const handleVerifyEmail = async () => {
         try {
             const resp = await api.post(`/members/verifyEmail`, {
@@ -176,14 +170,20 @@ const Member = () => {
                     title: '이메일 인증',
                     text: '이메일 인증이 완료되었습니다.',
                 });
-                setIsEmailVerified(true);
+                setRegexData((prev) => {
+                    return { ...prev, isEmailVerified: true }
+                })
+
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: '이메일 인증',
                     text: '유효하지 않은 인증 코드입니다.',
                 });
-                setIsEmailVerified(false);
+                setRegexData((prev) => {
+                    return { ...prev, isEmailVerified: false }
+                })
+
             }
         } catch (error) {
             Swal.fire({
@@ -191,10 +191,11 @@ const Member = () => {
                 title: '이메일 인증',
                 text: '이메일 인증 검증 중 오류가 발생했습니다.',
             });
-            setIsEmailVerified(false);
+            setRegexData((prev) => {
+                return { ...prev, isEmailVerified: false }
+            })
         }
     };
-
 
     return (
         <div className={styles.container}>
@@ -244,11 +245,12 @@ const Member = () => {
                     <div className={styles.update}>
                         <div style={{ display: 'flex', flexDirection: "column" }}>
                             <div>
-                                <input type="text" value={data.phone} disabled={updateCheck.phone} onChange={handelData} ref={phoneRef} name='phone' />
+                                <input type="text" value={data.phone} disabled={updateCheck.phone} onChange={handelData} ref={phoneRef} name='phone' className={styles.input} />
                             </div>
-                            <div className={styles.span}>
-                                {data.phone === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.phone ? (<span style={{ color: 'blue' }}>번호 형식이 맞습니다.</span>) : (<span>{`ex) 010-1111-1111`}</span>))}
-                            </div>
+
+                        </div>
+                        <div className={styles.span}>
+                            {data.phone === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.phone ? (<span style={{ color: 'blue' }}>번호 형식이 맞습니다.</span>) : (<span>{`ex) 010-1111-1111`}</span>))}
                         </div>
                         <div className={styles.updateBtn}>
                             {updateCheck.phone && (<button onClick={() => handleUpdateCheck(phoneRef)} className={styles.btnUpdate}>수정</button>)}
@@ -258,17 +260,18 @@ const Member = () => {
                     <div className={styles.update}>
                         <div style={{ display: 'flex', flexDirection: "column" }}>
                             <div>
-                                <input type="text" value={data.email} disabled={updateCheck.email} onChange={handelData} ref={emailRef} name='email' />
+                                <input type="text" value={data.email} disabled={updateCheck.email} onChange={handelData} ref={emailRef} name='email' className={styles.input} />
                             </div>
-                            <div className={styles.span}>
-                                {data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (<span style={{ color: 'blue' }}>이메일 형식이 맞습니다.</span>) : (<span>이메일 형식을 맞춰주세요</span>))}
-                            </div>
+
+                        </div>
+                        <div className={styles.span}>
+                            {data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (!regexData.isEmailVerified ? (<span>이메일 인증 해주세요.</span>) : (<span style={{ color: 'blue' }}>이메일 인증이 성공했습니다.</span>)) : (<span>이메일 형식을 맞춰주세요</span>))}
                         </div>
                         <div className={styles.updateBtn}>
                             {updateCheck.email && (<button onClick={() => handleUpdateCheck(emailRef)} className={styles.btnUpdate}>수정</button>)}
+                            {!updateCheck.email && (<button onClick={() => handleRequestEmailVerification()} className={styles.btnCancel}>인증</button>)}
                             {!updateCheck.email && (<button onClick={() => handleUpdateCancel(emailRef)} className={styles.btnCancel}>취소</button>)}
                         </div>
-
                     </div>
                     <div>
                         {user.birth}
@@ -289,7 +292,21 @@ const Member = () => {
                 </div>
 
             </div>
-            <Mybutton handleConfirm={handleConfirm} setcheck={null} />
+            {regexData.emailAvailable && (<div className={styles.inputTxt}>
+                <div>인증 코드 입력
+                </div>
+                <input
+                    type="text"
+                    onChange={handleVerificationCodeChange}
+                />
+                <button
+                    type="button"
+                    onClick={handleVerifyEmail}
+                >
+                    인증 코드 확인
+                </button>
+            </div>)}
+            <Mybutton handleConfirm={handleConfirm} setcheck={null} checkAll={checkAll} />
         </div>
     )
 }

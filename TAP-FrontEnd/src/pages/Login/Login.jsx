@@ -53,8 +53,14 @@ const Login = () => {
             return !prev
         })
     }
-
+    useEffect(()=>{
+        if(isAuth){
+            navi('/')
+        }
+    },[isAuth])
+    
     useEffect(() => {
+      
         const loginId = localStorage.getItem('loginId')
         if (loginId != null) {
             // setId(loginId)
