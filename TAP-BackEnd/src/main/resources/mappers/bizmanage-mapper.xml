@@ -190,7 +190,8 @@ JOIN place p
 LEFT JOIN files f
     ON f.files_parent_seq = a.application_seq
     AND f.files_type = 'poster'
-WHERE s.sale_approved = '승인 완료'
+WHERE s.sale_approved = '승인 완료' or s.sale_approved='승인 반려'
+and a.id = #{id}
 GROUP BY 
     a.application_seq, 
     a.id, 
