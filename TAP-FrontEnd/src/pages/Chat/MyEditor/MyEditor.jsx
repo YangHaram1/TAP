@@ -12,12 +12,12 @@ const MyEditor = ({ editorRef, height }) => {
 
   const { ws } = useContext(ChatsContext);
   const inputRef = useRef(null);
-  const fileRef=useRef(null);
+  const fileRef = useRef(null);
   const { chatSeq } = useCheckList();
- 
 
 
-  const handleFiles=()=>{
+
+  const handleFiles = () => {
     fileRef.current.click();
   }
   const handleImages = () => {
@@ -25,22 +25,54 @@ const MyEditor = ({ editorRef, height }) => {
   }
 
 
+
+  // 파일 사이즈 검사
+  const formatFileSize = (size) => {
+    if (size < 1024) return `${size} bytes`;
+    if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`; // 정수로 반올림
+    return `${Math.round(size / (1024 * 1024))} MB`; // 정수로 반올림
+  };
+
+  const checkSize = (file) => {
+    const split = formatFileSize(file.size).split(' ');
+    const size = parseInt(split[0], 10);
+    const str = split[1];
+    if (str === 'MB') {
+      if (size <= 10) return true;
+      else {
+        Swal.fire({
+          icon: 'error',
+          title: '파일',
+          text: '10MB 이하로 업로드 해주세요.'
+        })
+        return false;
+      }
+    }
+    else {
+      return true;
+    }
+  }
+
   //여기는 파일 업로드
-  const handleUpload=()=>{
+  const handleUpload = () => {
     const files = fileRef.current.files;
     const formData = new FormData();
     for (let index = 0; index < files.length; index++) {
-      formData.append("files", files[index]);
+      const sizeCheck=checkSize(files[index]);
+      if(sizeCheck){
+        formData.append("files", files[index]);
+      }
+      
     }
 
     api.post(`/chatUpload/file?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
       const array = resp.data;
       for (let index = 0; index < array.length; index++) {
-        
+
         const jsonString = JSON.stringify(array[index]);
         ws.current.send(jsonString);
 
-      
+
       }
       console.log(array);
 
@@ -63,7 +95,10 @@ const MyEditor = ({ editorRef, height }) => {
     const { chatSeq } = useCheckList.getState();
 
     for (let index = 0; index < files.length; index++) {
-      formData.append("files", files[index]);
+      const sizeCheck=checkSize(files[index]);
+      if(sizeCheck){
+        formData.append("files", files[index]);
+      }
     }
     api.post(`/chatUpload?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
       const array = resp.data;
@@ -72,7 +107,7 @@ const MyEditor = ({ editorRef, height }) => {
         const prevContent = editorRef.current.getContent();
         editorRef.current.setContent(prevContent + imageUrl);
       }
-     
+
       inputRef.current.value = '';
     }).catch(error => {
       console.error('There was an error posting the data!', error);
@@ -86,7 +121,10 @@ const MyEditor = ({ editorRef, height }) => {
   const handleImageUpload = async (file) => {
     try {
       const formData = new FormData();
-      formData.append('files', file); // FormData에 파일 추가
+      const sizeCheck=checkSize(file);
+      if(sizeCheck){
+        formData.append('files', file); // FormData에 파일 추가
+      }
       // 이미지 업로드
       const response = await api.post(`/chatUpload?group_seq=${chatSeq}`, formData);
       const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
@@ -118,16 +156,16 @@ const MyEditor = ({ editorRef, height }) => {
       </div>
       <div className={styles.editor}>
         <Editor
-         //initialValue={content}
-        // onEditorChange={(content) => handleEditorChange(content)}
-          apiKey={tinymce}   
+          //initialValue={content}
+          // onEditorChange={(content) => handleEditorChange(content)}
+          apiKey={tinymce}
           onInit={(evt, editor) => {
             editorRef.current = editor;
           }}
           init={{
             width: "auto",
             height: height,
-            max_height:height,
+            max_height: height,
             menubar: false,
             plugins: 'wordcount anchor code image', //image
             toolbar: false,
@@ -165,7 +203,7 @@ const MyEditor = ({ editorRef, height }) => {
                 if (event.key === 'Enter') {
                   if (!event.shiftKey) {
                     event.preventDefault(); // 기본 Enter 키 동작을 막음
-                    const message=editorRef.current.getContent();
+                    const message = editorRef.current.getContent();
                     if (message !== '') {
                       if (message.length > 1500) {
                         Swal.fire({
@@ -175,7 +213,7 @@ const MyEditor = ({ editorRef, height }) => {
                         })
                       } else {
                         const { chatSeq } = useCheckList.getState();
-                        const data = { group_seq: chatSeq, message:message,upload_seq:0 };
+                        const data = { group_seq: chatSeq, message: message, upload_seq: 0 };
                         const jsonString = JSON.stringify(data);
                         ws.current.send(jsonString);
                       }
@@ -190,8 +228,8 @@ const MyEditor = ({ editorRef, height }) => {
         />
       </div>
       <div className={styles.hidden}>
-        <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*"/>
-        <input type="file" className={styles.upload} name='files' ref={fileRef} onChange={handleUpload} multiple/>
+        <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*" />
+        <input type="file" className={styles.upload} name='files' ref={fileRef} onChange={handleUpload} multiple />
       </div>
     </div>);
 };

@@ -24,5 +24,9 @@ public class InquiryDAO {
 	public InquiryDTO selectBySeq(int seq) {
 		return mybatis.selectOne("Inquiry.selectBySeq",seq);
 	}
+	public List<InquiryDTO> selectAll() {
+		// TODO Auto-generated method stub
+		return mybatis.selectList("Inquiry.selectAll");
+	}
 
 }
