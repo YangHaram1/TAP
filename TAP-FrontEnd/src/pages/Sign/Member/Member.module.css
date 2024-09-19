@@ -144,6 +144,7 @@
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    height: 80px;
 }
 
 .btnPass {
@@ -151,11 +152,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 80px;
 }
 
 .btn button {
     width: 70%;
-    height: 40%;
+    height: 80px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 50px;
@@ -164,11 +166,13 @@
     background-color: #bfbfbf;
     cursor: pointer;
     font-size: 22px;
+    margin-top: 100px;
+    margin-bottom: 100px;
 }
 
 .btnPass button {
     width: 70%;
-    height: 40%;
+    height: 80px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 50px;
@@ -177,6 +181,8 @@
     background-color: #5e20d2;
     cursor: pointer;
     font-size: 22px;
+    margin-top: 100px;
+    margin-bottom: 100px;
 }
 
 
