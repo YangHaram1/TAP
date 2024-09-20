@@ -14,6 +14,10 @@ public class ReplyDAO {
 	public ReplyDTO selectByParentSeq(int parentSeq) {
 		return mybatis.selectOne("Reply.selectByParentSeq",parentSeq);
 	}
+
+	public int insert(ReplyDTO dto) {
+		return mybatis.insert("Reply.insert",dto);
+	}
 	
 	
 }

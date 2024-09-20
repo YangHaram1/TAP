@@ -84,6 +84,8 @@
     display: flex;
     flex-direction: column;
     font-size: 20px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.392);
+   
 }
 .detailTitle{
   
@@ -95,7 +97,7 @@
     display: flex;
     gap: 20px;
     padding-bottom: 20px;
-  
+    padding-top: 20px;
 }
 .q{
     display: flex;
@@ -122,11 +124,51 @@
 .contentDate{
     color: gray;
 }
+
+
+
 .reply{
     display: flex;
     gap: 20px;
+    padding-bottom: 10px;
 }
+
+.confirm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+}
+.confirm button{
+    width: 50%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(137, 43, 226, 0.536);
+    color: white;
+    cursor: pointer;
+}
+
+.confirmFalse{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+.confirmFalse button{
+    width: 50%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    color: black;
+}
+
+.container span{
+    font-size: 12px;
+}
+
 .a{
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -136,4 +178,29 @@
     background-color: blueviolet;
     color: white;
     border-radius: 50%;
+}
+
+.update{
+    display: flex;
+  
+}
+
+.updateBtn{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex: 1;
+}
+.updateBtn button{
+    border: none;
+    width: 30%;
+    height: 40px;
+    border-radius: 10px;
+    background-color: rgba(137, 43, 226, 0.536);
+    color: white;
+    cursor: pointer;
+}
+
+.updateBtn button:hover{
+    color: blue;
 }

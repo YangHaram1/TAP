@@ -1,13 +1,18 @@
 package com.tap.inquiry.controller;
 
+import java.lang.reflect.Type;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tap.delivery.dto.DeliveryDTO;
 import com.tap.inquiry.dto.InquiryDTO;
 import com.tap.inquiry.service.InquiryService;
@@ -51,10 +57,21 @@ public class InquiryController {
 	}
 	
 	@GetMapping("/admin")
-	ResponseEntity<List<InquiryDTO>> getAll() throws Exception {
+	ResponseEntity<Map<String, Object>> getAll(
+			@RequestParam(name = "start", required = true, defaultValue = "1") int start,
+			@RequestParam(name = "end", required = true, defaultValue = "5") int end,
+			@RequestParam(name = "status", required = false, defaultValue = "") String status,
+			@RequestParam(name = "category", required = false, defaultValue = "") String category) throws Exception {
 	
-		List<InquiryDTO> list =serv.selectAll();
-		return ResponseEntity.ok(list);
+		Map<String, Object> map= new HashMap<>();
+		System.out.println(status);
+		System.out.println(category);
+		map.put("start", start);
+		map.put("end", end);
+		map.put("status", status);
+		map.put("category", category);
+		Map<String, Object> result=serv.selectAll(map);
+		return ResponseEntity.ok(result);
 	}
 	
 	@GetMapping("/{seq}")

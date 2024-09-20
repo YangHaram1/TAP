@@ -14,7 +14,7 @@ const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
     setData((prev) => {
       return { ...prev, contents: content }
     })
-    const contentsRegex =  /^.{1,1000}$/;
+    const contentsRegex = /^([\s\S]{1,1000})$/;
     setRegexData((prev) => {
       return { ...prev, contents: contentsRegex.test(content) }
     })
