@@ -92,6 +92,11 @@
     gap: 20px;
     cursor: pointer;
 }
+.headerMenu {
+    color:#9c43f8;
+    font-weight: bold;
+    font-size: 18px;
+}
 
 .sign {
     padding: 10px 5px;

@@ -71,6 +71,7 @@ export const WaitingList=()=>{
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
+           
             <table>
                 <thead>
                 <tr>
@@ -83,6 +84,8 @@ export const WaitingList=()=>{
                 </tr>
                 </thead>
                 <tbody>
+                {filtered.length > 0 ? (
+                    <>
                 {filtered.slice(currentPage * PER_PAGE, (currentPage +1) * PER_PAGE).map((product, index) => (
                     <tr key={index}>
                         <td className={styles.product_id}>
@@ -132,8 +135,17 @@ export const WaitingList=()=>{
                     </td>
                     </tr>
                 ))}
+                    </>
+                ) : (
+                    <tr>
+                        <td colSpan="6">
+                        해당 카테고리에 대한 상품이 없습니다.
+                        </td>
+                    </tr>
+                )}
                 </tbody>
             </table>
+        
             </div>
             <div className={styles.pagination}>
             {/* 페이지네이션 */}

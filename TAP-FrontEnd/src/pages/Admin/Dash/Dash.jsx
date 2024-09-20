@@ -35,7 +35,12 @@ export const Dash=()=>{
     const [applyTodayCounts, setApplyTodayCounts] = useState('');
     const [saleTodayCounts, setSaleTodayCounts] = useState('');
     const [deliveryTodayCounts, setDeliveryTodayCounts] = useState('');
-    
+    // ==== Done ====
+    const [doneApprovedCounts, setDoneApprovedCounts ] = useState('');
+    const [doneSaleCounts, setDoneSaleCounts] = useState('');
+    const [doneDeliveryCounts, setDoneDeliveryCounts] = useState('');
+    // ==== total price ===
+    const [totalToday, setTotalToday] = useState([])
     useEffect(() => {
         // 카테고리별 주문 건수 - group by 로 하면 카테고리 별 카운트 가져올 수 있나?
         api.get('admin/dash/getordercount')
@@ -59,6 +64,33 @@ export const Dash=()=>{
         api.get(`/admin/dash/getdelivery`)
             .then((resp)=>{
                 setDeliveryTodayCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Sale Today counts:', error));
+        // ==============오늘 처리한 일 ===============
+        api.get(`/admin/dash/getapprovedtoday`)
+            .then((resp)=>{
+                setDoneApprovedCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Sale Today counts:', error));
+        api.get(`/admin/dash/getsaleapprovedtoday`)
+            .then((resp)=>{
+                setDoneSaleCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Sale Today counts:', error));
+        api.get(`/admin/dash/getdeliverytoday`)
+            .then((resp)=>{
+                setDoneDeliveryCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Sale Today counts:', error));
+        
+        // ============= 오늘 판 총 금액 ===========
+        api.get(`/admin/dash/gettotaltoday`)
+            .then((resp)=>{
+                setTotalToday(resp.data)
                 console.log(resp.data)
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
@@ -137,23 +169,24 @@ export const Dash=()=>{
                             <tbody>
                                 <tr>
                                     <td>상품신청</td>
-                                    <td> {applyTodayCounts}건</td>
+                                    <td> {applyTodayCounts} 건</td>
                                     <td> </td>
                                 </tr>
                                 <tr>
                                     <td>세일신청</td>
-                                    <td>{saleTodayCounts}건</td>
+                                    <td>{saleTodayCounts} 건</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td>배송 준비중</td>
-                                    <td>{deliveryTodayCounts}건</td>
+                                    <td>{deliveryTodayCounts} 건</td>
                                     <td>원</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+             
                 <div className={styles.todayDone}>
                     <div className={styles.title}>
                         <h2>오늘 처리한 일</h2>
@@ -170,17 +203,17 @@ export const Dash=()=>{
                             <tbody>
                                 <tr>
                                     <td>상품승인</td>
-                                    <td> 건</td>
+                                    <td> {doneApprovedCounts} 건</td>
                                     <td> 원</td>
                                 </tr>
                                 <tr>
                                     <td>세일승인</td>
-                                    <td></td>
+                                    <td>{doneSaleCounts} 건</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td>발송 완료</td>
-                                    <td>건</td>
+                                    <td>{doneDeliveryCounts} 건</td>
                                     <td>원</td>
                                 </tr>
                             </tbody>
@@ -190,7 +223,9 @@ export const Dash=()=>{
             </div>
             <div className={styles.row2}>
                 <div className={styles.dollar}>
-                    <h2>오늘 총 금액 </h2>
+                    <h2>이번달 총 매출</h2>
+                    <div>{totalToday.total_sum} 원 ({totalToday.total_count} 건)</div>
+                    <div></div>
                 </div>
                 <div className={styles.order}>
                     <h2>카테고리별 주문 건수</h2>

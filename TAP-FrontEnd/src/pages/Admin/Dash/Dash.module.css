@@ -29,11 +29,22 @@
     width: 100%;
     border-collapse: collapse;
 }
-
+.table table{
+    width: 100%;
+}
 .table td, .table th {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+}
+.table td:nth-child(1){
+    width:40%;
+}
+.table td:nth-child(2){
+    width:40%;
+}
+.table td:nth-child(3){
+    width:20%;
 }
 
 .table thead {

@@ -89,10 +89,10 @@ export const DetailRegist = () => {
         <div className={styles.container}>
             <h2>
             {productDetails.length > 0 && productDetails[0].STATUS === '승인 완료'
-                ? '승인 완료 상품'
+                ? `[${productDetails[0].SUB_CATEGORY_NAME}] 승인 완료 상품`
                 : productDetails[0].STATUS === '승인 반려'
-                ? '승인 반려 상품'
-                : '승인 대기 상품'}
+                ?  `[${productDetails[0].SUB_CATEGORY_NAME}] 승인 반려 상품`
+                :  `[${productDetails[0].SUB_CATEGORY_NAME}] 승인 대기 상품`}
         </h2>
             <table className={styles.detailTable}>
             {productDetails.map((product, index) => (
