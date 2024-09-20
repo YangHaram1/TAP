@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdminLog">
+
+   <insert id="insertLog" parameterType="com.tap.admin.dto.AdminLogDTO">
+       INSERT INTO log (log_seq, client_ip, local_logtime, log_status, member_id, name)
+       VALUES (log_sequence.nextval, #{client_ip, jdbcType=VARCHAR}, #{local_logtime, jdbcType=TIMESTAMP}, #{log_status, jdbcType=VARCHAR}, #{member_id, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR})
+   </insert>
+
+    <select id="getAllLog" resultType="com.tap.admin.dto.AdminLogDTO">
+        SELECT * FROM log
+        ORDER BY log_seq DESC
+    </select>
+
+   <select id="getSearchLog" parameterType="com.tap.admin.dto.AdminLogSearchDTO" resultType="com.tap.admin.dto.AdminLogDTO">
+       SELECT * FROM log
+       <where>
+           <if test="name != null and name != ''">
+               AND name LIKE '%' || #{name, jdbcType=VARCHAR} || '%'
+           </if>
+           <if test="member_id != null and member_id != ''">
+               AND member_id LIKE '%' || #{member_id, jdbcType=VARCHAR} || '%'
+           </if>
+           <if test="log_status != null and log_status != ''">
+               AND log_status = #{log_status, jdbcType=VARCHAR}
+           </if>
+           <if test="specific_start_date != null and specific_start_date != ''">
+               AND local_logtime <![CDATA[ >= ]]> TO_DATE(#{specific_start_date, jdbcType=VARCHAR} || ' 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+           </if>
+           <if test="specific_end_date != null and specific_end_date != ''">
+               AND local_logtime <![CDATA[ <= ]]> TO_DATE(#{specific_end_date, jdbcType=VARCHAR} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+           </if>
+       </where>
+       ORDER BY log_seq DESC
+   </select>
+
+</mapper>

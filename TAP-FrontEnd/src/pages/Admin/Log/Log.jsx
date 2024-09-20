@@ -16,14 +16,13 @@ export const Log = () => {
     const [specificStartDate, setSpecificStartDate] = useState('');
     const [specificEndDate, setSpecificEndDate] = useState('');
 
-    // Fetch logs when currentPage changes
     useEffect(() => {
         if (keyword || searchType || selectStatus || (specificStartDate && specificEndDate)) {
             fetchSearchResults(currentPage);
         } else {
             fetchLogs(currentPage);
         }
-    }, [currentPage, ]);
+    }, [currentPage]);
 
     const handlePageChange = ({ selected }) => {
         setCurrentPage(selected);
@@ -32,8 +31,9 @@ export const Log = () => {
 
     const fetchLogs = (page) => {
         const params = { page: page + 1, size: 10 };
-        api.get(`/admin/log`, { params })
+        api.get(`/admin/logs`, { params })
             .then((resp) => {
+                console.log("넘어오는 데이터", resp);
                 setLoglist(resp.data.list);
                 setFiltered(resp.data.list);
                 setTotalPages(resp.data.pages);
@@ -46,20 +46,21 @@ export const Log = () => {
     };
 
     const fetchSearchResults = (page) => {
+        console.log("검색 결과 요청 전송됨", page);
         const params = { page: page + 1, size: 10 };
-
+    
         if (searchType && keyword) {
             params[searchType] = keyword;
         }
         if (selectStatus) {
-            params.logStatus = selectStatus;
+            params.log_status = selectStatus; 
         }
         if (specificStartDate && specificEndDate) {
-            params.specificStartDate = specificStartDate;
-            params.specificEndDate = specificEndDate;
+            params.specific_start_date = specificStartDate; 
+            params.specific_end_date = specificEndDate; 
         }
-
-        api.get(`/admin/log/search`, { params })
+    
+        api.get(`/admin/logs/search`, { params })
             .then((resp) => {
                 setFiltered(resp.data.list);
                 setTotalPages(resp.data.pages);
@@ -119,6 +120,7 @@ export const Log = () => {
     };
 
     const handleSearch = () => {
+        console.log("검색 버튼 클릭");
         const today = format(startOfDay(new Date()), 'yyyy-MM-dd');
 
         if ((specificStartDate === '' || specificEndDate === '') && (searchType === '' && selectStatus === '')) {
@@ -174,8 +176,8 @@ export const Log = () => {
                                     value={searchType}
                                 >
                                     <option value="">검색 유형</option>
-                                    <option value="empName">이름</option>
-                                    <option value="empId">아이디</option>
+                                    <option value="name">이름</option>
+                                    <option value="memberId">아이디</option>
                                 </select>
                                 <input
                                     className={styles.typeInput}
@@ -248,7 +250,7 @@ export const Log = () => {
                             <tr>
                                 <td className={styles.theadtd}>접속시간</td>
                                 <td className={styles.theadtd}>아이디</td>
-                                <td className={styles.theadtd}>이름 (부서)</td>
+                                <td className={styles.theadtd}>이름</td>
                                 <td className={styles.theadtd}>로그 상태</td>
                                 <td className={styles.theadtd}>접속IP</td>
                             </tr>
@@ -266,12 +268,11 @@ export const Log = () => {
                                 filtered.map((log, i) => (
                                     <tr key={i}>
                                         <td className={styles.theadtd}>
-                                            {log.localLogTime ? format(new Date(log.localLogTime), 'yyyy.MM.dd HH:mm:ss') : '날짜 없음'}
+                                            {log.localLogtime ? format(new Date(log.localLogtime), 'yyyy.MM.dd HH:mm:ss') : '날짜 없음'}
                                         </td>
-                                        <td className={styles.theadtd}>{log.empId || "알 수 없음"}</td>
+                                        <td className={styles.theadtd}>{log.memberId || "알 수 없음"}</td>
                                         <td className={styles.theadtd}>
-                                            {/* {log.empName || "알 수 없음"} ({deptName(log.deptCode) || "알 수 없음"}) */}
-                                            {log.empName || "알 수 없음"} ({log.deptName || "알 수 없음"})
+                                            {log.name || "알 수 없음"}
                                         </td>
                                         <td className={styles.theadtd} style={{ color: log.logStatus === "로그인 성공" ? 'green' : 'red' }}>
                                             {log.logStatus}
@@ -283,15 +284,15 @@ export const Log = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
             <div className={styles.pagination}>
                 {totalPages > 0 && (
                     <Pagination
                         pageCount={totalPages}
                         onPageChange={handlePageChange}
-                        currentPage={currentPage} // Ensure this is updated correctly
+                        currentPage={currentPage} 
                     />
                 )}
+            </div>
             </div>
         </div>
     );
