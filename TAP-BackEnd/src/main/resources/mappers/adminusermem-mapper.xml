@@ -5,9 +5,13 @@
 <mapper namespace="AdminUserMem">
 	<resultMap id="memberResultMap" type="java.util.HashMap">
     	<result property="JOIN_DATE" column="join_date" javaType="java.sql.Timestamp" />    	
+    	<result property="ISSUE_DATE" column="issue_date" javaType="java.sql.Timestamp" />    	
 	</resultMap>
 	<select id="getAllUserMem" resultMap="memberResultMap">
-		select m.name as name,g.name as grade ,m.join_date,m.enabled  from members m left join grade g on m.grade_seq = g.seq
+		select m.*, g.*, g.name as g_name
+        from members m 
+        left join grade g on m.grade_seq = g.seq
+        where m.role = 'ROLE_USER'
 	</select> 
 <select id="searchUserMem" resultMap="memberResultMap">
     SELECT m.name AS name, g.name AS grade, m.join_date, m.enabled

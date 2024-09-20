@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './UserMem.module.css';
 import { api } from "../../../../config/config";
 import Grade from "./Grade/Grade";
+import { Pagination } from '../../../../components/Pagination/Pagination';
 
 export const UserMem = () => {
     const [userMems, setUserMems] = useState([]);
@@ -17,9 +18,10 @@ export const UserMem = () => {
 
     const fetchUserMems = async () => {
         try {
-            const resp = await api.get(`/admin/usermem/selectAll`);
+            const resp = await api.get(`/admin/mem/selectAll`);
             setUserMems(resp.data);
             setFilteredUserMems(resp.data);
+            console.log(resp.data)
         } catch (error) {
             console.error(error);
         }
@@ -27,7 +29,7 @@ export const UserMem = () => {
 
     const fetchGrades = async () => {
         try {
-            const resp = await api.get(`/admin/usermem/grades`);
+            const resp = await api.get(`/admin/mem/grades`);
             setGrades(resp.data);
         } catch (error) {
             console.error(error);
@@ -40,7 +42,7 @@ export const UserMem = () => {
                 keyword : keyword,
                 gradeSeq: selectedGrade || null // null로 변경하여 gradeSeq가 없을 때를 처리
             };
-            const resp = await api.get(`/admin/usermem/search`, { params });
+            const resp = await api.get(`/admin/mem/search`, { params });
             setFilteredUserMems(resp.data);
         } catch (error) {
             console.error(error);
@@ -68,6 +70,15 @@ export const UserMem = () => {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+
+     // 페이지네이션 설정
+     const [currentPage, setCurrentPage] = useState(0);
+     const PER_PAGE = 10;
+     const pageCount = Math.ceil(filteredUserMems.length / PER_PAGE);
+     const handlePageChange = ({selected}) => {
+         setCurrentPage(selected);
+         window.scrollTo(0,0); // 페이지 변경 시 스크롤 맨 위로 이동
+     };
 
     return (
         <div>
@@ -101,6 +112,7 @@ export const UserMem = () => {
                         <thead>
                             <tr>
                                 <td>이름</td>
+                                <td>구분</td>
                                 <td>등급</td>
                                 <td>가입날짜</td>
                                 <td>상태</td>
@@ -108,10 +120,11 @@ export const UserMem = () => {
                         </thead>
                         <tbody>
                             {filteredUserMems.length > 0 ? (
-                                filteredUserMems.map((mem, i) => (
+                                filteredUserMems.slice(currentPage * PER_PAGE, (currentPage +1) * PER_PAGE).map((mem, i) => (
                                     <tr key={i}>
                                         <td>{mem.NAME}</td>
-                                        <td>{mem.GRADE}</td>
+                                        <td>{mem.C_NAME ? "기업": "일반"}</td>
+                                        <td>{mem.G_NAME}</td>
                                         <td>{formatDate(mem.JOIN_DATE)}</td>
                                         <td>{mem.ENABLED === 1 ? '일반회원' : '블랙리스트'}</td>
                                     </tr>
@@ -124,6 +137,16 @@ export const UserMem = () => {
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div className={styles.pagination}>
+            {/* 페이지네이션 */}
+            {pageCount > 0 && (
+                <Pagination
+                    pageCount={pageCount}
+                    onPageChange={handlePageChange}
+                    currentPage={currentPage}
+                />
+                )}
             </div>
         </div>
     );
