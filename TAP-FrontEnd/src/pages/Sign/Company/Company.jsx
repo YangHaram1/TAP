@@ -47,7 +47,7 @@ const Company = () => {
     })
     // 정규식, 중복 검사 state
     const [regexDataCompany, setRegexDataCompany] = useState({
-        // > Company
+        nameAvailable: false, // 사업체 이름 중복 검사
         name: false, // 사업체 이름
         phone: false, // 사업체 전화번화
         registration_number: false, // 사업체 등록 번호
@@ -683,7 +683,7 @@ const Company = () => {
                                     ? styles.checkPassBtn
                                     : styles.checkBtn
                             }
-                            onClick={handleIdCheck}
+                            // onClick={handleIdCheck}
                         >
                             사업체 이름 중복 검사
                         </button>
