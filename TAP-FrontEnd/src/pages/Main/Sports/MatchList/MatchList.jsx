@@ -73,63 +73,73 @@ export const MatchList = () => {
     return openDateObj <= today;
   };
 
+  const sortedBaseballMatches = baseballMatches
+  .sort((a, b) => new Date(a.START_DATE) - new Date(b.START_DATE))
+  .slice(0, 6);
+const sortedSoccerMatches = soccerMatches
+  .sort((a, b) => new Date(a.START_DATE) - new Date(b.START_DATE))
+  .slice(0, 6);
+
   return (
     <div className={styles.container}>
-      <div className={styles.baseballSection}>
-        <div className={styles.sportTitle}>
-          <span className={styles.baseballText}>
-            야구 <span className={styles.englishText}>| BASEBALL</span>
-          </span>
-          <span className={styles.selectTeamText} onClick={toggleBaseballTeamSelect}>
-            구단선택
-          </span>
-        </div>
-        <div className={`${styles.teamSelect} ${isBaseballTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
-          <div className={styles.teamList}>
-            {getHomeTeams(baseballMatches).map((team, index) => (
-              <div key={index} className={styles.teamItem} onClick={() => handleTeamClick(team.name, team.logo)}>
-                <img src={team.logo} alt={team.name} className={styles.teamLogo} />
-                <span>{team.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles.matchSelect}>
-          <div className={styles.itemWrap}>
-            {baseballMatches.map((match, index) => (
-              <div key={index} className={styles.matchCard}>
-                <div className={styles.matchContent}>
-                  <div className={styles.teamMatch}>
-                    <div className={styles.team1}>
-                      <img src={match.HOME_TEAM_LOGO} alt="팀 1" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.HOME_TEAM_NAME}</div>
-                    </div>
-                    <div className={styles.vsText}>VS</div>
-                    <div className={styles.team2}>
-                      <img src={match.AWAY_TEAM_LOGO} alt="팀 2" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.AWAY_TEAM_NAME}</div>
-                    </div>
-                  </div>
-                  <div className={styles.matchDate}>
-                    <span>{match.START_DATE}</span>
-                  </div>
-                  <div className={styles.matchLocation}>
-                    <span>장소: {match.PLACE_NAME}</span>
-                  </div>
-                </div>
-                <div className={styles.matchBtn}>
-  {isOpenNow(match.OPEN_DATE) ? (
-    <span>예매하기</span>
-  ) : (
-    <span className={`${styles.openScheduled}`}>{formatOpenDate(match.OPEN_DATE)} 오픈 예정</span>
-  )}
-</div>
-              </div>
-            ))}
-          </div>
+    {/* 야구 섹션 */}
+    <div className={styles.baseballSection}>
+      <div className={styles.sportTitle}>
+        <span className={styles.baseballText}>
+          야구 <span className={styles.englishText}>| BASEBALL</span>
+        </span>
+        <span className={styles.selectTeamText} onClick={toggleBaseballTeamSelect}>
+          구단선택
+        </span>
+      </div>
+      <div className={`${styles.teamSelect} ${isBaseballTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
+        <div className={styles.teamList}>
+          {getHomeTeams(baseballMatches).map((team, index) => (
+            <div key={index} className={styles.teamItem} onClick={() => handleTeamClick(team.name, team.logo)}>
+              <img src={team.logo} alt={team.name} className={styles.teamLogo} />
+              <span>{team.name}</span>
+            </div>
+          ))}
         </div>
       </div>
+      <div className={styles.matchSelect}>
+        <div className={styles.itemWrap}>
+          {sortedBaseballMatches.map((match, index) => (
+            <div key={index} className={styles.matchCard}>
+              <div className={styles.matchContent}>
+                <div className={styles.teamMatch}>
+                  <div className={styles.team1}>
+                    <img src={match.HOME_TEAM_LOGO} alt="팀 1" className={styles.teamLogo} />
+                    <div className={styles.teamName}>{match.HOME_TEAM_NAME}</div>
+                  </div>
+                  <div className={styles.vsText}>VS</div>
+                  <div className={styles.team2}>
+                    <img src={match.AWAY_TEAM_LOGO} alt="팀 2" className={styles.teamLogo} />
+                    <div className={styles.teamName}>{match.AWAY_TEAM_NAME}</div>
+                  </div>
+                </div>
+                <div className={styles.matchDate}>
+                  <span>{match.START_DATE}</span>
+                </div>
+                <div className={styles.matchLocation}>
+                  <span>장소: {match.PLACE_NAME}</span>
+                </div>
+              </div>
+              <div className={styles.matchBtn}>
+                {isOpenNow(match.OPEN_DATE) ? (
+                  <span>예매하기</span>
+                ) : (
+                  <span className={styles.openScheduled}>{formatOpenDate(match.OPEN_DATE)} 오픈 예정</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
 
+  
+      {/* 축구 섹션 */}
       <div className={styles.soccerSection}>
         <div className={styles.sportsTitleFootball}>
           <span className={styles.baseballText}>
@@ -151,7 +161,7 @@ export const MatchList = () => {
         </div>
         <div className={styles.matchSelect}>
           <div className={styles.itemWrap}>
-            {soccerMatches.map((match, index) => (
+            {sortedSoccerMatches.map((match, index) => (
               <div key={index} className={styles.matchCard}>
                 <div className={styles.matchContent}>
                   <div className={styles.teamMatch}>
