@@ -71,7 +71,7 @@
 .teamList {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    gap:80px;
     align-items: center;
     
     height: 320px;
@@ -186,7 +186,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px; /* 원하는 버튼 너비 설정 */
+    width: 170px; /* 원하는 버튼 너비 설정 */
     height: 40px; /* 원하는 버튼 높이 설정 */
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -194,7 +194,7 @@
     overflow: hidden; /* 텍스트가 넘치는 경우 숨기기 */
     text-align: center;
     margin: 0 auto; /* 부모 컨테이너 내에서 중앙 정렬 */
-    margin-top: 8px;
+    margin-top: 5px;
 }
 
 .matchBtn a {
@@ -243,7 +243,7 @@
     padding: 20px;
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    gap:80px;
     align-items: center;
     text-decoration: none;
 }

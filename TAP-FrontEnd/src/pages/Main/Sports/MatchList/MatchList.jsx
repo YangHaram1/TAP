@@ -11,7 +11,6 @@ export const MatchList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 서버에서 야구 경기 데이터 가져오기
     api.get('/matchlist/baseball')
       .then((response) => {
         setBaseballMatches(response.data);
@@ -20,7 +19,6 @@ export const MatchList = () => {
         console.error('Error fetching baseball match data:', error.response ? error.response.data : error.message);
       });
 
-    // 서버에서 축구 경기 데이터 가져오기
     api.get('/matchlist/soccer')
       .then((response) => {
         setSoccerMatches(response.data);
@@ -38,7 +36,6 @@ export const MatchList = () => {
     setIsSoccerTeamSelectOpen(!isSoccerTeamSelectOpen);
   };
 
-  // 홈팀 필터링 함수
   const getHomeTeams = (matches) => {
     const homeTeams = [];
     matches.forEach((match) => {
@@ -50,18 +47,34 @@ export const MatchList = () => {
   };
 
   const handleTeamClick = (teamName, teamLogo) => {
-    const matches = baseballMatches.filter(match => match.HOME_TEAM_NAME === teamName || match.AWAY_TEAM_NAME === teamName);
-    
-    // 홈구장 정보 추출 (가장 첫 번째 경기를 사용한다고 가정)
-    const homeGround = matches.length > 0 ? matches[0].PLACE_NAME : "정보 없음";
-  
+    const homeMatch = baseballMatches.find(match => match.HOME_TEAM_NAME === teamName);
+    const homeGround = homeMatch ? homeMatch.PLACE_NAME : "정보 없음";
+    const matches = baseballMatches.filter(
+      match => match.HOME_TEAM_NAME === teamName || match.AWAY_TEAM_NAME === teamName
+    );
     navigate('/teamPage', {
       state: { teamName, teamLogo, homeGround, matches },
     });
   };
+
+  const formatOpenDate = (openDate) => {
+    const date = new Date(openDate);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${month}/${day} ${hours}:${minutes}`;
+  };
+
+  // 오픈 예정인지 여부 확인하는 함수
+  const isOpenNow = (openDate) => {
+    const today = new Date();
+    const openDateObj = new Date(today.getFullYear(), openDate.split('-')[0] - 1, openDate.split('-')[1].split(' ')[0], openDate.split(' ')[1].split(':')[0], openDate.split(' ')[1].split(':')[1]);
+    return openDateObj <= today;
+  };
+
   return (
     <div className={styles.container}>
-      {/* 야구 섹션 */}
       <div className={styles.baseballSection}>
         <div className={styles.sportTitle}>
           <span className={styles.baseballText}>
@@ -105,15 +118,18 @@ export const MatchList = () => {
                   </div>
                 </div>
                 <div className={styles.matchBtn}>
-                  <span>예매하기</span>
-                </div>
+  {isOpenNow(match.OPEN_DATE) ? (
+    <span>예매하기</span>
+  ) : (
+    <span className={`${styles.openScheduled}`}>{formatOpenDate(match.OPEN_DATE)} 오픈 예정</span>
+  )}
+</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* 축구 섹션 */}
       <div className={styles.soccerSection}>
         <div className={styles.sportsTitleFootball}>
           <span className={styles.baseballText}>
@@ -157,7 +173,11 @@ export const MatchList = () => {
                   </div>
                 </div>
                 <div className={styles.matchBtn}>
-                  <span>{match.OPEN_DATE}</span>
+                  {isOpenNow(match.OPEN_DATE) ? (
+                    <span>예매하기</span>
+                  ) : (
+                    <span>{formatOpenDate(match.OPEN_DATE)} 오픈 예정</span>
+                  )}
                 </div>
               </div>
             ))}
