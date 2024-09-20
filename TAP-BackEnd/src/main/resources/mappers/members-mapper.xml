@@ -9,7 +9,7 @@
 	</insert>
 	
 	<insert id="signUpBiz">
-		insert into members values(#{id}, #{pw},#{name},#{phone},#{email},#{birth},#{gender},#{delivery_seq},0, sysdate, default, 'ROLE_BIZ', default,default)
+		insert into members values(#{id}, #{pw},#{name},#{phone},#{email},#{birth},#{gender},#{delivery_seq},0, sysdate, default, 'ROLE_BIZ', default)
 	</insert>
 	
 	
