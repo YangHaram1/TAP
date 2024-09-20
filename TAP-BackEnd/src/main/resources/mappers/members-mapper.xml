@@ -60,4 +60,17 @@
 	<update id="updateDeliverySeq">
 	update members set delivery_seq=#{seq} where id=#{id}
 	</update>
+	
+	 <select id="findIdByNameAndEmail" parameterType="map" resultType="string">
+        SELECT id
+        FROM members
+        WHERE name = #{name} AND email = #{email}
+    </select>
+
+    <!-- 이메일로 비밀번호 업데이트 -->
+    <update id="updatePasswordByEmail" parameterType="map">
+        UPDATE members
+        SET pw = #{password}
+        WHERE email = #{email}
+    </update>
 </mapper>

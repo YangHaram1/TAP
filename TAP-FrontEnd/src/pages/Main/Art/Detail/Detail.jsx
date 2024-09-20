@@ -27,8 +27,7 @@ export const Detail = ()=>{
     const {token} = useAuthStore();
 
     // =================== 상품 상세 정보 ===================
-    const [mainData, setMainData] = useState(null);
-    const [seatPrices, setSeatPrices] = useState([]);
+    // const [mainData, setMainData] = useState(null);
     const [description, setDescription] = useState({}); 
     const [casting, setCasting] = useState([]);
     // const [schedules, setSchedules] = useState([]);
@@ -38,7 +37,7 @@ export const Detail = ()=>{
     const [castingAndDate, setCastingAndDate] = useState([]);
     const [company, setCompany] = useState({});
     const [member,setMember] = useState({});
-    const {setDate, setTime, setSeq, date, time} = useOrder();
+    const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices} = useOrder();
     
     
     useEffect(()=>{
@@ -159,15 +158,6 @@ export const Detail = ()=>{
 
     const isBookModalOpen = async ()=>{
         if(token !== null){
-
-            // const selectedDateStr = format(selectedDate, 'yyyy-MM-dd (EEE)',{locale:ko});
-            // const sysdateStr = format(new Date(), 'yyyy-MM-dd (EEE)',{locale:ko});
-            // if(sysdateStr !== selectedDateStr){
-            //     console.log("날짜 데이터 저장되는 중");
-            //     await setDate(selectedDateStr);
-            // }
-            // await setTime(selectedTime);
-
             if(date == null || time == null){
                 await Swal.fire(
                     { 
@@ -355,7 +345,7 @@ export const Detail = ()=>{
                 </div>
             </div>
 
-            <BookModal isOpen={bookModal} onClose={closeBookModal} mainData={mainData}/>
+            <BookModal isOpen={bookModal} onClose={closeBookModal}/>
 
             {showPopup && <Popup onClose={closePopup} application_seq={seq}/>} 
         </div>

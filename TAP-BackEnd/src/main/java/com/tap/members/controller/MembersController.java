@@ -98,6 +98,53 @@ public class MembersController {
 		String findId = mserv.findId(name, email);
 		return ResponseEntity.ok(findId);
 	}
+	@PostMapping("/requestPasswordReset/{email}")
+	public ResponseEntity<String> requestPasswordReset(@PathVariable("email") String userEmail) {
+	    try {
+	        // 비밀번호 재설정 코드 생성 및 저장
+	        String resetCode = UUID.randomUUID().toString().substring(0, 8);
+	        verificationCodes.put(userEmail, resetCode); // 이메일과 재설정 코드 저장
+
+	        // 비밀번호 재설정 이메일 전송
+	        emailService.sendVerificationEmail(userEmail, resetCode);
+
+	        return ResponseEntity.ok("비밀번호 재설정 코드가 전송되었습니다.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+	    }
+	}
+
+	@PostMapping("/resetPassword")
+	public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+	    try {
+	        String userEmail = request.get("email");
+	        String resetCode = request.get("code");
+	        String newPassword = request.get("newPassword");
+
+	        // 저장된 코드와 입력된 코드 비교
+	        String storedCode = verificationCodes.get(userEmail);
+
+	        if (storedCode != null && storedCode.equals(resetCode)) {
+	            // 비밀번호 인코딩 및 업데이트
+	            String encodedPassword = pe.encode(newPassword);
+	            boolean updateSuccessful = mserv.updatePassword(userEmail, encodedPassword);
+
+	            if (updateSuccessful) {
+	                // 재설정 코드 삭제
+	                verificationCodes.remove(userEmail);
+	                return ResponseEntity.ok("비밀번호가 성공적으로 재설정되었습니다.");
+	            } else {
+	                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 업데이트 실패");
+	            }
+	        } else {
+	            return ResponseEntity.badRequest().body("유효하지 않은 재설정 코드입니다.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+	    }
+	}
 
 	@GetMapping
 	public ResponseEntity<MembersDTO> selectById(Principal principal) throws Exception {

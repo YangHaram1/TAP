@@ -1,12 +1,19 @@
+import { useEffect } from 'react';
+import { useOrder } from '../../../store/store';
 import styles from './Discount.module.css';
 
 export const Discount = ()=>{
+
+    const {date, time, seq, storageSection, storageSeats, mainData, seatPrices} = useOrder();
+
+    // 좌석 가격 출력해보기
+
     return(
         <div className={styles.container}>
             <div className={styles.main_left_price_box}>
                 <h3>가격</h3>
                 <div className={styles.price_box_header}>
-                    VIP석 좌석 n개를 선택하셨습니다.
+                    좌석 {storageSeats.length}개를 선택하셨습니다.
                 </div>
                 <div className={styles.price_box_content}>
                     <div className={`${styles.price_box_cotent} ${styles.content1}`}>기본가</div>

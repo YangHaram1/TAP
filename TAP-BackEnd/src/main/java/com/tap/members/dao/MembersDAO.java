@@ -74,4 +74,14 @@ public class MembersDAO {
 		return mybatis.update("Members.updateDeliverySeq",map);
 	}
 	
+
+
+    // 이메일로 비밀번호 업데이트
+    public int updatePasswordByEmail(String email, String newPassword) throws Exception {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", newPassword);
+        return mybatis.update("Members.updatePasswordByEmail", params);
+    }
+	
 }

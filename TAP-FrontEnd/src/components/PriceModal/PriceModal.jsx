@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 import styles from './PriceModal.module.css';
-import { url } from '../../config/config';
+// import { url } from '../../config/config';
 import { Discount } from './Discount/Discount';
 import { OrderCheck } from './OrderCheck/OrderCheck';
+import { useOrder } from '../../store/store';
+import { format } from 'date-fns';
 
-export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
+export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
 
     const [tap, setTap] = useState(1);
     // 1 : step3 가격/할인정보
     // 2 : setp4 배송선택/주문지 확인
     // 3 : setp5 결재하기
+    const {date, time, storageSection, storageSeats, mainData, seatPrices} = useOrder();
 
     useEffect(()=>{
         console.log("탭확인", tap);
+        console.log("가격확인",seatPrices);
         // onBookClose();
     },[tap])
 
@@ -25,11 +29,8 @@ export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
     }
 
     const handlePrevModal = ()=>{
-        // BookModal 연결
         if(tap === 1){
-            // BookModal 연결
             onClose();
-            // alert("북모달 나올 예정");
         }else{
             setTap(tap-1);
         }
@@ -77,15 +78,15 @@ export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
                             </div>
                             <div className={styles.main_right_detail}>
                                 <div className={styles.right_detail_img}>
-                                    <img src={`${url}/31d8a1ec-913e-4808-8004-091734d77744`}/>
+                                    <img src={mainData.files_sysname}/>
                                 </div>
                                 <div className={styles.right_detail_content}>
-                                    <p style={{fontWeight:'700',fontSize:'18px'}}> 뮤지컬 &lt; 킹키부츠 &gt;</p>
-                                    <p> 2024.09.12 ~ </p>
-                                    <p> 2024.11.10 </p>
-                                    <p> 블루스퀘어홀 어쩌구저쩌</p>
-                                    <p> 8세이상 관람가능</p>
-                                    <p> 관람시간 : 155분</p>
+                                    <p style={{fontWeight:'700',fontSize:'18px'}}> {mainData.name}</p>
+                                    <p> {format(new Date(mainData.start_date), 'yyyy.MM.dd')}  ~ </p>
+                                    <p> {format(new Date(mainData.end_date), 'yyyy.MM.dd')} </p>
+                                    <p> {mainData.place_name}</p>
+                                    <p> {mainData.age_limit} {mainData.age_limit.startsWith("전") ? "" : " 이상"} 관람가능</p>
+                                    <p> 관람시간 : {mainData.running_time}분</p>
                                 </div>
                             </div>
                             <div className={styles.main_right_selectSeat}>
@@ -98,13 +99,24 @@ export const PriceModal = ({ isOpen, onClose, onBookClose })=>{
                                     <thead>
                                         <tr>
                                             <td>일시</td>
-                                            <td>2024.09.11(수) 19:00</td>
+                                            <td>{date} {time}</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>선택 좌석(1석) </td>
-                                            <td>R석 section1-10열-5</td>
+                                            <td> 
+                                                <p className={styles.seats_box}>선택 좌석 ({storageSeats.length}석)</p>
+                                                <p className={styles.seats_box}>(등급 | 구역-행-열)</p>
+                                            </td>
+                                            <td>
+                                                <div className={styles.seat_overflow_box}>
+                                                {
+                                                    storageSeats.map((seat,index)=>{
+                                                        return(<p className={styles.seats_box} key={index}>{seat.grade} | {storageSection}-{seat.seatId}</p>);
+                                                    })
+                                                }
+                                                </div>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>티켓 금액</td>
