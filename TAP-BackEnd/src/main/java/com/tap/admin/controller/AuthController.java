@@ -61,7 +61,7 @@ public class AuthController {
 
 				if (dto.getGrade().equals("pending")) {
 
-					// 로그인 성공 로그 기록
+					// 로그인 실패 로그 기록 (인증 권한 없음)
 					AdminLogDTO logDto = new AdminLogDTO();
 					logDto.setMemberId(id);
 					logDto.setName(dto.getName());
