@@ -15,6 +15,7 @@ import { format, parseISO, isSameDay } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useAuthStore, useOrder } from '../../../../store/store';
 import Swal from 'sweetalert2';
+import Popup from '../../../Admin/Popup/Popup';
 
 
 export const Detail = ()=>{
@@ -216,6 +217,33 @@ export const Detail = ()=>{
         return result;
     };
 
+    // ==================== 팝업 테스트 ==============================
+     // 팝업 테스트 
+     const { loginID, isAuth } = useAuthStore(); // 로그인 정보 가져오기
+     const [showPopup, setShowPopup] = useState(false);
+   
+     useEffect(() => {
+       const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD 형식
+       let hidePopup = null;
+   
+       // 로그인 상태에 따라 localStorage에서 팝업 숨김 상태 확인
+       if (loginID && isAuth) {
+         hidePopup = localStorage.getItem(`hidePopup_${loginID}_${seq}`); // 로그인 사용자
+       } else {
+         hidePopup = localStorage.getItem(`hidePopup_guest_${seq}`); // 비로그인 사용자
+       }
+   
+       // 팝업을 숨기지 않는 조건: 저장된 날짜가 오늘 날짜와 다를 경우에만 팝업을 표시
+       if (hidePopup !== today) {
+         setShowPopup(true);
+       } else {
+         setShowPopup(false);
+       }
+     }, [loginID, isAuth, seq]);
+   
+     const closePopup = () => {
+       setShowPopup(false); // 팝업 닫기
+     };
 
     return(
         <div className={styles.container}>
@@ -329,7 +357,7 @@ export const Detail = ()=>{
 
             <BookModal isOpen={bookModal} onClose={closeBookModal} mainData={mainData}/>
 
-
+            {showPopup && <Popup onClose={closePopup} application_seq={seq}/>} 
         </div>
     );
 

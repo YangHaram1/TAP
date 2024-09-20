@@ -209,6 +209,7 @@
         join place on place.place_seq = apply.place_seq
         join sub_category on sub_category.sub_category_seq = apply.sub_category_seq
 		WHERE application_seq = #{application_seq}
+		AND files.files_type ='poster'
 	</select>
 	
 	<update id="approveProduct">

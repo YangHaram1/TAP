@@ -12,8 +12,8 @@ export const Dash=()=>{
         // // 상품등록 건수 | created_at : 오늘, status: '승인 대기' 인 상품등록 건수 
         // // 상품세일 건수 | sale_approved : '승인 대기' 인 상품세일 건수 
         // // 배송 준비중 갯수 | delivery_status : '배송 준비중' 
-        // api.get(`/admin/dash/getapply`)
-        // api.get(`/admin/dash/getsale`)
+        // ------------------------------------api.get(`/admin/dash/getapply`)
+        // ------------------------------------api.get(`/admin/dash/getsale`)
         // api.get(`/admin/dash/getdelivery`)
         
         // // 상품 등록 갯수 | updated_at : 오늘인 상품 갯수 
@@ -32,7 +32,10 @@ export const Dash=()=>{
     })
 
     const [orderCounts, setOrderCounts] = useState([]);
-
+    const [applyTodayCounts, setApplyTodayCounts] = useState('');
+    const [saleTodayCounts, setSaleTodayCounts] = useState('');
+    const [deliveryTodayCounts, setDeliveryTodayCounts] = useState('');
+    
     useEffect(() => {
         // 카테고리별 주문 건수 - group by 로 하면 카테고리 별 카운트 가져올 수 있나?
         api.get('admin/dash/getordercount')
@@ -41,6 +44,24 @@ export const Dash=()=>{
                 console.log(resp.data)
             })
             .catch((error) => console.error('Error fetching order counts:', error));
+        api.get(`/admin/dash/getapply`)
+            .then((resp)=>{
+                setApplyTodayCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Today counts:', error));
+        api.get(`/admin/dash/getsale`)
+            .then((resp)=>{
+                setSaleTodayCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Sale Today counts:', error));
+        api.get(`/admin/dash/getdelivery`)
+            .then((resp)=>{
+                setDeliveryTodayCounts(resp.data)
+                console.log(resp.data)
+            })
+            .catch((error) => console.error('Error fetching Sale Today counts:', error));
     }, []);
 
     // 카테고리별 주문 건수를 그래프로 표현하기 위한 데이터 구성
@@ -116,17 +137,17 @@ export const Dash=()=>{
                             <tbody>
                                 <tr>
                                     <td>상품신청</td>
-                                    <td> 건</td>
+                                    <td> {applyTodayCounts}건</td>
                                     <td> </td>
                                 </tr>
                                 <tr>
-                                    <td>배송준비중</td>
-                                    <td>건</td>
+                                    <td>세일신청</td>
+                                    <td>{saleTodayCounts}건</td>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td>환불요청</td>
-                                    <td>건</td>
+                                    <td>배송 준비중</td>
+                                    <td>{deliveryTodayCounts}건</td>
                                     <td>원</td>
                                 </tr>
                             </tbody>
@@ -148,17 +169,17 @@ export const Dash=()=>{
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>결제완료</td>
+                                    <td>상품승인</td>
                                     <td> 건</td>
                                     <td> 원</td>
                                 </tr>
                                 <tr>
-                                    <td>발송 완료</td>
+                                    <td>세일승인</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td>환불요청</td>
+                                    <td>발송 완료</td>
                                     <td>건</td>
                                     <td>원</td>
                                 </tr>
