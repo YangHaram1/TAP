@@ -20,10 +20,7 @@ export const Orders = () => {
     
     // 모달 상태 관리
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalState, setModalState] = useState("");
 
-    // 모달 열기/닫기
-    // const openModal = () => setIsModalOpen(true);
     const openModal = () => {
         if (checkedOrders.length === 0) {
             alert('주문을 선택해주세요.');
@@ -64,8 +61,6 @@ export const Orders = () => {
         applyFilters();  // 상태 변경 시 필터링 적용
     }, [orderStatus, shippingStatus, orders]);
 
-  
-
     // 주문 상태 선택 핸들러
     const handleOrderStatusChange = (e) => {
         setOrderStatus(e.target.value);
@@ -103,13 +98,20 @@ export const Orders = () => {
 
     const handleCheckBox = (e) => {
         const { value, checked } = e.target;
+        const intValue = parseInt(value, 10); // 값이 int로 변환됨
+        
         setCheckedOrders(prev => {
             if (checked) {
-                return [...prev, value];
+                return [...prev, intValue]; // 선택된 경우 int 값으로 추가
             } else {
-                return prev.filter(prev => prev !== value);
+                return prev.filter(prev => prev !== intValue); // 선택 해제된 경우 해당 값 제외
             }
         });
+
+        // 전체 선택이 해제된 경우 '전체선택' 체크 해제
+        if (!checked) {
+            allCheckRef.current.checked = false;
+        }
     };
 
     // 체크박스 리셋
@@ -153,6 +155,7 @@ export const Orders = () => {
             minute: '2-digit',
         });
     };
+
     const getCategoryName = (seq) => {
         switch (seq) {
           case 1:
@@ -167,6 +170,7 @@ export const Orders = () => {
             return "알 수 없음";
         }
       };
+
     return (
         <div className={styles.container}>
             <h2>주문관리</h2>

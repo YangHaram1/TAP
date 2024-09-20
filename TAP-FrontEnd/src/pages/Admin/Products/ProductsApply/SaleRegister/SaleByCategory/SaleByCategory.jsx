@@ -47,7 +47,7 @@ export const SaleByCategory =({ category, categoryName, tap })=>{
         } else if (tap === 1) {
             return (
                 <button className={styles.manage_button}>
-                    {product.STATUS}
+                    {product.SALE_APPROVED}
                 </button>
             );
         } 

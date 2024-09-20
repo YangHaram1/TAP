@@ -677,7 +677,7 @@ export const EventApply = () => {
     
                 await api.post(`/biz/application`, updatedFormData);
                 alert('신청이 완료되었습니다!');
-                // navi('/'); 
+                navi('/waitingapply/registration'); 
                 } catch (error) {
                 console.error('서버에 전송 중 오류 발생:', error);
                 alert('서버에 전송 실패. 다시 시도해 주세요.');
@@ -1025,7 +1025,7 @@ export const EventApply = () => {
                             <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
                         </td>
                     </tr>
-                    { category === "1" &&  
+                   
                     <tr>
                         <td>메인 포스터</td>
                         <td>
@@ -1052,7 +1052,7 @@ export const EventApply = () => {
                                
                         </td>
                     </tr>
-                    }
+                    
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>

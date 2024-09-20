@@ -75,38 +75,125 @@ export const DetailSale =()=>{
         }
     };
 
-    return (
-        <div>
-            <h2>할인 신청 상품 상세 정보</h2>
-            <ul>
-                {productDetails.length > 0 && (
-                    <li>
-                        <p>상품명: {productDetails[0].APPLICATION_SEQ}</p>
-                        <p>카테고리: {productDetails[0].SUB_CATEGORY_NAME}</p>
-                        <p>연령 제한: {productDetails[0].AGE_LIMIT}</p>
-                        <p>상영 시간: {productDetails[0].RUNNING_TIME} 분</p>
-                        <p>상영 장소: {productDetails[0].PLACE_NAME}</p>
-                        <p>할인율 : {productDetails[0].SALE_RATE}%</p>
-                    </li>
-                )}
-            </ul>
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+        });
+    };
 
-            <div className={styles.btn}>
-                {tap === 0 ? (
-                    <>
-                        <button onClick={handleApprove}>승인</button>
-                        <button onClick={handleReject}>반려</button>
-                        <button onClick={handleBack}>취소</button>
-                    </>
-                ) : tap === 1 ? (
-                    <p>승인 완료 처리</p>
-                ) : null}
-            </div>
-          
-            {isModalOpen && (
+    return (
+        <div className={styles.container}>
+        <h2>
+            {productDetails.length > 0 && productDetails[0].SALE_APPROVED === '승인 완료'
+                ? '승인 완료 상품'
+                : productDetails[0].SALE_APPROVED === '승인 반려'
+                ? '승인 반려 상품'
+                : productDetails[0].SALE_APPROVED === '취소'
+                ? '할인 신청 취소 상품'
+                : '승인 대기 상품'}
+        </h2>
+        <table className={styles.detailTable}>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>신청번호:</strong> {productDetails[0].APPLICATION_SEQ}
+                    </td>
+                    <td rowSpan="4" className={styles.imgtd}>
+                        {/* 상품 이미지 */}
+                        <img
+                            src={productDetails[0].FILES_SYSNAME || '/path/to/default-image.jpg'} // 이미지가 없으면 기본 이미지
+                            alt={productDetails[0].NAME}
+                            className={styles.productImage}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>상품명:</strong> {productDetails[0].NAME}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>할인율 :</strong> {productDetails[0].SALE_RATE}%
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>신청일:</strong> {formatDate(productDetails[0].created_at)}
+                    </td>
+                </tr>
+                {productDetails[0].SALE_APPROVED === '승인 완료' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>승인일:</strong> {formatDate(productDetails[0].updated_at)}
+                        </td>
+                    </tr>
+                )}
+                {productDetails[0].SALE_APPROVED === '승인 반려' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>반려일:</strong> {formatDate(productDetails[0].updated_at)}
+                        </td>
+                    </tr>
+                )}
+                {/* 반려 이유 추가 */}
+                {productDetails[0].SALE_APPROVED === '승인 반려' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>반려 이유:</strong> {productDetails[0].REJECT_REASON || ''}
+                        </td>
+                    </tr>
+                )}
+                <tr>
+                    <td colSpan="2">
+                        <strong>일자:</strong> {formatDate(productDetails[0].start_date)} ~ {formatDate(productDetails[0].end_date)}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>티켓 오픈일:</strong> {formatDate(productDetails[0].open_date)}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>카테고리:</strong> {productDetails[0].SUB_CATEGORY_NAME}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>연령 제한:</strong> {productDetails[0].AGE_LIMIT}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>상영 시간:</strong> {productDetails[0].RUNNING_TIME} 분
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>상영 장소:</strong> {productDetails[0].PLACE_NAME}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div className={styles.btn}>
+            {tap === 0 ? (
+                <>
+                    <button onClick={handleApprove}>승인</button>
+                    <button onClick={handleReject}>반려</button>
+                    <button onClick={handleBack}>취소</button>
+                </>
+            ) : tap === 1 ? null : null}
+        </div>
+
+        {isModalOpen && (
             <ModalSale onClose={closeModal} applicationSeq={selectedProduct} />
         )}
-        
-        </div>
-    );
+    </div>
+);
 };

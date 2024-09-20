@@ -23,6 +23,8 @@ public class AdminOrderService {
 	@Transactional
     public void updateDeliveryStatus(List<Integer> orderSeqs, String newStatus) {
         // DAO 메서드를 통해 주문 상태 업데이트
+		System.out.println("서비스 "+ orderSeqs);
+		System.out.println("상태 "+ newStatus);
 		adOrderdao.updateOrderStatus(orderSeqs, newStatus);
     }
 }

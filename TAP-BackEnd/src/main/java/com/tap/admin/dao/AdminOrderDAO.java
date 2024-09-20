@@ -17,11 +17,16 @@ public class AdminOrderDAO {
 	}
 	
 	public void updateOrderStatus(List<Integer> orderSeqs, String newStatus) {
+		System.out.println("dao 번호" +orderSeqs);
+		System.out.println("dao 상태"+ newStatus);
+		
         for (Integer orderSeq : orderSeqs) {
+        	
             HashMap<String, Object> params = new HashMap<>();
             params.put("orderSeq", orderSeq);
             params.put("newStatus", newStatus);
-
+            	System.out.println("orderSeq" +orderSeq);
+            	
             mybatis.update("AdminOrder.updateOrderStatusSingle", params);
         }
     }

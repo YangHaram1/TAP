@@ -21,8 +21,8 @@ export const AdminContent =()=>{
             <Routes>
                 <Route path="/*" element={<Dash/>}/>
                 <Route path="/products/product/*" element={<ProductsManage/>}/>
-                <Route path="/products/apply/*" element={<ProductsRegister/>}/>
                 <Route path="/products/:application_seq" element={<DetailProduct />} />
+                <Route path="/products/apply/*" element={<ProductsRegister/>}/>
                 <Route path="/products/apply/:application_seq" element={<DetailRegist />} />
                 <Route path="/products/apply/sale/*" element={<SaleRegister/>}/>
                 <Route path="/products/apply/sale/:application_seq" element={<DetailSale/>}/>

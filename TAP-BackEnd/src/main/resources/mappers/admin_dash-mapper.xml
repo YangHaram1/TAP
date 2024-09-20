@@ -7,6 +7,24 @@
     	<result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
     	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
 </resultMap>
+<select id="getApplyCountToday" resultType="int">
+SELECT count(*) 
+FROM apply
+where created_at between concat(current_date, '00:00:00')
+AND concat(current_date, '23:59:59')
+AND status='승인 대기'
+</select>
+<select id="getSaleCountToday" resultType="int">
+SELECT count(*) 
+FROM sale
+where sale_approved='승인 대기'
+</select>
+<select id="getDeliveryCountToday" resultType="int">
+SELECT count(*) 
+FROM orders
+where delivery_status='미발송'
+</select>
+
 <select id="getOrderCountByCategory" resultMap="TimestampResultMap">
 SELECT 
     sub_category.sub_category_seq, 
@@ -21,9 +39,4 @@ GROUP BY
     sub_category.sub_category_name
 </select>
 
-<update id="updateOrderStatusSingle">
-    UPDATE orders
-    SET delivery_status = #{newStatus}
-    WHERE order_seq = #{orderSeq}
-</update>
 </mapper>

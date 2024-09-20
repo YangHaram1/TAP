@@ -52,8 +52,6 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
     };
 
 
-
-    // 나머지 로직은 동일
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('ko-KR', {

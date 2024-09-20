@@ -75,21 +75,107 @@ export const DetailRegist = () => {
             alert("승인이 취소되었습니다.");
         }
     };
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+        });
+    };
 
     return (
-        <div>
-            <h2>등록 신청 상품 상세 정보</h2>
-            <ul>
-                {productDetails.map((product, index) => (
-                    <li key={index}>
-                        <p>상품명: {product.APPLICATION_SEQ}</p>
-                        <p>카테고리: {product.SUB_CATEGORY_NAME}</p>
-                        <p>연령 제한: {product.AGE_LIMIT}</p>
-                        <p>상영 시간: {product.RUNNING_TIME} 분</p>
-                        <p>상영 장소: {product.PLACE_NAME}</p>
-                    </li>
-                ))}
-            </ul>
+        <div className={styles.container}>
+            <h2>
+            {productDetails.length > 0 && productDetails[0].STATUS === '승인 완료'
+                ? '승인 완료 상품'
+                : productDetails[0].STATUS === '승인 반려'
+                ? '승인 반려 상품'
+                : '승인 대기 상품'}
+        </h2>
+            <table className={styles.detailTable}>
+            {productDetails.map((product, index) => (
+                <tbody key={index}>
+                    <tr>
+                       
+                        <td>
+                            <strong>신청번호:</strong> {product.APPLICATION_SEQ}
+                        </td>
+                        <td rowSpan="4" className={styles.imgtd}>
+                            {/* 상품 이미지 */}
+                            <img
+                                src={product.FILES_SYSNAME || '/path/to/default-image.jpg'} // 이미지가 없으면 기본 이미지
+                                alt={product.NAME}
+                                className={styles.productImage}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>상품명:</strong> {product.NAME}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>신청일:</strong> {formatDate(product.created_at)}
+                        </td>
+                    </tr>
+                    {product.STATUS === '승인 완료' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>승인일:</strong> {formatDate(product.updated_at)}
+                        </td>
+                    </tr>
+                    )}
+                    {product.STATUS === '승인 반려' && (
+                        <tr>
+                            <td colSpan="2">
+                                <strong>반려일:</strong> {formatDate(product.updated_at)}
+                            </td>
+                        </tr>
+                    )}
+                       {/* 반려 이유 추가 */}
+                    {product.STATUS === '승인 반려' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>반려 이유:</strong> {product.REJECT_REASON || ''}
+                        </td>
+                    </tr>
+                    )}
+                    <tr>
+                        <td colSpan="2">
+                            <strong>일자:</strong> {formatDate(product.start_date)} ~ {formatDate(product.end_date)}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan="2">
+                            <strong>티켓 오픈일:</strong> {formatDate(product.open_date)}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan="2">
+                            <strong>카테고리:</strong> {product.SUB_CATEGORY_NAME}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan="2">
+                            <strong>연령 제한:</strong> {product.AGE_LIMIT}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan="2">
+                            <strong>상영 시간:</strong> {product.RUNNING_TIME} 분
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan="2">
+                            <strong>상영 장소:</strong> {product.PLACE_NAME}
+                        </td>
+                    </tr>
+                </tbody>
+            ))}
+        </table>
 
             <div className={styles.btn}>
                 {tap === 0 ? (
@@ -99,7 +185,7 @@ export const DetailRegist = () => {
                         <button onClick={handleBack}>취소</button>
                     </>
                 ) : tap === 1 ? (
-                    <p>승인 완료 처리</p>
+                    null
                 ) : null}
             </div>
           

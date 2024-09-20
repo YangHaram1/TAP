@@ -3,6 +3,7 @@ import styles from './CompletedApply.module.css';
 import { api } from "../../../../config/config";
 import { Pagination } from "../../../../components/Pagination/Pagination";
 import { useAuthStore } from "../../../../store/store";
+import { FaLightbulb } from "react-icons/fa";
 
 export const CompletedApply =()=>{
     const { login, loginID, setAuth} = useAuthStore();
@@ -54,6 +55,7 @@ export const CompletedApply =()=>{
         window.scrollTo(0,0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
     
+    
 
     return(
         <div className={styles.container}>
@@ -64,9 +66,8 @@ export const CompletedApply =()=>{
                     <th>접수<br/>번호</th>
                     <th>상품정보</th>
                     <th>공연장 및 일시</th>
-                    <th>신청일</th>
+                    <th>신청일 / 승인일</th>
                     <th>상태</th>
-                    <th>승인일</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -90,22 +91,25 @@ export const CompletedApply =()=>{
                         <div className={styles.product_venue}>{product.PLACE_NAME}</div>
                         {/* <br/> */}
                         {formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}
+                      
                     </td>
-                    <td className={styles.product_venue}>{formatDate(product.created_at)} </td>
                     <td className={styles.product_venue}>
-                    {product.STATUS !=='반려' && (
+                        신청일: {formatDate(product.created_at)} 
+                        <br/> 처리일:  {formatDate(product.updated_at)}
+                    </td>
+                    <td className={styles.product_venue}>
+                    {product.STATUS !=='승인 반려' && (
                          <div className={styles.rejectReason}>
                          <span>{product.STATUS} </span>
                          </div>
                     )}
-                     {product.STATUS === '반려' && (
-                    <div className={styles.rejectReason}>
-                      <span>반려</span>
-                    </div>
-                  )}
-                    </td>
-                    <td>
-                        {formatDate(product.updated_at)}
+                     
+                  {product.STATUS === '승인 반려' && (
+                        <div className={styles.rejectReason}>
+                         <span className={styles.tooltipIcon}>사유<FaLightbulb size={20} /> </span>
+                         <div className={styles.tooltipText}>{product.REJECTION_REASON} 반려 이유: </div>
+                       </div>
+                    )}
                     </td>
                     </tr>
                 ))}
