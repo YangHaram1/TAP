@@ -94,6 +94,57 @@
     border: 2px solid rgb(228, 228, 228);
 }
 
+/* 파일css */
+.inputFile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 80%;
+    flex: 5;
+    border-radius: 10px;
+
+}
+
+.inputFile input[type="file"] {
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 2px solid rgb(228, 228, 228);
+    font-size: 14px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    display: flex;
+    line-height: 40px;
+}
+
+.inputFile input[type="file"]::-webkit-file-upload-button {
+    /* background-color: #007bff; */
+    color: white;
+    border: none;
+    /* padding: 10px; */
+    height: 80%;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    /* border: 2px solid gray; */
+    background-color: rgb(205, 205, 205);
+
+}
+
+/* .inputFile input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #5a21c8;
+} */
+
+.img {
+    margin-top: 10px;
+    max-width: 100px;
+    max-height: 100px;
+    border: 1px solid rgb(228, 228, 228);
+    border-radius: 10px;
+    object-fit: cover;
+}
+
 .inputZipCode {
     display: flex;
     align-items: center;

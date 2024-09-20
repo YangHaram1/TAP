@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Silder.module.css';
 
-export const LeftSilder = ({ images, interval, onImageClick ,currentIndex}) => {
+export const LeftSilder = ({ images, interval, onImageClick, currentIndex }) => {
   const [localIndex, setLocalIndex] = useState(currentIndex);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const LeftSilder = ({ images, interval, onImageClick ,currentIndex}) => {
   }, [interval, images.length]);
 
   return (
-    <div className={styles.sliderContainerRight}>
+    <div className={styles.sliderContainerLeft}>
       <img 
         src={images[localIndex]} 
         alt={`Slide ${localIndex + 1}`} 

@@ -64,7 +64,11 @@ public class CompanyService {
 		dao.signUp(cdto);
 
 	}
-	
+	// 회원가입 사업체 이름 중복 검사
+	public int checkName(String name) throws Exception{
+		System.out.println(name);
+		return dao.checkName(name);
+	}
 	public CompanyDTO getCompanyData(String id) {
 		return dao.getCompanyData(id);
 	}

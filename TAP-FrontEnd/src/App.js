@@ -51,6 +51,7 @@ function App() {
                 })
                 .catch(resp => {
                     alert('인증되지 않은 사용자 입니다')
+                    sessionStorage.removeItem('token')
                 })
         }
     }, [])
