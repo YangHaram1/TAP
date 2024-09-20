@@ -87,6 +87,7 @@ const Login = () => {
         await api
             .post(`/auth/${id}/${pw}`)
             .then(resp => {
+                navi(-1)
                 console.log(resp)
                 const token = resp.data
                 const decoded = jwtDecode(token)
@@ -100,7 +101,7 @@ const Login = () => {
                     localStorage.removeItem('loginId')
                 }
                 setAuth(decoded)
-                navi(-1)
+                
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
