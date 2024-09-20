@@ -80,7 +80,9 @@ export const AdminHeader = ({hasScrolled}) => {
                     {role === 'ROLE_ADMIN' && (
                         <div className={styles.headerMenu}>관리자 {name}</div>
                     )}
-                    <div className={styles.headerMenu} onClick={handleLogin}>
+                    <div 
+                    className={`${styles.headerMenu} ${styles.sign}`}
+                    onClick={handleLogin}>
                         {isAuth ? '로그아웃' : '로그인'}
                     </div>
                 </div>
