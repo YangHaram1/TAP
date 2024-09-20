@@ -34,6 +34,9 @@ public class CompanyController {
 		MembersDTO mdto= gson.fromJson(member, MembersDTO.class);  //json 문자열을 객체로 역직렬화
 		CompanyDTO cdto =gson.fromJson(company, CompanyDTO.class); //json 문자열을 객체로 역직렬화
 		
+		String encodePassword = pe.encode(mdto.getPw());
+		mdto.setPw(encodePassword);
+		
 		System.out.println(mdto.getId());
 		System.out.println(cdto.getName());
 		
