@@ -47,7 +47,7 @@ const Company = () => {
     })
     // 정규식, 중복 검사 state
     const [regexDataCompany, setRegexDataCompany] = useState({
-        // nameAvailable: false, // 사업체 이름 중복 검사
+        nameAvailable: false, // 사업체 이름 중복 검사
         name: false, // 사업체 이름
         phone: false, // 사업체 전화번화
         registration_number: false, // 사업체 등록 번호
@@ -239,6 +239,40 @@ const Company = () => {
         }
     }
 
+    const handleNameCheck = async () => {
+        const name = company.name
+        try {
+            const resp = await api.get(`/company/name/${name}`)
+            if (resp.data === 0) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '회원가입',
+                    text: '사용 가능한 이름입니다.',
+                })
+                setRegexDataCompany(prev => {
+                    return { ...prev, nameAvailable: true }
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입',
+                    text: '사용 불가능한 이름입니다.',
+                })
+                setRegexDataCompany(prev => {
+                    return { ...prev, nameAvailable: false }
+                })
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '이름 중복 검사 중 오류가 발생했습니다.',
+            })
+            setRegexDataCompany(prev => {
+                return { ...prev, nameAvailable: false }
+            })
+        }
+    }
     const handleRequestEmailVerification = async () => {
         const email = member.email
         try {
@@ -683,7 +717,7 @@ const Company = () => {
                                     ? styles.checkPassBtn
                                     : styles.checkBtn
                             }
-                            // onClick={handleIdCheck}
+                            onClick={handleNameCheck}
                         >
                             사업체 이름 중복 검사
                         </button>
@@ -757,12 +791,12 @@ const Company = () => {
                     <div className={styles.subTitle}>
                         사업체 등록증 <span>*</span>
                     </div>
-                    <div className={styles.inputTxt}>
-                        🔗
+                    <div className={styles.inputFile}>
                         <input
                             type="file"
                             name="file"
                             onChange={handleFileChange}
+                            className={styles.file}
                         />
                         {img && (
                             <img src={img} alt="" className={styles.img}></img>
