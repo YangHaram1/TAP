@@ -1,54 +1,54 @@
 import { api } from '../../../../config/config';
 import styles from './List.module.css';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-const List=()=>{
+
+const List = () => {
     const [list, setList] = useState([]);
-    const navi =useNavigate();
+    const navi = useNavigate();
 
     //페이지
     const [cpage, setCpage] = useState(1);
     const [page_total_count, setPage_total_count] = useState(1);
     const [target, setTarget] = useState('');
     const [keyword, setKeyword] = useState('');
-    const [search,setSearch] =useState(false);
+    const [search, setSearch] = useState(false);
 
     const record_count_per_page = 20;
     const navi_count_per_page = 5;
 
-/*
-    useEffect(() => {
+    /*
+        useEffect(() => {
+        
     
-
-        axios.get(`${host}/user_history?start=${start}&end=${end}&target=${target}&keyword=${keyword}`).then((resp) => {
-           // console.log(resp.data)
-            setHistory((prev) => {
-                const record_total_count = resp.data.count;//106 10 // 10
-                if (record_total_count % record_count_per_page === 0) {
-                    setPage_total_count(Math.floor(record_total_count / record_count_per_page));
-                }
-                else {
-                    setPage_total_count(Math.floor(record_total_count / record_count_per_page) + 1);
-                }
-                return resp.data.list;//10
-            });
-        })
-    }, [cpage,search])*/
+            axios.get(`${host}/user_history?start=${start}&end=${end}&target=${target}&keyword=${keyword}`).then((resp) => {
+               // console.log(resp.data)
+                setHistory((prev) => {
+                    const record_total_count = resp.data.count;//106 10 // 10
+                    if (record_total_count % record_count_per_page === 0) {
+                        setPage_total_count(Math.floor(record_total_count / record_count_per_page));
+                    }
+                    else {
+                        setPage_total_count(Math.floor(record_total_count / record_count_per_page) + 1);
+                    }
+                    return resp.data.list;//10
+                });
+            })
+        }, [cpage,search])*/
 
     const handlePage = (selectedPage) => {
         setCpage(selectedPage.selected + 1);
     }
 
 
-    const handleSearch=()=>{
-        setSearch((prev)=>{
+    const handleSearch = () => {
+        setSearch((prev) => {
             setCpage(1);
             return !prev;
         })
     }
-
 
 
     useEffect(() => {
@@ -58,31 +58,30 @@ const List=()=>{
         api.get(`/inquiry/admin`).then((resp) => {
             setList(resp.data);
         })
-    }, [cpage,search])
+    }, [cpage, search])
 
-    const handleDetail=(item)=>{
-        const seq=item?.seq;
+    const handleDetail = (item) => {
+        const seq = item?.seq;
         if (!item || !item.seq) {
             console.error('Invalid item or seq:', item);
             return;
-          }
+        }
         navi(`detail/${seq}`);
     }
-    return(
+    return (
         <div className={styles.list}>
-        {
-            list.map((item, index) => {
-                const formattedDate = isNaN(new Date(item.write_date)) ? 'Invalid date' : format(new Date(item.write_date), 'yyyy-MM-dd');
-                return (
-                    <div className={styles.dto} key={index} onClick={()=>handleDetail(item)}>
-                        <div className={styles.status}>
-                            {item.status === 0 ? '답변대기' : '답변완료'}
-                        </div>
-                        <div className={styles.body}>
-                            <div className={styles.title}>
-                                {item.title}
+            {
+                list.map((item, index) => {
+                    const formattedDate = isNaN(new Date(item.write_date)) ? 'Invalid date' : format(new Date(item.write_date), 'yyyy-MM-dd');
+                    return (
+                        <div className={styles.dto} key={index} onClick={() => handleDetail(item)}>
+                            <div className={styles.status}>
+                                {item.status === 0 ? '답변대기' : '답변완료'}
                             </div>
-                            <div className={styles.contents}>
+                            <div className={styles.body}>
+                                <div className={styles.title}>
+                                    {item.title}
+                                </div>
                                 <div className={styles.category}>
                                     {item.category}
                                 </div>
@@ -91,11 +90,10 @@ const List=()=>{
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )
-            })
-        }
-         <ReactPaginate
+                    )
+                })
+            }
+            <ReactPaginate
                 pageCount={page_total_count} // 페이지 총 개수
                 pageRangeDisplayed={navi_count_per_page} // 현재 페이지를 기준으로 표시할 페이지 범위 수
                 marginPagesDisplayed={1} // 양쪽 끝에 표시할 페이지 수
@@ -110,7 +108,7 @@ const List=()=>{
                 breakLabel={'...'} // 생략 표시 제거
                 breakClassName={null} // 생략 표시의 클래스명 제거
             />
-    </div>
+        </div>
     )
 }
 export default List;

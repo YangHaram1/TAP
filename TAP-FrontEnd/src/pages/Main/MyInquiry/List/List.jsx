@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const List=()=>{
     const [list, setList] = useState([]);
+    const [count,setCount]=useState(5);
     const navi =useNavigate();
     useEffect(() => {
         api.get(`/inquiry`).then((resp) => {
@@ -21,10 +22,18 @@ const List=()=>{
           }
         navi(`detail/${seq}`);
     }
+    const handleCount=()=>{
+        setCount((prev)=>{
+            return prev+5;
+        })
+    }   
     return(
         <div className={styles.list}>
         {
             list.map((item, index) => {
+                if(index>=count){
+                    return null;
+                }
                 const formattedDate = isNaN(new Date(item.write_date)) ? 'Invalid date' : format(new Date(item.write_date), 'yyyy-MM-dd');
                 return (
                     <div className={styles.dto} key={index} onClick={()=>handleDetail(item)}>
@@ -48,6 +57,9 @@ const List=()=>{
                 )
             })
         }
+        <div className={styles.addList}>
+          {(count<list.length)&&(  <button onClick={handleCount}> 더보기 </button>)}
+        </div>
     </div>
     )
 }
