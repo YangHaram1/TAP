@@ -154,8 +154,8 @@ const Company = () => {
         setCompany(prev => ({ ...prev, [name]: value }))
 
         if (name === 'name') {
-            // 한글 2-12글자 사이 정규식
-            const regex = /^[가-힣]{2,12}$/
+            // 한글 또는 영어 2-12글자 사이 정규식
+            const regex = /^[가-힣a-zA-Z]{2,12}$/
             setRegexDataCompany(prev => {
                 return { ...prev, [name]: regex.test(value) }
             })
@@ -469,7 +469,8 @@ const Company = () => {
                             <span></span>
                         ) : regexData.id ? (
                             <span style={{ color: '#3737ff' }}>
-                                아이디 형식이 맞습니다.
+                                아이디 형식이 맞습니다. 아이디 중복 검사를
+                                해주세요.
                             </span>
                         ) : (
                             <span>{`형식에 맞게 입력해주세요.`}</span>
@@ -676,11 +677,22 @@ const Company = () => {
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>
                         사업체 이름 <span>*</span>
+                        <button
+                            className={
+                                regexDataCompany.name
+                                    ? styles.checkPassBtn
+                                    : styles.checkBtn
+                            }
+                            onClick={handleIdCheck}
+                        >
+                            사업체 이름 중복 검사
+                        </button>
                     </div>
+
                     <div className={styles.inputTxt}>
                         <input
                             type="text"
-                            placeholder="한글 2-12글자 사이"
+                            placeholder="한글 또는 영어 2-12글자 사이"
                             name="name"
                             onChange={handleCompanyAddChange}
                             value={company.name}
@@ -689,7 +701,8 @@ const Company = () => {
                             <span></span>
                         ) : regexDataCompany.name ? (
                             <span style={{ color: '#3737ff' }}>
-                                사업체 이름 형식이 맞습니다.
+                                사업체 이름 형식이 맞습니다. 사업체 이름 중복
+                                검사를 해주세요.
                             </span>
                         ) : (
                             <span>{`사업체 이름 형식이 맞지 않습니다.`}</span>
