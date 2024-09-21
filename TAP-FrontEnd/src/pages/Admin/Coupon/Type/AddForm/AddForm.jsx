@@ -4,9 +4,9 @@ import { useAuthStore } from '../../../../../store/store';
 import { api } from './../../../../../config/config';
 import SweetAlert from '../../../../../components/SweetAlert/SweetAlert';
 
-const AddForm = ({ setAddForm }) => {
+const AddForm = ({ setAddForm,setAdd}) => {
     const { isAuth } = useAuthStore();
-
+ 
 
     const [data, setData] = useState({
         seq: '',
@@ -46,17 +46,7 @@ const AddForm = ({ setAddForm }) => {
     }, [regexData])
 
 
-    useEffect(() => {
-        if (false) {
-            api.get(`/grade`).then((resp) => {
-
-            })
-            api.get(`/coupon`).then((resp) => {
-
-            })
-        }
-
-    }, [])
+ 
 
     const handleData = (e) => {
         const { name, value } = e.target;
@@ -126,7 +116,7 @@ const AddForm = ({ setAddForm }) => {
         setRegexData((prev) => {
             return { ...prev, [type]: false }
         })
-    }
+    } 
 
     const handleChange = (event) => {
         setData((prev) => {
@@ -144,8 +134,14 @@ const AddForm = ({ setAddForm }) => {
     };
 
     const handleConfirm = () => {
-        api.post(`/coupon`,data).then((resp)=>{
-            
+        api.post(`/coupon/type`,data).then((resp)=>{
+            setAddForm(false);
+            // setList((prev)=>{
+            //     return [...prev,{...data,seq:resp.data}];
+            // })
+            setAdd((prev)=>{
+                return !prev;
+            })
         })
     }
 

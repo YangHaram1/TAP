@@ -3,8 +3,11 @@ import styles from './Type.module.css';
 import { format } from 'date-fns';
 import ReactPaginate from 'react-paginate';
 import AddForm from './AddForm/AddForm';
+import { api } from '../../../../config/config';
 
 const Type = () => {
+
+    const [add,setAdd]=useState(false);
     const [list, setList] = useState([{
         seq: 1,
         coupon_order: "welcome",
@@ -35,7 +38,8 @@ const Type = () => {
 
     useEffect(() => {
         setCheck(list.map(() => { return false }))
-    }, [])
+    }, [list])
+
     const handlePage = (selectedPage) => {
         setCpage(selectedPage.selected + 1);
     }
@@ -50,6 +54,20 @@ const Type = () => {
             return temp;
         })
     }
+
+    useEffect(() => {
+        if (false) {
+            api.get(`/grade`).then((resp) => {
+
+            })
+           
+        }
+
+        api.get(`/coupon/type`).then((resp) => {
+            setList(resp.data)
+        })
+
+    }, [add])
 
     return (
         <div className={styles.container}>
@@ -138,7 +156,7 @@ const Type = () => {
                     breakClassName={null} // 생략 표시의 클래스명 제거
                 />
             </div>
-           {addForm&&( <AddForm setAddForm={setAddForm}/>)}
+           {addForm&&( <AddForm setAddForm={setAddForm} setAdd={setAdd}/>)}
         </div>
     )
 }
