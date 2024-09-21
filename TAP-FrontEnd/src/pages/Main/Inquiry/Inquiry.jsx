@@ -259,7 +259,7 @@ const Inquiry = () => {
                     {data.title === '' ? <span>30자 이내로 입력해주세요.</span> : (regexData.title ? (<span style={{ color: 'blue' }}>30자 이내 입니다.</span>) : (<span>30자 이내로 적어주세요</span>))}
                 </div>
                 <div style={{ paddingRight: '40px' }}>
-                    <MyEditor editorRef={editorRef} height={'400px'} setData={setData} setRegexData={setRegexData} />
+                    <MyEditor editorRef={editorRef} height={'400px'} setData={setData} setRegexData={setRegexData} data={data} />
                 </div>
                 <div>
                     {data.contents === '' ? <span>내용을 입력해주세요.</span> : (regexData.contents ? (<span style={{ color: 'blue' }}>1000자 이내 입니다.</span>) : (<span>1000자 이내로 적어주세요</span>))}
