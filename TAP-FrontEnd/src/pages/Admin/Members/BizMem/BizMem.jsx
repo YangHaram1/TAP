@@ -128,32 +128,35 @@ export const BizMem = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.searchWrapper}>
-                <input
-                    type="text"
-                    placeholder="사업명 검색"
-                    value={keyword} 
-                    onChange={(e) => setKeyword(e.target.value)} // 상태 업데이트
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            handleNameSearch();
-                        }
-                    }}
-                    className={styles.searchInput}
-                />
-                <button className={styles.buttonsearch} onClick={handleNameSearch}>
-                    돋보기
-                </button>
+            <div className={styles.top}>
+                <div className={styles.searchWrapper}>
+                    <input
+                        type="text"
+                        placeholder="사업명 검색"
+                        value={keyword} 
+                        onChange={(e) => setKeyword(e.target.value)} // 상태 업데이트
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleNameSearch();
+                            }
+                        }}
+                        className={styles.searchInput}
+                    />
+                    <button className={styles.buttonsearch} onClick={handleNameSearch}>
+                        돋보기
+                    </button>
+                </div>
+
+                <div className={styles.searchWrapper}>
+                    <button
+                        className={styles.btnDeliver}
+                        onClick={() => openModal()}
+                    >
+                        가입 승인 처리
+                    </button>
+                </div>
             </div>
 
-            <div className={styles.btnStatus}>
-                <button
-                    className={styles.btnDeliver}
-                    onClick={() => openModal()}
-                >
-                    가입 승인 처리
-                </button>
-            </div>
 
             <div className={styles.tableWrapper}>
                 <table className={styles.table}>
