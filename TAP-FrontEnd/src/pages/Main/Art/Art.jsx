@@ -99,11 +99,11 @@ export const Art = ({category})=>{
             </div>
 
             {/* 이벤트 -> 할까 말까*/}
-            <div className={styles.event_box}>
+            {/* <div className={styles.event_box}>
                 <div className={styles.event}>이벤트</div>
                 <div className={styles.event}>넣을까</div>
                 <div className={styles.event}>말까</div>
-            </div>
+            </div> */}
 
             {/* 할인 정보 -> 뮤지컬 일 때만 출력 */}
             {category === "musical"?

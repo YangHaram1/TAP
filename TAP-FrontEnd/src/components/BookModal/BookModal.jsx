@@ -4,7 +4,7 @@ import { PreventMacro } from './PreventMacro/PreventMacro';
 import { api } from '../../config/config';
 import { PriceModal } from '../PriceModal/PriceModal';
 import Swal from 'sweetalert2';
-import { useOrder } from '../../store/store';
+import { useAuthStore, useOrder } from '../../store/store';
 
 export const BookModal = ({ isOpen, onClose}) =>{
 
@@ -16,6 +16,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
     const [selectedSeats, setSelectedSeats] = useState([]); // 선택된 좌석 상태
     const [priceModal, setPriceModal] = useState(false);
 
+    const {token} = useAuthStore();
     const {date, time, seq, setDate, setTime, setStorageSeats, setStorageSection, mainData} = useOrder(); //저장소 데이터
     const [dateList, setDateList] = useState([]);
     const [timeList, setTimeList] = useState([]);
@@ -48,6 +49,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
     };
 
     useEffect(()=>{
+        if(token !== null){
         if(mainData !== null){
         api.get(`/order/${mainData.place_seq}`)
         .then((resp)=>{
@@ -78,6 +80,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         .catch((err)=>{
             console.log(err);
         })
+    }
     }},[mainData])
 
 
@@ -185,6 +188,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
     //============================== 날짜 세팅 ==============================
 
     useEffect(()=>{
+        if(token !== null){
         if(seq !== null){
             api.get(`/order/getDate?seq=${seq}`)
         .then((resp)=>{
@@ -196,9 +200,11 @@ export const BookModal = ({ isOpen, onClose}) =>{
             console.log(err);
         });
         }
+    }
     },[seq]);
 
     useEffect(()=>{
+        if(token !== null){
         if(seq !== null && date !== null){
         api.get(`/order/getTime?date=${date}&seq=${seq}`)
         .then((resp)=>{
@@ -209,7 +215,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         .catch((err)=>{
             console.log(err);
         }); 
-    }
+    }}
     },[date])
 
     //======================== 다음 페이지 세팅 ======================
