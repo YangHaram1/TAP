@@ -15,12 +15,7 @@ const Sign = () => {
     useEffect(() => {
         console.log(isAuth)
         if (isAuth) { //이게 로그인되었으면
-            navi('/')
-            Swal.fire({
-                icon: 'error',
-                title: '보안',
-                text: '잘못된 접근입니다.'
-            })
+            navi('/');
             setCheck(false)
         } else {
 

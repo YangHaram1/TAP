@@ -1,7 +1,9 @@
 package com.tap.inquiry.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +83,11 @@ public class InquiryService {
 	}
 
 
-	public List<InquiryDTO> selectAll() {
-		return dao.selectAll();
+	public Map<String, Object> selectAll(Map<String, Object> map) {
+		Map<String, Object> result =new HashMap<>();
+		result.put("list", dao.selectAll(map));
+		result.put("count", dao.getInquiryCount(map));
+		
+		return result;
 	}
 }
