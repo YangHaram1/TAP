@@ -5,8 +5,61 @@
 <mapper namespace="AdminBizMem">
 	<resultMap id="memberResultMap" type="java.util.HashMap">
     	<result property="JOIN_DATE" column="join_date" javaType="java.sql.Timestamp" />    	
+    	<result property="ISSUE_DATE" column="issue_date" javaType="java.sql.Timestamp" />    	
 	</resultMap>
 	<select id="getAllBizMem" resultMap="memberResultMap">
-		select * from members left join company on members.id = company.member_id
+		 SELECT 
+	    m.*, 
+	    g.*, 
+	    g.name AS g_name, 
+	    c.*, 
+	    c.name AS c_name, 
+	    (SELECT COUNT(*) FROM apply a 
+	    WHERE a.id = m.id
+	    and a.status = '승인 완료') AS apply_count
+	FROM 
+	    members m
+	LEFT JOIN 
+	    grade g ON m.grade_seq = g.seq
+	LEFT JOIN 
+	    company c ON c.member_id = m.id
+	WHERE 
+	    m.role = 'ROLE_BIZ'
 	</select>
+	
+	<update id="updateOrderStatusSingle">
+	update members set grade_seq = 1 , enabled = 1
+    where id= #{orderSeq}
+	</update>
+	
+
+	<select id="searchBizMem" resultMap="memberResultMap">
+     SELECT 
+	    m.*, 
+	    g.*, 
+	    g.name AS g_name, 
+	    c.*, 
+	    c.name AS c_name, 
+	    (SELECT COUNT(*) FROM apply a 
+	    WHERE a.id = m.id
+	    and a.status = '승인 완료') AS apply_count
+		FROM 
+		    members m
+		LEFT JOIN 
+		    grade g ON m.grade_seq = g.seq
+		LEFT JOIN 
+		    company c ON c.member_id = m.id
+		WHERE 
+		    m.role = 'ROLE_BIZ'
+	    <if test="keyword != null and keyword != ''">
+	        AND  (c.name LIKE '%'|| #{keyword}|| '%'
+	        OR m.name LIKE '%'|| #{keyword} || '%')
+	    </if>
+	    <if test="gradeSeq != null">
+	        AND m.grade_seq = #{gradeSeq}
+	    </if>
+	</select>
+	
+	
+	
 </mapper>

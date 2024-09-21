@@ -26,7 +26,7 @@ export const Log = () => {
 
     const handlePageChange = ({ selected }) => {
         setCurrentPage(selected);
-        window.scrollTo(0, 320);
+        window.scrollTo(0, 0);
     };
 
     const fetchLogs = (page) => {
@@ -62,6 +62,7 @@ export const Log = () => {
     
         api.get(`/admin/logs/search`, { params })
             .then((resp) => {
+                console.log(resp.data)
                 setFiltered(resp.data.list);
                 setTotalPages(resp.data.pages);
                 setIsLoading(false);

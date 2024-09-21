@@ -9,6 +9,7 @@ export const CompletedApply =()=>{
     const { login, loginID, setAuth} = useAuthStore();
     const [events, setEvents] = useState([]);
     const [filtered, setFiltered] = useState(events);
+    
   
     useEffect(()=>{
         // 신청 완료 목록 - { 판매중, 판매예정, 판매종료 }
@@ -104,13 +105,18 @@ export const CompletedApply =()=>{
                          </div>
                     )}
                      
-                  {product.STATUS === '승인 반려' && (
-                        <div className={styles.rejectReason}>
-                         <span className={styles.tooltipIcon}>사유<FaLightbulb size={20} /> </span>
-                         <div className={styles.tooltipText}>{product.REJECTION_REASON} 반려 이유: </div>
-                       </div>
-                    )}
-                    </td>
+                     {product.STATUS === '승인 반려' && (
+                    <div className={styles.rejectReason}>
+                        <span className={styles.tooltipIcon}>
+                            반려 <FaLightbulb size={20} />
+                        </span>
+                        {/* 툴팁을 CSS의 hover로 보여주기 */}
+                        <div className={styles.tooltipText}>
+                        반려 이유: {product.REJECT_REASON} 
+                        </div>
+                    </div>
+                )}
+            </td>
                     </tr>
                 ))}
                 </tbody>

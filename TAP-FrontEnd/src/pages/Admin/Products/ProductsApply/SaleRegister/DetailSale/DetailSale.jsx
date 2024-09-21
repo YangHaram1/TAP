@@ -89,12 +89,12 @@ export const DetailSale =()=>{
         <div className={styles.container}>
         <h2>
             {productDetails.length > 0 && productDetails[0].SALE_APPROVED === '승인 완료'
-                ? '승인 완료 상품'
+                ?  `[${productDetails[0].SUB_CATEGORY_NAME}] 할인 승인 완료 상품`
                 : productDetails[0].SALE_APPROVED === '승인 반려'
-                ? '승인 반려 상품'
+                ? `[${productDetails[0].SUB_CATEGORY_NAME}] 할인 승인 반려 상품`
                 : productDetails[0].SALE_APPROVED === '취소'
-                ? '할인 신청 취소 상품'
-                : '승인 대기 상품'}
+                ? `[${productDetails[0].SUB_CATEGORY_NAME}] 할인 신청 취소 상품`
+                : `[${productDetails[0].SUB_CATEGORY_NAME}] 할인 승인 대기 상품`}
         </h2>
         <table className={styles.detailTable}>
             <tbody>

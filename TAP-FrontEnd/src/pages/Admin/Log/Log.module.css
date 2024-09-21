@@ -5,6 +5,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    margin-top:50px;
 }
 
 .member_info{
@@ -77,25 +78,33 @@
    width: 100%;
    margin:2px;
 }
-.inputBox .dateBtn{
-    /* background-color: #e75757; */
-    flex:0.3;
+
+
+.inputBox .dateBtn {
+    flex: 0.3;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 5px 0px;
 }
-.inputBox .dateBtn button{
-    background-color: #90bbe6;
-    border:none;
+
+.inputBox .dateBtn button {
+    background-color: #c19bf8;
+    border: none;
     border-radius: 7px;
-    flex:1;
-    height: 85%;
-    margin-left: 2px;
+    width: 80px; /* 가로 크기 고정 */
+    padding: 10px 0px; /* 위아래 여유 공간 */
+    margin-left: 8px;
+    font-size: 14px;
+    color: white;
+    text-align: center; /* 텍스트가 가운데 정렬되도록 설정 */
 }
-.inputBox .dateBtn button:hover{
+
+.inputBox .dateBtn button:hover {
     cursor: pointer;
-    background-color: rgb(166, 211, 250);
+    background-color: #a28de6;
 }
+
 
 
 
@@ -190,13 +199,13 @@
     flex:8.5;
     display: flex;
     justify-content: center;
-    min-width: 1200px;
+    /* min-width: 1200px; */
 }
 
 .table{
     /* width: 100%;
     height: 100%; */
-    width: 85%; /* 테이블의 고정 너비를 설정 */
+    width: 100%; /* 테이블의 고정 너비를 설정 */
     height: 100%;
     table-layout: fixed; /* 테이블의 열 너비를 고정 */
 }
@@ -205,7 +214,7 @@
     width:20%;    /* 접속시간 너비 */
 }
 .table thead td:nth-child(2) {
-    width: 10%; /* 아이디 열의 너비 */
+    width: 8%; /* 아이디 열의 너비 */
 }
 
 .table thead td:nth-child(3) {

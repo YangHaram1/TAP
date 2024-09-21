@@ -33,6 +33,12 @@ public class AdminProductController {
 	    return ResponseEntity.ok(description);
 	}
 
+	// application_seq에 따른 DetailProduct.jsx에 정보 가져오기 (상품관리 )
+    @GetMapping()
+    public ResponseEntity<List<HashMap<String, Object>>> getDetail(@RequestParam String application_seq) {
+        // 상품 상세 정보를 가져오는 서비스 메서드 호출
+        return ResponseEntity.ok(AdProServ.getDetail(application_seq));
+    }
 	
 	
 	// Count - 현재 상품 갯수

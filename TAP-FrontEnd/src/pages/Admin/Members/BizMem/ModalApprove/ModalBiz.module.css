@@ -1,0 +1,68 @@
+.container{
+    width: 100%;
+    height: 100%;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
+.title{
+    flex:1;
+    font-size: 25px;
+    font-weight: bold;
+}
+.subtitle{
+    flex:1;
+    font-size: 15px;
+    padding-top:20px;
+}
+.changeStatus{
+    flex:1;
+    display: flex;
+    justify-content: space-around;
+    padding:40px;
+}
+.statusTitle{
+    flex:2;
+    padding-left: 20px;
+    min-width: 150px;
+}
+.statusSelect{
+    flex:3;
+    min-width: 150px;
+}
+.statusSelect select{
+    width: 50%;
+    height: 30px;
+}
+.btnstyle{
+    /* border: 1px solid black; */
+    
+    flex:1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btnstyle button{
+    width: 100px;
+    height: 40px;
+    border: none;
+    font-size: 13px;
+}
+.btnstyle .save{
+    border-radius: 3px;
+    background-color: #a6c76c;
+    color: white;
+   
+    margin-right: 10px;
+}
+.btnstyle .cancel{
+    border-radius: 3px;
+}
+
+.btnstyle button:hover{
+    cursor: pointer;
+}
+

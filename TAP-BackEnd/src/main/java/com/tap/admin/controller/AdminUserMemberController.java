@@ -15,7 +15,7 @@ import com.tap.members.dto.MembersDTO;
 import com.tap.members.dto.MembersGradeDTO;
 
 @RestController
-@RequestMapping("/admin/usermem")
+@RequestMapping("/admin/mem")
 public class AdminUserMemberController {
 	@Autowired
 	private AdminUserMemberService aumServ;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../../../config/config';
-
+import styles from './DetailProducts.module.css'
 export const DetailProduct = () => {
     const { application_seq } = useParams(); // URL에서 application_seq를 가져옴
     const [productDetails, setProductDetails] = useState(null);
@@ -9,8 +9,11 @@ export const DetailProduct = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                // const response = await api.get(`/admin/products/${application_seq}`);
-                // setProductDetails(response.data);
+                const response = await api.get(`/admin/products`, {
+                    params: { application_seq: application_seq } // 쿼리 파라미터로 전달
+                });
+                console.log(response.data)
+                setProductDetails(response.data);
             } catch (error) {
                 console.error('Error fetching product details:', error);
             }
@@ -19,20 +22,111 @@ export const DetailProduct = () => {
         fetchProductDetails();
     }, [application_seq]);
 
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+        });
+    };
+
     if (!productDetails) {
         return <p>Loading...</p>;
     }
 
     return (
-        <div>
-            <h2>상품 상세 정보</h2>
-            <p>상품명: {productDetails.NAME}</p>
-            <p>카테고리: {productDetails.SUB_CATEGORY_NAME}</p>
-            <p>연령 제한: {productDetails.AGE_LIMIT}</p>
-            <p>상영 시간: {productDetails.RUNNING_TIME} 분</p>
-            <p>상영 장소: {productDetails.PLACE_NAME}</p>
-            <p>판매 시작: {new Date(productDetails.start_date).toLocaleDateString()}</p>
-            <p>판매 종료: {new Date(productDetails.end_date).toLocaleDateString()}</p>
+        <div className={styles.container}>
+        <h2> [{productDetails[0].SUB_CATEGORY_NAME}] 상품 상세</h2>
+    
+        <table className={styles.detailTable}>
+        {productDetails.map((product, index) => (
+            <tbody key={index}>
+                <tr>
+                   
+                    <td>
+                        <strong>신청번호:</strong> {product.APPLICATION_SEQ}
+                    </td>
+                    <td rowSpan="4" className={styles.imgtd}>
+                        {/* 상품 이미지 */}
+                        <img
+                            src={product.FILES_SYSNAME || '/path/to/default-image.jpg'} // 이미지가 없으면 기본 이미지
+                            alt={product.NAME}
+                            className={styles.productImage}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>상품명:</strong> {product.NAME}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>신청일:</strong> {formatDate(product.created_at)}
+                    </td>
+                </tr>
+                {product.STATUS === '승인 완료' && (
+                <tr>
+                    <td colSpan="2">
+                        <strong>승인일:</strong> {formatDate(product.updated_at)}
+                    </td>
+                </tr>
+                )}
+                {product.STATUS === '승인 반려' && (
+                    <tr>
+                        <td colSpan="2">
+                            <strong>반려일:</strong> {formatDate(product.updated_at)}
+                        </td>
+                    </tr>
+                )}
+                   {/* 반려 이유 추가 */}
+                {product.STATUS === '승인 반려' && (
+                <tr>
+                    <td colSpan="2">
+                        <strong>반려 이유:</strong> {product.REJECT_REASON || ''}
+                    </td>
+                </tr>
+                )}
+                <tr>
+                    <td colSpan="2">
+                        <strong>일자:</strong> {formatDate(product.start_date)} ~ {formatDate(product.end_date)}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>티켓 오픈일:</strong> {formatDate(product.open_date)}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>카테고리:</strong> {product.SUB_CATEGORY_NAME}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>연령 제한:</strong> {product.AGE_LIMIT}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>상영 시간:</strong> {product.RUNNING_TIME} 분
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="2">
+                        <strong>상영 장소:</strong> {product.PLACE_NAME}
+                    </td>
+                </tr>
+            </tbody>
+        ))}
+    </table>
+
+       
+      
+    
         </div>
     );
 };

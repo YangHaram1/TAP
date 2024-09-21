@@ -17,6 +17,10 @@ public class AdminProductService {
 	public String getDescription(int application_seq) {
 		return adProdao.getDescription(application_seq);
 	}
+	public List<HashMap<String, Object>> getDetail(String application_seq){
+		return adProdao.getProductDetails(application_seq);
+	}
+	
 	
 	public List<HashMap<String, Object>> getCurrentProductsByCategory(String category){
 		return adProdao.getCurrentProductsByCategory(category);
