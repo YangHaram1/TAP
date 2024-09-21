@@ -56,6 +56,13 @@ public class MembersService implements UserDetailsService{
 		System.out.println(email);
 		return dao.findId(name, email);
 	}
+	// 비밀번호 찾기
+	public String findPw(String id, String email) throws Exception{
+		System.out.println(id);
+		System.out.println(email);
+		return dao.findPw(id, email);
+	}
+	
 	public boolean updatePassword(String id, String newPassword) throws Exception {
 	    int updateCount = dao.updatePasswordByEmail(id, newPassword);
 	    System.out.println(updateCount);

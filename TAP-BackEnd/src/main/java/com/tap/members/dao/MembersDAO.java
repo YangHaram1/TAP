@@ -63,6 +63,15 @@ public class MembersDAO {
 		dto.setName(name);
 		return mybatis.selectOne("Members.findId", dto);
 	}
+	
+	// 비밀번호 찾기
+	public String findPw(String id, String email) throws Exception{
+		MembersDTO dto =new MembersDTO();
+		dto.setEmail(email);
+		dto.setId(id);
+		return mybatis.selectOne("Members.findPw", dto);
+	}
+	
 	public List<String> selectByAdmin() throws Exception{
 		return mybatis.selectList("Members.selectByAdmin");
 	}

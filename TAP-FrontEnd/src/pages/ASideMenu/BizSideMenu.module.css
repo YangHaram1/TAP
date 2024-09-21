@@ -1,56 +1,64 @@
 .container {
-    width: 300px;
-     /* 사이즈 줄일 때 사이즈가 줄지 않게 설정  - admin.module.css 에도 설정*/
-     flex-shrink:0;
-    /* background-color: #333; */
-    /* color: #fff; */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-  }
-  
-  .menuContainer {
-    padding: 20px;
-    flex: 1;
-  }
-  
-  .menuItem {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #444;
-    /* background-color: pink; */
-    height: 30px;
-  }
-  
-  .icon {
-    margin-right: 10px;
-  }
-  
-  .menuTitle {
-    flex: 1;
-  }
-  
-  .dropdownToggle {
-    margin-left: auto;
-  }
-  
-  .submenuContainer {
-    padding-left: 20px;
-    /* background-color: #444; */
-  }
-  
-  .submenuItem {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #555;
-    height: 30px;
-    /* background-color: orange; */
-  }
-  
-  /* .submenuItem:hover {
+  width: 300px;
+  flex-shrink: 0;
+  /* background-color: #333; */
+  box-shadow: 0px 2px 4px 4px rgba(137, 43, 226, 0.14);
+  /* color: #fff; */
+  /* height: 100vh; */
+  max-height: 1200px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  border-radius: 20px;
+  margin-right: 20px;
+}
+
+.menuContainer {
+  padding: 20px;
+  flex: 1;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  /* border-bottom: 1px solid #444; */
+  /* background-color: pink; */
+  height: 40px;
+}
+
+.icon {
+  margin-right: 10px;
+  color: rgb(137 43 226 / 33%);
+  margin-top: 3px;
+}
+
+.menuTitle {
+  flex: 1;
+  font-size: 18px;
+  font-weight: bold;
+  /* color: #673AB7; */
+}
+
+.dropdownToggle {
+  margin-left: auto;
+}
+
+.submenuContainer {
+  padding-left: 20px;
+  /* background-color: #444; */
+}
+
+.submenuItem {
+  padding: 10px;
+  cursor: pointer;
+  /* border-bottom: 1px solid #555; */
+  height: 30px;
+  /* background-color: orange; */
+  margin-left: 10px;
+}
+
+/* .submenuItem:hover {
     background-color: #555;
   } */
-  
