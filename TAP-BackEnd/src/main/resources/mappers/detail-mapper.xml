@@ -96,4 +96,18 @@
 		ORDER BY datas.schedule_day, datas.schedule_time
 	</select>
 	
+	<select id="getReview" resultType="com.tap.detail.dto.ReviewStarDTO">
+		select 
+			r.review_seq, 
+			r.member_id, 
+			r.review_title,
+			r.review, 
+			r.review_date, 
+			s.stars 
+		from review r 
+			left outer join stars s on r.review_seq = s.review_seq
+			where r.application_seq=#{seq}
+			order by r.REVIEW_DATE desc
+	</select>
+	
 </mapper>

@@ -16,6 +16,7 @@ import com.tap.company.service.CompanyService;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DescriptionDTO;
 import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.ReviewStarDTO;
 import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.DescriptionService;
@@ -76,6 +77,11 @@ public class DetailController {
 			castingAndDate = dServ.getCastingAndDateNotArt(seq);
 		}
 		
+		// 후기
+		List<ReviewStarDTO> reviewList = dServ.getReview(seq);
+		
+		// 기대평
+		
 		map.put("mainData", mainData);
 		map.put("description", description);
 		map.put("seats", seats);
@@ -88,7 +94,8 @@ public class DetailController {
 		
 		return map;
 		
-		
 	}
+	
+	
 
 }

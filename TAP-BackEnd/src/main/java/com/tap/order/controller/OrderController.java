@@ -22,6 +22,7 @@ import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.SeatsService;
 import com.tap.members.dto.MembersDTO;
 import com.tap.members.service.MembersService;
+import com.tap.order.dto.OrdersDTO;
 import com.tap.order.dto.PlaceAndSectionDTO;
 import com.tap.order.dto.SectionInnerDataDTO;
 import com.tap.order.service.OrderService;
@@ -92,21 +93,38 @@ public class OrderController {
 		return ResponseEntity.ok(point);
 	}
 	
-	
-	
+	@GetMapping("/getReview/{seq}")
+	public List<OrdersDTO> getBook(@PathVariable int seq, Principal principal){
+		
+		List<OrdersDTO> list = new ArrayList<>();
+		Map<String,Object> map = new HashMap<>();
+		
+		System.out.println("주문번호 확인 여기들어왔쏭");
+		
+		if (principal == null) {
+			list=null;
+			return list;
+		}
+		String username = principal.getName();		
+		
+		map.put("id",username);
+		map.put("seq", seq);
+		list = oServ.getOrder(map);
+		
+		return list;
+		
+	}
+
 	
 	
 	// 주문 테이블에 데이터 넣기
 	@PostMapping("/orderFinal")
 	public ResponseEntity<Void> orderFinal(@RequestBody Map<String,Object> orderData, Principal principal){
 		
-		System.out.println("여기들어왔쏭");
 		if (principal == null) {
 			return ResponseEntity.ok(null);
 		}
 		String username = principal.getName();
-		System.out.println("getpoint id 확인 "+username);
-		
 		orderData.put("id", username);
 		
 		int seq = Integer.parseInt(orderData.get("seq").toString());
@@ -143,6 +161,46 @@ public class OrderController {
 	    oServ.insertOrder(orderData);
 		return ResponseEntity.ok().build();
 		
+	}
+	
+	@PostMapping("/write")
+	public ResponseEntity<Void> write(@RequestBody Map<String,Object> data, Principal principal){
+		
+		// data => 카테고리, 상품번호, 제목, 내용 (+별점, 주문번호)
+		
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		data.put("id", username);
+		
+		System.out.println("Received data:");
+		System.out.println("Username: " + username);
+		System.out.println("Category: " + data.get("category"));
+		System.out.println("Title: " + data.get("title"));
+		System.out.println("Content: " + data.get("content"));
+		System.out.println("Seq: " + data.get("seq"));
+		
+		String category = (String) data.get("category");
+//		String title = (String) data.get("title");
+//		String content = (String) data.get("content");
+//		int seq = data.get("seq") != null ? 
+//                Integer.parseInt(data.get("seq").toString()) : 0;
+		
+		if(category.equals("review")) {
+//			int orderSeq = data.get("orderSeq") != null ? 
+//	                Integer.parseInt(data.get("orderSeq").toString()) : 0;
+//			int star = data.get("star") != null ? 
+//	                Integer.parseInt(data.get("star").toString()) : 0;
+			
+			oServ.insertReview(data);
+			
+		}else if(category.equals("excite")) {
+			oServ.insertExcite(data);
+		}
+		
+		
+		return ResponseEntity.ok().build();
 	}
 	
 
