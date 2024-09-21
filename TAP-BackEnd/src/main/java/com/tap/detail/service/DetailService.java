@@ -37,5 +37,10 @@ public class DetailService {
 	public List<ScheduleAndCastingDTO> getCastingAndDate(int seq) {
 		return dDao.getCastingAndDate(seq);
 	}
+	
+	public List<ScheduleAndCastingDTO> getCastingAndDateNotArt(int seq) {
+		return dDao.getCastingAndDateNotArt(seq);
+	}
+
 
 }

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import styles from './Notice.module.css'
+import { useOrder } from '../../../../../store/store';
 
 export const Notice = ({description, casting})=> {
 
     const [boxSize, setBoxSize] = useState(true);
+    const {mainData} = useOrder();
 
     const handleSize = ()=>{
         console.log(boxSize);
@@ -12,29 +14,31 @@ export const Notice = ({description, casting})=> {
 
     return (
         <div className={styles.container}>
-
             {/* 캐스팅 */}
-            <div className={styles.casting}>
-                <h2> 캐스팅 </h2>
-                <div className={ `${styles.casting_circle} ${boxSize || styles.active}`}>
-                    {
-                        casting.map((cast, index)=>{
-                            return(
-                                <div key={index} className={styles.circle}>
-                                    <img src={cast.file_sysname}></img>
-                                    <div className={styles.circle_text}>
-                                        <p>{cast.casting_role}</p>
-                                        <p>{cast.casting_name}</p>
+            {
+                mainData.sub_category_seq === 1?
+                <div className={styles.casting}>
+                    <h2> 캐스팅 </h2>
+                    <div className={ `${styles.casting_circle} ${boxSize || styles.active}`}>
+                        {
+                            casting.map((cast, index)=>{
+                                return(
+                                    <div key={index} className={styles.circle}>
+                                        <img src={cast.file_sysname}></img>
+                                        <div className={styles.circle_text}>
+                                            <p>{cast.casting_role}</p>
+                                            <p>{cast.casting_name}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })
-                    }
+                                );
+                            })
+                        }
+                    </div>
+                    <button onClick={handleSize}>더보기</button>
                 </div>
-
-
-                <button onClick={handleSize}>더보기</button>
-            </div>
+                :
+                ""
+            }
 
             {/* 공지사항 & 상세 내용*/}
             <div className={styles.notice}>

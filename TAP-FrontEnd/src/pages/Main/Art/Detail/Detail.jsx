@@ -291,7 +291,11 @@ export const Detail = ()=>{
 
                         <div className={styles.btns}>
                             <button onClick={() => { setTap(0) }}>공지사항</button>
-                            <button onClick={() => { setTap(1) }}>캐스팅정보</button>
+                            { 
+                                mainData.sub_category_seq === 1
+                                ?<button onClick={() => { setTap(1) }}>캐스팅정보</button>
+                                :""
+                            }
                             <button onClick={() => { setTap(2) }}>판매정보</button>
                             <button onClick={() => { setTap(3) }}>관람후기 (0)</button>
                             <button onClick={() => { setTap(4) }}>기대평 (0)</button>

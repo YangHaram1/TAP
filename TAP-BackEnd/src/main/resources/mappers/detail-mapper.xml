@@ -12,7 +12,8 @@
 		    a.end_date, 
 		    a.open_date,
 		    a.running_time,
-		    a.running_intertime,  
+		    a.running_intertime, 
+		    a.SUB_CATEGORY_SEQ, 
 		    a.status,
 		    a.age_limit,
 		    f.files_sysname,
@@ -71,6 +72,28 @@
 		left join casting c on datas.day_number = c.SCHEDULE_DAY and datas.schedule_time= c.schedule_time
 		WHERE c.application_seq = #{seq}
 		ORDER BY datas.schedule_day, datas.schedule_time, c.casting_role
+	</select>
+	
+	
+	<select id="getCastingAndDateNotArt" resultType="com.tap.detail.dto.ScheduleAndCastingDTO">
+		select 
+		    datas.schedule_day, 
+		    datas.schedule_time, 
+		    datas.days, 
+		    datas.day_number, 
+		    datas.times
+		from
+		(SELECT s.*, 
+		       TO_CHAR(s.schedule_day, 'DAY') AS days,
+		       CASE 
+		           WHEN TO_CHAR(s.schedule_day, 'D') = '1' THEN 0
+		           ELSE TO_NUMBER(TO_CHAR(s.schedule_day, 'D')) - 1 
+		       END AS day_number,
+		       TO_CHAR(s.schedule_time, 'HH24:MI') AS times
+		FROM schedule s
+		WHERE s.application_seq = #{seq}
+		ORDER BY schedule_day) datas 
+		ORDER BY datas.schedule_day, datas.schedule_time
 	</select>
 	
 </mapper>

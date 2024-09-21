@@ -36,5 +36,9 @@ public class DetailDAO {
 	public List<ScheduleAndCastingDTO> getCastingAndDate(int seq) {
 		return mybatis.selectList("Detail.getCastingAndDate",seq);
 	}
+	
+	public List<ScheduleAndCastingDTO> getCastingAndDateNotArt(int seq) {
+		return mybatis.selectList("Detail.getCastingAndDateNotArt",seq);
+	}
 
 }
