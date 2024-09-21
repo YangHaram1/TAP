@@ -15,13 +15,14 @@
  orders.delivery_status, orders.total_price, orders.status,
  members.id, orders.order_seq
 from orders 
-join members on members.id = orders.member_id
-join apply on apply.application_seq = orders.application_seq
-join book on orders.order_seq = book.order_seq
+LEFT join members on members.id = orders.member_id
+LEFT join apply on apply.application_seq = orders.application_seq
+LEFT join book on orders.order_seq = book.order_seq
 GROUP BY orders.ORDER_SEQ, members.name, orders.order_date, 
 members.join_date, orders.delivery_status, orders.total_price,
  members.id, orders.order_seq, 
 orders.status, apply.name, apply.sub_category_seq
+order by orders.order_seq desc
 </select>
 
 <update id="updateOrderStatusSingle">
