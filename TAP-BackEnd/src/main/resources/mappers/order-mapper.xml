@@ -58,6 +58,32 @@
 		where schedule_date = #{date} order by times
 	</select>
 	
+	<select id="getPoint" resultType="int">
+		select point from members where id=#{id}
+	</select>
+	
+	<insert id="insertOrder">
+		insert into orders 
+		(order_seq, application_seq, member_id, order_date, total_price, status, delivery_status, pay, delivery_method,DELIVERY_SEQ) 
+		values 
+		(order_seq.nextval, #{seq}, #{id}, sysdate,#{totalPrice},#{status},#{deliveryStatus,jdbcType=VARCHAR}, #{pay}, #{deliveryMethod,jdbcType=VARCHAR},#{deliverySeq,jdbcType=INTEGER}) 
+		<selectKey resultType="int" order="AFTER" keyProperty="order_seq">
+ 			select order_seq.currval from dual
+ 		</selectKey>
+	</insert>
+	
+	<insert id="insertBook">
+		insert into book
+		(book_seq, order_seq, member_id, book_date, book_time, section_seq, book_row, book_col, book_level) 
+		values
+		(#{bookSeq},#{orderSeq},#{id},#{date},#{time},#{storageSection},#{row},#{col},#{grade})
+		
+	</insert>
+	
+	<update id="updatePoint">
+		update members set point = #{point} where id=#{id}
+	</update>
+	
 	
 	
 </mapper>

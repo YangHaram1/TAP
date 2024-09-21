@@ -1,0 +1,143 @@
+.container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.side{
+    flex: 2.5;
+    /* border: 1px solid red; */
+    margin-left: 10px;
+}
+
+.side ul{
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+.side li{
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.side li:hover{
+    cursor: pointer;
+    color: blueviolet;
+    font-weight: 700;
+}
+
+.main{
+    flex:7.5;
+    margin-left: 30px;
+    /* border: 1px solid red; */
+}
+
+.main_box{
+    border: 1px solid black;
+    width: 93%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main_header{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+}
+
+.main_header h3{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: lightgray;
+    margin-bottom: 0px;
+}
+
+.point_box{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgray;
+    margin-bottom: 15px;
+}
+
+.mypoint{
+    display: flex;
+    height: 30px;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.usepoint{
+    display: flex;
+    height: 30px;
+    align-items: center;
+}
+
+.usepoint button{
+    width: 80px;
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    text-indent: 10px;
+    height: 100%;
+    width: 130px;
+    background-color: rgb(240, 238, 238);
+    font-size: 14px;
+}
+
+.content, .input{
+    text-indent: 10px;
+}
+
+.input{
+    width: 200px;
+}
+
+.usepoint button{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.usepoint button:hover{
+    background-color: lightgray;
+}
+
+.point_info_box{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgray;
+    margin-bottom: 15px;
+}
+
+.point_info_box p{
+    text-indent: 10px;
+    color: gray;
+}
+
+/* ================ 카카오 결제 css ============== */
+.kakao_box{
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid lightgray; */
+    margin-bottom: 15px;
+}
+
+.kakao_info_box{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgray;
+    margin-bottom: 15px;
+}
+
+.kakao_info_box p{
+    text-indent: 10px;
+    color: gray;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 13px;
+}

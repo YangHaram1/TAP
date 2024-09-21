@@ -34,9 +34,9 @@ export const Detail = ()=>{
     const [days, setDays] = useState([]); 
     const [part, setPart] = useState([]); // 날짜 선택 시 회차 넣을 변수
     const [castingAndDate, setCastingAndDate] = useState([]);
-    const [company, setCompany] = useState({});
+    // const [company, setCompany] = useState({});
     const [member,setMember] = useState({});
-    const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices} = useOrder();
+    const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices,company, setCompany} = useOrder();
     
     
     useEffect(()=>{

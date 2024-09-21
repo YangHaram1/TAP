@@ -1,0 +1,72 @@
+.container{
+    width: 100%;
+    height: 100%;
+    margin-top: 15px;
+    margin-left: 25px;
+    font-size: 13px;
+}
+
+.cancle_box{
+    width: 92%;
+    height: 80%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cancle_box h4 {
+    width: 100%;
+    margin-bottom: 10px;
+    text-indent: 20px;
+}
+
+.cancle_tax_box{
+    display: flex;
+    justify-content: center;
+    width: 90%;
+}
+
+.cancle_tax_box table, .paymethod_box table {
+    width: 100%;
+    border-collapse: collapse;
+    border:1px solid gray;
+    text-align: center;
+}
+
+.cancle_tax_box thead, .paymethod_box thead{
+    background-color: lightgray;
+}
+
+.cancle_tax_box td,.cancle_tax_box th , .paymethod_box th, .paymethod_box td{
+    border-right: 1px solid gray;
+}
+
+.cancle_tax_box tr{
+    border-bottom: 1px solid gray;
+}
+
+.data_box{
+    border: 1px solid gray;
+    width: 89%;
+    height: 190px;
+    padding: 10px;
+    overflow: auto;
+}
+
+.data_box p{
+    margin-top: 0px;
+}
+
+.check_box{
+    width: 94%;
+}
+
+.check_box p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.paymethod_box{
+    width: 85%;
+}

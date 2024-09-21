@@ -43,6 +43,12 @@ export const useOrder = create((set)=>({
     storageSeats:[],
     mainData:null,
     seatPrices:[],
+    deliveryMethod:null,
+    address:null,
+    payMethod:"point",
+    point:null,
+    totalPrice:0,
+    company:null,
     setDate: (date) => {
         console.log("Setting date:", date); // 로그 추가
         set(() => ({date: date}));
@@ -70,5 +76,51 @@ export const useOrder = create((set)=>({
     setSeatPrices:(seatPrices)=>{
         console.log("Setting seatPrices:", seatPrices); // 로그 추가
         set({ seatPrices: seatPrices });
+    },
+    setDeliveryMethod: (deliveryMethod) => {
+        console.log("Setting deliveryMethod:", deliveryMethod); // 로그 추가
+        set(() => ({deliveryMethod: deliveryMethod}));
+    },
+    setAddress: (address) => {
+        console.log("Setting address:", address); // 로그 추가
+        set(() => ({address: address}));
+    },
+    setPayMethod: (payMethod) => {
+        console.log("Setting payMethod:", payMethod); // 로그 추가
+        set(() => ({payMethod: payMethod}));
+    },
+    setPoint: (point) => {
+        console.log("Setting point:", point); // 로그 추가
+        set(() => ({point: point}));
+    },
+    setTotalPrice: (totalPrice) => {
+        console.log("Setting totalPrice:", totalPrice); // 로그 추가
+        set(() => ({totalPrice: totalPrice}));
+    },
+    setCompany:(company) => {
+        console.log("Setting company:", company); // 로그 추가
+        set(() => ({company: company}));
+    },
+    // 상태 초기화 메서드 추가
+    setRemoveData: () => {
+        console.log("Resetting all order data to initial values"); // 로그 추가
+        set(() => ({
+            storageSection: null,
+            storageSeats: [],
+            deliveryMethod: null,
+            address: null,
+            payMethod: "point",
+            point: null,
+            totalPrice: 0,
+        }));
+    }
+
+}))
+
+export const useUserData = create((set)=>({
+    user:{},
+    setUser:(user) => {
+        console.log("Setting user:", user); // 로그 추가
+        set(() => ({user: user}));
     }
 }))
