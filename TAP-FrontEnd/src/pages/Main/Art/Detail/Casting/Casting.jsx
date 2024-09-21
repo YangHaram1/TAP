@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styles from './Casting.module.css'
-import { api } from '../../../../../config/config';
 import { format } from 'date-fns';
 
 export const Casting = ({castings, seq, days, time, castingAndDate})=> {
