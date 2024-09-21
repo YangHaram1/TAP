@@ -1,5 +1,6 @@
 package com.tap.order.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,28 @@ public class OrderDAO {
 	
 	public List<String> getTime(Map<String,Object> map){
 		return mybatis.selectList("Order.getTime",map);
+	}
+	
+	public int getPoint(String id) {
+		return mybatis.selectOne("Order.getPoint", id);
+	}
+	
+	public int insertOrder(Map<String,Object> orderData) {
+		orderData.put("order_seq", 0);
+		mybatis.insert("Order.insertOrder", orderData);
+		int seq = (int)orderData.get("order_seq");
+		return seq;
+	}
+	
+	public void insertBook(Map<String,Object> map) {
+		mybatis.insert("Order.insertBook", map);
+	}
+	
+	public void updatePoint(int point, String id) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", id);
+		map.put("point", point);
+		mybatis.update("Order.updatePoint", map);
 	}
 	
 }
