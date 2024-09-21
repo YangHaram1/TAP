@@ -24,7 +24,7 @@ export const WaitingSaleApply = () => {
     return (
         <div className={styles.container}>
             <div className={styles.product_table}>
-                <h2>상품 세일 신청 내역</h2>
+                <h3>상품 세일 신청 내역</h3>
                 <div className={styles.btns}>
                     <button
                         onClick={() => { setTap(0); }}

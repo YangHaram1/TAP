@@ -35,6 +35,7 @@ export const Orders = () => {
         api.get(`admin/orders`).then((resp) => {
             setOrders(resp.data);
             setFiltered(resp.data);
+            console.log(resp.data)
         });
     };
     useEffect(() => {
@@ -225,7 +226,7 @@ export const Orders = () => {
                                     />
                                 </td>
                                 <td>{order.ORDER_SEQ}</td>
-                                <td>{order.MEMBER_ID}</td>
+                                <td>{order.ID}</td>
                                 <td>{order.NAME}</td>
                                 <td>{getCategoryName(order.SUB_CATEGORY_SEQ)}</td>
                                 <td>
@@ -239,7 +240,7 @@ export const Orders = () => {
                                 <td>{order.TOTAL_PRICE}</td>
                                 <td>{formatTime(order.order_date)}</td>
                                 <td>{order.STATUS}</td>
-                                <td>{order.DELIVERY_STATUS}</td>
+                                <td>{!order.DELIVERY_STATUS ? "현장 발매" : order.DELIVERY_STATUS}</td>
                             </tr>
                         ))}
                     </tbody>
