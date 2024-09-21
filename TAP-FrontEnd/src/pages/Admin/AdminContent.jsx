@@ -16,6 +16,7 @@ import { Log } from './Log/Log';
 import Inquiry from './Inquiry/Inquiry';
 import Coupon from './Coupon/Coupon';
 import Grade from './Grade/Grade';
+import Board from './Board/Board';
 
 export const AdminContent =()=>{
     return(
@@ -33,7 +34,8 @@ export const AdminContent =()=>{
                 <Route path="/members/biz/*" element={<BizMem/>}/>
                 <Route path='/support/chat/*' element={<Chat/>}/>
                 <Route path='/support/inquiry/*' element={<Inquiry/>}/>
-                <Route path='/coupon' element={<Coupon/>}/>
+                <Route path='/coupon/*' element={<Coupon/>}/>
+                <Route path='/board/*' element={<Board/>}/>
                 <Route path='/grade' element={<Grade/>}/>
                 <Route path='/log/*' element={<Log/>}/>
             </Routes>

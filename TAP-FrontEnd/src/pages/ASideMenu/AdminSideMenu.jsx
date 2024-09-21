@@ -41,12 +41,20 @@ export const AdminSideMenu = () => {
     },
     {
       name: "쿠폰 관리", link: "/coupon", type: "couponManage", icon: FaCartPlus,
+      submenus: [
+        { name: "쿠폰 종류", link: "/coupon/type" },
+        { name: "사용자 쿠폰 내역", link: "/coupon/list" }
+      ]
     },
     {
       name: "멤버쉽 관리", link: "/grade", type: "gradeManage", icon: FaCartPlus,
     },
     {
       name: "게시물 관리", link: "/board", type: "boardManage", icon: FaCartPlus,
+      submenus: [
+        { name: "공지사항", link: "/board/notice" },
+        { name: "사용자 기대평 내역", link: "/board/list" }
+      ]
     },
     {
       name: "로그 관리", link: "/log", type: "logManage", icon: FaCartPlus,
