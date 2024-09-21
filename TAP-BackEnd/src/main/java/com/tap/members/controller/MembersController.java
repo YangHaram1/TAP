@@ -98,6 +98,13 @@ public class MembersController {
 		String findId = mserv.findId(name, email);
 		return ResponseEntity.ok(findId);
 	}
+	
+	// 비밀번호 찾기
+	@GetMapping("findPw/{id}/{email}")
+	public ResponseEntity<String> findPw(@PathVariable String id, @PathVariable String email) throws Exception{
+		String findPw = mserv.findPw(id, email);
+		return ResponseEntity.ok(findPw);
+	}
 	@PostMapping("/requestPasswordReset/{email}")
 	public ResponseEntity<String> requestPasswordReset(@PathVariable("email") String userEmail) {
 	    try {
@@ -121,7 +128,8 @@ public class MembersController {
 	        String userEmail = request.get("email");
 	        String resetCode = request.get("code");
 	        String newPassword = request.get("newPassword");
-
+	        System.out.println(userEmail);
+	        System.out.println(newPassword);
 	        // 저장된 코드와 입력된 코드 비교
 	        String storedCode = verificationCodes.get(userEmail);
 
