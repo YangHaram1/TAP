@@ -44,6 +44,7 @@ public class SecurityConfig {
 			request.requestMatchers(HttpMethod.GET,"/company/name/{name}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/email/{email}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/findId/{name}/{email}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/members/findPw/{id}/{email}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/artlist/{category}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/artlist/openContents/{category}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/artlist/getTap").permitAll();
