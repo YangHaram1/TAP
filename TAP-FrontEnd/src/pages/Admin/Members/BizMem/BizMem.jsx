@@ -3,7 +3,7 @@ import styles from './BizMem.module.css';
 import { api } from '../../../../config/config';
 import { Pagination } from '../../../../components/Pagination/Pagination';
 import { Modal } from '../../../../components/Modal/Modal';
-import { ModalBiz } from './ModalBiz/ModalBIz';
+import { ModalBiz } from './ModalApprove/ModalBIz';
 
 export const BizMem = () => {
     const [bizMems, setBizMems] = useState([]);
