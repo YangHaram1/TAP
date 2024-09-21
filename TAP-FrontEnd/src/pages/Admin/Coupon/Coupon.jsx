@@ -10,7 +10,6 @@ const Coupon =()=>{
                 <Route path='type' element={<Type/>}/>
                 <Route path='list' element={<List/>}/>
             </Routes>
-
         </div>
     )
 }
