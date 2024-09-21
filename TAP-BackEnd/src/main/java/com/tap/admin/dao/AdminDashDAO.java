@@ -7,11 +7,18 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.tap.admin.dto.AdminDashDTO;
+
 @Repository
 public class AdminDashDAO {
 
 	@Autowired
 	private SqlSession mybatis;
+	
+	public HashMap<String, Object> getId(String id){
+		return mybatis.selectOne("AdminDash.getId", id);
+	}
+	
 	// 오늘 할일 ====================
 	// 오늘 신청된 상품 갯수
 	public int getApplyCountToday() {
@@ -22,6 +29,20 @@ public class AdminDashDAO {
 	}
 	public int getDeliveryCountToday() {
 		return mybatis.selectOne("AdminDash.getDeliveryCountToday");
+	}
+	// 오늘 Done =======================
+	public int getApprovedCountToday() {
+		return mybatis.selectOne("AdminDash.getApprovedCountToday");
+	}
+	public int getSaleApprovedCountToday() {
+		return mybatis.selectOne("AdminDash.getSaleApprovedCountToday");
+	}
+	public int getDeliveryApprovedCountToday() {
+		return mybatis.selectOne("AdminDash.getDeliveryApprovedCountToday");
+	}
+	// 오늘 주문 총 금액
+	public AdminDashDTO getTotalToday() {
+		return mybatis.selectOne("AdminDash.getTotalToday");
 	}
 	// 카테고리 별 주문 갯수 ============
 	public List<HashMap<String, Object>> getOrderCountByCategory(){

@@ -1,9 +1,9 @@
 /* Team.module.css */
-.selectContainer {
+/* .selectContainer {
     display: flex;
     align-items: center;
     gap: 10px; /* 요소들 사이의 간격 */
-}
+/* }
 
 .gradeSelect {
     padding: 8px;
@@ -21,4 +21,12 @@
     border-color: #6B9080;
     outline: none;
     box-shadow: 0 0 5px rgba(107, 144, 128, 0.5);
+}  */
+
+
+.gradeSelect{
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    font-weight: 600;
 }

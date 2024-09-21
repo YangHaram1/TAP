@@ -7,32 +7,57 @@ import { Navigate, useNavigate } from 'react-router-dom';
 export const ProductsCurrent = ({ category, categoryName, tap }) => {
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([]);
+    const [loading, setLoading] = useState(false); 
     const navigate = useNavigate(); 
+    const [currentPage, setCurrentPage] = useState(0);
+    const PER_PAGE = 3;
+    const pageCount = Math.ceil(filtered.length / PER_PAGE);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                // tap 값에 따라 서버 엔드포인트 결정
-                let productList = '';
-                if (tap === 0) {
-                    productList = `/admin/products/current?category=${category}`; // 현재 판매 중인 상품
-                } else if (tap === 1) {
-                    productList = `/admin/products/past?category=${category}`; // 판매 종료된 상품
-                } else if (tap === 2) {
-                    productList = `/admin/products/future?category=${category}`; // 판매 예정인 상품
-                }
+        if (currentPage > pageCount - 1) {
+          setCurrentPage(Math.max(pageCount - 1, 0));
+        }
+      }, [currentPage, pageCount]);
+    
+      // 데이터 불러오기 함수
+      const fetchProducts = async () => {
+        try {
+          setLoading(true);
+          let productList = '';
+          if (tap === 0) {
+            productList = `/admin/products/current?category=${category}&page=${currentPage}&perPage=${PER_PAGE}`;
+          } else if (tap === 1) {
+            productList = `/admin/products/past?category=${category}&page=${currentPage}&perPage=${PER_PAGE}`;
+          } else if (tap === 2) {
+            productList = `/admin/products/future?category=${category}&page=${currentPage}&perPage=${PER_PAGE}`;
+          }
+    
+          const response = await api.get(productList);
+          console.log(response.data);
+          setProducts(response.data);
+          setFiltered(response.data);
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      // 페이지나 카테고리, 탭이 변경될 때마다 데이터 재요청
+      useEffect(() => {
+        fetchProducts();
+      }, [category, tap, currentPage]);
 
-                const response = await api.get(productList);
-                console.log(response.data)
-                setProducts(response.data);
-                setFiltered(response.data);
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected);
+        window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
+    };
 
-        fetchProducts(); // 컴포넌트가 마운트될 때 데이터 가져오기
-    }, [category, tap]); // 카테고리와 상품 상태가 변경될 때마다 다시 API 요청
+
+    // 페이지나 카테고리, 탭이 변경될 때마다 데이터 재요청
+    useEffect(() => {
+        fetchProducts();
+    }, [category, tap, currentPage]);
 
     // 나머지 로직은 동일
     const formatDate = (dateString) => {
@@ -58,13 +83,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
     };
     
 
-    const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 3;
-    const pageCount = Math.ceil(filtered.length / PER_PAGE);
-    const handlePageChange = ({ selected }) => {
-        setCurrentPage(selected);
-        window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
-    };
+   
 
     // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
     const handleRowClick = (application_seq) => {

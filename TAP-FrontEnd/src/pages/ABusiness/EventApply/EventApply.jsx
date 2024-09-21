@@ -434,7 +434,6 @@ export const EventApply = () => {
     };
 
     // 캐스팅 상태
-    
     const [scheduleCastingList, setScheduleCastingList] = useState([]);
     const [castingData, setCastingData] = useState([]); 
     const [currentSchedule, setCurrentSchedule] = useState(null);
