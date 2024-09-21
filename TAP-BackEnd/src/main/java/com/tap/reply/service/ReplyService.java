@@ -29,4 +29,16 @@ public class ReplyService {
 		return rdao.insert(dto);
 		
 	}
+	
+	@Transactional
+	public int deleteBySeq(int seq,int parentSeq) {
+		
+		idao.updateStatus(parentSeq);
+		
+		return rdao.deleteBySeq(seq);
+	}
+
+	public int update(ReplyDTO dto) {
+		return rdao.update(dto);
+	}
 }

@@ -18,6 +18,14 @@ public class ReplyDAO {
 	public int insert(ReplyDTO dto) {
 		return mybatis.insert("Reply.insert",dto);
 	}
+
+	public int deleteBySeq(int seq) {
+		return mybatis.delete("Reply.deleteBySeq",seq);
+	}
+
+	public int update(ReplyDTO dto) {
+		return mybatis.update("Reply.update",dto);
+	}
 	
 	
 }

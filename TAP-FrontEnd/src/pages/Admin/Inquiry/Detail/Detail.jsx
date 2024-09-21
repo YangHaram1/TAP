@@ -8,6 +8,7 @@ import { faSquareArrowUpRight } from '@fortawesome/free-solid-svg-icons';
 import { faFileLines } from '@fortawesome/free-regular-svg-icons';
 import MyEditor from './../../../Main/Inquiry/MyEditor/MyEditor';
 import SweetAlert from './../../../../components/SweetAlert/SweetAlert';
+import Swal from 'sweetalert2';
 const Detail = () => {
     const { seq } = useParams();
     const [dto, setDto] = useState({});
@@ -15,6 +16,7 @@ const Detail = () => {
     const [fileList, setFileList] = useState([]);
 
     const [data, setData] = useState({
+        seq: '',
         parent_seq: seq,
         contents: ''
     })
@@ -39,6 +41,9 @@ const Detail = () => {
             })
             api.get(`/reply/${parentSeq}`).then((resp) => {
                 setReply(resp.data);
+                setData((prev) => {
+                    return { parent_seq: parentSeq, seq: resp.data.seq, contents: resp.data.contents }
+                })
             })
         }
 
@@ -65,21 +70,47 @@ const Detail = () => {
         })
     }
 
-    const handleCancel=()=>{
+    const handleCancel = () => {
         setCheck(true);
     }
 
-    const handleDelete=()=>{
-        const seq=reply.seq;
-        api.delete(`/reply/${seq}`).then((resp)=>{
-            
+    const handleDelete = () => {
+        const seq = reply.seq;
+        const parentSeq = reply.parent_seq
+        api.delete(`/reply/${seq}/${parentSeq}`).then((resp) => {
+            Swal.fire({
+                icon: "success",
+                title: "답변",
+                text: "삭제 완료됬습니다."
+            })
+            setReply({});
+            setDto((prev) => {
+                return { ...prev, status: 0 }
+            })
+            setData((prev)=>{
+                return {...prev,contents:''}
+            })
         })
     }
 
-    const handleUpdate=()=>{
-        api.put(`/reply`,data).then((resp)=>{
-            
+    const handleUpdate = () => {
+
+        api.put(`/reply`, data).then((resp) => {
+            Swal.fire({
+                icon: "success",
+                title: "답변",
+                text: "수정 완료됬습니다."
+            })
+            setReply((prev)=>{
+                return {...prev,contents:data.contents}
+            })
+            setCheck(true);
         })
+    }
+
+    const handleCheck=()=>{
+        setCheck(false);
+      
     }
 
     return (
@@ -140,18 +171,18 @@ const Detail = () => {
             {(reply.contents === undefined) ? (
                 <React.Fragment>
                     <div className={styles.reply}>
-                        <MyEditor editorRef={editorRef} setData={setData} setRegexData={setRegexData} />
+                        <MyEditor editorRef={editorRef} setData={setData} setRegexData={setRegexData} data={data} />
                     </div>
                     {regexData.contents ? <span style={{ color: 'blue' }} >1000자 이내입니다.</span> : <span style={{ color: 'red' }}>입력해주세요</span>}
                     <div className={regexData.contents ? styles.confirm : styles.confirmFalse}>
                         <button onClick={() => {
-                            SweetAlert('warning', '고객센터', '등록 하시겠습니까?', handleConfirm, null);
+                            SweetAlert('warning', '답변', '등록 하시겠습니까?', handleConfirm, null);
                         }}>답변 등록</button>
                     </div>
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <div className={styles.inquiry}>
+                    {check ? (<div className={styles.inquiry}>
                         <div className={styles.a}>
                             A
                         </div>
@@ -162,20 +193,26 @@ const Detail = () => {
                                 {isNaN(new Date(reply.write_date)) ? '' : format(new Date(reply.write_date), 'yyyy.MM.dd HH:mm')}
                             </div>
                         </div>
-
-                    </div>
+                    </div>) : (
+                        <React.Fragment>
+                            <div className={styles.reply}>
+                                <MyEditor editorRef={editorRef} setData={setData} setRegexData={setRegexData} data={data}/>
+                            </div>
+                            {regexData.contents ? <span style={{ color: 'blue' }} >1000자 이내입니다.</span> : <span style={{ color: 'red' }}>입력해주세요</span>}
+                        </React.Fragment>
+                    )}
                     <div className={styles.update}>
                         <div className={styles.updateBtn}>
                             {check ? (
                                 <React.Fragment>
-                                    <button onClick={()=>{setCheck(false)}}>수정</button>
-                                    <button onClick={handleDelete}>삭제</button>
+                                    <button onClick={handleCheck}>수정</button>
+                                    <button onClick={() => { SweetAlert('warning', '답변', '삭제 하시겠습니까?', handleDelete) }}>삭제</button>
                                 </React.Fragment>
 
                             ) : (
                                 <React.Fragment>
                                     <button onClick={handleCancel}>취소</button>
-                                    <button >확인</button>
+                                    <button className={regexData.contents ? styles.confirm : styles.updateFalse} onClick={() => {SweetAlert('warning', '답변', '수정 하시겠습니까?', handleUpdate, null);}}>확인</button>
                                 </React.Fragment>
                             )}
                         </div>

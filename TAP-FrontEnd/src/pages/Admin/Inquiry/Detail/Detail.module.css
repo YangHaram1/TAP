@@ -204,3 +204,13 @@
 .updateBtn button:hover{
     color: blue;
 }
+
+.updateFalse {
+    width: 50%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    background-color: rgba(128, 128, 128, 0.444) !important;
+    pointer-events: none;
+}
