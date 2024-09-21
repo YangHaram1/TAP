@@ -1,10 +1,10 @@
 package com.tap.biz.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
-
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import com.tap.chatupload.dto.ChatUploadDTO;
 import com.tap.chatupload.service.ChatUploadService;
-import com.tap.files.service.FilesService;
 
 @RestController
 @RequestMapping("/bizUpload")

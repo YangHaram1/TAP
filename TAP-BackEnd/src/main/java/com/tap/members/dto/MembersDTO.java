@@ -16,6 +16,7 @@ public class MembersDTO {
 	private int enabled;
 	private String role;
 	private String coupon;
+	private int point ;
 	public String getId() {
 		return id;
 	}
@@ -94,8 +95,14 @@ public class MembersDTO {
 	public void setCoupon(String coupon) {
 		this.coupon = coupon;
 	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
 	public MembersDTO(String id, String pw, String name, String phone, String email, String birth, String gender,
-			int delivery_seq, int grade_seq, Timestamp join_date, int enabled, String role, String coupon) {
+			int delivery_seq, int grade_seq, Timestamp join_date, int enabled, String role, String coupon, int point) {
 		super();
 		this.id = id;
 		this.pw = pw;
@@ -110,10 +117,12 @@ public class MembersDTO {
 		this.enabled = enabled;
 		this.role = role;
 		this.coupon = coupon;
+		this.point = point;
 	}
 	public MembersDTO() {
 		super();
 	}
+	
 	
 	
 	

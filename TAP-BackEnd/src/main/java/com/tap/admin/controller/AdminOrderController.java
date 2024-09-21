@@ -35,6 +35,8 @@ public class AdminOrderController {
             List<Integer> orderSeqs = (List<Integer>) request.get("orderSeqs"); // 주문 번호 목록
             String newStatus = (String) request.get("newStatus"); // 새로운 상태 (예: 발송 완료)
 
+            System.out.println(orderSeqs);
+            System.out.println(newStatus);
              AdOrderServ.updateDeliveryStatus(orderSeqs, newStatus);
 
             return ResponseEntity.ok("주문 상태가 성공적으로 업데이트되었습니다.");

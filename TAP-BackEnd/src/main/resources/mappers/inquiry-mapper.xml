@@ -12,7 +12,7 @@
 	</insert>
 	
 	<select id="selectById" resultType="com.tap.inquiry.dto.InquiryDTO">
-		select *from inquiry where member_id = #{id}
+		select *from inquiry where member_id = #{id} order by write_date desc
 	</select>
 	
 	<select id="selectBySeq" resultType="com.tap.inquiry.dto.InquiryDTO">
@@ -20,6 +20,42 @@
 	</select>
 	
 	<select id="selectAll" resultType="com.tap.inquiry.dto.InquiryDTO">
-		select *from inquiry order by status desc
+		select a.* from
+		(
+		select inquiry.*, row_number() over (order by write_date desc) as rown 
+		from inquiry where 1=1
+		<if test="category!=''">
+      		and  category = #{category,jdbcType=VARCHAR}
+   		</if>
+   		
+		<if test="status!=''">
+      		and status = ${status}
+   		</if>
+   		
+   		)a 
+   		where rown between ${start} and ${end}
 	</select>
+	
+	<select id="getInquiryCount" resultType="int" >
+		select count(*) from inquiry where 1=1
+		<if test="category!=''">
+      		and  category = #{category,jdbcType=VARCHAR}
+   		</if>
+	 
+		<if test="status!=''">
+      		and status = ${status}
+   		</if>
+   	
+	</select>
+	
+	<update id="updateStatus">
+		  update inquiry 
+    	set status = 
+    	case 
+    		when status = 1 then 0 
+    		else 1 
+    	end 
+    	where seq = ${seq}
+	</update>
+	
 </mapper>

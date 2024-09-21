@@ -100,8 +100,7 @@ const Detail = () => {
                         A
                     </div>
                     <div className={styles.inquiryBody}>
-                        <div className={styles.content}>
-                            {reply.contents === undefined ? '죄송합니다 답변을 기다려주세요.' : reply.contents}
+                        <div className={styles.content}  dangerouslySetInnerHTML={ {__html:reply.contents === undefined ? '죄송합니다 답변을 기다려주세요.' : reply.contents}}>
                         </div>
                         <div className={styles.contentDate}>
                             {isNaN(new Date(reply.write_date)) ? '' : format(new Date(reply.write_date), 'yyyy.MM.dd HH:mm')}

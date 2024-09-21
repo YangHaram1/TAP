@@ -54,6 +54,7 @@ export const CurrentEvent=()=>{
                 <thead>
                 <tr>
                     <th>상품정보</th>
+                    <th>판매 오픈일</th>
                     <th>일시</th>
                     <th>공연장</th>
                     <th>할인신청</th>
@@ -74,6 +75,7 @@ export const CurrentEvent=()=>{
                         </div>
                         </div>
                     </td>
+                    <td>{formatDate(product.open_date)}</td>
                     <td className={styles.product_date}>{formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}</td>
                     <td className={styles.product_venue}>{product.PLACE_NAME} </td>
                     <td>

@@ -47,7 +47,7 @@ const Company = () => {
     })
     // 정규식, 중복 검사 state
     const [regexDataCompany, setRegexDataCompany] = useState({
-        // > Company
+        nameAvailable: false, // 사업체 이름 중복 검사
         name: false, // 사업체 이름
         phone: false, // 사업체 전화번화
         registration_number: false, // 사업체 등록 번호
@@ -154,8 +154,8 @@ const Company = () => {
         setCompany(prev => ({ ...prev, [name]: value }))
 
         if (name === 'name') {
-            // 한글 2-12글자 사이 정규식
-            const regex = /^[가-힣]{2,12}$/
+            // 한글 또는 영어 2-12글자 사이 정규식
+            const regex = /^[가-힣a-zA-Z]{2,12}$/
             setRegexDataCompany(prev => {
                 return { ...prev, [name]: regex.test(value) }
             })
@@ -239,6 +239,40 @@ const Company = () => {
         }
     }
 
+    const handleNameCheck = async () => {
+        const name = company.name
+        try {
+            const resp = await api.get(`/company/name/${name}`)
+            if (resp.data === 0) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '회원가입',
+                    text: '사용 가능한 이름입니다.',
+                })
+                setRegexDataCompany(prev => {
+                    return { ...prev, nameAvailable: true }
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입',
+                    text: '사용 불가능한 이름입니다.',
+                })
+                setRegexDataCompany(prev => {
+                    return { ...prev, nameAvailable: false }
+                })
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '회원가입',
+                text: '이름 중복 검사 중 오류가 발생했습니다.',
+            })
+            setRegexDataCompany(prev => {
+                return { ...prev, nameAvailable: false }
+            })
+        }
+    }
     const handleRequestEmailVerification = async () => {
         const email = member.email
         try {
@@ -469,7 +503,8 @@ const Company = () => {
                             <span></span>
                         ) : regexData.id ? (
                             <span style={{ color: '#3737ff' }}>
-                                아이디 형식이 맞습니다.
+                                아이디 형식이 맞습니다. 아이디 중복 검사를
+                                해주세요.
                             </span>
                         ) : (
                             <span>{`형식에 맞게 입력해주세요.`}</span>
@@ -676,11 +711,22 @@ const Company = () => {
                 <div className={styles.signCont}>
                     <div className={styles.subTitle}>
                         사업체 이름 <span>*</span>
+                        <button
+                            className={
+                                regexDataCompany.name
+                                    ? styles.checkPassBtn
+                                    : styles.checkBtn
+                            }
+                            onClick={handleNameCheck}
+                        >
+                            사업체 이름 중복 검사
+                        </button>
                     </div>
+
                     <div className={styles.inputTxt}>
                         <input
                             type="text"
-                            placeholder="한글 2-12글자 사이"
+                            placeholder="한글 또는 영어 2-12글자 사이"
                             name="name"
                             onChange={handleCompanyAddChange}
                             value={company.name}
@@ -689,7 +735,8 @@ const Company = () => {
                             <span></span>
                         ) : regexDataCompany.name ? (
                             <span style={{ color: '#3737ff' }}>
-                                사업체 이름 형식이 맞습니다.
+                                사업체 이름 형식이 맞습니다. 사업체 이름 중복
+                                검사를 해주세요.
                             </span>
                         ) : (
                             <span>{`사업체 이름 형식이 맞지 않습니다.`}</span>
@@ -744,12 +791,12 @@ const Company = () => {
                     <div className={styles.subTitle}>
                         사업체 등록증 <span>*</span>
                     </div>
-                    <div className={styles.inputTxt}>
-                        🔗
+                    <div className={styles.inputFile}>
                         <input
                             type="file"
                             name="file"
                             onChange={handleFileChange}
+                            className={styles.file}
                         />
                         {img && (
                             <img src={img} alt="" className={styles.img}></img>

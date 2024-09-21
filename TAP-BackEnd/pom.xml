@@ -122,6 +122,11 @@
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
         </dependency>
+           <dependency>
+          <groupId>com.github.pagehelper</groupId>
+          <artifactId>pagehelper-spring-boot-starter</artifactId>
+          <version>1.4.6</version>
+      </dependency>     
 	</dependencies>
 
 	<build>

@@ -5,16 +5,23 @@ import styles from './MyEditor.module.css';
 import Swal from 'sweetalert2';
 import { api, tinymce } from '../../../../config/config'
 import { useCheckList } from '../../../../store/store';
-const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
+const MyEditor = ({ editorRef, height, setData, setRegexData ,data}) => {
 
   const inputRef = useRef(null);
   const { chatSeq } = useCheckList();
+  const [contents, setContents] = useState('');
 
+
+  useEffect(() => {
+    if(data.contents!==undefined){
+      setContents(data.contents)
+    }
+  }, []);
   const handleEditorChange = (content) => {
     setData((prev) => {
       return { ...prev, contents: content }
     })
-    const contentsRegex =  /^.{1,1000}$/;
+    const contentsRegex = /^([\s\S]{1,1000})$/;
     setRegexData((prev) => {
       return { ...prev, contents: contentsRegex.test(content) }
     })
@@ -27,32 +34,32 @@ const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
     inputRef.current.click();
   }
 
-    // 파일 사이즈 검사
-    const formatFileSize = (size) => {
-      if (size < 1024) return `${size} bytes`;
-      if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`; // 정수로 반올림
-      return `${Math.round(size / (1024 * 1024))} MB`; // 정수로 반올림
-    };
-  
-    const checkSize = (file) => {
-      const split = formatFileSize(file.size).split(' ');
-      const size = parseInt(split[0], 10);
-      const str = split[1];
-      if (str === 'MB') {
-        if (size <= 10) return true;
-        else {
-          Swal.fire({
-            icon: 'error',
-            title: '파일',
-            text: '10MB 이하로 업로드 해주세요.'
-          })
-          return false;
-        }
-      }
+  // 파일 사이즈 검사
+  const formatFileSize = (size) => {
+    if (size < 1024) return `${size} bytes`;
+    if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`; // 정수로 반올림
+    return `${Math.round(size / (1024 * 1024))} MB`; // 정수로 반올림
+  };
+
+  const checkSize = (file) => {
+    const split = formatFileSize(file.size).split(' ');
+    const size = parseInt(split[0], 10);
+    const str = split[1];
+    if (str === 'MB') {
+      if (size <= 10) return true;
       else {
-        return true;
+        Swal.fire({
+          icon: 'error',
+          title: '파일',
+          text: '10MB 이하로 업로드 해주세요.'
+        })
+        return false;
       }
     }
+    else {
+      return true;
+    }
+  }
 
   //여기는 이미지 넣기
   const handleOnchange = () => {
@@ -61,8 +68,8 @@ const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
     const { chatSeq } = useCheckList.getState();
 
     for (let index = 0; index < files.length; index++) {
-      const sizeCheck=checkSize(files[index]);
-      if(sizeCheck){
+      const sizeCheck = checkSize(files[index]);
+      if (sizeCheck) {
         formData.append("files", files[index]);
       }
     }
@@ -84,8 +91,8 @@ const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
   const handleImageUpload = async (file) => {
     try {
       const formData = new FormData();
-      const sizeCheck=checkSize(file);
-      if(sizeCheck){
+      const sizeCheck = checkSize(file);
+      if (sizeCheck) {
         formData.append('files', file); // FormData에 파일 추가
       }
       const response = await api.post(`/chatUpload?group_seq=${chatSeq}`, formData);
@@ -118,6 +125,7 @@ const MyEditor = ({ editorRef, height, setData, setRegexData }) => {
           onInit={(evt, editor) => {
             editorRef.current = editor;
           }}
+          initialValue={contents}
           onEditorChange={(content) => handleEditorChange(content)}
           init={{
             width: "auto",
