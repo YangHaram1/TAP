@@ -14,7 +14,6 @@
 .dto{
     display: flex;
     gap: 20px;
-    cursor: pointer;
     padding-bottom: 30px;
     border-bottom: 2px solid rgba(128, 128, 128, 0.2);
     flex-direction: column;

@@ -46,6 +46,9 @@ export const AdminSideMenu = () => {
       name: "멤버쉽 관리", link: "/grade", type: "gradeManage", icon: FaCartPlus,
     },
     {
+      name: "게시물 관리", link: "/board", type: "boardManage", icon: FaCartPlus,
+    },
+    {
       name: "로그 관리", link: "/log", type: "logManage", icon: FaCartPlus,
     }
   ];
