@@ -1,13 +1,14 @@
-import { Routes ,Route} from 'react-router-dom';
-import styles from './Board.module.css';
+import { Routes, Route } from 'react-router-dom'
+import styles from './Board.module.css'
+import Notice from './Notice/Notice'
 
-const Board=()=>{
-    return(
+const Board = () => {
+    return (
         <div className={styles.container}>
             <Routes>
-                <Route path='noitice' element={null}/>
+                <Route path="notice" element={<Notice></Notice>} />
             </Routes>
         </div>
     )
 }
-export default Board;
+export default Board
