@@ -27,6 +27,11 @@
 	<select id="findId" resultType="String">
 		select id from members where email=#{email} and name=#{name}
 	</select>
+	
+	<!--비밀번호 찾기-->
+	<select id="findPw" resultType="String">
+		select id from members where id=#{id} and email=#{email}
+	</select>
 		
 	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
 		select pw,role,m.name as name, g.name as grade from members
