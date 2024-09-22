@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
-	<select id="getAllBoard" resultType="com.tap.board.dto.BoardDTO">
-		select * from board
-	</select>
 
+	<insert id="insert">
+		insert into board values(board_seq.nextval, #{member_id},#{title},#{contents},sysdate,0)
+	</insert>
+	<select id="getAllBoard" resultType="com.tap.board.dto.BoardDTO">
+		select * from board order by write_date desc
+	</select>
+	
 	<select id="selectAll" resultType="com.tap.board.dto.BoardDTO">
 
 	</select>

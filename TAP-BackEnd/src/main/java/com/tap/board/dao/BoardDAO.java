@@ -25,4 +25,7 @@ public class BoardDAO {
 	public int getBoardCount(Map<String, Object> map) {
 		return mybatis.selectOne("Board.getInquiryCount",map);
 	}
+	public int insert(BoardDTO dto) {
+		return mybatis.insert("Board.insert",dto);
+	}
 }

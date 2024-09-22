@@ -77,7 +77,11 @@ const Board = () => {
 
                             {check[index] && (
                                 <div className={styles.hideConts}>
-                                    <div>{item.contents}</div>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: item.contents,
+                                        }}
+                                    ></div>
                                 </div>
                             )}
                         </div>
