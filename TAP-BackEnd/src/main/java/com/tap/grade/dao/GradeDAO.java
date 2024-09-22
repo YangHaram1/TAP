@@ -16,4 +16,10 @@ public class GradeDAO {
 	public List<GradeDTO> getGrade(){
 		return mybatis.selectList("AdminUserMem.getGrade");
 	}
+
+	public List<GradeDTO> selectAll() {
+		
+		return mybatis.selectList("Grade.selectAll");
+	}
+
 }

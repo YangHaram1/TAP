@@ -64,8 +64,6 @@ public class InquiryController {
 			@RequestParam(name = "category", required = false, defaultValue = "") String category) throws Exception {
 	
 		Map<String, Object> map= new HashMap<>();
-		System.out.println(status);
-		System.out.println(category);
 		map.put("start", start);
 		map.put("end", end);
 		map.put("status", status);

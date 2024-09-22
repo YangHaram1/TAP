@@ -4,7 +4,7 @@ import { useAuthStore } from '../../../../../store/store';
 import { api } from './../../../../../config/config';
 import SweetAlert from '../../../../../components/SweetAlert/SweetAlert';
 
-const AddForm = ({ setAddForm,setAdd}) => {
+const AddForm = ({ setAddForm,setAdd,grade}) => {
     const { isAuth } = useAuthStore();
  
 
@@ -25,20 +25,7 @@ const AddForm = ({ setAddForm,setAdd}) => {
     const [checkAll, setCheckAll] = useState();
 
 
-    const [grade, setGrade] = useState([
-        {
-            grade_order: 1,
-            name: 'welcome'
-        },
-        {
-            grade_order: 2,
-            name: 'familly'
-        },
-        {
-            grade_order: 3,
-            name: 'vip'
-        }
-    ]);
+   
     useEffect(() => {
         //(regexData.birth&&regexData.address&&regexData.detailed_address)
         const allTrue = Object.values(regexData).every(value => value === true)

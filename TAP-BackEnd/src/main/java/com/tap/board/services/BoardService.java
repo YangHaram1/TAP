@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.tap.board.dao.BoardDAO;
 import com.tap.board.dto.BoardDTO;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class BoardService {
 	
@@ -26,6 +28,11 @@ public class BoardService {
 //		result.put("count", bdao.getInquiryCount(map));
 		
 		return result;
+	}
+	
+	@Transactional
+	public int insert(BoardDTO dto) {
+		return bdao.insert(dto);
 	}
 	
 }
