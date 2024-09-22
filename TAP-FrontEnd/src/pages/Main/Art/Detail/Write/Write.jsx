@@ -5,22 +5,165 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'; // so
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
+import { api } from '../../../../../config/config';
+import { useOrder } from '../../../../../store/store';
+import { useSearchParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-export const Write = ({category})=> {
+export const Write = ({category, list})=> {
 
-    const handleInput = (event) => {
-        const inputText = event.target.value;
-        let byteCount = 0;
+    // category -> review, excite
+    const {seq, mainData} = useOrder();
+    const [orderList, setOrderList] = useState([]); // 예매 내역 리스트 출력
+    const [orderSeq, setOrderSeq] = useState(null); // 선택한 예매 내역
+    const [selectedStar, setSelectedStar] = useState(null); // 별점 저장
+    const [inputData, setInputData] = useState({title:'', content:''}); // 제목, 내용 저장
+    const [lastInput, setLastInput] = useState('');
+    const [enterPressed, setEnterPressed] = useState(false);
 
-        for (let i = 0; i < inputText.length; i++) {
-          const char = inputText.charAt(i);
-          byteCount += (char.charCodeAt(0) > 127) ? 3 : 1; // 한글은 3바이트, 영문은 1바이트로 계산
-          if (byteCount > 1200) {
-            event.target.value = inputText.substring(0, i);
-            break;
-          }
+    const handleOrder = (e) => {
+        setOrderSeq(e.target.value); // 선택된 값 저장
+    };
+
+    const handleStarClick = (e) => {
+        setSelectedStar(Number(e.target.id)); // 클릭한 별점 저장
+        console.log(selectedStar);
+    };
+
+    useEffect(()=>{
+
+        console.log(list);
+
+        if(category === "review"){
+            api.get(`/order/getReview/${seq}`)
+            .then((resp)=>{
+                console.log(resp.data);
+                setOrderList(resp.data);
+                //관람 후기 불러오기
+            })  
+            .catch((err)=>{
+                console.log(err);
+            })
+        }else if(category === "excite"){
+            //기대평 불러오기
         }
-      };
+    },[category])
+
+    const handleChange = (e) => {
+        let { name, value } = e.target;
+    
+        // 현재 입력값에서 마지막 문자가 엔터인지 확인
+        if (value.charAt(value.length - 1) === '\n') {
+            if (enterPressed || value.length === 1) { // 값이 비어있거나 엔터가 연속인 경우
+                Swal.fire(
+                    { 
+                      icon: 'error',
+                      title: '연속으로 엔터를 입력할 수 없습니다.',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }
+                );
+                e.target.value = value.slice(0, -1); // 마지막 문자 제거
+                return;
+            }
+            setEnterPressed(true);
+        } else {
+            setEnterPressed(false); // 엔터가 아니면 상태 초기화
+        }
+    
+        // 입력값이 비어있으면 예외 처리
+        if (value.trim() === "") {
+            setInputData(prev => ({ ...prev, [name]: value }));
+            setLastInput(value);
+            setEnterPressed(false);
+            return;
+        }
+    
+        const inputText = value;
+        let byteCount = 0;
+    
+        for (let i = 0; i < inputText.length; i++) {
+            const char = inputText.charAt(i);
+            byteCount += (char.charCodeAt(0) > 127) ? 3 : 1; // 한글은 3바이트, 영문은 1바이트로 계산
+            if (byteCount > 900) {
+                Swal.fire(
+                    { 
+                      icon: 'error',
+                      title: '최대 900바이트까지만 입력할 수 있습니다.',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }
+                );
+                e.target.value = inputText.substring(0, i);
+                break;
+            }
+        }
+    
+        setInputData(prev => ({ ...prev, [name]: value }));
+        setLastInput(value);
+    }
+
+    const handleWrite = () => {
+        console.log(inputData);
+        let data;
+        if(category === "review"){
+
+            if(selectedStar == null || inputData.title == null  || inputData.content == null || orderSeq == null ){
+                Swal.fire(
+                    { 
+                      icon: 'error',
+                      title: '모든 내용을 작성해주세요',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }
+                );
+                return;
+            }
+            data = {
+                category:category,
+                seq:seq,
+                orderSeq:orderSeq,
+                star:selectedStar,
+                title:inputData.title,
+                content:inputData.content
+            };
+        }else if(category === "excite"){
+
+            if(inputData.title == null || inputData.content== null ){
+                Swal.fire(
+                    { 
+                      icon: 'error',
+                      title: '모든 내용을 작성해주세요',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }
+                );
+                return;
+            }
+
+            data = {
+                category:category,
+                seq:seq,
+                title:inputData.title,
+                content:inputData.content
+            };
+        }
+
+        api.post(`/order/write`,data)
+            .then((resp)=>{
+                console.log(resp.data);
+                setSelectedStar(null);
+                setInputData({ title: '', content: '' });
+                setOrderSeq(null);
+            })  
+            .catch((err)=>{
+                console.log(err);
+            })
+
+            window.location.reload();
+
+    }
 
     return (
 
@@ -84,9 +227,15 @@ export const Write = ({category})=> {
                 <>
                 <div className={styles.write_header}>
                     <div className={styles.writer}>관람일시 &nbsp;</div> 
-                    <select>
-                        <option defaultValue="">예매 내역 없음</option>
-                        <option defaultValue="y">예매번호 : M1234 / 2024-09-09 19:00 뮤지컬&lt;킹키부츠&gt;</option>
+                    <select onChange={(e)=>{handleOrder(e)}}>
+                        <option value="" selected disabled>예매 내역 선택</option>
+                        {
+                            orderList.map((list)=>{
+                                return(
+                                    <option key={list.order_seq} value={list.order_seq}>예매번호 : {list.order_seq} | {mainData.name}</option>
+                                );
+                            })
+                        }
                     </select>
                 </div>
 
@@ -95,12 +244,11 @@ export const Write = ({category})=> {
                     <div className={styles.write_stars}>별점 &nbsp;</div>
                     {[5, 4, 3, 2, 1].map((star) => (
                         <div key={star}>
-                        <input type="radio" id={star.toString()} name="star" /> &nbsp;
+                        <input type="radio" id={star.toString()} name="star" onClick={handleStarClick} /> &nbsp;
                         {[1, 2, 3, 4, 5].map((i) => (
                             <FontAwesomeIcon key={i} icon={i <= star ? solidStar : regularStar} // star 값보다 작거나 같으면 solidStar, 크면 regularStar
                             />
                         ))}
-
                         &nbsp;&nbsp;&nbsp;
                         </div>
                     ))}
@@ -109,12 +257,12 @@ export const Write = ({category})=> {
                 :""}
 
                 <div> 
-                    제목 : <input type='text' className={styles.write_title} placeholder="후기 제목을 입력해주세요"></input>
-                    <textarea onChange={handleInput} rows="10" placeholder="텍스트를 입력하세요. 최대 400자, 1200바이트" />
+                    제목 : <input type='text' className={styles.write_title} placeholder="제목을 입력해주세요" name="title" onChange={handleChange}></input>
+                    <textarea rows="10" placeholder="내용을 입력하세요. 한글 최대 300자, 900bytes" name="content" onChange={handleChange}/>
                 </div>
 
                 <div className={styles.write_btn}>
-                    <button>작성하기</button>
+                    <button onClick={handleWrite}>작성하기</button>
                 </div>
             </div>
 

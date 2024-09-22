@@ -6,12 +6,12 @@ public class DetailDTO {
 	
 	private String name, place_name, id;
 	private Timestamp start_date, end_date, open_date;
-	private int running_time, running_intertime;
+	private int running_time, running_intertime, sub_category_seq;
 	private String status, age_limit, files_sysname;
 	private int max_ticket, place_seq;
 	
 	public DetailDTO(String name, String place_name, String id,Timestamp start_date, Timestamp end_date, Timestamp open_date,
-			int running_time, int running_intertime, String status, String age_limit, String files_sysname,
+			int running_time, int running_intertime, int sub_category_seq,String status, String age_limit, String files_sysname,
 			int max_ticket, int place_seq) {
 		super();
 		this.name = name;
@@ -22,12 +22,14 @@ public class DetailDTO {
 		this.open_date = open_date;
 		this.running_time = running_time;
 		this.running_intertime = running_intertime;
+		this.sub_category_seq = sub_category_seq;
 		this.status = status;
 		this.age_limit = age_limit;
 		this.files_sysname = files_sysname;
 		this.max_ticket = max_ticket;
 		this.place_seq = place_seq;
 	}
+
 	public DetailDTO() {
 		super();
 	}
@@ -109,7 +111,12 @@ public class DetailDTO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+	public int getSub_category_seq() {
+		return sub_category_seq;
+	}
+	public void setSub_category_seq(int sub_category_seq) {
+		this.sub_category_seq = sub_category_seq;
+	}
 	
 
 }

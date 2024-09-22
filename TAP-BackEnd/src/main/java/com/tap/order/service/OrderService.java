@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tap.order.dao.OrderDAO;
+import com.tap.order.dto.OrdersDTO;
 import com.tap.order.dto.PlaceAndSectionDTO;
 import com.tap.order.dto.SectionInnerDataDTO;
 
@@ -100,5 +101,23 @@ public class OrderService {
 	    int point = oDao.getPoint(id);
 	    int updatePoint = point-totalPrice;
 	    oDao.updatePoint(updatePoint, id);
+	    
 	}
+	
+	public List<OrdersDTO> getOrder(Map<String,Object> map){
+		return oDao.getOrder(map);
+	}
+	
+	@Transactional
+	public void insertReview(Map<String,Object> data) {
+		int reviewSeq = oDao.insertReview(data);
+		System.out.println(reviewSeq+"번 댓글 입니다.");
+		data.put("reviewSeq", reviewSeq);
+		oDao.insertStar(data);
+	}
+	
+	public void insertExcite(Map<String,Object> data) {
+		oDao.insertExcite(data);
+	}
+	
 }

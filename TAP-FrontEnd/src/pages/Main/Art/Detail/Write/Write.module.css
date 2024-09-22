@@ -80,6 +80,11 @@
     display: flex;
 }
 
+.write_header select{
+    width: 300px;
+}
+
+
 .write_title{
     height: 20px;
     width: 70%;
