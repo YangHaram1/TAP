@@ -144,7 +144,7 @@ export const DetailSale =()=>{
                 {productDetails[0].SALE_APPROVED === '승인 반려' && (
                     <tr>
                         <td colSpan="2">
-                            <strong>반려 이유:</strong> {productDetails[0].REJECT_REASON || ''}
+                            <strong>반려 이유:</strong> {productDetails[0].SALE_REJECTED_REASON || ''}
                         </td>
                     </tr>
                 )}
