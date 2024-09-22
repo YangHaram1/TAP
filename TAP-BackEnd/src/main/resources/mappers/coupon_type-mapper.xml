@@ -10,7 +10,52 @@
 		</selectKey>
 	</insert>
 	
-	<select id="selectAll" resultType="com.tap.coupon.dto.CouponTypeDTO">
-		select *from coupon_type
+	<select id="selectAll" resultType="com.tap.coupon.dto.CouponTypeGrade">
+	
+		select a.* from
+		(
+		select b.*, row_number() over (order by coupon_order) as rown 
+		from 
+			(
+			select c.*, g.name
+			from coupon_type  c
+			join grade g on c.coupon_order =g.grade_order
+			) b
+		where 1=1
+		<if test="target=='title'">
+      		and  b.title like '%' ||#{keyword,jdbcType=VARCHAR}||'%' 
+   		</if>
+   		
+		<if test="target=='grade'">
+      		and b.name like '%' ||#{keyword,jdbcType=VARCHAR}||'%' 
+   		</if>
+   		)a 
+   		where rown between ${start} and ${end}
 	</select>
+	
+
+	
+	
+	<select id="getCount" resultType="int" >
+		select count(*) from 
+		(
+			select c.*,g.name
+			from coupon_type  c
+			join grade g on c.coupon_order =g.grade_order
+			) a
+		 where 1=1
+		<if test="target=='title'">
+      		and  a.title like '%' ||#{keyword,jdbcType=VARCHAR}||'%' 
+   		</if>
+   		
+		<if test="target=='grade'">
+      		and a.name like '%' ||#{keyword,jdbcType=VARCHAR}||'%' 
+   		</if>
+	</select>
+	
+	<delete id="delete">
+		delete from coupon_type where seq=${seq}
+	</delete>
+	
+	
 </mapper>

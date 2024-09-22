@@ -14,4 +14,8 @@ public class GradeService {
     public List<GradeDTO> getGrade(){
     	return gDao.getGrade();
     }
+	public List<GradeDTO> selectAll() {
+		return gDao.selectAll();
+		}
+
 }

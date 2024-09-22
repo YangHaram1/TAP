@@ -1,42 +1,44 @@
 import { api } from '../../../../config/config';
 import styles from './List.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
-const List = () => {
+const List = ({recordCountPerPage,cpage,setCpage}) => {
     const [list, setList] = useState([]);
     const navi = useNavigate();
 
     //페이지
-    const [cpage, setCpage] = useState(1);
+ 
     const [page_total_count, setPage_total_count] = useState(1);
     const [status,setStatus]= useState('');
     const [category,setCategory]=useState('');
 
-    const record_count_per_page = 5;
+    //const record_count_per_page = 5;
     const navi_count_per_page = 5;
 
-
     useEffect(() => {
-        const start = cpage * record_count_per_page - (record_count_per_page - 1); //1
-        const end = cpage * record_count_per_page; //10
-
-        api.get(`/inquiry/admin?start=${start}&end=${end}&status=${status}&category=${category}`).then((resp) => {
-            // console.log(resp)
-            setList(()=>{
-                const record_total_count = resp.data.count;//106 10 // 10
-                if (record_total_count % record_count_per_page === 0) {
-                    setPage_total_count(Math.floor(record_total_count / record_count_per_page));
-                }
-                else {
-                    setPage_total_count(Math.floor(record_total_count / record_count_per_page) + 1);
-                }
-                return resp.data.list;//10
-            });
-        })
-        window.scrollTo(0, 0);
+        if(cpage!==0){
+            const start = cpage * recordCountPerPage - (recordCountPerPage - 1); //1
+            const end = cpage * recordCountPerPage; //10
+      
+            api.get(`/inquiry/admin?start=${start}&end=${end}&status=${status}&category=${category}`).then((resp) => {
+                // console.log(resp)
+                setList(()=>{
+                    const record_total_count = resp.data.count;//106 10 // 10
+                    if (record_total_count % recordCountPerPage === 0) {
+                        setPage_total_count(Math.floor(record_total_count / recordCountPerPage));
+                    }
+                    else {
+                        setPage_total_count(Math.floor(record_total_count / recordCountPerPage) + 1);
+                    }
+                    return resp.data.list;//10
+                });
+            })
+            window.scrollTo(0, 0);
+        }
+       
     }, [cpage, status,category])
 
     const handlePage = (selectedPage) => {
@@ -137,6 +139,7 @@ const List = () => {
                     nextClassName={styles.next} // 다음 버튼의 클래스명
                     breakLabel={'...'} // 생략 표시 제거
                     breakClassName={null} // 생략 표시의 클래스명 제거
+                    forcePage={cpage>0?cpage-1:0}
                 />
             </div>
 
