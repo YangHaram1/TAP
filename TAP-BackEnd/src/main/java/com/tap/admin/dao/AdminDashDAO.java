@@ -44,6 +44,12 @@ public class AdminDashDAO {
 	public AdminDashDTO getTotalToday() {
 		return mybatis.selectOne("AdminDash.getTotalToday");
 	}
+	
+	// 환불
+	public HashMap<String, Object> getRefundToday(){
+		return mybatis.selectOne("AdminDash.getRefundToday");
+	}
+	
 	// 카테고리 별 주문 갯수 ============
 	public List<HashMap<String, Object>> getOrderCountByCategory(){
 		return mybatis.selectList("AdminDash.getOrderCountByCategory");

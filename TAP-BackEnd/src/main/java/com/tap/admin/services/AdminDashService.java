@@ -43,6 +43,10 @@ public class AdminDashService {
 	public AdminDashDTO getTotalToday() {
 		return adDashdao.getTotalToday();
 	}
+	// 환불
+	public HashMap<String, Object> getRefundToday(){
+		return adDashdao.getRefundToday();
+	}
 	// =======================
 	public List<HashMap<String, Object>> getOrderCountByCategory(){
 		return adDashdao.getOrderCountByCategory();
