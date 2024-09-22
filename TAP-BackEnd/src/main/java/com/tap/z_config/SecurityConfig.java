@@ -50,6 +50,7 @@ public class SecurityConfig {
 			request.requestMatchers(HttpMethod.GET,"/artlist/getTap").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/genre/{category}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/detail/{seq}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/admin/products/event_popup").permitAll();
 			request.requestMatchers(HttpMethod.POST,"/members/requestEmailVerification/{email}").permitAll();
 			request.requestMatchers(HttpMethod.POST,"/members/verifyEmail").permitAll();
 			request.requestMatchers(HttpMethod.POST,"/members/requestPasswordReset/{email}").permitAll();
