@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './UserMem.module.css';
 import { api } from "../../../../config/config";
 import Grade from "./Grade/Grade";
 import { Pagination } from '../../../../components/Pagination/Pagination';
+import { ModalUser } from './ModalUser/ModalUser';
+import { Modal } from '../../../../components/Modal/Modal';
 
 export const UserMem = () => {
     const [userMems, setUserMems] = useState([]);
@@ -37,24 +39,14 @@ export const UserMem = () => {
         }
     };
 
-    const handleNameSearch = async () => {
-        try {
-            const params = {
-                keyword : keyword,
-                gradeSeq: selectedGrade || null // null로 변경하여 gradeSeq가 없을 때를 처리
-            };
-            const resp = await api.get(`/admin/mem/search`, { params });
-            setFilteredUserMems(resp.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    
 
     const handleGradeChange = (e) => {
         const newGrade = e.target.value;
         console.log(newGrade)
         setSelectedGrade(newGrade);
         filterUserMemsByGrade(newGrade); // 선택된 등급으로 필터링
+        resetCheckboxes(); 
     };
 
     const filterUserMemsByGrade = (grade) => {
@@ -65,6 +57,30 @@ export const UserMem = () => {
         );
         setFilteredUserMems(filtered);
     };
+
+    const handleNameSearch = async () => {
+        try {
+            const params = {
+                keyword: keyword,
+                gradeSeq: selectedGrade || null
+            };
+            const resp = await api.get(`/admin/mem/search`, { params });
+    
+            // 받은 데이터를 가공해서 G_NAME 필드를 설정
+            const modifiedData = resp.data.map(mem => {
+                const grade = grades.find(g => g.name === mem.GRADE);  // g.name과 mem.GRADE를 비교
+                return {
+                    ...mem,
+                    G_NAME: grade ? grade.name : '등급 없음'  // G_NAME에 등급 이름을 할당
+                };
+            });
+    
+            setFilteredUserMems(modifiedData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -119,12 +135,68 @@ export const UserMem = () => {
     const handleOrderStatusChange = (e) => {
         setOrderStatus(e.target.value);
         applyFilters(); // 필터링 적용
+        resetCheckboxes(); 
     };
 
     // 배송 상태 선택 핸들러
     const handleShippingStatusChange = (e) => {
         setShippingStatus(e.target.value);
         applyFilters(); // 필터링 적용
+        resetCheckboxes(); 
+    };
+
+      // 체크박스 처리 관련 상태
+      const [checkedOrders, setCheckedOrders] = useState([]);
+      const checkboxRef = useRef([]);
+      const allCheckRef = useRef(null);
+
+       // 모달 상태 관리
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    const openModal = () => {
+        if (checkedOrders.length === 0) {
+            alert('기업 회원을 선택해주세요.');
+            return;
+        }
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => setIsModalOpen(false);
+
+    //=========== 체크박스 처리 ============
+    const handleCheckAll = (e) => {
+        const checked = e.target.checked;
+        const enabledValues = filteredUserMems
+            .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
+            .map(order => order.ID);
+    
+        checkboxRef.current.forEach((checkbox, i) => {
+            const order = filteredUserMems[i + currentPage * PER_PAGE];
+    
+            // checkbox가 존재하는지 확인 후 checked 속성을 설정
+            if (checkbox) {
+                checkbox.checked = checked;
+            }
+        });
+    
+        setCheckedOrders(checked ? enabledValues : []);
+    };
+    
+
+    const handleCheckBox = (e) => {
+        const { value, checked } = e.target;
+        setCheckedOrders(prev => checked ? [...prev, value] : prev.filter(id => id !== value));
+        if (!checked) {
+            allCheckRef.current.checked = false;
+        }
+    };
+
+    const resetCheckboxes = () => {
+        setCheckedOrders([]);
+        allCheckRef.current.checked = false;
+        checkboxRef.current.forEach(checkbox => {
+            if (checkbox) checkbox.checked = false;
+        });
     };
 
     return (
@@ -147,19 +219,28 @@ export const UserMem = () => {
                         돋보기
                     </button>
                 </div>
+                <div className={styles.searchWrapper}>
+                    <button
+                        className={styles.btnDeliver}
+                        onClick={() => openModal()}
+                    >
+                        회원 상태 변경
+                    </button>
+                </div>
 
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead>
                             <tr>
+                                <td><input type="checkbox" name='checkedAll' onClick={handleCheckAll} ref={allCheckRef} /></td>
                                 <td>이름</td>
                                 <td>구분</td>
                                 {/* <td>등급</td> */}
                                 <td> <Grade 
-                    grades={grades}
-                    selectedGrade={selectedGrade}
-                    onGradeChange={handleGradeChange}
-                /> </td>
+                                    grades={grades}
+                                    selectedGrade={selectedGrade}
+                                    onGradeChange={handleGradeChange}
+                                /> </td>
                                 <td>가입날짜</td>
                                 <td>
                                     <select value={orderStatus} onChange={handleOrderStatusChange} className={styles.select}> 
@@ -174,6 +255,15 @@ export const UserMem = () => {
                             {filteredUserMems.length > 0 ? (
                                 filteredUserMems.slice(currentPage * PER_PAGE, (currentPage +1) * PER_PAGE).map((mem, i) => (
                                     <tr key={i}>
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                value={mem.ID}
+                                                onClick={handleCheckBox}
+                                                ref={el => (checkboxRef.current[i] = el)}
+                                                // disabled={mem.G_NAME !== 'pending'}
+                                            />
+                                        </td>
                                         <td>{mem.NAME}</td>
                                         <td>{mem.C_NAME ? "기업": "일반"}</td>
                                         <td>{mem.G_NAME}</td>
@@ -191,8 +281,8 @@ export const UserMem = () => {
                 </div>
             </div>
             <div className={styles.pagination}>
-            {/* 페이지네이션 */}
-            {pageCount > 0 && (
+                {/* 페이지네이션 */}
+                {pageCount > 0 && (
                 <Pagination
                     pageCount={pageCount}
                     onPageChange={handlePageChange}
@@ -200,6 +290,16 @@ export const UserMem = () => {
                 />
                 )}
             </div>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <div className={styles.modalForm}>
+                    <ModalUser
+                        resetCheckboxes={resetCheckboxes}
+                        checkedOrders={checkedOrders}
+                        onClose={closeModal}
+                        fetchOrders={fetchUserMems}
+                    />
+                </div>
+            </Modal>
         </div>
     );
 };

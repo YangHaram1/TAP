@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -127,7 +127,7 @@ public class BizManageController {
 		return ResponseEntity.ok(bizManServ.getAllSaleWaiting(user.getUsername()));
 	}
     // 세일 신청 취소한거  업데이트 처리
-    @PutMapping("/sale/{applicationSeq}")
+    @DeleteMapping("/sale/{applicationSeq}")
     public ResponseEntity<Void> cancelSaleRegistration(
         @PathVariable("applicationSeq") Long applicationSeq) {
         bizManServ.cancelSaleRegistration(applicationSeq);

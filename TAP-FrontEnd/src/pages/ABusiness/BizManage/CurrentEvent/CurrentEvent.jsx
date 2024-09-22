@@ -24,13 +24,11 @@ export const CurrentEvent=()=>{
     // 날짜 변환 함수
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        // 원하는 포맷으로 변환 (년-월-일)
-        return date.toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        weekday: 'short',
-        });
+        const year = `${date.getFullYear()}년`;
+        const month = date.toLocaleString('ko-KR', { month: 'short' });
+        const day = date.getDate();
+        const weekday = date.toLocaleString('ko-KR', { weekday: 'short' });
+        return { year, month, day, weekday };
     };
 
     // 페이지네이션 설정
@@ -55,7 +53,7 @@ export const CurrentEvent=()=>{
                 <tr>
                     <th>상품정보</th>
                     <th>판매 오픈일</th>
-                    <th>일시</th>
+                    <th>공연 기간</th>
                     <th>공연장</th>
                     <th>할인신청</th>
                 </tr>
@@ -75,15 +73,53 @@ export const CurrentEvent=()=>{
                         </div>
                         </div>
                     </td>
-                    <td>{formatDate(product.open_date)}</td>
-                    <td className={styles.product_date}>{formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}</td>
+                    <td>
+                    <div className={styles.date_group}>                       
+                        {(() => {
+                            const { year, month, day, weekday } = formatDate(product.open_date);
+                            return (
+                                <>
+                                    <span className={styles.date_year}>{year}</span>
+                                    <span className={styles.date_value}>
+                                        {month} {day}
+                                        <span className={styles.date_weekday}>{weekday}</span>
+                                    </span>
+                                </>
+                            );
+                        })()}
+                    </div>
+                </td>
+                <td>
+                    <div className={styles.date_range}>
+                        {(() => {
+                            const start = formatDate(product.start_date);
+                            const end = formatDate(product.end_date);
+                            return (
+                                <>
+                                    <span className={styles.date_year}>{start.year}</span>
+                                    <div className={styles.date_range_values}>
+                                        <span className={styles.date_value}>
+                                            {start.month} {start.day}
+                                            <span className={styles.date_weekday}>{start.weekday}</span>
+                                        </span>
+                                        <span className={styles.date_range_separator}>~</span>
+                                        <span className={styles.date_value}>
+                                            {end.month} {end.day}
+                                            <span className={styles.date_weekday}>{end.weekday}</span>
+                                        </span>
+                                    </div>
+                                </>
+                            );
+                        })()}
+                    </div>
+                </td>
                     <td className={styles.product_venue}>{product.PLACE_NAME} </td>
                     <td>
                         {/* SALE_APPROVED에 따른 조건부 표시 */}
                         {product.SALE_APPROVED === '승인 대기' ? (
-                            <span className={styles.approval_pending}>신청중</span>
+                            <span className={styles.approval_pending}>⏳ 신청 중</span>
                         ) : product.SALE_APPROVED === '승인 완료' ? (
-                            <span className={styles.approval_complete}>승인 완료</span>
+                            <span className={styles.approval_complete}>✅ 승인 완료</span>
                         ) : (
                             <button className={styles.manage_button}
                                 onClick={() => handleSaleApplyClick(product.APPLICATION_SEQ)}

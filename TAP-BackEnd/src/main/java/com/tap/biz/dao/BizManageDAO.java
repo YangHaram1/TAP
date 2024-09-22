@@ -41,7 +41,7 @@ public class BizManageDAO {
 		return mybatis.selectList("BizManage.getAllSaleWaiting", id);
 	}
 	public void cancelSaleRegistration(Long applicationSeq) {
-		mybatis.update("BizManage.cancelSaleRegistration", applicationSeq);
+		mybatis.delete("BizManage.cancelSaleRegistration", applicationSeq);
 	}
 	public List<HashMap<String, Object>> getAllSaleRecentApproved(String id){
 		return mybatis.selectList("BizManage.getAllSaleRecentApproved", id);
