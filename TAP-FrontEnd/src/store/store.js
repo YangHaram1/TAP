@@ -124,3 +124,16 @@ export const useUserData = create((set)=>({
         set(() => ({user: user}));
     }
 }))
+
+export const useWriteData = create((set)=>({
+    reviewData:[],
+    exciteData:[],
+    setReviewData:(reviewData) => {
+        console.log("Setting reviewData:", reviewData); // 로그 추가
+        set(() => ({reviewData: reviewData}));
+    },
+    setExciteData:(exciteData) => {
+        console.log("Setting exciteData:", exciteData); // 로그 추가
+        set(() => ({exciteData: exciteData}));
+    }
+}))

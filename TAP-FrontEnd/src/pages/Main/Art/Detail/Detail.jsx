@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Detail.module.css'
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'; // solid 아이콘
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { api } from '../../../../config/config';
 import { useEffect, useRef, useState } from 'react';
@@ -13,7 +14,7 @@ import { Calender } from '../../../../components/Calender/Calender';
 import { BookModal } from '../../../../components/BookModal/BookModal';
 import { format, parseISO, isSameDay } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useAuthStore, useOrder } from '../../../../store/store';
+import { useAuthStore, useOrder, useWriteData } from '../../../../store/store';
 import Swal from 'sweetalert2';
 import Popup from '../../../Admin/Popup/Popup';
 import fstyles from '../../../../components/Footer/Footer.module.css';
@@ -39,7 +40,8 @@ export const Detail = ()=>{
     // const [company, setCompany] = useState({});
     const [member,setMember] = useState({});
     const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices,company, setCompany} = useOrder();
-    const [reviewList, setReviewList] = useState([]);
+    const [reviewData, setReviewData] = useState([]);
+    const [exciteData,setExciteData] = useState([]);
 
     const btnsRef = useRef(null);
     // const [bottomOffset, setBottomOffset] = useState(5); // 초기값 5vh
@@ -59,8 +61,9 @@ export const Detail = ()=>{
             setTimes(resp.data.times);
             const processedData = processCastingData(resp.data.castingAndDate);
             setCastingAndDate(processedData);
+            setReviewData(resp.data.reviewList);
+            setExciteData(resp.data.exciteList);
             setSeq(seq);
-            setReviewList(resp.data.reviewList); // 리뷰 리스트
         })
         .catch((err)=>{
             console.log(err);
@@ -275,10 +278,12 @@ export const Detail = ()=>{
                                         {format(new Date(mainData.end_date), 'yyyy.MM.dd')}
                                     </div>
                                 </div>
-                                <div className={styles.datas}>
-                                    <div className={styles.data_title}>공연시간</div>
+                                {mainData.running_time === 0 ? "" :
+                                <div className={styles.datas}> 
+                                <div className={styles.data_title}>공연시간</div>
                                     <div className={styles.data_content}>{mainData.running_time}분 { mainData.running_intertime === 0 ? "" : `(인터미션 ${mainData.running_intertime}분 포함)`}</div>
-                                </div>
+                                    </div>
+                                }    
                                 <div className={styles.datas}>
                                     <div className={styles.data_title}>관람연령</div>
                                     <div className={styles.data_content}>{mainData.age_limit} {mainData.age_limit.startsWith("전") ? "" : " 이상"}</div>
@@ -308,16 +313,23 @@ export const Detail = ()=>{
                                 :""
                             }
                             <button onClick={() => { setTap(2) }}>판매정보</button>
-                            <button onClick={() => { setTap(3) }}>관람후기 (0)</button>
-                            <button onClick={() => { setTap(4) }}>기대평 (0)</button>
+                            { 
+                                mainData.sub_category_seq === 1
+                                ?
+                                <>
+                                <button onClick={() => { setTap(3) }}>관람후기 ({Array.isArray(reviewData) ? reviewData.length : "0"})</button>
+                                <button onClick={() => { setTap(4) }}>기대평 ({Array.isArray(exciteData) ? exciteData.length : "0"})</button>
+                                </>
+                                :""
+                            }
                         </div>
 
                         <div className={styles.detail_page}>
                             {
                                 tap === 1 ? <Casting castings={casting} seq={seq} days={days} time={times} castingAndDate={castingAndDate}/> :
                                 tap === 2 ? <ProductData member={member} company={company} mainData={mainData} casting={casting}/> :
-                                tap === 3 ? <Write category="review" list={reviewList}/> :
-                                tap === 4 ? <Write category="excite" /> :
+                                tap === 3 ? <Write category="review" list={reviewData}/> :
+                                tap === 4 ? <Write category="excite" list={exciteData}/> :
                                 <Notice description = {description} casting = {casting}/>
                             }
                         </div>
@@ -357,7 +369,11 @@ export const Detail = ()=>{
                     <div className={styles.book}>
                         <button onClick={isBookModalOpen}>예매하기</button>
                     </div>       
-                    <button className={styles.up_btn} onClick={()=>{scrollToBtns();}}>맨위로</button> 
+                    <button className={styles.up_btn} onClick={()=>{scrollToBtns();}}>
+                    <FontAwesomeIcon icon={faArrowUp} style={{fontSize:"20px"}}/>
+                    <br></br>
+                    Top
+                    </button> 
                 </div>
             </div>
 

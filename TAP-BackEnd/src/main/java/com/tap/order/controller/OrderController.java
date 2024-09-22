@@ -22,6 +22,7 @@ import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.SeatsService;
 import com.tap.members.dto.MembersDTO;
 import com.tap.members.service.MembersService;
+import com.tap.order.dto.BookSeatsDTO;
 import com.tap.order.dto.OrdersDTO;
 import com.tap.order.dto.PlaceAndSectionDTO;
 import com.tap.order.dto.SectionInnerDataDTO;
@@ -113,6 +114,25 @@ public class OrderController {
 		
 		return list;
 		
+	}
+	
+	@GetMapping("/getBookSeats")
+	public List<BookSeatsDTO> getBookSeats(@RequestParam int seq,@RequestParam String date ,@RequestParam String time ){
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("date",date);
+		map.put("time",time);
+		map.put("seq",seq);
+		
+		List<BookSeatsDTO> booklist = oServ.getBookSeats(map);
+		return booklist;
+	}
+	
+	@PostMapping("/checkSeat")
+	public int checkSeat(@RequestBody Map<String,Object> orderData) {
+		int count = oServ.checkSeat(orderData);
+		System.out.println("중복된 좌석 유뮤 " + count);
+		return count;
 	}
 
 	
