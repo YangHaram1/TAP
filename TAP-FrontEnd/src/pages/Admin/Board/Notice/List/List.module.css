@@ -65,7 +65,7 @@
     font-weight: 600;
 }
 
-.header div {
+.header .headerConts {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -81,13 +81,33 @@
     border-radius: 10px;
 }
 
-.addBtn {
+.addBoardBtn {
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
     background-color: #fcecff;
     font-weight: bold;
     color: #673AB7;
+    cursor: pointer;
+}
+
+.addBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    pointer-events: none;
+
+}
+
+.addPassBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background-color: #fcecff;
+    font-weight: bold;
+    color: #673AB7;
+    cursor: pointer;
 }
 
 .dto {
@@ -188,4 +208,58 @@
 
 .previous {
     display: none;
+}
+
+.writeBox {
+    /* background-color: yellow; */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.writeBox h2 {
+    /* flex: 1; */
+    width: 100%;
+}
+
+.writeTitle {
+    width: 100%;
+    height: 50px;
+    border: 2px solid rgb(205, 205, 205);
+    border-radius: 10px;
+}
+
+.writeInner {
+    flex: 5 1;
+    /* background-color: red; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.writeCont {
+    width: 100%;
+    background-color: #f8f9fa;
+    /* border: 1px solid black; */
+    flex: 5;
+    max-height: 700px;
+}
+
+.closeBtn {
+    /* flex: 1; */
+    width: 100px;
+    height: 30px;
+
+
+}
+
+.closeBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background-color: #fcecff;
+    font-weight: bold;
+    color: #673AB7;
 }

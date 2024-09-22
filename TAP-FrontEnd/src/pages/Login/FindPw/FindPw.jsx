@@ -191,7 +191,7 @@ const FindPw = () => {
                 text: '비밀번호가 성공적으로 변경되었습니다.',
             })
             // 필요 시 다른 페이지로 이동하거나 초기화
-            navi('login')
+            navi('/login')
         } catch (error) {
             Swal.fire({
                 icon: 'error',
