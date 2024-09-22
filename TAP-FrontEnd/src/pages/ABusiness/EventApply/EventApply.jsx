@@ -585,7 +585,7 @@ export const EventApply = () => {
         });
     }
     };
-    //
+    
     const handleCancel = ()=>{
         const userConfirmed = window.confirm("작성을 취소하시겠습니까?");
     

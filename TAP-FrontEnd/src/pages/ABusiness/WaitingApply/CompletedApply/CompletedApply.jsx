@@ -57,7 +57,6 @@ export const CompletedApply =()=>{
     };
     
     
-
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>

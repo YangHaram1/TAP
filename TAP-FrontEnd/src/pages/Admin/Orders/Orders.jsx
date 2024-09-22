@@ -35,6 +35,7 @@ export const Orders = () => {
         api.get(`admin/orders`).then((resp) => {
             setOrders(resp.data);
             setFiltered(resp.data);
+            console.log(resp.data)
         });
     };
     useEffect(() => {
@@ -49,9 +50,17 @@ export const Orders = () => {
         if (orderStatus) {
             filteredOrders = filteredOrders.filter(order => order.STATUS === orderStatus);
         }
+        
         // 배송 상태 필터 적용
         if (shippingStatus) {
-            filteredOrders = filteredOrders.filter(order => order.DELIVERY_STATUS === shippingStatus);
+            filteredOrders = filteredOrders.filter(order => {
+                // 배송 상태가 null 또는 빈 문자열일 때 '현장 발매'로 취급
+                const deliveryStatus = !order.DELIVERY_STATUS || order.DELIVERY_STATUS === '' 
+                    ? '현장 발매' 
+                    : order.DELIVERY_STATUS;
+
+                return deliveryStatus === shippingStatus;
+            });
         }
 
         setFiltered(filteredOrders);
@@ -197,13 +206,14 @@ export const Orders = () => {
                             <th>
                                 <select value={orderStatus} onChange={handleOrderStatusChange} className={styles.select}> 
                                     <option value="">주문 상태</option>
-                                    <option value="결제">결제</option>
+                                    <option value="완료">완료</option>
                                     <option value="환불">환불</option>
                                 </select>
                             </th>
                             <th>
                                 <select value={shippingStatus} onChange={handleShippingStatusChange} className={styles.select}>
                                     <option value="">배송 상태</option>
+                                    <option value="현장 발매">현장 발매</option>
                                     <option value="미발송">미발송</option>
                                     <option value="발송 완료">발송 완료</option>
                                     <option value="배송중">배송중</option>
@@ -225,7 +235,7 @@ export const Orders = () => {
                                     />
                                 </td>
                                 <td>{order.ORDER_SEQ}</td>
-                                <td>{order.MEMBER_ID}</td>
+                                <td>{order.ID}</td>
                                 <td>{order.NAME}</td>
                                 <td>{getCategoryName(order.SUB_CATEGORY_SEQ)}</td>
                                 <td>
@@ -239,7 +249,7 @@ export const Orders = () => {
                                 <td>{order.TOTAL_PRICE}</td>
                                 <td>{formatTime(order.order_date)}</td>
                                 <td>{order.STATUS}</td>
-                                <td>{order.DELIVERY_STATUS}</td>
+                                <td>{order.DELIVERY_STATUS ? order.DELIVERY_STATUS :  "현장 발매" }</td>
                             </tr>
                         ))}
                     </tbody>

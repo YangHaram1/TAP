@@ -15,7 +15,7 @@ export const BizManage=()=>{
     return(
     <div className={styles.container}>
         <div className={styles.product_table}>
-        <h2>상품관리 </h2>
+        <h3>상품관리 </h3>
         <div className={styles.btns}>
             <button onClick={()=>{setTap(0)}}
                 className={tap === 0 ? styles.active : ''}

@@ -13,7 +13,7 @@ export const WaitingApply=()=>{
     return(
     <div className={styles.container}>
         <div className={styles.product_table}>
-        <h2>상품 신청 내역 </h2>
+        <h3>상품 신청 내역 </h3>
         <div className={styles.btns}>
             <button onClick={()=>{setTap(0)}}
                 className={tap === 0 ? styles.active : ''}
