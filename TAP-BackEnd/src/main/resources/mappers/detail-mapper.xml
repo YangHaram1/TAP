@@ -26,7 +26,15 @@
 	</select>
 	
 	<select id="getPriceByPlaceSeq" resultType="com.tap.detail.dto.SeatsDTO">
-		select * from seats where place_seq=#{place_seq} order by PRICE_SEAT desc
+		SELECT price_seq, place_seq, place_seat_level, price_seat
+		FROM (
+		    SELECT s.*, 
+		           ROW_NUMBER() OVER (PARTITION BY place_seat_level ORDER BY PRICE_SEAT DESC) AS rank
+		    FROM seats s
+		    WHERE place_seq = #{seq} AND section_seq IS NOT NULL
+		) 
+		WHERE rank = 1
+		ORDER BY PRICE_SEAT DESC
 	</select>
 	
 	<select id="getCasting" resultType="com.tap.detail.dto.CastingDTO">

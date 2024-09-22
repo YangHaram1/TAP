@@ -334,17 +334,24 @@ export const BookModal = ({ isOpen, onClose}) =>{
                             원하시는 좌석을 선택해주세요
                         </div>
                         <div className={styles.main_right_section}>
-                            <div className={styles.main_right_section_img}>
-                            {
-                                shape === '직선형' ?
-                                section.map((section, i)=>{
-                                    return(<button key={i} className={styles.section_btns} onClick={()=>{handleSection(section.section_seq)}}>{section.section_name}</button>);
-                                })
-                                : //원형일 때
-                                section.map((section, i)=>{
-                                    return(<button key={i} className={styles.section_btns_circle} onClick={()=>{handleSection(section.section_seq)}}>{section.section_name}</button>);
-                                })
-                            }
+                            <div className={shape === '직선형' ? styles.main_right_section_img : styles.main_right_section_img_circle}>
+                                {shape === '직선형' ? (
+                                section.map((section, i) => (
+                                    <button key={i} className={styles.section_btns} onClick={() => { handleSection(section.section_seq); }}>
+                                    {section.section_name}
+                                    </button>
+                                ))
+                                ) : (
+                                Array.from({ length: Math.ceil(section.length / 2) }, (_, rowIndex) => (
+                                    <div key={rowIndex} className={styles.row}>
+                                    {section.slice(rowIndex * 2, rowIndex * 2 + 2).map((sec, index) => (
+                                        <button key={index} className={styles.section_btns_circle} onClick={() => { handleSection(sec.section_seq); }}>
+                                        {sec.section_name}
+                                        </button>
+                                    ))}
+                                    </div>
+                                ))
+                                )}
                             </div>
                         </div>
                         <div className={styles.seats_level}>

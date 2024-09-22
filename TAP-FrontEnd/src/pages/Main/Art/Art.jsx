@@ -74,7 +74,9 @@ export const Art = ({category})=>{
     // 스크롤 함수
     const scrollToBtns = () => {
         if (btnsRef.current) {
-            btnsRef.current.scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({
+                top: btnsRef.current.offsetTop - 150, behavior: 'smooth'
+            });
         }
     };
 
@@ -106,15 +108,15 @@ export const Art = ({category})=>{
             </div> */}
 
             {/* 할인 정보 -> 뮤지컬 일 때만 출력 */}
-            {category === "musical"?
-            <><h2>지금 할인 중!</h2>
-            <div className={styles.saleEvent}>
-                {/* 카드 케러셀 */}
-                <div className={styles.caroucel}>
-                    <Caroucel images={images} category={"art2"}/>
-                </div>
-            </div></>
-            :<></>}
+            {/* {category === "musical"? */}
+
+             {/* <h2>지금 할인 중!</h2>
+             <div className={styles.saleEvent}>
+                 <div className={styles.caroucel}>
+                     <Caroucel images={images} category={"art2"}/>
+                 </div>
+             </div> */}
+            
 
             {/* 오픈 정보*/}
             <h2>티켓 오픈</h2>
