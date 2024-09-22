@@ -1,5 +1,6 @@
 package com.tap.detail.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.tap.company.service.CompanyService;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DescriptionDTO;
 import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.ReviewStarDTO;
 import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.DescriptionService;
@@ -65,7 +67,20 @@ public class DetailController {
 		//회차정보
 		List<String> days = dServ.getDays(seq);
 		List<String> times = dServ.getTimes(seq);
-		List<ScheduleAndCastingDTO> castingAndDate = dServ.getCastingAndDate(seq);
+		
+		List<ScheduleAndCastingDTO> castingAndDate = new ArrayList<>();
+		
+		//뮤지컬일 떄
+		if(mainData.getSub_category_seq() == 1) {
+			castingAndDate = dServ.getCastingAndDate(seq);
+		}else{
+			castingAndDate = dServ.getCastingAndDateNotArt(seq);
+		}
+		
+		// 후기
+		List<ReviewStarDTO> reviewList = dServ.getReview(seq);
+		
+		// 기대평
 		
 		map.put("mainData", mainData);
 		map.put("description", description);
@@ -79,7 +94,8 @@ public class DetailController {
 		
 		return map;
 		
-		
 	}
+	
+	
 
 }

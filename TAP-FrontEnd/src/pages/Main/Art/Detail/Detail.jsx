@@ -4,7 +4,7 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'; // so
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'; // regular 아이콘
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { api } from '../../../../config/config';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Notice } from './Notice/Notice';
 import { ProductData } from './ProductData/ProductData';
 import { Casting } from './Casting/Casting';
@@ -16,6 +16,7 @@ import { ko } from 'date-fns/locale';
 import { useAuthStore, useOrder } from '../../../../store/store';
 import Swal from 'sweetalert2';
 import Popup from '../../../Admin/Popup/Popup';
+import fstyles from '../../../../components/Footer/Footer.module.css';
 
 
 export const Detail = ()=>{
@@ -38,7 +39,10 @@ export const Detail = ()=>{
     // const [company, setCompany] = useState({});
     const [member,setMember] = useState({});
     const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices,company, setCompany} = useOrder();
-    
+    const [reviewList, setReviewList] = useState([]);
+
+    const btnsRef = useRef(null);
+    // const [bottomOffset, setBottomOffset] = useState(5); // 초기값 5vh
     
     useEffect(()=>{
         // alert(seq+"번 상품 상세정보입니다.");
@@ -56,20 +60,24 @@ export const Detail = ()=>{
             const processedData = processCastingData(resp.data.castingAndDate);
             setCastingAndDate(processedData);
             setSeq(seq);
+            setReviewList(resp.data.reviewList); // 리뷰 리스트
         })
         .catch((err)=>{
             console.log(err);
         })
+
     },[seq])
 
-    // useEffect(()=>{
-    //     console.log("데이터 변환 모습",castingAndDate);
-    // },[castingAndDate]);
-
+    const scrollToBtns = () => {
+        if (btnsRef.current) {
+            window.scrollTo({
+                top: btnsRef.current.offsetTop - 160, behavior: 'smooth'
+            });
+        }
+    };
 
 
     // =================== 캘린더 관련 멤버 변수 =================== 
-    const [selectedDate, setSelectedDate] = useState(new Date());
     // 달력 표시 범위 (지금의 경우 9월달만 있기 때문에 화살표가 비활성화 됨)
     //format(new Date(image.end_date), 'yyyy-MM-dd')
     const today = new Date();
@@ -79,6 +87,9 @@ export const Detail = ()=>{
     const minDate = startDate > today ? startDate : today;
     const maxDate = mainData?.end_date ? new Date(mainData.end_date) : new Date();
     // 활성화 시킬 날짜 설정
+
+    const [selectedDate, setSelectedDate] = useState(minDate);
+
     const periods = [];
     const scheduleDays = Object.keys(castingAndDate)
     .map(dateStr => new Date(dateStr))
@@ -236,7 +247,7 @@ export const Detail = ()=>{
      };
 
     return(
-        <div className={styles.container}>
+        <div className={styles.container} ref={btnsRef}>
             <div className={styles.left}>
             {mainData ? (
                     <>
@@ -266,7 +277,7 @@ export const Detail = ()=>{
                                 </div>
                                 <div className={styles.datas}>
                                     <div className={styles.data_title}>공연시간</div>
-                                    <div className={styles.data_content}>{mainData.running_time}분 (인터미션 {mainData.running_intertime}분 포함)</div>
+                                    <div className={styles.data_content}>{mainData.running_time}분 { mainData.running_intertime === 0 ? "" : `(인터미션 ${mainData.running_intertime}분 포함)`}</div>
                                 </div>
                                 <div className={styles.datas}>
                                     <div className={styles.data_title}>관람연령</div>
@@ -291,7 +302,11 @@ export const Detail = ()=>{
 
                         <div className={styles.btns}>
                             <button onClick={() => { setTap(0) }}>공지사항</button>
-                            <button onClick={() => { setTap(1) }}>캐스팅정보</button>
+                            { 
+                                mainData.sub_category_seq === 1
+                                ?<button onClick={() => { setTap(1) }}>캐스팅정보</button>
+                                :""
+                            }
                             <button onClick={() => { setTap(2) }}>판매정보</button>
                             <button onClick={() => { setTap(3) }}>관람후기 (0)</button>
                             <button onClick={() => { setTap(4) }}>기대평 (0)</button>
@@ -301,7 +316,7 @@ export const Detail = ()=>{
                             {
                                 tap === 1 ? <Casting castings={casting} seq={seq} days={days} time={times} castingAndDate={castingAndDate}/> :
                                 tap === 2 ? <ProductData member={member} company={company} mainData={mainData} casting={casting}/> :
-                                tap === 3 ? <Write category="review" /> :
+                                tap === 3 ? <Write category="review" list={reviewList}/> :
                                 tap === 4 ? <Write category="excite" /> :
                                 <Notice description = {description} casting = {casting}/>
                             }
@@ -334,14 +349,15 @@ export const Detail = ()=>{
                         }
                     </div>
                     <div className={styles.seats}> 
-                        <p>
+                        {/* <p>
                             <span>총 좌석수 : 100 좌석&nbsp;&nbsp;|</span>
                             <span>&nbsp;&nbsp;잔여 좌석수 : 70 좌석</span>
-                        </p>
+                        </p> */}
                     </div>     
                     <div className={styles.book}>
                         <button onClick={isBookModalOpen}>예매하기</button>
-                    </div>            
+                    </div>       
+                    <button className={styles.up_btn} onClick={()=>{scrollToBtns();}}>맨위로</button> 
                 </div>
             </div>
 

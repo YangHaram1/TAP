@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.ReviewStarDTO;
 
 @Repository
 public class DetailDAO {
@@ -35,6 +36,14 @@ public class DetailDAO {
 	
 	public List<ScheduleAndCastingDTO> getCastingAndDate(int seq) {
 		return mybatis.selectList("Detail.getCastingAndDate",seq);
+	}
+	
+	public List<ScheduleAndCastingDTO> getCastingAndDateNotArt(int seq) {
+		return mybatis.selectList("Detail.getCastingAndDateNotArt",seq);
+	}
+	
+	public List<ReviewStarDTO> getReview(int seq) {
+		return mybatis.selectList("Detail.getReview",seq);
 	}
 
 }

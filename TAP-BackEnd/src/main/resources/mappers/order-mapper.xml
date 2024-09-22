@@ -61,7 +61,7 @@
 	<select id="getPoint" resultType="int">
 		select point from members where id=#{id}
 	</select>
-	
+
 	<insert id="insertOrder">
 		insert into orders 
 		(order_seq, application_seq, member_id, order_date, total_price, status, delivery_status, pay, delivery_method,DELIVERY_SEQ) 
@@ -77,13 +77,40 @@
 		(book_seq, order_seq, member_id, book_date, book_time, section_seq, book_row, book_col, book_level) 
 		values
 		(#{bookSeq},#{orderSeq},#{id},#{date},#{time},#{storageSection},#{row},#{col},#{grade})
-		
 	</insert>
 	
-	<update id="updatePoint">
+	<update id="updatePoint"> 
 		update members set point = #{point} where id=#{id}
 	</update>
 	
+	<select id="getOrder" resultType="com.tap.order.dto.OrdersDTO">
+		select * from orders o
+			left outer join review r on o.order_seq = r.order_seq
+			where o.application_seq = #{seq} and o.member_id=#{id} and review is null
+	</select>
 	
+	<insert id="insertReview">
+		insert into Review
+		(review_seq, application_seq, member_id, review_title, review, review_date, order_seq) 
+		values
+		(review_seq.nextval,#{seq},#{id},#{title},#{content},sysdate,#{orderSeq})
+		<selectKey resultType="int" order="AFTER" keyProperty="review_seq">
+ 			select review_seq.currval from dual
+ 		</selectKey>
+	</insert>
+	
+	<insert id="insertStar">
+		insert into stars
+		(star_seq, application_seq, member_id, stars, review_seq) 
+		values
+		(star_seq.nextval,#{seq},#{id},#{star,jdbcType=INTEGER},#{reviewSeq})
+	</insert>
+	
+	<insert id="insertExcite">
+		insert into excite
+		(excite_seq, application_seq, member_id, excite_title, excite, excite_date) 
+		values
+		(excite_seq.nextval,#{seq},#{id},#{title},#{content},sysdate)
+	</insert>
 	
 </mapper>
