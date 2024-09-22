@@ -42,7 +42,10 @@ export const ModalUser = ({ resetCheckboxes, checkedOrders, onClose, fetchOrders
                 </div>
                 <div className={styles.statusSelect}>
                     <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
-                        <option value="1">일반</option>
+                        <option value="1">welcome</option>
+                        <option value="2">family</option>
+                        <option value="3">vip</option>
+                        <option value="4">vvip</option>
                         <option value="-1">블랙리스트</option>
                     </select>
                 </div>

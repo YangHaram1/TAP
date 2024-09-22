@@ -5,6 +5,7 @@ import Grade from "./Grade/Grade";
 import { Pagination } from '../../../../components/Pagination/Pagination';
 import { ModalUser } from './ModalUser/ModalUser';
 import { Modal } from '../../../../components/Modal/Modal';
+import { FaSearch } from 'react-icons/fa'; 
 
 export const UserMem = () => {
     const [userMems, setUserMems] = useState([]);
@@ -155,7 +156,7 @@ export const UserMem = () => {
     
     const openModal = () => {
         if (checkedOrders.length === 0) {
-            alert('기업 회원을 선택해주세요.');
+            alert('회원을 선택해주세요.');
             return;
         }
         setIsModalOpen(true);
@@ -202,6 +203,7 @@ export const UserMem = () => {
     return (
         <div>
             <div className={styles.container}>
+            <div className={styles.top}>
                 <div className={styles.searchWrapper}>
                     <input
                         type="text"
@@ -216,7 +218,7 @@ export const UserMem = () => {
                         className={styles.searchInput}
                     />
                     <button className={styles.buttonsearch}  onClick={handleNameSearch}>
-                        돋보기
+                    <FaSearch /> 
                     </button>
                 </div>
                 <div className={styles.searchWrapper}>
@@ -226,6 +228,7 @@ export const UserMem = () => {
                     >
                         회원 상태 변경
                     </button>
+                </div>
                 </div>
 
                 <div className={styles.tableWrapper}>

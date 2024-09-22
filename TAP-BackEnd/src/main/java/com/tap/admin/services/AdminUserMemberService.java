@@ -30,10 +30,10 @@ public class AdminUserMemberService {
  		  // newStatus 값에 따른 처리
         if ("-1".equals(newStatus)) {
             // 블랙리스트 처리 (enabled = 0, grade_seq = -1)
-            aumDao.updateMemberStatus(orderSeqs, 0, -1);
-        } else if ("1".equals(newStatus)) {
+            aumDao.updateMemberStatus(orderSeqs, 0, newStatus);
+        } else {
             // 일반 회원 처리 (enabled = 1, grade_seq = 1)
-            aumDao.updateMemberStatus(orderSeqs, 1, 1);
+            aumDao.updateMemberStatus(orderSeqs, 1, newStatus);
         }
     }
 }

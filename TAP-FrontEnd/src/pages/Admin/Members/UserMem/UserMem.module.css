@@ -3,7 +3,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  margin-top:80px;
+  margin-top: 50px;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -117,18 +117,27 @@
   height: 16px;
 }
 
-
-.select{
+/* 선택 스타일 */
+.select {
   height: 30px;
   background-color: transparent;
   border: none;
   font-weight: 600;
+  margin-left: 10px;
 }
+
+/* searchWrapper를 양쪽에 배치 */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 50px;
+}
+
 .searchWrapper {
   display: flex;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-  margin-top:50px;
+  align-items: center;
 }
 
 .searchInput {
@@ -147,7 +156,7 @@
   box-shadow: 0 0 8px rgba(106, 13, 173, 0.2);
 }
 
-.buttonsearch{
+.buttonsearch {
   background-color: #6a0dad; /* 보라색 */
   color: white;
   padding: 10px 20px;
@@ -156,4 +165,19 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 10px; /* 버튼과 인풋 사이 간격 */
+  display: inline-block; /* 버튼을 인라인 블록으로 설정 */
+  align-items: center; /* 아이콘과 텍스트를 세로로 중앙 정렬 */
+  justify-content: center; /* 텍스트와 아이콘을 가로로 중앙 정렬 */
+  text-align: center; /* 텍스트를 가운데 정렬 */
+  white-space: nowrap; /* 텍스트가 줄 바꿈 되지 않도록 설정 */
+}
+
+.buttonsearch:hover {
+  background-color: #5a0ca0;
+  transform: translateY(-2px); /* 호버 시 부드러운 애니메이션 */
+}
+
+.buttonsearch span {
+  margin-left: 5px; /* 돋보기 아이콘과 텍스트 사이 간격 */
 }

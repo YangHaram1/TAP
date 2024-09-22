@@ -4,6 +4,7 @@ import { api } from '../../../../config/config';
 import { Pagination } from '../../../../components/Pagination/Pagination';
 import { Modal } from '../../../../components/Modal/Modal';
 import { ModalBiz } from './ModalApprove/ModalBIz';
+import { FaSearch } from 'react-icons/fa'; 
 
 export const BizMem = () => {
     const [bizMems, setBizMems] = useState([]);
@@ -161,7 +162,7 @@ const handleNameSearch = () => {
                         className={styles.searchInput}
                     />
                     <button className={styles.buttonsearch} onClick={handleNameSearch}>
-                        돋보기
+                    <FaSearch /> 
                     </button>
                 </div>
 

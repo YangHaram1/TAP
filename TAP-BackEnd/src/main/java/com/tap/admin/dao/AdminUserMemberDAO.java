@@ -27,15 +27,15 @@ public class AdminUserMemberDAO {
 	    return mybatis.selectList("searchUserMem", params);
 	}
 	
-	public void updateMemberStatus(List<String> orderSeqs, int enabled, int gradeSeq) {
+	public void updateMemberStatus(List<String> orderSeqs, int enabled, String newStatus) {
 		System.out.println("dao 번호" +orderSeqs);
-		 System.out.println("dao 상태 enabled: " + enabled + ", gradeSeq: " + gradeSeq);
+		 System.out.println("dao 상태 enabled: " + enabled + ", gradeSeq: " + newStatus);
 		
 		 for (String orderSeq : orderSeqs) {
 	            HashMap<String, Object> params = new HashMap<>();
 	            params.put("orderSeq", orderSeq);
 	            params.put("enabled", enabled);
-	            params.put("gradeSeq", gradeSeq);
+	            params.put("gradeSeq", newStatus);
 
 	            System.out.println("orderSeq " + orderSeq);
 	            
