@@ -246,7 +246,7 @@ export const Orders = () => {
                                         {order.SEAT_INFO}
                                     </div>
                                 </td>
-                                <td>{order.TOTAL_PRICE}</td>
+                                <td>{Number(order.TOTAL_PRICE)?.toLocaleString()}</td>
                                 <td>{formatTime(order.order_date)}</td>
                                 <td>{order.STATUS}</td>
                                 <td>{order.DELIVERY_STATUS ? order.DELIVERY_STATUS :  "현장 발매" }</td>

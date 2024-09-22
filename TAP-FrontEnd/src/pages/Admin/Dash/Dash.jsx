@@ -222,11 +222,13 @@ export const Dash=()=>{
                 </div>
             </div>
             <div className={styles.row2}>
-                <div className={styles.dollar}>
-                    <h2>이번달 총 매출</h2>
-                    <div>{totalToday.total_sum} 원 ({totalToday.total_count} 건)</div>
-                    <div></div>
-                </div>
+            <div className={styles.dollar}>
+                <h2>이번달 총 매출</h2>
+                <div className={styles.total_sum}>{Number(totalToday.total_sum)?.toLocaleString()} 원</div>
+                <div className={styles.total_count_box}>{totalToday.total_count} 건</div>
+            </div>
+
+
                 <div className={styles.order}>
                     <h2>카테고리별 주문 건수</h2>
                     <Bar data={barChartData} options={barChartOptions} />

@@ -74,7 +74,8 @@ JOIN files ON apply.application_seq = files.files_parent_seq
 LEFT JOIN sale_ranked ON sale_ranked.application_seq = apply.application_seq AND sale_ranked.rn = 1
 WHERE apply.status = '승인 완료'
 AND apply.id = #{id}
-AND CURRENT_DATE BETWEEN apply.start_date AND apply.end_date
+AND CURRENT_DATE BETWEEN apply.open_date AND apply.end_date
+AND files.files_type='poster'
 ORDER BY apply.created_at DESC
 </select>
 <select id="getAllFutureApproved" resultMap="TimestampResultMap">

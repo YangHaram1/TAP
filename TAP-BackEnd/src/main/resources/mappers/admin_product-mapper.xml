@@ -162,7 +162,12 @@
 	    SET sale_approved = '승인 완료'
 	    WHERE application_seq = #{applicationSeq}
 	</update>
-	
+	<update id="rejectSale">
+	    UPDATE sale
+	    SET sale_approved = '승인 반려',
+	        sale_rejected_reason = #{rejectReason}
+	    WHERE application_seq = #{applicationSeq}
+	</update>
 	
 	
 	
@@ -231,12 +236,7 @@
 	    WHERE application_seq = #{applicationSeq}
 	</update>
 	
-	<update id="rejectSale">
-	    UPDATE sale
-	    SET sale_approved = '승인 반려',
-	        reject_reason = #{rejectReason}
-	    WHERE application_seq = #{applicationSeq}
-	</update>
+	
 	
 	
 </mapper>
