@@ -18,7 +18,7 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
     // 3 : setp5 결재하기
     const {seq,date, time, storageSection, storageSeats, mainData, 
         seatPrices,deliveryMethod,address, setAddress,point,totalPrice ,
-        setTotalPrice, payMethod, setRemoveData} = useOrder();
+        setTotalPrice, payMethod, setRemoveData,setStorageSeats} = useOrder();
     const {user} = useUserData();
     const [tickets, setTickets] = useState([]);
     const [ticketTotalPrice, setTicketTotalPrice] = useState(0);
@@ -117,6 +117,7 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
                 return;
             }else if(check){
                 console.log("여기 들어옴", address);
+
                 let deliveryStatus = '';
                 let deliveryMethod = '현장발매';
                 let deliverySeq = null;
@@ -140,22 +141,48 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
                         deliveryMethod:deliveryMethod, // 배송방법(현장결재, 배송)
                         deliverySeq:deliverySeq, //배송지번호
                     }
-                    api.post(`/order/orderFinal`,orderData)
+
+                    // 예약 되어있는 좌석 중 동일 좌석이 있는지 한번 더 확인 
+                    api.post(`/order/checkSeat`,orderData)
                     .then((resp)=>{
-                        setRemoveData();
-                        handleClosePriceModal();
-                        Swal.fire(
-                            { 
-                              icon: 'success',
-                              title: '티켓 예매가 완료되었습니다.',
-                              showConfirmButton: false,
-                              timer: 1500
-                            }
-                        );
-                    }) 
-                    .catch((err)=>{
-                        console.log(err);
+
+                        
+                        console.log(resp.data);
+
+                        if(resp.data === 0){
+                            api.post(`/order/orderFinal`,orderData)
+                            .then((resp)=>{
+                                setRemoveData();
+                                handleClosePriceModal();
+                                Swal.fire(
+                                    { 
+                                    icon: 'success',
+                                    title: '티켓 예매가 완료되었습니다.',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                    }
+                                );
+                            }) 
+                            .catch((err)=>{
+                                console.log(err);
+                            })
+                        }else{
+                            setRemoveData();
+                            setStorageSeats([]);
+                            onClose();
+                            Swal.fire(
+                                { 
+                                icon: 'success',
+                                title: '이미 예매가 완료된 좌석이 포함되어있습니다.',
+                                showConfirmButton: false,
+                                timer: 1500
+                                }
+                            );
+                            
+
+                        }
                     })
+
                     console.log(orderData);
                 }
             }

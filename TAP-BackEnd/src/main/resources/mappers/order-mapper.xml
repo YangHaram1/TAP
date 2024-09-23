@@ -113,4 +113,16 @@
 		(excite_seq.nextval,#{seq},#{id},#{title},#{content},sysdate)
 	</insert>
 	
+	<select id="getBookSeats" resultType="com.tap.order.dto.BookSeatsDTO">
+		select section_seq, book_row, book_col, book_level 
+		from orders o left outer join book b on o.order_seq = b.order_seq 
+		where application_seq=#{seq} and status='완료' and book_date=#{date} and book_time=#{time}
+	</select>
+	
+	<select id="checkSeat" resultType="int">
+		select count(*) from orders o 
+		left outer join book b on o.order_seq = b.order_seq 
+		where application_seq=#{seq} and status='완료' and book_date=#{date} and book_time=#{time} and book_row= #{row} and book_col=#{col} and section_seq=#{storageSection}
+	</select>
+	
 </mapper>
