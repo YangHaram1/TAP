@@ -261,25 +261,6 @@
     color: #999;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
-    .header, .title {
-        padding: 15px;
-    }
-
-    .table td {
-        font-size: 14px;
-        padding: 8px 10px;
-    }
-
-    .shortInput, input[type="text"], select {
-        width: 100%; /* 작은 화면에서는 100% 너비로 */
-    }
-}
 
 
 
@@ -309,8 +290,18 @@
 }
 
 /* 업로드 영역을 감싸는 파일 업로드 wrapper */
-.file_upload_wrapper {
+/* .file_upload_wrapper {
     display: flex;
     align-items: center;
     gap: 10px;
+} */
+
+.file_upload_wrapper {
+    display: flex;
+    flex-direction: column; /* 수직으로 배치 */
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
+
