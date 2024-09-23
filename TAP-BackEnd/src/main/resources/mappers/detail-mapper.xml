@@ -26,7 +26,15 @@
 	</select>
 	
 	<select id="getPriceByPlaceSeq" resultType="com.tap.detail.dto.SeatsDTO">
-		select * from seats where place_seq=#{place_seq} order by PRICE_SEAT desc
+		SELECT price_seq, place_seq, place_seat_level, price_seat
+		FROM (
+		    SELECT s.*, 
+		           ROW_NUMBER() OVER (PARTITION BY place_seat_level ORDER BY PRICE_SEAT DESC) AS rank
+		    FROM seats s
+		    WHERE place_seq = #{seq} AND section_seq IS NOT NULL
+		) 
+		WHERE rank = 1
+		ORDER BY PRICE_SEAT DESC
 	</select>
 	
 	<select id="getCasting" resultType="com.tap.detail.dto.CastingDTO">
@@ -108,6 +116,54 @@
 			left outer join stars s on r.review_seq = s.review_seq
 			where r.application_seq=#{seq}
 			order by r.REVIEW_DATE desc
+	</select>
+	
+	<select id="getExcite" resultType="com.tap.detail.dto.ExciteDTO">
+		select * from excite where application_seq=#{seq}
+	</select>
+	
+	<select id="getReviewByKeyword" resultType="com.tap.detail.dto.ReviewStarDTO">
+	select * from(
+		select 
+			r.review_seq, 
+			r.member_id, 
+			r.review_title,
+			r.review, 
+			r.review_date, 
+			s.stars,
+            ROW_NUMBER() OVER (
+				<if test="keyword != null">
+                    ORDER BY ${keyword} DESC
+                </if>
+                <if test="keyword == null">
+                    ORDER BY r.review_date DESC
+                </if>
+			) as rown  
+		from review r 
+			left outer join stars s on r.review_seq = s.review_seq
+			where r.application_seq=#{seq}
+			order by r.REVIEW_DATE desc
+		)
+		where rown between #{start} and #{end}
+		order by rown
+	</select>
+	
+	
+	<select id="getExciteByKeyword" resultType="com.tap.detail.dto.ExciteDTO">
+	select * from(
+		select excite.*, 
+		ROW_NUMBER() OVER (
+				<if test="keyword != null">
+                    ORDER BY ${keyword} DESC
+                </if>
+                 ) as rown  
+		from excite where application_seq= #{seq})
+		where rown between #{start} and #{end}
+		order by rown
+	</select>
+	
+	<select id="getCount" resultType="int">
+	   select count(*) from ${table} where application_seq=#{seq}
 	</select>
 	
 </mapper>

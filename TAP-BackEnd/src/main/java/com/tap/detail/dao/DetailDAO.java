@@ -1,6 +1,7 @@
 package com.tap.detail.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.ExciteDTO;
 import com.tap.detail.dto.ReviewStarDTO;
 
 @Repository
@@ -44,6 +46,22 @@ public class DetailDAO {
 	
 	public List<ReviewStarDTO> getReview(int seq) {
 		return mybatis.selectList("Detail.getReview",seq);
+	}
+	
+	public List<ExciteDTO> getExcite(int seq) {
+		return mybatis.selectList("Detail.getExcite",seq);
+	}
+	
+	public List<ReviewStarDTO> getReviewByKeyword(Map<String, Object> search) {
+		return mybatis.selectList("Detail.getReviewByKeyword",search);
+	}
+	
+	public List<ExciteDTO> getExciteByKeyword(Map<String, Object> search) {
+		return mybatis.selectList("Detail.getExciteByKeyword",search);
+	}
+	
+	public int getCount(Map<String, Object> data) {
+		return mybatis.selectOne("Detail.getCount",data);
 	}
 
 }
