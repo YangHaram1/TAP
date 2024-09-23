@@ -1,31 +1,34 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './AddForm.module.css';
 import { useAuthStore } from '../../../../store/store';
 import { api } from './../../../../config/config';
 import SweetAlert from '../../../../components/SweetAlert/SweetAlert';
+import Swal from 'sweetalert2';
 
-const AddForm = ({ setAddForm,setAdd,grade}) => {
+const AddForm = ({ setAddForm, setAdd, grade, setList,setGrade }) => {
     const { isAuth } = useAuthStore();
- 
+
 
     const [data, setData] = useState({
         seq: '',
-        title: '',
-        contents: '',
-        discount: 0,
-        coupon_order: ''
+        name: '',
+        min_point: 0,
+        benefits: 0,
+        grade_order: 0
     });
-    const [viewDiscount,setViewDisCount]=useState(0);
+    const [viewMinPoint, setViewMinPoint] = useState(0);
+    const [viewBenefits, setViewBenefits] = useState(0);
     const [regexData, setRegexData] = useState({
-        discount: false,
-        title: false,
-        contents: false,
-        coupon_order: false
+        name: false,
+        min_point: false,
+        benefits: false,
+        grade_order: false,
+        nameCheck: false
     })
     const [checkAll, setCheckAll] = useState();
 
 
-   
+
     useEffect(() => {
         //(regexData.birth&&regexData.address&&regexData.detailed_address)
         const allTrue = Object.values(regexData).every(value => value === true)
@@ -33,16 +36,16 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
     }, [regexData])
 
 
- 
+
 
     const handleData = (e) => {
         const { name, value } = e.target;
-        if(name!=='discount')
-        setData((prev) => {
-            return { ...prev, [name]: value }
-        })
-       
-       
+        if (name !== 'discount')
+            setData((prev) => {
+                return { ...prev, [name]: value }
+            })
+
+
 
         if (name === 'email') {
             const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
@@ -51,29 +54,44 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
             })
 
         }
-        else if (name === 'title') {
+        else if (name === 'name') {
             const regex = /^.{1,30}$/;
             setRegexData((prev) => {
                 return { ...prev, [name]: regex.test(value) }
             })
         }
-        else if (name === 'discount') {
+        else if (name === 'min_point' || name === 'benefits') {
 
             const temp = parseInt(value.replace(/,/g, ''), 10); // 문자열을 정수로 변환
             // 값이 NaN이거나 음수인 경우 0으로 고정
             const fixedValue = isNaN(temp) || temp < 0 ? 0 : temp;
             const formattedValue = new Intl.NumberFormat().format(fixedValue);
-            setViewDisCount(formattedValue)
+            if (name === 'min_point') {
+                setViewMinPoint(formattedValue)
+            }
+            else if (name === 'benefits') {
+                setViewBenefits(formattedValue)
+            }
+
             setData((prev) => {
                 return { ...prev, [name]: fixedValue }
             })
 
-            if(fixedValue){
-                setRegexData((prev) => {
-                    return { ...prev, [name]: true }
-                })
+            if (fixedValue) {
+                const regex = /^\d{0,13}$/; 
+                if (regex.test(fixedValue) && (fixedValue >= -2147483648 && fixedValue <= 2147483647)) {
+                    setRegexData((prev) => {
+                        return { ...prev, [name]: true }
+                    })
+                }
+                else{
+                    setRegexData((prev) => {
+                        return { ...prev, [name]: false }
+                    })
+                }
+               
             }
-            else{
+            else {
                 setRegexData((prev) => {
                     return { ...prev, [name]: false }
                 })
@@ -103,28 +121,31 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
         setRegexData((prev) => {
             return { ...prev, [type]: false }
         })
-    } 
+    }
 
     const handleChange = (event) => {
         setData((prev) => {
-            return { ...prev, coupon_order: event.target.value }
+            return { ...prev, grade_order: event.target.value }
         }); // 선택된 값을 상태로 업데이트
         if (event.target.value !== '선택')
             setRegexData((prev) => {
-                return { ...prev, coupon_order: true }
+                return { ...prev, grade_order: true }
             })
         else {
             setRegexData((prev) => {
-                return { ...prev, coupon_order: false }
+                return { ...prev, grade_order: false }
             })
         }
     };
 
     const handleConfirm = () => {
-        api.post(`/coupon/type`,data).then((resp)=>{
+        api.post(`/grade`, data).then((resp) => {
             setAddForm(false);
-            // setList((prev)=>{
-            //     return [...prev,{...data,seq:resp.data}];
+            // setList((prev) => {
+            //     return [...prev, { ...data, seq: resp.data }];
+            // })
+            // setGrade((prev)=>{
+            //     return [...prev, { ...data, seq: resp.data }];
             // })
             setAdd((prev)=>{
                 return !prev;
@@ -137,65 +158,92 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
         window.scrollTo(0, 0);
     }
 
+    const handleCheckName = () => {
+        const name = data.name;
+        api.post(`/grade/${name}`).then(() => {
+            setRegexData((prev) => {
+                return { ...prev, nameCheck: true }
+            })
+            Swal.fire({
+                icon: 'success',
+                title: '멤버쉽',
+                text: '사용 가능한 이름 입니다.'
+            })
+        }).catch(() => {
+            setRegexData((prev) => {
+                return { ...prev, nameCheck: false }
+            })
+            Swal.fire({
+                icon: 'error',
+                title: '멤버쉽',
+                text: '사용 불가능한 이름 입니다.'
+            })
+        })
+    }
+
 
     return (
         <div className={styles.container}>
             <div className={styles.input1}>
                 <div className={styles.header}>
-                    쿠폰 추가하기
+                    멤버쉽 추가하기
                 </div>
                 <div className={styles.contents}>
                     <div className={styles.title}>
-                        이름 <span>*</span>
+                        이름 <span>*</span> <button className={styles.nameBtn} onClick={handleCheckName}>중복 검사</button>
                     </div>
                     <div className={styles.input}>
-                        <input type="text" placeholder='이름을 입력해주세요' name='title' value={data.title} onChange={handleData} />
+                        <input type="text" placeholder='이름을 입력해주세요' name='name' value={data.name} onChange={handleData} />
                         {(<button className={data.title !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'title') }}>X</button>)}
                     </div>
                     <div>
-                        {data.title === '' ? <span>30자 이내로 입력해주세요.</span> : (regexData.title ? (<span style={{ color: 'blue' }}>30자 이내 입니다.</span>) : (<span>30자 이내로 적어주세요</span>))}
+                        {data.name === '' ? <span>30자 이내로 입력해주세요.</span> : (regexData.name ? (regexData.nameCheck ? (<span style={{ color: 'blue' }}>사용가능한 이름입니다.</span>) : (<span>중복검사를 해주세요.</span>)) : (<span>30자 이내로 적어주세요</span>))}
                     </div>
                 </div>
                 <div className={styles.contents}>
                     <div className={styles.title}>
-                        내용 <span>*</span>
-                    </div>
-                    <div className={styles.contentsInput} contentEditable={true} onInput={handleContents} name='contents'>
-
-                    </div>
-                    <div>
-                        {data.contents === '' ? <span>내용을 입력해주세요.</span> : (regexData.contents ? (<span style={{ color: 'blue' }}>1000자 이내 입니다.</span>) : (<span>1000자 이내로 적어주세요</span>))}
-                    </div>
-                </div>
-                <div className={styles.contents}>
-                    <div className={styles.title}>
-                        할인가격 <span>*</span>
+                        조건(원) <span>*</span>
                     </div>
                     <div className={styles.input}>
-                        <input type="text" placeholder='할인 가격을 입력해주세요' value={viewDiscount} name='discount' onChange={handleData} />
-                        {(<button className={data.email !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'discount') }}>X</button>)}
+                        <input type="text" placeholder='최소 포인트 조건을 입력해주세요' value={viewMinPoint} name='min_point' onChange={handleData} />
                     </div>
                     <div>
-                        {data.discount === '' ? <span>입력해주세요</span> : (regexData.discount ? (<span style={{ color: 'blue' }}>입력 완료 되었습니다.</span>) : (<span>숫자로만 입력해주세요</span>))}
+                        {data.min_point === 0 ? <span>최소 포인트 조건을 입력해주세요</span> : (regexData.min_point ? (<span style={{ color: 'blue' }}>입력 완료 되었습니다.</span>) : (<span>숫자가 너무 큽니다.</span>))}
                     </div>
                 </div>
                 <div className={styles.contents}>
                     <div className={styles.title}>
-                        쿠폰 등급 <span>*</span>
+                        혜택(%) <span>*</span>
                     </div>
                     <div className={styles.input}>
-                        <select className={styles.select} value={data.coupon_order} onChange={handleChange}>
-                            <option value="">선택</option>
+                        <input type="text" placeholder='혜택을 설정해주세요' value={viewBenefits} name='benefits' onChange={handleData} />
+                    </div>
+                    <div>
+                        {data.benefits === 0 ? <span>혜택을 설정해주세요(%)</span> : (regexData.benefits ? (<span style={{ color: 'blue' }}>입력 완료 되었습니다.</span>) : (<span>숫자가 너무 큽니다.</span>))}
+                    </div>
+                </div>
+                <div className={styles.contents}>
+                    <div className={styles.title}>
+                        등급 순서 <span>*</span>
+                    </div>
+                    <div className={styles.input}>
+                        <select className={styles.select} value={data.grade_order} onChange={handleChange}>
+                           
                             {
                                 grade.map((item, index) => {
                                     return (
-                                        <option value={item.grade_order}>{item.name}</option>
+                                        <React.Fragment key={index}>
+                                             {index===0&&(<option value={item.grade_order} style={{color:'red'}}>{`${index}. 선택`}</option>)}
+                                            <option value="" style={{pointerEvents:'none'}} disabled={true}>{item.name}</option>
+                                            <option value={item.grade_order+1} style={{color:'red'}}>{`${index+1}. 선택`}</option>
+                                        </React.Fragment>
+
                                     )
                                 })
                             }
                         </select>
                     </div>
-                    {data.coupon_order === '' ? <span>선택해 주세요.</span> : (regexData.coupon_order ? (<span style={{ color: 'blue' }}>선택 완료되었습니다.</span>) : (<span>선택해 주세요.</span>))}
+                    {data.grade_order === '' ? <span>등급 순서를 선택해주세요 </span> : (regexData.grade_order ? (<span style={{ color: 'blue' }}>선택 완료되었습니다.</span>) : (<span>선택해 주세요.</span>))}
                 </div>
 
                 <div className={styles.contents}>
@@ -204,7 +252,7 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
                             <button onClick={handleCancel}>취소하기</button>
                         </div>
                         <div className={checkAll ? styles.confirmReverse : styles.confirm}>
-                            <button onClick={()=>{SweetAlert('warning','쿠폰','추가 하시겠습니까?',handleConfirm)}}>추가하기</button>
+                            <button onClick={() => { SweetAlert('warning', '등급', '추가 하시겠습니까?', handleConfirm) }}>추가하기</button>
                         </div>
                     </div>
                 </div>

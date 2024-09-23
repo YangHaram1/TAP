@@ -173,7 +173,7 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
                     </div>
                     <div className={styles.input}>
                         <input type="text" placeholder='할인 가격을 입력해주세요' value={viewDiscount} name='discount' onChange={handleData} />
-                        {(<button className={data.email !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'discount') }}>X</button>)}
+                        {/* {(<button className={data.discount !== 0 ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'discount') }}>X</button>)} */}
                     </div>
                     <div>
                         {data.discount === '' ? <span>입력해주세요</span> : (regexData.discount ? (<span style={{ color: 'blue' }}>입력 완료 되었습니다.</span>) : (<span>숫자로만 입력해주세요</span>))}

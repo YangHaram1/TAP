@@ -16,6 +16,12 @@ export const BizSideMenu = () => {
 
     const menus = [
         {
+            name: '마이페이지',
+            link: '/mypage',
+            type: 'mypageManager',
+            icon: FaBox,
+        },
+        {
             name: '상품등록내역',
             link: '/',
             type: 'productRegistration',

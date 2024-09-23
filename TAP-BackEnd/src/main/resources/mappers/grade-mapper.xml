@@ -3,6 +3,15 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Grade">
+	<insert id="insert">
+		insert into grade values(grade_seq.nextval,#{name},${min_point},${benefits},${grade_order})
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select grade_seq.currval from dual
+		</selectKey>
+	</insert>
+
+
+
 	<select id="selectAll" resultType="com.tap.grade.dto.GradeDTO">
 		select * from grade where grade_order >0 order by grade_order
 	</select>
@@ -37,7 +46,22 @@
    		</if>
 	</select>
 	
+	<select id="checkName" resultType="boolean">
+		select count(*) from grade where name=#{name}
+	</select>
+	
 	<delete id="delete">
 		delete from grade where seq=${seq}
 	</delete>
+	
+	
+	
+	<update id="updateByAdd">
+		update grade set grade_order= grade_order +1 where grade_order>= ${grade_order}
+	</update>
+	
+	<update id="updateByDelete">
+		update grade set grade_order= grade_order -1 where grade_order> ${grade_order}
+	</update>
+	
 </mapper>

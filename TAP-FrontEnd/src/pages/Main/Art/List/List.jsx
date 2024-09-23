@@ -11,7 +11,7 @@ export const List = ({genre, category})=>{
 
     useEffect(()=>{
         console.log("변경테스트", genre, category);
-
+        setLists([]);
         if(genre ===""){
             genre = 0;
         }

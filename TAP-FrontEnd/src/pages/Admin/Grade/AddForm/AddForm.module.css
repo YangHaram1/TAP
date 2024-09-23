@@ -202,3 +202,15 @@
 .btnForm div{
     flex: 1;
 }
+
+.nameBtn{
+    border: none;
+    margin-left: 20px;
+    background-color: blueviolet;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    height: 30px;
+    font-size: 12px;
+    cursor: pointer;
+}

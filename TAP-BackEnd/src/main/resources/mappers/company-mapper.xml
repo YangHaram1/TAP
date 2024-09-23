@@ -17,4 +17,5 @@
 		select count(*) from company where name=#{name}
 	</select>
 	
+
 </mapper>
