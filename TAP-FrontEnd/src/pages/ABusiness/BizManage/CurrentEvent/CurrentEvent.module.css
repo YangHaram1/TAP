@@ -41,6 +41,14 @@
   vertical-align: middle;
 }
 
+.product_table table thead tr th:nth-child(1) { width: 5%; }
+.product_table table thead tr th:nth-child(2) { width: 35%; }
+.product_table table thead tr th:nth-child(3) { width: 10%; }
+.product_table table thead tr th:nth-child(4) { width: 15%; }
+.product_table table thead tr th:nth-child(5) { width: 15%; }
+.product_table table thead tr th:nth-child(6) { width: 20%; }
+
+
 .product_info {
   display: flex;
   align-items: center;
@@ -182,7 +190,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .approval_sale{
-  background-color: #6777c0;
+  background-color: #8921b3;
   color: #ccd2eb;
   font-weight: bold;
   padding: 5px 10px;
