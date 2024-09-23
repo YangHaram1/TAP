@@ -87,7 +87,7 @@
 .rank {
     flex: 1;
     /* border: 1px solid black; */
-    height: 80%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     /* padding: 10px 20px; */
@@ -96,15 +96,13 @@
 }
 
 .rankImg {
-    flex: 6;
+    flex: 7.5;
     cursor: pointer;
     background-color: black;
     border-radius: 10px;
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;
-
-
 }
 
 .rankNum {
@@ -124,25 +122,25 @@
 }
 
 .rankSubTitle {
-    flex: 1;
+    flex: 0.75;
     display: flex;
     align-items: center;
 }
 
 .rankDate {
-    flex: 1;
+    flex: 0.75;
     display: flex;
     align-items: center;
     color: #c1c1c1;
 }
 
-.rankSub {
+/* .rankSub {
     flex: 1;
     display: flex;
     align-items: center;
     font-size: 12px;
     color: #ff7262;
-}
+} */
 
 .rankSub span {
     border: 2px solid #ffe4d5;
@@ -249,6 +247,11 @@
     flex: 2;
     background-color: rgb(220, 220, 220);
     border-radius: 10px;
+}
+
+.oImgs img{
+    height: 100%;
+    width: 100%;
 }
 
 .oBox {
@@ -497,6 +500,11 @@
 
 .tapImg {
     flex: 3;
-    background-color: rgb(179, 212, 246);
+    /* background-color: rgb(179, 212, 246); */
     border-radius: 10px;
+}
+
+.tapImg img{
+    width: 95%;
+    height: 100%;
 }

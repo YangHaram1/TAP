@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tap.artlist.dto.ArtListDTO;
+import com.tap.detail.dto.ReviewStarDTO;
 
 @Repository
 public class ArtListDAO {
@@ -31,5 +32,18 @@ public class ArtListDAO {
 		map.put("category", category);
 		return mybatis.selectList("ArtList.getTapListByGenre", map);
 	}
+	
+	public List<ArtListDTO> getOpenAllList() {
+		return mybatis.selectList("ArtList.getOpenAllList");
+	}
+	
+	public List<ReviewStarDTO> getReviewList() {
+		return mybatis.selectList("ArtList.getReviewList");
+	}
+	
+	public List<ArtListDTO> getArtList(String category) {
+		return mybatis.selectList("ArtList.getArtList",category);
+	}
+
 	
 }

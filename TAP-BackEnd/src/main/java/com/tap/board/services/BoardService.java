@@ -35,4 +35,15 @@ public class BoardService {
 		return bdao.insert(dto);
 	}
 	
+	public BoardDTO detail(int seq){
+		return bdao.detail(seq);
+	}
+	
+	public int delete(int seq) {
+		return bdao.delete(seq);
+	}
+	
+	public int update(BoardDTO dto) throws Exception{
+		return bdao.update(dto);
+	}
 }

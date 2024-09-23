@@ -60,7 +60,7 @@
 
 .header {
     display: flex;
-    padding: 10px;
+    /* padding: 10px; */
     font-size: 15px;
     font-weight: 600;
 }
@@ -140,8 +140,8 @@
 .body {
     flex: 3;
     display: flex;
-    gap: 10px;
-    padding-left: 10px;
+    /* gap: 10px;
+    padding-left: 10px; */
     font-size: 12px;
 }
 
@@ -262,4 +262,19 @@
     background-color: #fcecff;
     font-weight: bold;
     color: #673AB7;
+}
+
+.headerConts div {
+    display: flex;
+    justify-content: center;
+}
+
+.deleteBtn {
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #fcecff;
+    font-weight: bold;
+    color: #ff5050;
+    cursor: pointer;
 }

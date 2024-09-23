@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styles from './BizSideMenu.module.css'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { FaBox, FaCartPlus } from 'react-icons/fa'
+import { FaBox, FaCartPlus, FaClipboardList, FaHeadset, FaList, FaShoppingCart, FaTicketAlt, FaUserFriends, FaUserShield } from 'react-icons/fa'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
+import { MdDashboard, MdPostAdd, MdSupport } from 'react-icons/md';
 
 export const AdminSideMenu = () => {
     const navigate = useNavigate()
@@ -10,14 +11,14 @@ export const AdminSideMenu = () => {
     const [selectedMenu, setSelectedMenu] = useState('')
 
     const menus = [
-        { name: '대시보드', link: '/', type: 'dashboard', icon: FaBox },
+        { name: '대시보드', link: '/', type: 'dashboard', icon: MdDashboard },
         {
             name: '상품관리',
             link: '/products',
             type: 'productManage',
-            icon: FaCartPlus,
+            icon: FaShoppingCart ,
             submenus: [
-                { name: '상품ㅎ관리', link: '/products/product' },
+                { name: '상품관리', link: '/products/product' },
                 { name: '상품신청관리', link: '/products/apply' },
                 { name: '할인신청관리', link: '/products/apply/sale' },
             ],
@@ -26,14 +27,14 @@ export const AdminSideMenu = () => {
             name: '주문관리',
             link: '/orders',
             type: 'orderManage',
-            icon: FaCartPlus,
-            submenus: [{ name: '주문ㅎ관리', link: '/orders/user' }],
+            icon: FaClipboardList,
+            submenus: [{ name: '주문관리', link: '/orders/user' }],
         },
         {
             name: '고객관리',
             link: '/members',
             type: 'memberManage',
-            icon: FaCartPlus,
+            icon: FaUserFriends,
             submenus: [
                 { name: '일반회원관리', link: '/members/user' },
                 { name: '기업회원관리', link: '/members/biz' },
@@ -43,7 +44,7 @@ export const AdminSideMenu = () => {
             name: '고객센터',
             link: '/support',
             type: 'supportManage',
-            icon: FaCartPlus,
+            icon: FaHeadset ,
             submenus: [
                 { name: '관리자 1:1 상담', link: '/support/chat' },
                 { name: '고객 문의내역', link: '/support/inquiry' },
@@ -53,23 +54,26 @@ export const AdminSideMenu = () => {
             name: '쿠폰 관리',
             link: '/coupon',
             type: 'couponManage',
-            icon: FaCartPlus,
+            icon: FaTicketAlt,
             submenus: [
                 { name: '쿠폰 종류', link: '/coupon/type' },
-                { name: '사용자 쿠폰 내역', link: '/coupon/list' },
             ],
         },
         {
             name: '멤버쉽 관리',
             link: '/grade',
             type: 'gradeManage',
-            icon: FaCartPlus,
+            icon: FaUserShield,   
+            submenus: [
+                { name: '등급 관리', link: '/grade' },
+            ],
+
         },
         {
             name: '게시물 관리',
             link: '/board',
             type: 'boardManage',
-            icon: FaCartPlus,
+            icon: MdPostAdd ,
             submenus: [
                 { name: '공지사항', link: '/board/notice' },
                 { name: '사용자 기대평 내역', link: '/board/list' },
@@ -79,7 +83,11 @@ export const AdminSideMenu = () => {
             name: '로그 관리',
             link: '/log',
             type: 'logManage',
-            icon: FaCartPlus,
+            icon: FaList,
+            submenus: [
+                { name: '로그 관리', link: '/log/manage' },
+                { name: 'IP 차단', link: '/log/ip-block' },
+            ],
         },
     ]
 
@@ -91,6 +99,7 @@ export const AdminSideMenu = () => {
     const handleMenuClick = (link, type) => {
         setSelectedMenu(type)
         navigate(link)
+        window.scrollTo(0, 0);
     }
 
     const toggleDropdown = menuType => {

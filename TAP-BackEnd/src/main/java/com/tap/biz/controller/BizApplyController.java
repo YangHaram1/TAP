@@ -19,6 +19,7 @@ import com.tap.biz.dto.BizApplyDTO;
 import com.tap.biz.dto.CastingDataDTO;
 import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.dto.TotalScheduleDTO;
+import com.tap.biz.services.BizApplyService;
 import com.tap.biz.services.BizService;
 import com.tap.files.dto.FilesDTO;
 import com.tap.members.service.MembersService;
@@ -30,6 +31,8 @@ public class BizApplyController {
 	private BizService bizServ;
 	@Autowired
 	private MembersService mserv;
+	@Autowired
+	private BizApplyService bizApServ;
 	
 	@GetMapping("/category")
 	public ResponseEntity<List<HashMap<String, Object>>> getAllCategory(){
@@ -95,12 +98,13 @@ public class BizApplyController {
 	// 상품 테이블에 insert POST
 	@PostMapping
 	public ResponseEntity<BizApplyDTO> insertEvent(@RequestBody BizApplyDTO formData){
-		String id = formData.getId();
-		Timestamp start_date = formData.getStart_date();
-		int running_time = formData.getRunning_time();
-		Timestamp open_date = formData.getOpen_date();
-		System.out.println("ghkrd");
-	
+		
+			String id = formData.getId();
+			Timestamp start_date = formData.getStart_date();
+			int running_time = formData.getRunning_time();
+			Timestamp open_date = formData.getOpen_date();
+			System.out.println("ghkrd");
+		
 		
 		// Apply 테이블에 삽입 ==================================
 		int applicationSeq = bizServ.createApply(formData); // apply테이블에 insert하고 시퀀스 돌려받기. 

@@ -12,6 +12,7 @@
         from members m 
         left join grade g on m.grade_seq = g.seq
         where m.role = 'ROLE_USER'
+        ORDER BY m.join_date desc
 	</select> 
 <select id="searchUserMem" resultMap="memberResultMap">
     SELECT m.name AS name, g.name AS grade, m.join_date, m.enabled
@@ -24,8 +25,16 @@
     <if test="gradeSeq != null">
         AND m.grade_seq = #{gradeSeq}
     </if>
+    ORDER BY m.join_date desc
 </select>
 <select id="getGrade" resultType="com.tap.grade.dto.GradeDTO">
-    select * from grade
+    select * from grade order by grade_order
 </select>
+
+
+<update id="updateMemberStatus">
+	update members set grade_seq = #{gradeSeq} , enabled = #{enabled}
+    where id= #{orderSeq}
+	</update>
+
 </mapper>

@@ -19,13 +19,13 @@
        SELECT * FROM log
        <where>
            <if test="name != null and name != ''">
-               AND name LIKE '%' || #{name, jdbcType=VARCHAR} || '%'
+               AND UPPER(name) LIKE '%' || UPPER(#{name, jdbcType=VARCHAR}) || '%'
            </if>
            <if test="member_id != null and member_id != ''">
-               AND member_id LIKE '%' || #{member_id, jdbcType=VARCHAR} || '%'
+               AND UPPER(member_id) LIKE '%' || UPPER(#{member_id, jdbcType=VARCHAR}) || '%'
            </if>
            <if test="log_status != null and log_status != ''">
-               AND log_status = #{log_status, jdbcType=VARCHAR}
+               AND log_status LIKE '%' || #{log_status, jdbcType=VARCHAR} || '%'
            </if>
            <if test="specific_start_date != null and specific_start_date != ''">
                AND local_logtime <![CDATA[ >= ]]> TO_DATE(#{specific_start_date, jdbcType=VARCHAR} || ' 00:00:00', 'YYYY-MM-DD HH24:MI:SS')

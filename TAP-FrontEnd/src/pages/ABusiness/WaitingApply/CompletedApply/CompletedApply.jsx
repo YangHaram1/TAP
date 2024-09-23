@@ -60,10 +60,10 @@ export const CompletedApply =()=>{
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
-            <table>
+            <table className={styles.table}>
                 <thead>
                 <tr>
-                    <th>접수<br/>번호</th>
+                    <th>접수번호</th>
                     <th>상품정보</th>
                     <th>공연장 및 일시</th>
                     <th>신청일 / 승인일</th>
@@ -78,7 +78,7 @@ export const CompletedApply =()=>{
                         </td>
                     <td className={styles.product_info}>
                         <div className={styles.product_image_container}>
-                        <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
+                        <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image_container} />
                         </div>
                         <div className={styles.product_details }>
                             <div className={styles.product_name}>{product.NAME}</div>
@@ -98,24 +98,25 @@ export const CompletedApply =()=>{
                         <br/> 처리일:  {formatDate(product.updated_at)}
                     </td>
                     <td className={styles.product_venue}>
-                    {product.STATUS !=='승인 반려' && (
-                         <div className={styles.rejectReason}>
-                         <span>{product.STATUS} </span>
-                         </div>
-                    )}
-                     
-                     {product.STATUS === '승인 반려' && (
-                    <div className={styles.rejectReason}>
-                        <span className={styles.tooltipIcon}>
+                    {product.STATUS !== '승인 반려' ? (
+                        <div className={`${styles.status} ${
+                        product.STATUS === '승인 대기' ? styles['status-pending'] :
+                        product.STATUS === '승인 완료' ? styles['status-approved'] :
+                        ''
+                        }`}>
+                        {product.STATUS}
+                        </div>
+                    ) : (
+                        <div className={styles.rejectReason}>
+                        <span className={`${styles.tooltipIcon} ${styles['status-rejected']}`}>
                             반려 <FaLightbulb size={20} />
                         </span>
-                        {/* 툴팁을 CSS의 hover로 보여주기 */}
                         <div className={styles.tooltipText}>
-                        반려 이유: {product.REJECT_REASON} 
+                            반려 이유: {product.REJECT_REASON} 
                         </div>
-                    </div>
-                )}
-            </td>
+                        </div>
+                    )}
+                    </td>
                     </tr>
                 ))}
                 </tbody>

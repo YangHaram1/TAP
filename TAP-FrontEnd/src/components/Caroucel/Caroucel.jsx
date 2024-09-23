@@ -28,14 +28,14 @@ export const Caroucel = ({category, images})=>{
           setSettings({
             chevronWidth: 40,
             numberOfCards: 4,
-            height: 350
+            height: 400
         });
         setAutoPlay(true);
         }else if(category === "art2" && category === "art3"){
           setSettings({
             chevronWidth: 40,
             numberOfCards: 5,
-            height: 500
+            height: 400
         });
         setAutoPlay(false);
         } else if (category === "sport") {
@@ -88,7 +88,7 @@ export const Caroucel = ({category, images})=>{
                     return(
                     <div key={image.application_seq} onClick={()=>{handleMove(`${image.application_seq}`)}} style={{ height: settings.height, background: `url(${image.files_sysname}) no-repeat center/cover`, color:'white' }} className={styles.card}>
                         <div className={styles.overlay}></div> {/* 오버레이 추가 */}
-                        <h2>{image.name}</h2>
+                        <h2 style={{overflow:"hidden",whiteSpace: "nowrap",textOverflow: "ellipsis", maxWidth: "300px" }}>{image.name}</h2>
                         <p>{image.place_name}</p>
                         <p>{format(new Date(image.start_date), 'yyyy.MM.dd')} - &nbsp; 
                         {format(new Date(image.end_date), 'yyyy.MM.dd')}</p>
@@ -172,12 +172,12 @@ export const Caroucel = ({category, images})=>{
             {
               images.map((image)=>{
                 return(
-                  <div key={image.application_seq} style={{ height: settings.height}} className={styles.card}>
+                  <div key={image.application_seq} style={{ height: settings.height}} className={styles.card} onClick={()=>{handleMove(`${image.application_seq}`)}}> 
                     <div className={styles.poster}>
                       <img src={image.files_sysname}></img>
                     </div>
                     <p style={{color:"purple", fontWeight:"600", marginBottom:"0px",fontSize:"18px"}}>{format(new Date(image.start_date), 'MM.dd(EEE) HH:mm', { locale: ko })}</p>
-                    <p style={{fontSize:"18px", fontWeight:"600"}}>{image.name}</p>
+                    <p style={{fontSize:"18px", fontWeight:"600", height:"25px", overflow:"hidden",whiteSpace: "nowrap",textOverflow: "ellipsis", maxWidth: "250px" }}>{image.name}</p>
                     <p>{image.place_name}</p>
                   </div>
                 );

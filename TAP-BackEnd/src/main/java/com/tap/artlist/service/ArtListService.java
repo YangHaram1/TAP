@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tap.artlist.dao.ArtListDAO;
 import com.tap.artlist.dto.ArtListDTO;
+import com.tap.detail.dto.ReviewStarDTO;
 
 @Service
 public class ArtListService {
@@ -25,4 +26,17 @@ public class ArtListService {
 	public List<ArtListDTO> getTapList(String genre, String category){
 		return alDao.getTapList(genre, category);
 	}
+	
+	public List<ArtListDTO> getOpenAllList() {
+		return alDao.getOpenAllList();
+	}
+	
+	public List<ReviewStarDTO> getReviewList() {
+		return alDao.getReviewList();
+	}
+	
+	public List<ArtListDTO> getArtList(String category) {
+		return alDao.getArtList(category);
+	}
+	
 }

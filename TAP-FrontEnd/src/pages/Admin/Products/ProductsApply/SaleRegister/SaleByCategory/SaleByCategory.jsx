@@ -79,7 +79,7 @@ export const SaleByCategory =({ category, categoryName, tap })=>{
 
     return (
         <div className={styles.container}>
-            <h3>{categoryName} - {tap === 0 ? "할인 상품 등록 승인 대기 중" : tap === 1 ? "할인 상품 등록 처리 완료" : "승인 대기중"}</h3>
+            <h4>{categoryName} - {tap === 0 ? "할인 상품 등록 승인 대기 중" : tap === 1 ? "할인 상품 등록 처리 완료" : "승인 대기중"}</h4>
                 <div className={styles.product_table}>
                     
                 {filtered.length > 0 ? (

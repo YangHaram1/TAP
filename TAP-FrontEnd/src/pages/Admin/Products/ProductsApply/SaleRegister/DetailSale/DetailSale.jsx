@@ -46,6 +46,7 @@ export const DetailSale =()=>{
 
     const handleBack = () => {
         navigate('/products/apply/sale');
+        window.scrollTo(0, 0);
     };
 
     const handleReject = () => {
@@ -188,7 +189,9 @@ export const DetailSale =()=>{
                     <button onClick={handleReject}>반려</button>
                     <button onClick={handleBack}>취소</button>
                 </>
-            ) : tap === 1 ? null : null}
+            ) : tap === 1 ? 
+            <button onClick={handleBack}>목록으로</button> 
+            : null}
         </div>
 
         {isModalOpen && (

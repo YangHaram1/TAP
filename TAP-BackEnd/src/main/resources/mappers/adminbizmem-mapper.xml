@@ -25,6 +25,7 @@
 	    company c ON c.member_id = m.id
 	WHERE 
 	    m.role = 'ROLE_BIZ'
+	ORDER BY m.join_date desc
 	</select>
 	
 	<update id="updateOrderStatusSingle">
@@ -59,6 +60,8 @@
 	        AND m.grade_seq = #{gradeSeq}
 	    </if>
 	</select>
+	
+	
 	
 	
 	

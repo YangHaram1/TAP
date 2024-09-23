@@ -66,7 +66,7 @@ export const WaitingSaleList =()=>{
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
-            <table>
+            <table className={styles.table}>
                 <thead>
                 <tr>
                     <th>접수<br/>번호</th>
@@ -74,7 +74,7 @@ export const WaitingSaleList =()=>{
                     <th>공연장 및 일시</th>
                     <th>할인율</th>
                     <th>상태</th>
-                    <th>신청<br/>취소</th>
+                    <th>신청취소</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,8 +86,8 @@ export const WaitingSaleList =()=>{
                             {product.APPLICATION_SEQ}
                         </td>
                     <td className={styles.product_info}>
-                        <div className={styles.product_image_container} style={{paddingLeft:"40px"}}>
-                        <img src={product.FILES_SYSNAME}  className={styles.product_image} />
+                        <div className={styles.product_image_container} >
+                        <img src={product.FILES_SYSNAME}  className={styles.product_image_container} />
                         </div>
                         <div className={styles.product_details }>
                             <div className={styles.product_name}>{product.NAME}</div>
@@ -116,7 +116,7 @@ export const WaitingSaleList =()=>{
                     <td>
                     {product.STATUS !== '반려' && (
                         <button className={styles.manage_button} onClick={() => handleCancel(product.APPLICATION_SEQ)}>
-                            신청<br/>취소
+                            신청취소
                         </button>
                     )}
                      {product.STATUS === '반려' && (

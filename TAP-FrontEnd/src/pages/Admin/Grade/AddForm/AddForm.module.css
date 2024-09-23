@@ -1,0 +1,216 @@
+.container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70vw;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경 어둡게 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+   
+}
+
+.input1{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+    gap: 20px;
+}
+
+
+
+.hidden{
+    visibility: hidden;
+
+}
+
+
+
+.container p {
+    margin: 0;
+
+}
+
+.container span {
+    color: red;
+    font-size: 12px;
+    padding-left: 10px;
+}
+
+.title span{
+    font-size: 15px !important;
+    text-align: center;
+}
+.checkTitle span{
+    text-align: center;
+    font-size: 15px !important;
+}
+
+
+.header {
+    font-size: 25px;
+    font-weight: 700;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.contents {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.title {
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
+.input {
+    display: flex;
+    position: relative;
+}
+
+
+.cancel {
+    background-color: gray;
+    border: none;
+    color: white;
+    border-radius: 50%;
+    position: relative;
+    right: 40px;
+    top: 10px;
+    height: 30px;
+    width: 30px;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 700;
+}
+
+.contents input {  
+    width: 94%;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px !important;
+    height: 50px;
+    border: 1px solid rgba(128, 128, 128, 0.249);
+}
+
+.select {
+    width: 96.1%;
+    height: 54px;
+    border-radius: 20px;
+    padding-left: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.249);
+    padding-right: 10px !important;
+
+}
+.icon {
+    background-color: white;
+    border: none;
+    position: relative;
+    right: 40px;
+    top: 10px;
+    width: 10px;
+    height: 30px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 700;
+    pointer-events: none;
+}
+
+.none {
+    width: 94%;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px !important;
+    height: 50px;
+    border: 1px solid rgba(128, 128, 128, 0.249);
+    background-color: white;
+    pointer-events: none;
+
+}
+
+.confirm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    pointer-events: none;
+    border-radius: 15px;
+}
+.confirm button{
+    width: 100%;
+    height: 65px;
+    border: none;
+    background-color: rgba(128, 128, 128, 0.366);
+    color: white;
+    pointer-events: none;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 15px;
+}
+
+.confirmReverse{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   padding: 20px;
+    border-radius: 15px;
+}
+.confirmReverse button{
+    width: 100%;
+    height: 65px;
+    border: none;
+    background-color: blueviolet;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 15px;
+}
+
+.contentsInput{
+    width: 96%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding-left: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.442);
+    font-size: 15px;
+    min-height: 50px;
+    max-height: 100px;
+    overflow: auto;
+}
+.btnForm{
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.btnForm div{
+    flex: 1;
+}
+
+.nameBtn{
+    border: none;
+    margin-left: 20px;
+    background-color: blueviolet;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    height: 30px;
+    font-size: 12px;
+    cursor: pointer;
+}

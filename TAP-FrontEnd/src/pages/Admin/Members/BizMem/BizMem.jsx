@@ -4,6 +4,7 @@ import { api } from '../../../../config/config';
 import { Pagination } from '../../../../components/Pagination/Pagination';
 import { Modal } from '../../../../components/Modal/Modal';
 import { ModalBiz } from './ModalApprove/ModalBIz';
+import { FaSearch } from 'react-icons/fa'; 
 
 export const BizMem = () => {
     const [bizMems, setBizMems] = useState([]);
@@ -37,6 +38,7 @@ export const BizMem = () => {
             const resp = await api.get(`/admin/bizmem`);
             setBizMems(resp.data);
             setFiltered(resp.data);
+            console.log(resp.data)
         } catch (error) {
             alert("데이터를 가져오는 중 오류가 발생했습니다.");
         }
@@ -46,19 +48,7 @@ export const BizMem = () => {
         fetchOrders();  // 컴포넌트 마운트 시 데이터 가져오기
     }, []);
 
-    // 검색 요청 함수 (shippingStatus도 포함)
-    const handleNameSearch = async () => {
-        try {
-            const params = {
-                keyword: keyword,
-                shippingStatus: shippingStatus || null  // 가입 상태 필터를 함께 전송
-            };
-            const resp = await api.get(`/admin/bizmem/search`, { params });
-            setFiltered(resp.data);
-        } catch (error) {
-            console.error('검색 중 오류:', error);
-        }
-    };
+    
 
     // 체크박스 처리 
     const handleCheckAll = (e) => {
@@ -111,11 +101,40 @@ export const BizMem = () => {
         window.scrollTo(0, 0);
     };
 
-    // 가입 상태 필터 변경 핸들러
-    const handleShippingStatusChange = (e) => {
-        setShippingStatus(e.target.value);
-        handleNameSearch(); // 검색 함수와 함께 필터링 적용
-    };
+  // 가입 상태 필터 변경 핸들러
+const handleShippingStatusChange = (e) => {
+    setShippingStatus(e.target.value);
+    applyFilters();  // 필터링을 따로 처리
+};
+
+// select 필터링 함수
+const applyFilters = () => {
+    let filteredOrders = [...bizMems];  // 원본 데이터 복사
+
+    // 가입 상태 필터 적용
+    if (shippingStatus) {
+        console.log("현재 상태 필터:", shippingStatus);
+        filteredOrders = filteredOrders.filter(mem => mem.ENABLED == shippingStatus);
+    }
+
+    // 검색 키워드 필터 적용 (필요할 경우)
+    if (keyword) {
+        filteredOrders = filteredOrders.filter(mem => 
+            mem.C_NAME.includes(keyword) || mem.NAME.includes(keyword)
+        );
+    }
+
+    setFiltered(filteredOrders);  // 필터링된 데이터 설정
+    setCurrentPage(0);  // 페이지를 처음으로 이동
+};
+useEffect(() => {
+    applyFilters();  // 상태 변경 시 필터링 적용
+}, [shippingStatus, bizMems]);
+// 검색 함수에서도 필터링만 적용되도록 수정
+const handleNameSearch = () => {
+    applyFilters();  // 검색과 필터링을 동일하게 처리
+};
+
 
     // 날짜 포맷팅 함수
     const formatDate = (dateString) => {
@@ -143,7 +162,7 @@ export const BizMem = () => {
                         className={styles.searchInput}
                     />
                     <button className={styles.buttonsearch} onClick={handleNameSearch}>
-                        돋보기
+                    <FaSearch /> 
                     </button>
                 </div>
 
@@ -155,6 +174,9 @@ export const BizMem = () => {
                         가입 승인 처리
                     </button>
                 </div>
+            </div>
+            <div className={styles.countMem} style={{textAlign:"right"}}>
+                    기업 회원: {filtered.length} 명 (가입대기: {filtered.filter(mem=>mem.ENABLED===0).length} 명)
             </div>
 
 
@@ -194,7 +216,9 @@ export const BizMem = () => {
                                 <td>{mem.REGISTRATION_NUMBER}</td>
                                 <td>{formatDate(mem.JOIN_DATE)}</td>
                                 <td>{mem.APPLY_COUNT}</td>
-                                <td>{mem.G_NAME === 'pending' ? "승인 대기" : "승인 완료"}</td>
+                                <td style={mem.ENABLED !== 1 ? { color: 'purple' , fontWeight:'bold'} : {}}>
+                                    {mem.ENABLED === 1 ? "승인 완료" : "승인 대기"}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
