@@ -6,4 +6,38 @@
 	<select id="selectAll" resultType="com.tap.grade.dto.GradeDTO">
 		select * from grade where grade_order >0 order by grade_order
 	</select>
+	
+	
+	<select id="selectList" resultType="com.tap.grade.dto.GradeDTO">
+	
+		select a.* from
+		(
+		select grade.*, row_number() over (order by grade_order) as rown 
+		from grade
+		where 1=1
+		<if test="target=='grade_order'">
+      		and  grade_order =${keyword}
+   		</if>
+		<if test="target=='grade'">
+      		and name = #{keyword,jdbcType=VARCHAR}
+   		</if>
+   		)a 
+   		where rown between ${start} and ${end}
+	</select>
+	
+	<select id="getCount" resultType="int" >
+		select count(*) from 
+		grade
+		 where 1=1
+		<if test="target=='grade_order'">
+      		and  grade_order =${keyword}
+   		</if>
+		<if test="target=='grade'">
+      		and name = #{keyword,jdbcType=VARCHAR}
+   		</if>
+	</select>
+	
+	<delete id="delete">
+		delete from grade where seq=${seq}
+	</delete>
 </mapper>

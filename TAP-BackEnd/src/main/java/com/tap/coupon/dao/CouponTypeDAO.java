@@ -16,19 +16,19 @@ public class CouponTypeDAO {
 	@Autowired
 	private SqlSession mybatis;
 
-	public void insert(CouponTypeDTO dto) {
+	public void insert(CouponTypeDTO dto) throws Exception{
 		mybatis.insert("CouponType.insert",dto);
 	}
 
-	public List<CouponTypeGrade> selectAll(Map<String, Object> map) {
+	public List<CouponTypeGrade> selectAll(Map<String, Object> map) throws Exception{
 		return mybatis.selectList("CouponType.selectAll",map);
 	}
 	
-	public int getCount(Map<String, Object> map) {
+	public int getCount(Map<String, Object> map) throws Exception{
 		return mybatis.selectOne("CouponType.getCount",map);
 	}
 
-	public int delete(int seq) {
+	public int delete(int seq) throws Exception{
 		
 		return mybatis.delete("CouponType.delete",seq);
 	}
