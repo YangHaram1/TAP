@@ -1,0 +1,116 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.container h2 {
+    font-size: 22px;
+    color: #4a148c;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    justify-content: center;
+}
+
+.searchInput {
+    width: 100%;
+    max-width: 280px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #5e35b1;
+    box-shadow: 0 0 5px rgba(94, 53, 177, 0.2);
+}
+
+.buttonsearch, .buttonblock, .buttonunblock {
+    background-color: #5e35b1;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.buttonsearch:hover, .buttonblock:hover, .buttonunblock:hover {
+    background-color: #512da8;
+    transform: translateY(-2px);
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f3f3f3;
+    color: #444;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.table tr:hover {
+    background-color: #f3e5f5;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #5e35b1;
+    padding: 8px 14px;
+    margin: 0 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #f0e5ff;
+}
+
+.pagination .active {
+    background-color: #5e35b1;
+    color: white;
+}

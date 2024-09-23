@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IPBlock">
+    <select id="getBlockedIPs" resultType="com.tap.admin.dto.IPBlockDTO">
+        SELECT 
+            id, 
+            ip, 
+            reason, 
+            NVL(blocked_at, CURRENT_TIMESTAMP) as blocked_at,
+            unblocked_at,
+            login_attempts,
+            last_attempt_at
+        FROM ip_block
+        WHERE unblocked_at IS NULL
+        ORDER BY blocked_at DESC
+    </select>
+
+    <insert id="blockIP" parameterType="com.tap.admin.dto.IPBlockDTO">
+        INSERT INTO ip_block (id, ip, reason, blocked_at, login_attempts, last_attempt_at)
+        VALUES (ip_block_seq.NEXTVAL, #{ip}, #{reason, jdbcType=VARCHAR}, #{blockedAt}, #{loginAttempts}, #{lastAttemptAt})
+    </insert>
+
+    <update id="unblockIP" parameterType="string">
+        UPDATE ip_block
+        SET unblocked_at = CURRENT_TIMESTAMP
+        WHERE ip = #{ip} AND unblocked_at IS NULL
+    </update>
+
+    <select id="isIPBlocked" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM ip_block
+        WHERE ip = #{ip} AND unblocked_at IS NULL
+    </select>
+
+    <update id="incrementLoginAttempts" parameterType="string">
+        UPDATE ip_block
+        SET login_attempts = login_attempts + 1,
+            last_attempt_at = CURRENT_TIMESTAMP
+        WHERE ip = #{ip}
+        RETURNING login_attempts
+    </update>
+
+    <update id="resetLoginAttempts" parameterType="string">
+        UPDATE ip_block
+        SET login_attempts = 0,
+            last_attempt_at = NULL
+        WHERE ip = #{ip}
+    </update>
+
+    <select id="getIPBlockInfo" parameterType="string" resultType="com.tap.admin.dto.IPBlockDTO">
+        SELECT * FROM ip_block
+        WHERE ip = #{ip}
+    </select>    
+</mapper>

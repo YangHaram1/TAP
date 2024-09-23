@@ -17,6 +17,7 @@ import Inquiry from './Inquiry/Inquiry';
 import Coupon from './Coupon/Coupon';
 import Grade from './Grade/Grade';
 import Board from './Board/Board';
+import { IPBlockManagement } from './Log/IPBlockManagement';
 
 export const AdminContent =()=>{
     return(
@@ -37,7 +38,8 @@ export const AdminContent =()=>{
                 <Route path='/coupon/*' element={<Coupon/>}/>
                 <Route path='/board/*' element={<Board/>}/>
                 <Route path='/grade' element={<Grade/>}/>
-                <Route path='/log/*' element={<Log/>}/>
+                <Route path='/log/manage' element={<Log/>}/>
+                <Route path='/log/ip-block' element={<IPBlockManagement/>}/>
             </Routes>
         </div>
     );
