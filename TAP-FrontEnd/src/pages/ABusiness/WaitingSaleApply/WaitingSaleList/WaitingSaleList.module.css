@@ -41,19 +41,19 @@
   vertical-align: middle;
 }
 .product_table table thead tr th:nth-child(1){
-  width:5%;
+  width:7%;
 }
 .product_table table thead tr th:nth-child(2){
-  width:35%; 
+  width:33%; 
 }
 .product_table table thead tr th:nth-child(3){
   width:15%;
 }
 .product_table table thead tr th:nth-child(4){
-  width:15%;
+  width:10%;
 }
 .product_table table thead tr th:nth-child(6){
-  width:7%;
+  width:12%;
 }
 .product_table table thead tr th:nth-child(5){
   width:13%;

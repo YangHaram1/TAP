@@ -801,7 +801,7 @@ export const EventApply = () => {
                                             .filter((seat) => seat.PLACE_SEQ.toString() === selectedPlace)
                                             .map((seat, index) => (
                                                 <li key={index}>
-                                                    {seat.PLACE_SEAT_LEVEL} - {seat.PRICE_SEAT} 원
+                                                    {seat.PLACE_SEAT_LEVEL} - {Number(seat.PRICE_SEAT)?.toLocaleString()} 원
                                                 </li>
                                             ))}
                                     </ul>
