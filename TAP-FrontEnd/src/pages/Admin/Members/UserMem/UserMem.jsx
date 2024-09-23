@@ -203,32 +203,35 @@ export const UserMem = () => {
     return (
         <div>
             <div className={styles.container}>
-            <div className={styles.top}>
-                <div className={styles.searchWrapper}>
-                    <input
-                        type="text"
-                        placeholder="회원 이름으로 검색"
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                handleNameSearch();
-                            }
-                        }}
-                        className={styles.searchInput}
-                    />
-                    <button className={styles.buttonsearch}  onClick={handleNameSearch}>
-                    <FaSearch /> 
-                    </button>
+                <div className={styles.top}>
+                    <div className={styles.searchWrapper}>
+                        <input
+                            type="text"
+                            placeholder="회원 이름으로 검색"
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleNameSearch();
+                                }
+                            }}
+                            className={styles.searchInput}
+                        />
+                        <button className={styles.buttonsearch}  onClick={handleNameSearch}>
+                        <FaSearch /> 
+                        </button>
+                    </div>
+                    <div className={styles.searchWrapper}>
+                        <button
+                            className={styles.btnDeliver}
+                            onClick={() => openModal()}
+                        >
+                            회원 상태 변경
+                        </button>
+                    </div>
                 </div>
-                <div className={styles.searchWrapper}>
-                    <button
-                        className={styles.btnDeliver}
-                        onClick={() => openModal()}
-                    >
-                        회원 상태 변경
-                    </button>
-                </div>
+                <div className={styles.countMem} style={{textAlign:"right"}}>
+                    회원: {filteredUserMems.length} 명 (블랙리스트 회원: {filteredUserMems.filter(mem=>mem.GRADE_SEQ===-1).length} 명)
                 </div>
 
                 <div className={styles.tableWrapper}>

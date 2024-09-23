@@ -96,7 +96,8 @@ export const Dash=()=>{
                 [
                     'pink',  // 첫 번째 카테고리 색상
                     'yellow',  // 두 번째 카테고리 색상
-                    '#ADD8E6',  // 세 번째 카테고리 색상
+                    // 'rgb(137 43 226 / 33%)',  // 세 번째 카테고리 색상
+                    'rgb(204, 204, 255)',
                     'purple'   // 네 번째 카테고리 색상
                 ], 
                 borderColor: 'transparent',
@@ -144,7 +145,7 @@ export const Dash=()=>{
             <div className={styles.today}>
                 <div className={styles.toDO}>
                     <div className={styles.title}>
-                        <h2>오늘 처리할 일</h2>
+                        <h3>오늘 처리할 일</h3>
                     </div>
                     <div className={styles.table}>
                         <table>
@@ -178,7 +179,7 @@ export const Dash=()=>{
              
                 <div className={styles.todayDone}>
                     <div className={styles.title}>
-                        <h2>오늘 처리한 일</h2>
+                        <h3>오늘 처리한 일</h3>
                     </div>
                     <div className={styles.table}>
                         <table>
@@ -212,20 +213,20 @@ export const Dash=()=>{
             </div>
             <div className={styles.row2}>
                 <div className={styles.dollar}>
-                    <h2>이번달 총 매출</h2>
+                    <h3>이번달 총 매출</h3>
                     <div className={styles.total_sum}>{Number(totalToday.total_sum)?.toLocaleString()} 원</div>
                     <div className={styles.total_count_box}>{totalToday.total_count} 건</div>
                 </div>
 
                 <div className={styles.order}>
-                    <h2>카테고리별 주문 건수</h2>
+                    <h3>카테고리별 주문 건수</h3>
                     <Bar data={barChartData} options={barChartOptions} />
                 </div>
             </div>
 
             <div className={styles.row2}>
                 <div className={styles.refund}>
-                    <h2>이번달 환불 금액</h2>
+                    <h3>이번달 환불 금액</h3>
                     <div className={styles.total_sum}>
                     {Number(refundAmount.REFUND_SUM || 0).toLocaleString()} 원
                     </div>
