@@ -900,44 +900,22 @@ export const EventApply = () => {
                                                 ? "전체"
                                                 : `${daysOfWeek[schedule.schedule_day]}요일`}{" "}
                                             - {schedule.schedule_time}
-                                    <br />
-                                    {/*  */}
+                                  
                                     <div className={styles.file_upload_wrapper}>
-                                            {/* <input id="file_upload_1" type="file" style={{display:"block"}}
+                                        <input id="file_upload_1" type="file" style={{display:"block"}}
                                             ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
-                                            onChange={handleCastingImageChange} /> */}
-
+                                            onChange={handleCastingImageChange} />
+                                        <div className={styles.inputRow}>
                                         <input
-                                                id={`file_upload_${scheduleKey}`} // id를 동적으로 변경
-                                                type="file"
-                                                style={{ display: "none" }} // 파일 업로드 필드를 숨김
-                                                ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
-                                                onChange={handleCastingImageChange}
-                                            />
-                                            {/* 사용자 정의 버튼 */}
-                                            <label 
-                                                htmlFor={`file_upload_${scheduleKey}`} 
-                                                className={styles.custom_file_upload_button}
-                                            >
-                                                파일 선택
-                                            </label>
-                                            {/* 업로드된 파일 이름 표시 (선택 사항) */}
-                                            {castingImage?.file_oriname && (
-                                                <span className={styles.file_name}>{castingImage.file_oriname}</span>
-                                            )}
-
-
-                                        <div style={{ marginTop: "10px" }}>
-                                            <input
-                                            type="text"
-                                            placeholder="배우 이름"
-                                            ref={actorInputRef}
-                                            value={currentInputs.actorName}
-                                            onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
-                                            className={styles.shortInput}
-                                            />
-                                            <span className={styles.Gap}></span>
-                                     
+                                        type="text"
+                                        placeholder="배우 이름"
+                                        ref={actorInputRef}
+                                        value={currentInputs.actorName}
+                                        onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
+                                        className={styles.shortInput}
+                                        />
+                                      
+                                        <span className={styles.Gap}></span>
                                         <input
                                         type="text"
                                         placeholder="역할"
@@ -947,7 +925,7 @@ export const EventApply = () => {
                                         className={styles.shortInput}
                                         />
                                         <span className={styles.Gap}></span>
-                                        <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가</button>
+                                        <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
                                     </div>
                                     </div>
                                     <br />

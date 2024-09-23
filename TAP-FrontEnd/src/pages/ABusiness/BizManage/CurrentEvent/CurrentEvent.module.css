@@ -150,13 +150,15 @@
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   text-align: center;
-  background-color: #007bff;
+  /* background-color: #007bff; */
+  background-color: transparent;
   color: white;
   border: none;
 }
 
 .manage_button:hover {
-  background-color: #0056b3;
+  /* background-color: #0056b3; */
+  background-color: transparent;
   transform: translateY(-2px);
 }
 
@@ -173,6 +175,15 @@
 .approval_complete {
   background-color: #d4edda;
   color: #155724;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.approval_sale{
+  background-color: #6777c0;
+  color: #ccd2eb;
   font-weight: bold;
   padding: 5px 10px;
   border-radius: 15px;

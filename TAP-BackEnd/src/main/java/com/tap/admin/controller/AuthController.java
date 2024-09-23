@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.admin.dto.AdminLogDTO;
 import com.tap.admin.services.AdminLogService;
+import com.tap.admin.services.IPBlockService;
 import com.tap.members.dto.MembersGradeDTO;
 import com.tap.members.service.MembersService;
 import com.tap.z_utils.JwtUtil;
@@ -24,6 +25,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+	private static final int MAX_LOGIN_ATTEMPTS = 5;
 
 	@Autowired
 	private JwtUtil jwt;
@@ -37,15 +40,30 @@ public class AuthController {
 	@Autowired
 	private AdminLogService adminLogService;
 
+    @Autowired
+    private IPBlockService ipBlockService;	
+
 	// httpservletRequest 추가(로그 아이피)
 	@PostMapping("/{id}/{pw}")
 	public ResponseEntity<String> login(@PathVariable String id, @PathVariable String pw, HttpServletRequest request)
 			throws Exception {
 		// 사용자가 입력한 비밀번호
 		// 데이터베이스에서 가져온 암호화된 비밀번호
-		MembersGradeDTO dto = null;
 		String clientIp = getClientIp(request);
 		LocalDateTime localLogTime = LocalDateTime.now();
+
+        // IP 차단 확인
+        if (ipBlockService.isIPBlocked(clientIp)) {
+            AdminLogDTO logDto = new AdminLogDTO();
+            logDto.setMemberId(id);
+            logDto.setClientIp(clientIp);
+            logDto.setLocalLogtime(localLogTime);
+            logDto.setLogStatus("로그인 실패: IP 차단됨");
+            adminLogService.insertLog(logDto);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("이 IP는 차단되었습니다. 관리자에게 문의하세요.");
+        }
+		
+		MembersGradeDTO dto = null;
 
 		try {
 			dto = mserv.getMemberInfo(id); // 데이터베이스에서 조회한 사용자 정보
@@ -82,7 +100,7 @@ public class AuthController {
 					logDto.setLocalLogtime(localLogTime);
 					logDto.setLogStatus("로그인 성공");
 					adminLogService.insertLog(logDto);
-
+					ipBlockService.resetLoginAttempts(clientIp);
 					return ResponseEntity.ok(token);
 				}
 
@@ -94,6 +112,7 @@ public class AuthController {
 				logDto.setLocalLogtime(localLogTime);
 				logDto.setLogStatus("로그인 실패: 비밀번호 불일치");
 				adminLogService.insertLog(logDto);
+				checkAndBlockIP(clientIp);
 			}
 		} else {
 			// 로그인 실패 로그 기록 (사용자 정보 없음)
@@ -103,6 +122,7 @@ public class AuthController {
 			logDto.setLocalLogtime(localLogTime);
 			logDto.setLogStatus("로그인 실패: 사용자 정보 없음");
 			adminLogService.insertLog(logDto);
+			checkAndBlockIP(clientIp);
 		}
 
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -158,6 +178,33 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 	}
+
+	// 반복코드 지우려고
+    private void logLoginSuccess(String id, String name, String clientIp, LocalDateTime localLogTime) {
+        AdminLogDTO logDto = new AdminLogDTO();
+        logDto.setMemberId(id);
+        logDto.setName(name);
+        logDto.setClientIp(clientIp);
+        logDto.setLocalLogtime(localLogTime);
+        logDto.setLogStatus("로그인 성공");
+        adminLogService.insertLog(logDto);
+    }
+	// 테스트 후 적용 예정
+    private void logLoginFailure(String id, String clientIp, LocalDateTime localLogTime, String status) {
+        AdminLogDTO logDto = new AdminLogDTO();
+        logDto.setMemberId(id);
+        logDto.setClientIp(clientIp);
+        logDto.setLocalLogtime(localLogTime);
+        logDto.setLogStatus(status);
+        adminLogService.insertLog(logDto);
+    }
+
+    private void checkAndBlockIP(String clientIp) {
+        int attempts = ipBlockService.incrementLoginAttempts(clientIp);
+        if (attempts >= MAX_LOGIN_ATTEMPTS) {
+            ipBlockService.blockIP(clientIp, "로그인 " + MAX_LOGIN_ATTEMPTS + "회 실패");
+        }
+    }
 
 	// 로그 아이피
 	private String getClientIp(HttpServletRequest request) {

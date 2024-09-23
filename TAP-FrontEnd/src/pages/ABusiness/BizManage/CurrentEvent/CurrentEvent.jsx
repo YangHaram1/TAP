@@ -114,16 +114,17 @@ export const CurrentEvent=()=>{
                     </div>
                 </td>
                     <td className={styles.product_venue}>{product.PLACE_NAME} </td>
-                    <td>
+                    <td style={{textAlign:"center"}}>
                         {/* SALE_APPROVED에 따른 조건부 표시 */}
                         {product.SALE_APPROVED === '승인 대기' ? (
                             <span className={styles.approval_pending}>⏳ 신청 중</span>
                         ) : product.SALE_APPROVED === '승인 완료' ? (
-                            <span className={styles.approval_complete}>✅ 승인 완료</span>
+                            <span className={styles.approval_complete} >✅ 승인 완료</span>
                         ) : (
                             <button className={styles.manage_button}
                                 onClick={() => handleSaleApplyClick(product.APPLICATION_SEQ)}
-                            >할인 신청</button>
+                            > <span className={styles.approval_sale}> 할인 신청</span>
+                            </button>
                         )}
                     </td>
                     </tr>
