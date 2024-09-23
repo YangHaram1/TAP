@@ -6,14 +6,24 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
 
-  const handleTeamClick = (teamName, teamLogo, homeGround, matches) => {
-    const filteredMatches = getTeamMatches(teamName, matches);
-    console.log('Team Name:', teamName);
-    console.log('Team Logo:', teamLogo);
-    console.log('Home Ground:', homeGround);
-    console.log('Matches:', filteredMatches);
+  const handleTeamClick = (teamName, teamLogo) => {
+    const homeMatch = baseballMatches.find(match => match.homeTeamName === teamName);
+    
+    if (!homeMatch) {
+      console.warn("해당 팀의 경기가 없습니다:", teamName);
+      return; // 경기가 없을 경우 함수 종료
+    }
+
+    const homeGround = homeMatch.placeName || "정보 없음"; // placeName으로 수정
+    const matches = baseballMatches.filter(
+      match => match.homeTeamName === teamName || match.awayTeamName === teamName
+    );
+
+    console.log("홈 구장:", homeGround);
+    console.log("매치들:", matches);
+
     navigate('/teamPage', {
-      state: { teamName, teamLogo, homeGround, matches: filteredMatches }
+      state: { teamName, teamLogo, homeGround, matches },
     });
   };
 
@@ -28,14 +38,10 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
   const getUniqueTeams = (matches) => {
     const teamSet = new Set();
     return matches.filter((match) => {
-      const isDuplicate = teamSet.has(match.HOME_TEAM_NAME);
-      teamSet.add(match.HOME_TEAM_NAME);
+      const isDuplicate = teamSet.has(match.homeTeamName);
+      teamSet.add(match.homeTeamName);
       return !isDuplicate;
     });
-  };
-
-  const getTeamMatches = (teamName, matches) => {
-    return matches.filter(match => match.HOME_TEAM_NAME === teamName || match.AWAY_TEAM_NAME === teamName);
   };
 
   return (
@@ -55,13 +61,11 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
                 <a
                   href="javascript:;"
                   onClick={() => handleTeamClick(
-                    match.HOME_TEAM_NAME,
-                    match.HOME_TEAM_LOGO,
-                    match.PLACE_NAME,
-                    getTeamMatches(match.HOME_TEAM_NAME, baseballMatches)
+                    match.homeTeamName,
+                    match.homeTeamLogo // 로고는 match에서 가져옴
                   )}
                 >
-                  {match.HOME_TEAM_NAME}
+                  {match.homeTeamName}
                 </a>
               </li>
             ))}
@@ -82,13 +86,11 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
                 <a
                   href="javascript:;"
                   onClick={() => handleTeamClick(
-                    match.HOME_TEAM_NAME,
-                    match.HOME_TEAM_LOGO,
-                    match.PLACE_NAME,
-                    getTeamMatches(match.HOME_TEAM_NAME, soccerMatches)
+                    match.homeTeamName,
+                    match.homeTeamLogo // 로고는 match에서 가져옴
                   )}
                 >
-                  {match.HOME_TEAM_NAME}
+                  {match.homeTeamName}
                 </a>
               </li>
             ))}
