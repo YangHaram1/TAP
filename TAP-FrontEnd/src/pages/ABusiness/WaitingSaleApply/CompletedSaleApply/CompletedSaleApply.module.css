@@ -1,8 +1,8 @@
 .container {
   width: 100%;
   padding: 0px 20px;
-  max-width: 1200px; /* max-width 조정 */
-  margin: 0 auto; /* 중앙 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {
@@ -12,7 +12,6 @@
   font-weight: bold;
 }
 
-/* 테이블 영역 */
 .product_table {
   width: 100%;
   margin-top: 20px;
@@ -31,6 +30,7 @@
   font-size: 16px;
   color: #333;
   text-align: left;
+  white-space: nowrap;
 }
 
 .product_table table td {
@@ -40,24 +40,14 @@
   color: #555;
   vertical-align: middle;
 }
-.product_table table thead tr th:nth-child(1){
-  width:5%;
-}
-.product_table table thead tr th:nth-child(2){
-  width:35%; 
-}
-.product_table table thead tr th:nth-child(3){
-  width:15%;
-}
-.product_table table thead tr th:nth-child(4){
-  width:15%;
-}
-.product_table table thead tr th:nth-child(6){
-  width:7%;
-}
-.product_table table thead tr th:nth-child(5){
-  width:13%;
-}
+
+.product_table table thead tr th:nth-child(1) { width: 5%; }
+.product_table table thead tr th:nth-child(2) { width: 35%; }
+.product_table table thead tr th:nth-child(3) { width: 15%; }
+.product_table table thead tr th:nth-child(4) { width: 15%; }
+.product_table table thead tr th:nth-child(5) { width: 13%; }
+.product_table table thead tr th:nth-child(6) { width: 7%; }
+
 .product_info {
   display: flex;
   align-items: center;
@@ -66,15 +56,16 @@
 .product_image_container {
   position: relative;
   margin-right: 20px;
-  width: 120px; /* 이미지 너비 조정 */
-  height: 120px; /* 이미지 높이 조정 */
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
 }
 
 .product_image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px; /* 이미지에 약간의 둥근 모서리 추가 */
+  border-radius: 8px;
 }
 
 .status_tag {
@@ -85,12 +76,13 @@
   color: white;
   padding: 5px 8px;
   font-size: 12px;
-  border-radius: 4px; /* 태그 모서리 둥글게 */
+  border-radius: 4px;
 }
 
 .product_details {
   text-align: left;
-  flex: 1; /* 내용이 차지하는 영역을 유연하게 조정 */
+  flex: 1;
+  min-width: 0;
 }
 
 .product_name {
@@ -98,11 +90,17 @@
   font-size: 18px;
   margin-bottom: 5px;
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product_sub_info {
   font-size: 14px;
   color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product_date, .product_venue {
@@ -111,6 +109,9 @@
   color: #333;
   width: 150px;
   padding-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .manage_button, .edit_button {
@@ -129,23 +130,147 @@
   background-color: #0056b3;
 }
 
-/* 반응형 디자인 */
+.rejectReason {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipIcon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f44336;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.tooltipText {
+  width: 200px;
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 100;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltipText::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.rejectReason:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* 상태에 따른 스타일 */
+.status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status-승인-완료 {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-승인-대기 {
+  background-color: #ffc107;
+  color: #856404;
+}
+
+.status-승인-반려 {
+  background-color: #dc3545;
+  color: white;
+}
+
 @media (max-width: 768px) {
   .product_table {
-      width: 100%;
+    width: 100%;
+    overflow-x: auto;
   }
 
   .product_image_container {
-      width: 80px;
-      height: 80px;
+    width: 80px;
+    height: 80px;
   }
 
   .product_details {
-      font-size: 14px;
+    font-size: 14px;
   }
 
   .manage_button, .edit_button {
-      font-size: 12px;
-      padding: 6px 10px;
+    font-size: 12px;
+    padding: 6px 10px;
   }
+}
+
+.rejectReason {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipIcon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f44336;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.tooltipText {
+  width: 200px;
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 100;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltipText::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.rejectReason:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
 }

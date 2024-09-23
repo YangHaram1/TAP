@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './BizSideMenu.module.css'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { FaBox, FaCartPlus } from 'react-icons/fa'
+import { FaBox, FaCartPlus, FaList } from 'react-icons/fa'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 
 export const AdminSideMenu = () => {
@@ -79,7 +79,11 @@ export const AdminSideMenu = () => {
             name: '로그 관리',
             link: '/log',
             type: 'logManage',
-            icon: FaCartPlus,
+            icon: FaList,
+            submenus: [
+                { name: '로그 관리', link: '/log/manage' },
+                { name: 'IP 차단', link: '/log/ip-block' },
+            ],
         },
     ]
 

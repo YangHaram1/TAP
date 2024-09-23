@@ -6,37 +6,40 @@
 }
 
 .header {
-  padding: 20px 0;
+  padding: 25px 0;
   text-align: center;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
+  color: #333;
+  letter-spacing: 1px;
 }
 
 /* 테이블 영역 */
 .product_table {
   width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
+  margin-top: 25px;
+  border-collapse: separate;
+  border-spacing: 0 15px;
 }
 
 .product_table table {
   width: 100%;
   border: 1px solid #ddd;
-  border-spacing: 0;
 }
 
 .product_table table thead tr th {
   background-color: #f4f4f4;
-  padding: 12px 8px;
-  font-size: 16px;
+  padding: 15px 10px;
+  font-size: 17px;
   color: #333;
   text-align: left;
+  border-bottom: 2px solid #ddd;
 }
 
 .product_table table td {
   border: 1px solid #ddd;
-  padding: 12px 8px;
-  font-size: 14px;
+  padding: 15px 10px;
+  font-size: 15px;
   color: #555;
   vertical-align: middle;
 }
@@ -64,7 +67,7 @@
   position: absolute;
   top: 5px;
   right: 5px;
-  background: #0cfc2c;
+  background: #3ad475;
   color: white;
   padding: 5px 8px;
   font-size: 12px;
@@ -110,6 +113,35 @@
 
 .manage_button:hover, .edit_button:hover {
   background-color: #0056b3;
+}
+
+.edit_button {
+  margin-left: 10px;
+  background-color: green;
+}
+
+.edit_button:hover {
+  background-color: green;;
+}
+
+.approval_pending {
+  background-color: #ffeb99;
+  color: #b36b00;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.approval_complete {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* 반응형 디자인 */

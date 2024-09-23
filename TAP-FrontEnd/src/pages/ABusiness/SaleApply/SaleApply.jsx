@@ -92,7 +92,7 @@ export const SaleApply = () => {
                                     <ul>
                                         {seatInfo.map((seat, index) => (
                                             <li key={index}>
-                                                {seat.PLACE_SEAT_LEVEL}: {seat.PRICE_SEAT}원
+                                                {seat.PLACE_SEAT_LEVEL}: {Number(seat.PRICE_SEAT)?.toLocaleString()}원
                                             </li>
                                         ))}
                                     </ul>
@@ -117,7 +117,7 @@ export const SaleApply = () => {
                                         <ul>
                                             {discountedPrices.map((price, index) => (
                                                 <li key={index}>
-                                                    {price.place_seat_level}: {price.discountedPrice}원
+                                                    {price.place_seat_level}: {Number(price.discountedPrice)?.toLocaleString()}원
                                                 </li>
                                             ))}
                                         </ul>

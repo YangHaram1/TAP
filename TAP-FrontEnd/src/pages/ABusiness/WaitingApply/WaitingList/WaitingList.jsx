@@ -75,12 +75,11 @@ export const WaitingList=()=>{
             <table>
                 <thead>
                 <tr>
-                    <th>접수<br/>번호</th>
+                    <th>접수번호</th>
                     <th>상품정보</th>
                     <th>공연장 및 일시</th>
                     <th>신청일</th>
-                    <th>상태</th>
-                    <th>신청<br/>취소</th>
+                    <th>신청 취소</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,22 +107,10 @@ export const WaitingList=()=>{
                         {formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}
                     </td>
                     <td className={styles.product_venue}>{formatDate(product.created_at)} </td>
-                    <td className={styles.product_venue}>
-                            {product.STATUS !=='반려' && (
-                                <div className={styles.rejectReason}>
-                                <span>{product.STATUS} </span>
-                                </div>
-                            )}
-                            {product.STATUS === '반려' && (
-                            <div className={styles.rejectReason}>
-                            <span>반려</span>
-                            </div>
-                        )}
-                    </td>
                     <td>
                     {product.STATUS !== '반려' && (
                         <button className={styles.manage_button} onClick={() => handleCancel(product.APPLICATION_SEQ)}>
-                            신청<br/>취소
+                            신청 취소
                         </button>
                     )}
                      {product.STATUS === '반려' && (

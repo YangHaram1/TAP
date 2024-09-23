@@ -1,42 +1,42 @@
 .container {
   width: 100%;
-  padding: 0px 20px;
-  max-width: 1200px; /* max-width 조정 */
-  margin: 0 auto; /* 중앙 정렬 */
+  padding: 20px;
 }
 
 .header {
-  padding: 20px 0;
+  padding: 25px 0;
   text-align: center;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
+  color: #333;
+  letter-spacing: 1px;
 }
 
-/* 테이블 영역 */
 .product_table {
   width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
+  margin-top: 25px;
+  border-collapse: separate;
+  border-spacing: 0 15px;
 }
 
 .product_table table {
   width: 100%;
   border: 1px solid #ddd;
-  border-spacing: 0;
 }
 
 .product_table table thead tr th {
   background-color: #f4f4f4;
-  padding: 12px 8px;
-  font-size: 16px;
+  padding: 15px 10px;
+  font-size: 17px;
   color: #333;
   text-align: left;
+  border-bottom: 2px solid #ddd;
 }
 
 .product_table table td {
   border: 1px solid #ddd;
-  padding: 12px 8px;
-  font-size: 14px;
+  padding: 15px 10px;
+  font-size: 15px;
   color: #555;
   vertical-align: middle;
 }
@@ -48,87 +48,134 @@
 
 .product_image_container {
   position: relative;
-  margin-right: 20px;
-  width: 120px; /* 이미지 너비 조정 */
-  height: 120px; /* 이미지 높이 조정 */
+  margin-right: 25px;
+  width: 130px;
+  height: 130px;
 }
 
 .product_image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px; /* 이미지에 약간의 둥근 모서리 추가 */
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .status_tag {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 8px;
+  right: 8px;
   background: #f4b400;
   color: white;
-  padding: 5px 8px;
-  font-size: 12px;
-  border-radius: 4px; /* 태그 모서리 둥글게 */
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .product_details {
   text-align: left;
-  flex: 1; /* 내용이 차지하는 영역을 유연하게 조정 */
+  flex: 1;
 }
 
 .product_name {
   font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 5px;
+  font-size: 19px;
+  margin-bottom: 8px;
   color: #333;
 }
 
 .product_sub_info {
-  font-size: 14px;
+  font-size: 15px;
   color: #888;
 }
 
 .product_date, .product_venue {
-  font-size: 14px;
+  font-size: 15px;
   text-align: left;
   color: #333;
-  width: 150px;
-  padding-left: 10px;
+  width: 120px;
+  padding-left: 12px;
 }
 
-.manage_button, .edit_button {
+.date_group, .date_range {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.date_label, .date_range_label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.date_year {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.date_value {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.date_weekday {
+  font-size: 11px;
+  color: #888;
+  margin-left: 5px;
+}
+
+.date_range_values {
+  display: flex;
+  align-items: center;
+}
+
+.date_range_separator {
+  margin: 0 8px;
+  color: #888;
+}
+
+.manage_button {
+  display: inline-block;
+  padding: 10px 15px;
+  margin-top: 8px;
+  font-size: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 8px 12px;
-  margin-top: 5px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.manage_button:hover, .edit_button:hover {
+.manage_button:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .product_table {
-      width: 100%;
-  }
+.approval_pending {
+  background-color: #ffeb99;
+  color: #b36b00;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
-  .product_image_container {
-      width: 80px;
-      height: 80px;
-  }
-
-  .product_details {
-      font-size: 14px;
-  }
-
-  .manage_button, .edit_button {
-      font-size: 12px;
-      padding: 6px 10px;
-  }
+.approval_complete {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

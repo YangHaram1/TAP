@@ -26,5 +26,22 @@ public class AdminUserMemberDAO {
 
 	    return mybatis.selectList("searchUserMem", params);
 	}
+	
+	public void updateMemberStatus(List<String> orderSeqs, int enabled, String newStatus) {
+		System.out.println("dao 번호" +orderSeqs);
+		 System.out.println("dao 상태 enabled: " + enabled + ", gradeSeq: " + newStatus);
+		
+		 for (String orderSeq : orderSeqs) {
+	            HashMap<String, Object> params = new HashMap<>();
+	            params.put("orderSeq", orderSeq);
+	            params.put("enabled", enabled);
+	            params.put("gradeSeq", newStatus);
+
+	            System.out.println("orderSeq " + orderSeq);
+	            
+	            // MyBatis 매퍼에서 enabled와 grade_seq를 업데이트하도록 변경
+	            mybatis.update("AdminUserMem.updateMemberStatus", params);
+	        }
+	    }
 
 }
