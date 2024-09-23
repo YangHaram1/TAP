@@ -57,14 +57,17 @@ export const AdminSideMenu = () => {
             icon: FaTicketAlt,
             submenus: [
                 { name: '쿠폰 종류', link: '/coupon/type' },
-                { name: '사용자 쿠폰 내역', link: '/coupon/list' },
             ],
         },
         {
             name: '멤버쉽 관리',
             link: '/grade',
             type: 'gradeManage',
-            icon: FaUserShield,
+            icon: FaUserShield,   
+            submenus: [
+                { name: '등급 관리', link: '/grade' },
+            ],
+
         },
         {
             name: '게시물 관리',

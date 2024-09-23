@@ -1,6 +1,6 @@
 package com.tap.board.dto;
 
-import com.google.cloud.Timestamp;
+import java.sql.Timestamp;
 
 public class BoardDTO {
 	private int board_seq;

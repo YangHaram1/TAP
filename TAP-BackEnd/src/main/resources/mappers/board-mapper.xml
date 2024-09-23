@@ -16,5 +16,15 @@
 
    	
 	</select>
+	<delete id="delete">
+		delete from board where board_seq=${seq}
+	</delete>
+	
+	<select id="detail" resultType="com.tap.board.dto.BoardDTO">
+		select * from board where board_seq=${seq}
+	</select>
+	<update id="update">
+		update board set title=#{title,jdbcType=VARCHAR}, contents=#{contents,jdbcType=VARCHAR} where board_seq=${board_seq}
+	</update>
 
 </mapper>

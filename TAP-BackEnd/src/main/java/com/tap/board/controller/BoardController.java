@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +48,33 @@ public class BoardController {
 		}
 		return ResponseEntity.ok("fail");
 		
+	}
+	
+	@DeleteMapping("/delete/{seq}")
+	public ResponseEntity<String> delete(@PathVariable int seq) throws Exception{
+		int result = bserv.delete(seq);
+		if(result>0) {
+			return ResponseEntity.ok().build();
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+	
+	@GetMapping("/detail/{seq}")
+	public ResponseEntity<BoardDTO> detail(@PathVariable int seq) throws Exception{
+		BoardDTO list = bserv.detail(seq);
+		return ResponseEntity.ok(list);
+		
+	}
+	
+	@PutMapping
+	public ResponseEntity<String> update(@RequestBody BoardDTO dto) throws Exception{
+		int result = bserv.update(dto);
+		if(result>0) {
+			return ResponseEntity.ok("success");
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
 	}
 	@GetMapping("/admin")
 	ResponseEntity<Map<String,Object>> getAll(
