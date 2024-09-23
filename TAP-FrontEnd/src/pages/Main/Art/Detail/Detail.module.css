@@ -194,3 +194,27 @@
     background-color: blueviolet;
     /* color: white; */
 }
+
+.openDate{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+.openDate h3{
+    width: 100%;
+} 
+
+.openDateData{
+    border: 1px solid black;
+    width: 80%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-weight: 700;
+    color: blueviolet;
+    background-color: rgba(137, 43, 226, 0.167);
+}
