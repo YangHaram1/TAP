@@ -49,7 +49,7 @@ export const CompletedSaleApply = () => {
             ) : (
                 <div className={styles.product_table}>
                     <h3>최근 한 달동안 승인된 상품 목록</h3>
-                    <table>
+                    <table className={styles.table}>
                         <thead>
                             <tr>
                                 <th>접수<br />번호</th>
@@ -67,7 +67,7 @@ export const CompletedSaleApply = () => {
                                     </td>
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
-                                            <img src={product.FILES_SYSNAME} alt={product.NAME} className={styles.product_image} />
+                                            <img src={product.FILES_SYSNAME} alt={product.NAME} className={styles.product_image_container} />
                                         </div>
                                         <div className={styles.product_details }>
                                             <div className={styles.product_name}>{product.NAME}</div>

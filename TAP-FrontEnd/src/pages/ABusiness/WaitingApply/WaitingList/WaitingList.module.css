@@ -1,117 +1,182 @@
+/* RegisterByCategory.module.css */
+
+/* 전체 컨테이너 스타일 */
 .container {
-  width: 100%;
-  padding: 0px 20px;
-  max-width: 1200px; /* max-width 조정 */
-  margin: 0 auto; /* 중앙 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
 }
 
-.header {
-  padding: 20px 0;
-  text-align: center;
+.container h3 {
   font-size: 24px;
-  font-weight: bold;
+  color: #6a0dad; /* 보라색으로 컨셉 맞춤 */
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
 }
 
-/* 테이블 영역 */
-.product_table {
+/* 테이블 스타일 */
+.table {
   width: 100%;
-  margin-top: 20px;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-.product_table table {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-spacing: 0;
-}
-
-.product_table table thead tr th {
-  background-color: #f4f4f4;
-  padding: 12px 8px;
-  font-size: 16px;
-  color: #333;
+.table th, .table td {
+  padding: 15px;
   text-align: left;
-}
-
-.product_table table td {
-  border: 1px solid #ddd;
-  padding: 12px 8px;
-  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 16px;
   color: #555;
-  vertical-align: middle;
-}
-.product_table table thead tr th:nth-child(1){
-  width:10%;
-}
-.product_table table thead tr th:nth-child(2){
-  width:35%; 
-}
-.product_table table thead tr th:nth-child(3){
-  width:15%;
-}
-.product_table table thead tr th:nth-child(4){
-  width:15%;
 }
 
-.product_table table thead tr th:nth-child(5){
-  width:13%;
+.table th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: 700;
 }
 
+.table_row {
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.table_row:hover {
+  background-color: #f9f0ff; /* 보라색의 연한 배경색 */
+}
+
+/* 상품 정보 스타일 */
 .product_info {
   display: flex;
   align-items: center;
 }
 
 .product_image_container {
-  position: relative;
-  margin-right: 20px;
-  width: 120px; /* 이미지 너비 조정 */
-  height: 120px; /* 이미지 높이 조정 */
-}
-
-.product_image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px; /* 이미지에 약간의 둥근 모서리 추가 */
-}
-
-.status_tag {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: #f4b400;
-  color: white;
-  padding: 5px 8px;
-  font-size: 12px;
-  border-radius: 4px; /* 태그 모서리 둥글게 */
+  width: 60px;
+  height: 60px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  margin-right: 15px;
 }
 
 .product_details {
-  text-align: left;
-  flex: 1; /* 내용이 차지하는 영역을 유연하게 조정 */
+  display: flex;
+  flex-direction: column;
 }
 
 .product_name {
-  font-weight: bold;
   font-size: 18px;
-  margin-bottom: 5px;
   color: #333;
+  font-weight: bold;
 }
 
 .product_sub_info {
   font-size: 14px;
   color: #888;
+  margin-top: 5px;
 }
 
-.product_date, .product_venue {
+/* 상품 날짜 스타일 */
+.product_date {
   font-size: 14px;
-  text-align: left;
-  color: #333;
-  width: 150px;
-  padding-left: 10px;
+  color: #666;
 }
 
+/* 장소 정보 스타일 */
+.product_venue {
+  font-size: 16px;
+  color: #6a0dad;
+  font-weight: 600;
+}
+
+
+/* 버튼 스타일 */
+.manage_button {
+  background-color: transparent; /* 보라색 */
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.manage_button:hover {
+  background-color: transparent; /* 호버 시 더 진한 보라색 */
+  transform: translateY(-2px);
+}
+
+/* Pagination 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  color: #6a0dad;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #f5f0ff; /* 보라색 배경색 */
+}
+
+.pagination .active {
+  background-color: #6a0dad;
+  color: white;
+}
+
+.p {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+}
+
+.no_products {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}
+.approval_sale{
+  background-color: #8921b3;
+  color: #ccd2eb;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.status_tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #f4b400;
+  color: white;
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.date_year {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3px;
+}
 .manage_button, .edit_button {
   background-color: #007bff;
   color: white;
