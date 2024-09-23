@@ -85,7 +85,17 @@ export const DetailRegist = () => {
             weekday: 'short',
         });
     };
-
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
     return (
         <div className={styles.container}>
             <h2>
@@ -146,12 +156,15 @@ export const DetailRegist = () => {
                     )}
                     <tr>
                         <td colSpan="2">
-                            <strong>일자:</strong> {formatDate(product.start_date)} ~ {formatDate(product.end_date)}
+                            <strong>일자:</strong> {formatDate(product.start_date) === formatDate(product.end_date) 
+                            ? `${formatTime(product.start_date)}` 
+                            : `${formatTime(product.start_date)} ~ ${formatTime(product.end_date)}`}
                         </td>
                     </tr>
+
                     <tr>
                         <td colSpan="2">
-                            <strong>티켓 오픈일:</strong> {formatDate(product.open_date)}
+                            <strong>티켓 오픈일:</strong> {formatTime(product.open_date)}
                         </td>
                     </tr>
                     <tr>

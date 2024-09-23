@@ -63,6 +63,26 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
             weekday: 'short',
         });
     };
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+    // 요일과 시간만 포맷팅하는 함수
+    const formatDayAndTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+           
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
 
     const [currentPage, setCurrentPage] = useState(0);
     const PER_PAGE = 3;
@@ -117,8 +137,16 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                                         </div>
                                     </td>
                                     <td className={styles.product_date}>
-                                        {formatDate(product.start_date)}~ <br />
-                                        {formatDate(product.end_date)}
+                                    <strong>일자:</strong> <br/>{formatDate(product.start_date) === formatDate(product.end_date) 
+                                    ? (
+                                        <>
+                                        {`${formatDate(product.start_date)}`} <br/> 
+                                        {`${formatDayAndTime(product.start_date)}`}
+                                        </>
+                                    )
+                                    : (<>
+                                    {`${formatDate(product.start_date)} ~`} <br/> {`${formatDate(product.end_date)}`}
+                                    </>)}
                                     </td>
                                     <td className={styles.product_venue}>
                                         {product.PLACE_NAME}
