@@ -17,7 +17,6 @@ import { ko } from 'date-fns/locale';
 import { useAuthStore, useOrder, useWriteData } from '../../../../store/store';
 import Swal from 'sweetalert2';
 import Popup from '../../../Admin/Popup/Popup';
-import fstyles from '../../../../components/Footer/Footer.module.css';
 
 
 export const Detail = ()=>{
@@ -45,6 +44,8 @@ export const Detail = ()=>{
 
     const btnsRef = useRef(null);
     // const [bottomOffset, setBottomOffset] = useState(5); // 초기값 5vh
+    const checktoday = new Date();
+    let openDate = mainData !== null ? new Date(mainData.open_date) : '';
     
     useEffect(()=>{
         // alert(seq+"번 상품 상세정보입니다.");
@@ -344,6 +345,8 @@ export const Detail = ()=>{
             {/* 예매 섹션 */}
             <div className={styles.right}>
                 <div className={styles.bubble}>
+                {openDate < today ? 
+                <>
                     <div className={styles.text}><span style={{color:"blueviolet", fontWeight:600, fontSize:"20px"}}>Step 1.</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
                     <div className={styles.calendar}>
                         <Calender minDate={minDate} maxDate={maxDate} periods = {periods} setSelectedDate = {setSelectedDate} selectedDate={selectedDate}/>
@@ -368,12 +371,24 @@ export const Detail = ()=>{
                     </div>     
                     <div className={styles.book}>
                         <button onClick={isBookModalOpen}>예매하기</button>
-                    </div>       
+                    </div>  
+
                     <button className={styles.up_btn} onClick={()=>{scrollToBtns();}}>
                     <FontAwesomeIcon icon={faArrowUp} style={{fontSize:"20px"}}/>
                     <br></br>
                     Top
                     </button> 
+                </> : 
+                <div className={styles.openDate}>
+                    <h3>오픈 예정 시간</h3>
+                    <p className={styles.openDateData} style={{textAlign:"center"}}>
+                    COMMING SOON! <br></br> 
+                    {format(new Date(new Date(mainData.open_date).getTime() - 9 * 60 * 60 * 1000), 'yyyy년 MM월 dd일(eee) HH:mm', { locale: ko })}
+                    </p>
+
+                </div>
+            }
+                    
                 </div>
             </div>
 
