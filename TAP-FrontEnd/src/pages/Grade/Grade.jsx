@@ -73,7 +73,7 @@ const Grade = () => {
                     {
                         coupon.map((item, index) => {
                             return (
-                                <div className={styles.content}>
+                                <div className={styles.content} key={index}>
                                     <div>
                                         <img src={couponImg} alt="" />
                                     </div>
