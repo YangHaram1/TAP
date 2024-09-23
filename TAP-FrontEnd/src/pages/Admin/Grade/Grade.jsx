@@ -136,7 +136,7 @@ const Grade = () => {
         <div className={styles.container}>
             <div className={styles.header}>
                 <div style={{ flex: 1 }}>
-                    멤버쉽 관리
+                    등급 관리
                 </div>
                 <select value={recordCountPerPage} onChange={(e) => setRecordCountPerPage(e.target.value)}>
                     <option value={5}>5 </option>
