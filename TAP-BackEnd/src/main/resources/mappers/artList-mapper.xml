@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArtList">
+	<select id="getListByCategory" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and sysdate > open_date
+		order by a.application_seq desc
+	</select>
+	
+	<select id="getOpenListByCategory" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and open_date > sysdate
+		order by a.application_seq desc
+	</select>
+	
+	<select id="getTapListByGenre" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where (#{genre} = '0' OR a.genre_seq = #{genre})  and f.files_type='poster' and a.status='승인 완료' and sysdate > open_date and sc.sub_category_seq=#{category}
+		order by a.application_seq desc
+	</select>
+	
+	<select id="getOpenAllList" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where f.files_type='poster' and a.status='승인 완료' and open_date > sysdate and sub_category_name in ('콘서트', '뮤지컬')
+		order by a.start_date
+	</select>
+	
+	<select id="getReviewList" resultType="com.tap.detail.dto.ReviewStarDTO">
+		SELECT 
+		    r.review_seq,
+		    r.application_seq,
+		    r.member_id, 
+		    r.review_title,
+		    r.review, 
+		    r.review_date, 
+		    s.stars,
+		    COUNT(rl.review_seq) AS like_count,
+		    a.name,
+		    f.files_sysname
+		FROM review r
+		LEFT OUTER JOIN stars s ON r.review_seq = s.review_seq
+		LEFT OUTER JOIN review_like rl ON r.review_seq = rl.review_seq
+		left outer join apply a on r.application_seq = a.application_seq
+		left outer join files f on r.application_seq = f.files_parent_seq
+		GROUP BY r.review_seq,r.application_seq,r.member_id, r.review_title, r.review, r.review_date, s.stars, a.name, f.files_sysname
+		ORDER BY like_count DESC, r.review_date DESC
+	</select>
+	
+	<select id="getArtList" resultType="com.tap.artlist.dto.ArtListDTO">
+		SELECT * FROM (
+		    SELECT 
+		        a.application_seq, 
+		        a.name, 
+		        a.start_date, 
+		        a.end_date, 
+		        a.open_date, 
+		        a.status,
+		        p.place_name,
+		        sc.sub_category_name,
+		        f.files_sysname
+		    FROM apply a
+		    LEFT OUTER JOIN place p ON a.place_seq = p.place_seq
+		    LEFT OUTER JOIN sub_category sc ON a.sub_category_seq = sc.sub_category_seq
+		    LEFT OUTER JOIN files f ON a.application_seq = f.files_parent_seq 
+		    LEFT OUTER JOIN (
+		        SELECT o.application_seq, COUNT(o.order_seq) AS order_count
+		        FROM orders o
+		        WHERE o.order_date >= SYSDATE - 7
+		        GROUP BY o.application_seq
+		    ) o ON o.application_seq = a.application_seq
+		    WHERE f.files_type = 'poster' 
+		      AND a.status = '승인 완료' 
+		      AND SYSDATE > a.open_date 
+		      AND sc.sub_category_name IN (#{category})
+		    ORDER BY o.order_count DESC NULLS LAST, a.start_date
+		) 
+		WHERE 5 >= ROWNUM
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>

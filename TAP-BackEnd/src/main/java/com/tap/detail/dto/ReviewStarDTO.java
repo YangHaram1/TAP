@@ -7,7 +7,22 @@ public class ReviewStarDTO {
 	private int review_seq;
 	private String member_id, review_title, review;
 	private Timestamp review_date;
-	private int stars;
+	private int stars, like_count;
+	private String name, files_sysname;
+	
+	public ReviewStarDTO(int review_seq, String member_id, String review_title, String review, Timestamp review_date,
+			int stars, int like_count, String name, String files_sysname) {
+		super();
+		this.review_seq = review_seq;
+		this.member_id = member_id;
+		this.review_title = review_title;
+		this.review = review;
+		this.review_date = review_date;
+		this.stars = stars;
+		this.like_count = like_count;
+		this.name = name;
+		this.files_sysname = files_sysname;
+	}
 	public ReviewStarDTO(int review_seq, String member_id, String review_title, String review, Timestamp review_date,
 			int stars) {
 		super();
@@ -57,6 +72,25 @@ public class ReviewStarDTO {
 	public void setStars(int stars) {
 		this.stars = stars;
 	}
+	public int getLike_count() {
+		return like_count;
+	}
+	public void setLike_count(int like_count) {
+		this.like_count = like_count;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getFiles_sysname() {
+		return files_sysname;
+	}
+	public void setFiles_sysname(String files_sysname) {
+		this.files_sysname = files_sysname;
+	}
+	
 	
 	
 }
