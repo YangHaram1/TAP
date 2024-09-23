@@ -49,25 +49,9 @@ const Home = () => {
         })
     },[])
 
-    const [musical, setMusical] = useState([
-        {
-            title: ' 뮤지컬 킹키부츠',
-            subtitle: '블루스퀘어 신한카드홀',
-            writedate: '2024.9.7 ~ 11.10',
-        }
-    ])
-
     const [sport, setSport] = useState([
         {
             title: '스포츠 킹키부츠',
-            subtitle: '블루스퀘어 신한카드홀',
-            writedate: '2024.9.7 ~ 11.10',
-        }
-    ])
-
-    const [concert, setConcert] = useState([
-        {
-            title: '콘서트 킹키부츠',
             subtitle: '블루스퀘어 신한카드홀',
             writedate: '2024.9.7 ~ 11.10',
         }
@@ -207,7 +191,7 @@ const Home = () => {
                         {currentCategory === 'musical' &&
                             musicalList.map((item, index) => {
                                 return (
-                                    <div className={styles.rank} key={index}>
+                                    <div className={styles.rank} key={index} onClick={()=>{handleMove(`${item.application_seq}`)}}>
                                         <div className={styles.rankImg} style={{background: `url(${item.files_sysname}) no-repeat center/cover`}}>
                                             <h1 className={styles.rankNum}>
                                                 {index + 1}
@@ -267,7 +251,7 @@ const Home = () => {
                         {currentCategory === 'concert' &&
                             concertList.map((item, index) => {
                                 return (
-                                    <div className={styles.rank} key={index}>
+                                    <div className={styles.rank} key={index} onClick={()=>{handleMove(`${item.application_seq}`)}}>
                                         <div className={styles.rankImg} style={{background: `url(${item.files_sysname}) no-repeat center/cover`}}>
                                             <h1 className={styles.rankNum}>
                                                 {index + 1}

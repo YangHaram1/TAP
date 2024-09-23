@@ -45,7 +45,11 @@ export const Detail = ()=>{
     const btnsRef = useRef(null);
     // const [bottomOffset, setBottomOffset] = useState(5); // 초기값 5vh
     const checktoday = new Date();
-    let openDate = mainData !== null ? new Date(mainData.open_date) : '';
+    let openDate =( mainData !== null ? new Date(new Date(mainData.open_date).getTime() - 9 * 60 * 60 * 1000) : '');
+
+    useEffect(()=>{
+        console.log(checktoday, openDate);
+    },[])
     
     useEffect(()=>{
         // alert(seq+"번 상품 상세정보입니다.");
@@ -345,7 +349,7 @@ export const Detail = ()=>{
             {/* 예매 섹션 */}
             <div className={styles.right}>
                 <div className={styles.bubble}>
-                {openDate < today ? 
+                {openDate < checktoday ? 
                 <>
                     <div className={styles.text}><span style={{color:"blueviolet", fontWeight:600, fontSize:"20px"}}>Step 1.</span><span style={{fontWeight:600, fontSize:"19px"}}> 날짜 선택</span></div>
                     <div className={styles.calendar}>
@@ -382,7 +386,7 @@ export const Detail = ()=>{
                 <div className={styles.openDate}>
                     <h3>오픈 예정 시간</h3>
                     <p className={styles.openDateData} style={{textAlign:"center"}}>
-                    COMMING SOON! <br></br> 
+                    COMMING SOON!<br></br> 
                     {format(new Date(new Date(mainData.open_date).getTime() - 9 * 60 * 60 * 1000), 'yyyy년 MM월 dd일(eee) HH:mm', { locale: ko })}
                     </p>
 

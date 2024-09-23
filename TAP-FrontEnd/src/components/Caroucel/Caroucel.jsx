@@ -28,14 +28,14 @@ export const Caroucel = ({category, images})=>{
           setSettings({
             chevronWidth: 40,
             numberOfCards: 4,
-            height: 350
+            height: 400
         });
         setAutoPlay(true);
         }else if(category === "art2" && category === "art3"){
           setSettings({
             chevronWidth: 40,
             numberOfCards: 5,
-            height: 500
+            height: 400
         });
         setAutoPlay(false);
         } else if (category === "sport") {
@@ -172,7 +172,7 @@ export const Caroucel = ({category, images})=>{
             {
               images.map((image)=>{
                 return(
-                  <div key={image.application_seq} style={{ height: settings.height}} className={styles.card}>
+                  <div key={image.application_seq} style={{ height: settings.height}} className={styles.card} onClick={()=>{handleMove(`${image.application_seq}`)}}> 
                     <div className={styles.poster}>
                       <img src={image.files_sysname}></img>
                     </div>
