@@ -7,35 +7,70 @@ import Swal from 'sweetalert2';
 import { useAuthStore } from './../../../store/store';
 import MyEditor from './MyEditor/MyEditor';
 import { api } from '../../../config/config';
+import { useNavigate } from 'react-router-dom';
 const Inquiry = () => {
     const editorRef = useRef(null);
+    const fileRef = useRef(null);
+    const navi = useNavigate();
     const [check, setCheck] = useState([false, false]);
     const [checkAll, setCheckAll] = useState(false);
-    const fileRef = useRef();
     const [fileList, setFileList] = useState([]);
     const { name, isAuth } = useAuthStore();
     const [data, setData] = useState({
-        name: name,
+        name: '',
         email: '',
-        category: '',
+        category: '선택',
         title: '',
         contents: ''
     });
+    const [regexData, setRegexData] = useState({
+        email: false,
+        title: false,
+        contents: false,
+        category: false
+    })
 
+    useEffect(() => {
+        setData((prev) => {
+            return { ...prev, name: name }
+        })
+    }, [name])
     //data
     // useEffect(()=>{
     //     console.log(data);
     // },[data])
+
     const handleData = (e) => {
         const { name, value } = e.target;
         setData((prev) => {
             return { ...prev, [name]: value }
         })
+        // console.log(`${name}:${value}`)
+
+        if (name === 'email') {
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/i;
+            setRegexData((prev) => {
+                return { ...prev, [name]: emailRegex.test(value) }
+            })
+
+        }
+        else if (name === 'title') {
+            const titleRegex = /^.{1,30}$/;
+            setRegexData((prev) => {
+                return { ...prev, [name]: titleRegex.test(value) }
+            })
+        }
     }
+    // useEffect(()=>{
+    //     console.log(regexData)
+    // },[regexData])
 
     const handleInputDelete = (e, type) => {
         setData((prev) => {
             return { ...prev, [type]: '' };
+        })
+        setRegexData((prev) => {
+            return { ...prev, [type]: false }
         })
     }
 
@@ -43,9 +78,18 @@ const Inquiry = () => {
 
     //체크박스
     const handleChange = (event) => {
-        setData((prev)=>{
-            return {...prev,category:event.target.value}
+        setData((prev) => {
+            return { ...prev, category: event.target.value }
         }); // 선택된 값을 상태로 업데이트
+        if (event.target.value !== '선택')
+            setRegexData((prev) => {
+                return { ...prev, category: true }
+            })
+        else {
+            setRegexData((prev) => {
+                return { ...prev, category: false }
+            })
+        }
     };
 
     const handleChangeCheck = (e) => {
@@ -81,12 +125,27 @@ const Inquiry = () => {
     //파일
     const handleFile = (e) => {
         const files = fileRef.current.files;
-
         setFileList((prev) => {
             const temp = [...prev];
             for (let index = 0; index < files.length; index++) {
                 if (temp.length > 4) break;
-                temp.push(files[index]);
+                const split=formatFileSize(files[index].size).split(' ');
+                const size=parseInt(split[0],10);
+                const str=split[1];
+                if(str==='MB'){
+                    if(size<=10)  temp.push(files[index]);
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: '파일',
+                            text: '10MB 이하로 업로드 해주세요.'
+                        })
+                    }
+                }
+                else {
+                    temp.push(files[index]);
+                }
+              
             }
             return temp
         })
@@ -111,8 +170,8 @@ const Inquiry = () => {
     // 파일 크기를 읽기 쉽게 변환하는 함수 (KB, MB) - 반올림 포함
     const formatFileSize = (size) => {
         if (size < 1024) return `${size} bytes`;
-        if (size < 1024 * 1024) return `${Math.round(size / 1024)}KB`; // 정수로 반올림
-        return `${Math.round(size / (1024 * 1024))}MB`; // 정수로 반올림
+        if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`; // 정수로 반올림
+        return `${Math.round(size / (1024 * 1024))} MB`; // 정수로 반올림
     };
 
     // useEffect(()=>{
@@ -120,9 +179,24 @@ const Inquiry = () => {
     // },[fileList])
 
     ///
-    const handleConfirm=()=>{
-        api.post(`/inquiry`,data).then((resp)=>{
-            
+    const handleConfirm = () => {
+        const formData = new FormData();
+
+        for (let index = 0; index < fileList.length; index++) {
+            formData.append("files", fileList[index]);
+        }
+        const jsonData = JSON.stringify(data) // 객체를 json 형식의 문자열로 바꿔주는 직렬화
+        formData.append('inquiry', jsonData)
+
+        api.post(`/inquiry`, formData).then((resp) => {
+
+            Swal.fire({
+                icon: 'success',
+                title: '문의',
+                text: '정상적으로 문의가 등록 되었습니다.'
+            })
+            navi('/support');
+
         })
     }
     return (
@@ -135,7 +209,7 @@ const Inquiry = () => {
                     이름 <span>*</span>
                 </div>
                 <div className={styles.input}>
-                    <input type="text" placeholder='이름을 입력해주세요' value={data.name} name='name' onChange={handleData} disabled={isAuth ? true : false} />
+                    <input type="text" placeholder='이름을 입력해주세요' value={data.name || ''} name='name' onChange={handleData} disabled={isAuth ? true : false} />
                     {(<button className={!isAuth ? (data.name !== '' ? styles.cancel : styles.hidden) : styles.hidden} onClick={(e) => { handleInputDelete(e, 'email') }}>X</button>)}
                 </div>
             </div>
@@ -148,6 +222,9 @@ const Inquiry = () => {
                     {(<button className={data.email !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'email') }}>X</button>)}
 
                 </div>
+                <div>
+                    {data.email === '' ? <span>이메일을 입력해주세요.</span> : (regexData.email ? (<span style={{ color: 'blue' }}>이메일 형식이 맞습니다.</span>) : (<span>이메일 형식에 맞게 입력해주세요.</span>))}
+                </div>
             </div>
             <div className={styles.contents}>
                 <div className={styles.title}>
@@ -155,6 +232,7 @@ const Inquiry = () => {
                 </div>
                 <div className={styles.input}>
                     <select className={styles.select} value={data.category} onChange={handleChange}>
+                        <option value="선택">선택</option>
                         <option value="예매">예매</option>
                         <option value="할인">할인</option>
                         <option value="결제/수수료">결제/수수료</option>
@@ -165,8 +243,9 @@ const Inquiry = () => {
                         <option value="기타">기타</option>
                     </select>
                     <FontAwesomeIcon icon={faCaretDown} className={styles.icon} />
+                    
                 </div>
-
+                {data.category === '선택' ? <span>선택해 주세요.</span> : (regexData.category ? (<span style={{ color: 'blue' }}>선택 완료되었습니다.</span>) : (<span>이메일 형식에 맞게 입력해주세요.</span>))}
             </div>
             <div className={styles.contents}>
                 <div className={styles.title}>
@@ -176,8 +255,14 @@ const Inquiry = () => {
                     <input type="text" placeholder='제목을 입력해주세요' name='title' value={data.title} onChange={handleData} />
                     {(<button className={data.title !== '' ? styles.cancel : styles.hidden} onClick={(e) => { handleInputDelete(e, 'title') }}>X</button>)}
                 </div>
-                <div style={{paddingRight:'40px'}}>
-                    <MyEditor editorRef={editorRef} height={'400px'}  setData={setData}/>
+                <div>
+                    {data.title === '' ? <span>30자 이내로 입력해주세요.</span> : (regexData.title ? (<span style={{ color: 'blue' }}>30자 이내 입니다.</span>) : (<span>30자 이내로 적어주세요</span>))}
+                </div>
+                <div style={{ paddingRight: '40px' }}>
+                    <MyEditor editorRef={editorRef} height={'400px'} setData={setData} setRegexData={setRegexData} data={data} />
+                </div>
+                <div>
+                    {data.contents === '' ? <span>내용을 입력해주세요.</span> : (regexData.contents ? (<span style={{ color: 'blue' }}>1000자 이내 입니다.</span>) : (<span>1000자 이내로 적어주세요</span>))}
                 </div>
 
 
@@ -187,7 +272,7 @@ const Inquiry = () => {
                     첨부 파일
                 </div>
                 <div className={styles.input} onClick={() => { fileRef.current.click(); }}>
-                    <input type='text' placeholder='파일을 등록해주세요' disabled={true} className={styles.none} ></input>
+                    <input type='text' placeholder='파일을 등록해주세요' disabled={true} className={styles.none} defaultValue={''} ></input>
                     <button className={styles.fileBtn} ><FontAwesomeIcon icon={faPaperclip} /></button>
                     <input type="file" multiple className={styles.file} ref={fileRef} onChange={handleFile} onClick={handleFileClick} />
                 </div>
@@ -195,7 +280,7 @@ const Inquiry = () => {
                     {
                         fileList.map((item, index) => {
                             return (
-                                <div className={styles.fileContent}>
+                                <div className={styles.fileContent} key={index}>
                                     <div className={styles.fileInfo}>
                                         <div className={styles.fileName}>
                                             <FontAwesomeIcon icon={faFileLines} />
@@ -223,10 +308,7 @@ const Inquiry = () => {
                             <p>10MB 이내의 모든 이미지 및 PDF, TXT, MS office 문서 및 zip파일을 업로드해주세요.</p>
                         </li>
                         <li>
-                            <p>첨부 파일 형식 및 내용이 1:1 문의 내용과 맞지 않는 경우(비방, 음란, 고유식별정보 포함 등) 관리자에</p>
-                        </li>
-                        <li>
-                            <p>의해 자동 삭제 될 수 있습니다.</p>
+                            <p>첨부 파일 형식 및 내용이 1:1 문의 내용과 맞지 않는 경우(비방, 음란, 고유식별정보 포함 등) 관리자에 의해 자동 삭제 될 수 있습니다.</p>
                         </li>
                     </ul>
                 </div>
@@ -239,7 +321,7 @@ const Inquiry = () => {
                 <div className={styles.detail}>
                     <ul>
                         <li>
-                            <p>로그인 후 등록한 문의에 한해 인터파크 고객센터 "내 문의내역" 에서 확인할 수 있어요.</p>
+                            <p>로그인 후 등록한 문의에 한해 TAP 고객센터 "내 문의내역" 에서 확인할 수 있어요.</p>
                         </li>
                         <li>
                             <p>비회원 문의 또는 로그인 하지 않은 상태의 1:1 문의 답변은 메일로만 전달되니 회원이시라면 로그인 후 문의해주세요.</p>
@@ -253,10 +335,10 @@ const Inquiry = () => {
             <div className={styles.contents}>
                 <div className={styles.checkTitle}>
                     <div>
-                        <input type="checkbox" onChange={handleCheckAll} checked={checkAll}  className={styles.checkBox}/>
+                        <input type="checkbox" onChange={handleCheckAll} checked={checkAll} className={styles.checkBox} />
                     </div>
                     <div>
-                        전체 동의
+                        전체 동의 <span>*</span>
                     </div>
                 </div>
                 <div className={styles.check}>
@@ -277,7 +359,7 @@ const Inquiry = () => {
                         </div>
                     </div>
                 </div>
-                <div className={checkAll?styles.confirmReverse:styles.confirm} onClick={handleConfirm}>
+                <div className={(checkAll && regexData.email && regexData.title && regexData.contents && regexData.category) ? styles.confirmReverse : styles.confirm} onClick={handleConfirm}>
                     <button>문의하기</button>
                 </div>
             </div>

@@ -10,11 +10,11 @@
     display: flex;
 }
 
-.menu,
-.menuCenter,
-.menuNotice,
-.menuLine {
 
+.menu,
+.moreMenu,
+.menuLine {
+    font-size: 18px;
     /* flex: 1; */
     display: flex;
     align-items: center;
@@ -23,22 +23,38 @@
     height: 40px;
 }
 
-.menuCenter,
-.menuNotice {
+.menu {
+    border-bottom: 3px solid rgba(255, 255, 255, 0);
+}
+
+.moreMenu {
     color: #9c43f8;
     gap: 6px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0);
+    border-bottom: 3px solid rgba(255, 255, 255, 0);
 }
 
 .menuLine {
     color: #e7e7e7;
 }
 
-.menu:hover {
-    border-bottom: 2px solid rgb(114, 114, 114);
+.menuActice {
+    border-bottom: 3px solid #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 40px;
 }
 
-.menuCenter:hover,
-.menuNotice:hover {
-    border-bottom: 2px solid #9c43f8;
+
+.moreActiveMenu {
+    color: #9c43f8;
+    gap: 6px;
+    border-bottom: 3px solid #9c43f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 40px;
+
 }

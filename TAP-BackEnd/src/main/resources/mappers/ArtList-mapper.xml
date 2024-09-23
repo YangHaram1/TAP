@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArtList">
+	<select id="getListByCategory" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and sysdate > open_date
+		order by a.application_seq desc
+	</select>
+	
+	<select id="getOpenListByCategory" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and open_date > sysdate
+		order by a.application_seq desc
+	</select>
+	
+	<select id="getTapListByGenre" resultType="com.tap.artlist.dto.ArtListDTO">
+		select 
+		    a.application_seq, 
+		    a.name, 
+		    a.start_date, 
+		    a.end_date, 
+		    a.open_date, 
+		    a.status,
+		    p.place_name,
+		    sc.sub_category_name,
+		    f.files_sysname
+		from apply a 
+		left outer join place p on a.place_seq = p.place_seq
+		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
+		left outer join files f on a.application_seq = f.files_parent_seq 
+		where (#{genre} = '0' OR a.genre_seq = #{genre})  and f.files_type='poster' and a.status='승인 완료' and sysdate > open_date and sc.sub_category_seq=#{category}
+		order by a.application_seq desc
+	</select>
+	
+	
+</mapper>

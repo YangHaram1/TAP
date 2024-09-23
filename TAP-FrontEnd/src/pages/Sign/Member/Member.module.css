@@ -1,12 +1,12 @@
 .container {
     width: 600px;
-    height: 1200px;
     /* border: 1px solid black; */
     margin: auto;
     display: flex;
     flex-direction: column;
 
 }
+
 
 .title {
     flex: 1;
@@ -41,6 +41,12 @@
     /* height: 80px; */
 }
 
+.genderBox {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
 .subTitle {
     font-size: 15px;
     font-weight: bold;
@@ -56,7 +62,23 @@
 
 }
 
+.inputCode {
+    margin-top: 20px;
+}
 
+.codeConfirm {
+    /* background-color: #5a21c8; */
+    border: 3px solid #5a21c8;
+    border-radius: 20px;
+    padding: 6px 10px;
+    margin-top: 10px;
+    display: flex;
+    color: #5a21c8;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: white;
+}
 
 .inputTxt input {
     width: 100%;
@@ -121,11 +143,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
+    height: 80px;
+}
+
+.btnPass {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
 }
 
 .btn button {
     width: 70%;
-    height: 40%;
+    height: 80px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 50px;
@@ -134,11 +166,13 @@
     background-color: #bfbfbf;
     cursor: pointer;
     font-size: 22px;
+    margin-top: 100px;
+    margin-bottom: 100px;
 }
 
-.btn button:hover {
+.btnPass button {
     width: 70%;
-    height: 40%;
+    height: 80px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 50px;
@@ -146,9 +180,11 @@
     color: white;
     background-color: #5e20d2;
     cursor: pointer;
-    transition: 0.2s;
     font-size: 22px;
+    margin-top: 100px;
+    margin-bottom: 100px;
 }
+
 
 .emailBtn {
     padding: 5px 10px 5px 10px;
@@ -157,15 +193,21 @@
 
 }
 
+.container span {
+    color: #ff322f;
+    font-size: 14px;
+}
+
 .checkBtn {
-    border: 2px solid #5a21c8;
+    border: 2px solid #a2a2a2;
     margin-left: 10px;
     padding: 6px 10px;
     border-radius: 20px;
-    color: #5a21c8;
+    color: #a2a2a2;
     background-color: white;
     font-size: 12px;
     font-weight: bold;
+    pointer-events: none;
 }
 
 .addressBtn {
@@ -178,7 +220,7 @@
     color: white;
 }
 
-.checkBtn:hover {
+/* .checkBtn:hover {
     background-color: #5a21c8;
     margin-left: 10px;
     padding: 6px 10px;
@@ -186,6 +228,19 @@
     color: white;
     border: 2px solid #5a21c8;
     transition: 0.2s;
+} */
+
+.checkPassBtn {
+    margin-left: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: bold;
+
+    background-color: #5a21c8;
+    border: 2px solid #5a21c8;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
 }
 
 .container input[type="radio"] {
@@ -220,4 +275,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.success {
+    color: blue;
 }

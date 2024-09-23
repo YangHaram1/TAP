@@ -1,0 +1,62 @@
+
+
+.list{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-left: 30px;
+}
+.dto{
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    padding-bottom: 30px;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.2);
+}
+.status{
+    border-radius: 20px;
+    background-color: rgba(137, 43, 226, 0.14);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    color: rgb(129, 0, 249);
+    font-weight: 600;
+    height: 50%;
+   
+}
+
+.body{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-left: 1px solid rgba(128, 128, 128, 0.282);
+    padding-left: 10px;
+}
+
+.title{
+    font-size: 20px;
+    font-weight: 600;
+}
+.contents{
+    display: flex;
+    gap: 10px;
+    color: gray;
+}
+.addList{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.addList button{
+    border: 1px solid blueviolet;
+    background-color: rgba(137, 43, 226, 0.316);
+    font-size: 20px;
+    font-weight: 600;
+    color: blueviolet;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 50%;
+    height: 50px;
+    
+}

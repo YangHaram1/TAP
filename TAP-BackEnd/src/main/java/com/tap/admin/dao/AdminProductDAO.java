@@ -103,4 +103,12 @@ System.out.println("application_seq: " + application_seq + " (type: " + ((Object
 	    
 	    return mybatis.update("AdminProduct.rejectProduct", params);
 	}
+	// Sale 상품 반려 처리
+	public int rejectSale(String applicationSeq, String rejectReason){
+		Map<String, Object> params = new HashMap<>();
+	    params.put("applicationSeq", applicationSeq);
+	    params.put("rejectReason", rejectReason);
+	    
+	    return mybatis.update("AdminProduct.rejectSale", params);
+	}
 }

@@ -8,13 +8,26 @@
     	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
 </resultMap>
 <select id="getAllOrders" resultMap="TimestampResultMap">
-select 
+    select 
  CAST(orders.order_date AS TIMESTAMP) AS order_date,
  CAST(members.join_date AS TIMESTAMP) AS join_date, 
- members.name, book.*, orders.*, apply.name as apply_name
+ members.name, apply.name as apply_name, apply.sub_category_seq, 
+ orders.delivery_status, orders.total_price, orders.status,
+ members.id, orders.order_seq
 from orders 
-join members on members.id = orders.member_id
-join apply on apply.application_seq = orders.application_seq
-join book on orders.order_seq = book.order_seq
+LEFT join members on members.id = orders.member_id
+LEFT join apply on apply.application_seq = orders.application_seq
+LEFT join book on orders.order_seq = book.order_seq
+GROUP BY orders.ORDER_SEQ, members.name, orders.order_date, 
+members.join_date, orders.delivery_status, orders.total_price,
+ members.id, orders.order_seq, 
+orders.status, apply.name, apply.sub_category_seq
+order by orders.order_seq desc
 </select>
+
+<update id="updateOrderStatusSingle">
+    UPDATE orders
+    SET delivery_status = #{newStatus}
+    WHERE order_seq = #{orderSeq}
+</update>
 </mapper>

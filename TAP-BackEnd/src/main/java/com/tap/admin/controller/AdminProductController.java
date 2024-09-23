@@ -24,10 +24,21 @@ public class AdminProductController {
 	// 팝업 테스트 상품 공지사항 가져오기 
 	@GetMapping("/event_popup")
 	public ResponseEntity<String> getDescription(@RequestParam int application_seq) {
-	  System.out.println("공지사항 번호 : "+ application_seq);
-		return ResponseEntity.ok(AdProServ.getDescription(application_seq));
+		 String description = AdProServ.getDescription(application_seq);
+
+	    if (description == null || description.isEmpty()) {
+	        // 데이터가 없을 때 204 No Content 반환
+	        return ResponseEntity.noContent().build();
+	    }
+	    return ResponseEntity.ok(description);
 	}
 
+	// application_seq에 따른 DetailProduct.jsx에 정보 가져오기 (상품관리 )
+    @GetMapping()
+    public ResponseEntity<List<HashMap<String, Object>>> getDetail(@RequestParam String application_seq) {
+        // 상품 상세 정보를 가져오는 서비스 메서드 호출
+        return ResponseEntity.ok(AdProServ.getDetail(application_seq));
+    }
 	
 	
 	// Count - 현재 상품 갯수
@@ -165,6 +176,18 @@ public class AdminProductController {
         
         // 반려 처리 로직 (DB 업데이트 등)
         int result = AdProServ.rejectProduct(applicationSeq, rejectReason);
+        
+        return ResponseEntity.ok(result); // 성공 시 200 OK와 결과 반환
+    }
+    
+    // Sale 신청 반려 처리 해주기 
+    @PutMapping("/sale/reject")
+    public ResponseEntity<Integer> rejectSale(@RequestBody Map<String, String> requestBody) {
+        String applicationSeq = requestBody.get("application_seq");
+        String rejectReason = requestBody.get("reject_reason");
+        
+        // 반려 처리 로직 (DB 업데이트 등)
+        int result = AdProServ.rejectSale(applicationSeq, rejectReason);
         
         return ResponseEntity.ok(result); // 성공 시 200 OK와 결과 반환
     }

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Order">
+	<select id="getSection" resultType="com.tap.order.dto.PlaceAndSectionDTO">
+		select 
+		    p.place_total_seats,
+		    p.place_shape,
+		    s.section_seq,
+		    s.section_name,
+		    s.selection_col,
+		    s.selection_row
+		from place p 
+		    left outer join section s on s.place_seq = p.place_seq
+		where p.place_seq=#{placeSeq}
+		order by s.section_seq
+	</select>
+	
+	<select id="getInnerData" resultType="com.tap.order.dto.SectionInnerDataDTO">
+		select 
+		    s.section_seq,
+		    s.section_name,
+		    sg.SECTION_SEAT_GRADES_SEQ,
+		    sg.SEAT_GRADE,
+		    sg.SEAT_ROW,
+		    sg.SEAT_COL_START,
+		    sg.SEAT_COL_END
+		from section s
+		    left outer join SECTION_SEAT_GRADES sg on s.section_seq = sg.section_seq 
+		where s.place_seq=#{placeSeq}
+		order by s.section_seq, sg.seat_row, seat_col_start
+	</select>
+	
+	<select id="getDate" resultType="map">
+		select 
+		DISTINCT
+		    TO_CHAR(schedule_day, 'YYYY-MM-DD') AS schedule_date,
+		    CASE TO_CHAR(schedule_day, 'D')
+		        WHEN '1' THEN '일'
+		        WHEN '2' THEN '월'
+		        WHEN '3' THEN '화'
+		        WHEN '4' THEN '수'
+		        WHEN '5' THEN '목'
+		        WHEN '6' THEN '금'
+		        WHEN '7' THEN '토'
+		    END as day
+		from SCHEDULE where application_seq=#{seq} and SCHEDULE_DAY > sysdate 
+		order by 1
+	</select>
+	
+	<select id="getTime" resultType="String">
+		select times from(
+			select 
+			    TO_CHAR(schedule_day, 'YYYY-MM-DD') AS schedule_date,
+			    TO_CHAR(schedule_time, 'HH24:MI') AS times
+			from SCHEDULE where application_seq=#{seq})
+		where schedule_date = #{date} order by times
+	</select>
+	
+	<select id="getPoint" resultType="int">
+		select point from members where id=#{id}
+	</select>
+
+	<insert id="insertOrder">
+		insert into orders 
+		(order_seq, application_seq, member_id, order_date, total_price, status, delivery_status, pay, delivery_method,DELIVERY_SEQ) 
+		values 
+		(order_seq.nextval, #{seq}, #{id}, sysdate,#{totalPrice},#{status},#{deliveryStatus,jdbcType=VARCHAR}, #{pay}, #{deliveryMethod,jdbcType=VARCHAR},#{deliverySeq,jdbcType=INTEGER}) 
+		<selectKey resultType="int" order="AFTER" keyProperty="order_seq">
+ 			select order_seq.currval from dual
+ 		</selectKey>
+	</insert>
+	
+	<insert id="insertBook">
+		insert into book
+		(book_seq, order_seq, member_id, book_date, book_time, section_seq, book_row, book_col, book_level) 
+		values
+		(#{bookSeq},#{orderSeq},#{id},#{date},#{time},#{storageSection},#{row},#{col},#{grade})
+	</insert>
+	
+	<update id="updatePoint"> 
+		update members set point = #{point} where id=#{id}
+	</update>
+	
+	<select id="getOrder" resultType="com.tap.order.dto.OrdersDTO">
+		select * from orders o
+			left outer join review r on o.order_seq = r.order_seq
+			where o.application_seq = #{seq} and o.member_id=#{id} and review is null
+	</select>
+	
+	<insert id="insertReview">
+		insert into Review
+		(review_seq, application_seq, member_id, review_title, review, review_date, order_seq) 
+		values
+		(review_seq.nextval,#{seq},#{id},#{title},#{content},sysdate,#{orderSeq})
+		<selectKey resultType="int" order="AFTER" keyProperty="review_seq">
+ 			select review_seq.currval from dual
+ 		</selectKey>
+	</insert>
+	
+	<insert id="insertStar">
+		insert into stars
+		(star_seq, application_seq, member_id, stars, review_seq) 
+		values
+		(star_seq.nextval,#{seq},#{id},#{star,jdbcType=INTEGER},#{reviewSeq})
+	</insert>
+	
+	<insert id="insertExcite">
+		insert into excite
+		(excite_seq, application_seq, member_id, excite_title, excite, excite_date) 
+		values
+		(excite_seq.nextval,#{seq},#{id},#{title},#{content},sysdate)
+	</insert>
+	
+	<select id="getBookSeats" resultType="com.tap.order.dto.BookSeatsDTO">
+		select section_seq, book_row, book_col, book_level 
+		from orders o left outer join book b on o.order_seq = b.order_seq 
+		where application_seq=#{seq} and status='완료' and book_date=#{date} and book_time=#{time}
+	</select>
+	
+	<select id="checkSeat" resultType="int">
+		select count(*) from orders o 
+		left outer join book b on o.order_seq = b.order_seq 
+		where application_seq=#{seq} and status='완료' and book_date=#{date} and book_time=#{time} and book_row= #{row} and book_col=#{col} and section_seq=#{storageSection}
+	</select>
+	
+</mapper>

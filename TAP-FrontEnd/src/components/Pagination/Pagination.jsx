@@ -4,20 +4,24 @@ import ReactPaginate from 'react-paginate';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 export const Pagination = ({ pageCount, onPageChange, currentPage }) => {
-    return (
-      <ReactPaginate
-        previousLabel={<FiChevronLeft className={styles.pagination_arrow} />}
-        nextLabel={<FiChevronRight className={styles.pagination__arrow} />}
-        pageCount={pageCount}
-        onPageChange={onPageChange}
-        containerClassName={styles.pagination}
-        pageLinkClassName={styles.pagination__link}
-        activeLinkClassName={styles.pagination__link__active}
-        forcePage={currentPage} // 현재 페이지를 외부 상태로 설정
-        pageRangeDisplayed={4} // 화면에 표시할 페이지 범위
-        marginPagesDisplayed={1} // 시작과 끝에 표시할 페이지 번호 수
-      />
-    );
+    // forcePage가 유효한 범위 내에 있도록 조정
+  const forcePage =
+  currentPage >= pageCount ? Math.max(pageCount - 1, 0) : currentPage;
+
+  return (
+    <ReactPaginate
+      previousLabel={<FiChevronLeft className={styles.pagination_arrow} />}
+      nextLabel={<FiChevronRight className={styles.pagination__arrow} />}
+      pageCount={pageCount}
+      onPageChange={onPageChange}
+      containerClassName={styles.pagination}
+      pageLinkClassName={styles.pagination__link}
+      activeLinkClassName={styles.pagination__link__active}
+      forcePage={forcePage}
+      pageRangeDisplayed={4}
+      marginPagesDisplayed={1}
+    />
+  );
   };
 
 

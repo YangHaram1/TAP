@@ -7,32 +7,57 @@ import { Navigate, useNavigate } from 'react-router-dom';
 export const ProductsCurrent = ({ category, categoryName, tap }) => {
     const [products, setProducts] = useState([]);
     const [filtered, setFiltered] = useState([]);
+    const [loading, setLoading] = useState(false); 
     const navigate = useNavigate(); 
+    const [currentPage, setCurrentPage] = useState(0);
+    const PER_PAGE = 3;
+    const pageCount = Math.ceil(filtered.length / PER_PAGE);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                // tap 값에 따라 서버 엔드포인트 결정
-                let productList = '';
-                if (tap === 0) {
-                    productList = `/admin/products/current?category=${category}`; // 현재 판매 중인 상품
-                } else if (tap === 1) {
-                    productList = `/admin/products/past?category=${category}`; // 판매 종료된 상품
-                } else if (tap === 2) {
-                    productList = `/admin/products/future?category=${category}`; // 판매 예정인 상품
-                }
+        if (currentPage > pageCount - 1) {
+          setCurrentPage(Math.max(pageCount - 1, 0));
+        }
+      }, [currentPage, pageCount]);
+    
+      // 데이터 불러오기 함수
+      const fetchProducts = async () => {
+        try {
+          setLoading(true);
+          let productList = '';
+          if (tap === 0) {
+            productList = `/admin/products/current?category=${category}&page=${currentPage}&perPage=${PER_PAGE}`;
+          } else if (tap === 1) {
+            productList = `/admin/products/past?category=${category}&page=${currentPage}&perPage=${PER_PAGE}`;
+          } else if (tap === 2) {
+            productList = `/admin/products/future?category=${category}&page=${currentPage}&perPage=${PER_PAGE}`;
+          }
+    
+          const response = await api.get(productList);
+          console.log(response.data);
+          setProducts(response.data);
+          setFiltered(response.data);
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      // 페이지나 카테고리, 탭이 변경될 때마다 데이터 재요청
+      useEffect(() => {
+        fetchProducts();
+      }, [category, tap, currentPage]);
 
-                const response = await api.get(productList);
-                console.log(response.data)
-                setProducts(response.data);
-                setFiltered(response.data);
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected);
+        window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
+    };
 
-        fetchProducts(); // 컴포넌트가 마운트될 때 데이터 가져오기
-    }, [category, tap]); // 카테고리와 상품 상태가 변경될 때마다 다시 API 요청
+
+    // 페이지나 카테고리, 탭이 변경될 때마다 데이터 재요청
+    useEffect(() => {
+        fetchProducts();
+    }, [category, tap, currentPage]);
 
     // 나머지 로직은 동일
     const formatDate = (dateString) => {
@@ -58,13 +83,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
     };
     
 
-    const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 3;
-    const pageCount = Math.ceil(filtered.length / PER_PAGE);
-    const handlePageChange = ({ selected }) => {
-        setCurrentPage(selected);
-        window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
-    };
+   
 
     // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
     const handleRowClick = (application_seq) => {
@@ -95,8 +114,13 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                                                 alt={product.FILES_ORINAME}
                                                 className={styles.product_image}
                                             />
-                                            <span className={styles.status_tag}>
-                                            {tap === 0 ? "예매중" : tap === 1 ? "판매 종료" : "판매 예정"}
+                                            <span 
+                                                className={`${styles.status_tag} ${tap === 0 
+                                                    ? styles.status_tag_booking 
+                                                    : tap === 1 
+                                                    ? styles.status_tag_sold_out 
+                                                    : styles.status_tag_upcoming}`}>
+                                                {tap === 0 ? "예매중" : tap === 1 ? "판매 종료" : "판매 예정"}
                                             </span>
                                         </div>
                                         <div className={styles.product_details}>
@@ -116,7 +140,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                                         {formatDate(product.end_date)}
                                     </td>
                                     <td>
-                                        <button className={styles.manage_button}>상품관리</button>
+                                        <button className={styles.manage_button}>상품상세</button>
                                     </td>
                                 </tr>
                             ))}
@@ -124,7 +148,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
                 </table>
                     </>
                 ) : (
-                    <p>해당 카테고리에 대한 상품이 없습니다.</p>
+                    <p className={styles.no_products}>해당 카테고리에 대한 상품이 없습니다.</p>
                 )}
              
             </div>

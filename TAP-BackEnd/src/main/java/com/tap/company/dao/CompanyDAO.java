@@ -19,5 +19,12 @@ public class CompanyDAO {
 
 	}
 	
+	public CompanyDTO getCompanyData(String id) {
+		return mybatis.selectOne("Company.selectById",id);
+	}
 	
+	// 회원가입 사업체 이름 중복 검사
+	public int checkName(String name) throws Exception{
+		return mybatis.selectOne("Company.checkName",name);
+	}
 }

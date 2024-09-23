@@ -53,6 +53,11 @@ const Login = () => {
             return !prev
         })
     }
+    useEffect(() => {
+        if (isAuth) {
+            navi('/')
+        }
+    }, [isAuth])
 
     useEffect(() => {
         const loginId = localStorage.getItem('loginId')
@@ -81,6 +86,7 @@ const Login = () => {
         await api
             .post(`/auth/${id}/${pw}`)
             .then(resp => {
+                navi(-1)
                 console.log(resp)
                 const token = resp.data
                 const decoded = jwtDecode(token)
@@ -94,7 +100,6 @@ const Login = () => {
                     localStorage.removeItem('loginId')
                 }
                 setAuth(decoded)
-                navi('/')
             })
             .catch(resp => {
                 alert('아이디 또는 패스워드를 확인하세요. ')
@@ -203,14 +208,16 @@ const Login = () => {
                             onChange={handleCheck}
                         />
                         <span className={styles.saveId}>아이디 저장</span>
-                    </div>
-                    <div>
-                        <button onClick={() => handlePageChange('findId')}>
-                            아이디 찾기
-                        </button>
-                        <button onClick={() => handlePageChange('findPw')}>
-                            비밀번호 찾기
-                        </button>
+                        <div className={styles.findBtn}>
+                            <button onClick={() => handlePageChange('findId')}>
+                                아이디 찾기
+                            </button>
+                            |
+                            <button onClick={() => handlePageChange('findPw')}>
+                                비밀번호 찾기
+                            </button>
+                            {/* <button onClick={() => navi('/sign')}>회원가입</button> */}
+                        </div>
                     </div>
                 </div>
                 <div>

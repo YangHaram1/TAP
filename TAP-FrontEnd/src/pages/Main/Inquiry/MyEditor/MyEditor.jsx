@@ -4,25 +4,61 @@ import styles from './MyEditor.module.css';
 // import './MyEditor.css';
 import Swal from 'sweetalert2';
 import { api, tinymce } from '../../../../config/config'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useCheckList } from '../../../../store/store';
-const MyEditor = ({ editorRef, height,setData }) => {
+const MyEditor = ({ editorRef, height, setData, setRegexData ,data}) => {
 
   const inputRef = useRef(null);
   const { chatSeq } = useCheckList();
- 
-  const handleEditorChange =(content) => {
-    setData((prev)=>{
-      return{ ...prev,content:content}
+  const [contents, setContents] = useState('');
+
+
+  useEffect(() => {
+    if(data.contents!==undefined){
+      setContents(data.contents)
+    }
+  }, []);
+  const handleEditorChange = (content) => {
+    setData((prev) => {
+      return { ...prev, contents: content }
+    })
+    const contentsRegex = /^([\s\S]{1,1000})$/;
+    setRegexData((prev) => {
+      return { ...prev, contents: contentsRegex.test(content) }
     })
 
   }
-    
+
 
 
   const handleImages = () => {
     inputRef.current.click();
+  }
+
+  // 파일 사이즈 검사
+  const formatFileSize = (size) => {
+    if (size < 1024) return `${size} bytes`;
+    if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`; // 정수로 반올림
+    return `${Math.round(size / (1024 * 1024))} MB`; // 정수로 반올림
+  };
+
+  const checkSize = (file) => {
+    const split = formatFileSize(file.size).split(' ');
+    const size = parseInt(split[0], 10);
+    const str = split[1];
+    if (str === 'MB') {
+      if (size <= 10) return true;
+      else {
+        Swal.fire({
+          icon: 'error',
+          title: '파일',
+          text: '10MB 이하로 업로드 해주세요.'
+        })
+        return false;
+      }
+    }
+    else {
+      return true;
+    }
   }
 
   //여기는 이미지 넣기
@@ -32,7 +68,10 @@ const MyEditor = ({ editorRef, height,setData }) => {
     const { chatSeq } = useCheckList.getState();
 
     for (let index = 0; index < files.length; index++) {
-      formData.append("files", files[index]);
+      const sizeCheck = checkSize(files[index]);
+      if (sizeCheck) {
+        formData.append("files", files[index]);
+      }
     }
     api.post(`/chatUpload?group_seq=${chatSeq}`, formData).then(resp => { //파일 로직 처리
       const array = resp.data;
@@ -41,7 +80,7 @@ const MyEditor = ({ editorRef, height,setData }) => {
         const prevContent = editorRef.current.getContent();
         editorRef.current.setContent(prevContent + imageUrl);
       }
-     
+
       inputRef.current.value = '';
     }).catch(error => {
       console.error('There was an error posting the data!', error);
@@ -52,8 +91,10 @@ const MyEditor = ({ editorRef, height,setData }) => {
   const handleImageUpload = async (file) => {
     try {
       const formData = new FormData();
-      formData.append('files', file); // FormData에 파일 추가
-      // 이미지 업로드
+      const sizeCheck = checkSize(file);
+      if (sizeCheck) {
+        formData.append('files', file); // FormData에 파일 추가
+      }
       const response = await api.post(`/chatUpload?group_seq=${chatSeq}`, formData);
       const imageUrl = response.data[0]; // 서버에서 반환된 이미지 URL
       const image = `<img src="${imageUrl}" alt="uploaded image"  style="width: 100px; height: 100px; border-radius: 10px;" />`;
@@ -80,16 +121,17 @@ const MyEditor = ({ editorRef, height,setData }) => {
     <div className={styles.container}>
       <div className={styles.editor}>
         <Editor
-          apiKey={tinymce}   
+          apiKey={tinymce}
           onInit={(evt, editor) => {
             editorRef.current = editor;
           }}
+          initialValue={contents}
           onEditorChange={(content) => handleEditorChange(content)}
           init={{
             width: "auto",
             height: height,
             menubar: true,
-            plugins: 'fileupload wordcount anchor code', //image
+            plugins: 'wordcount anchor code', //image
             toolbar: 'fileupload| forecolor backcolor  blocks fontfamily fontsize fontcolor | bold italic underline strikethrough | link image media table mergetags  | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat ',
             language: 'ko_KR',
             statusbar: false,
@@ -121,15 +163,15 @@ const MyEditor = ({ editorRef, height,setData }) => {
               editor.ui.registry.addButton('fileupload', {
                 text: '📷',
                 onSetup: (buttonApi) => {
-                    setTimeout(() => {
-                        const button = document.querySelector('button[data-mce-name="fileupload"]');
-                        if (button) {
-                          button.classList.add(styles.editorBtn); // 원하는 클래스 추가
-                        }
-                      }, 0); // 렌더링 후에 실행되도록 setTimeout 사용
-                  },
+                  setTimeout(() => {
+                    const button = document.querySelector('button[data-mce-name="fileupload"]');
+                    if (button) {
+                      button.classList.add(styles.editorBtn); // 원하는 클래스 추가
+                    }
+                  }, 0); // 렌더링 후에 실행되도록 setTimeout 사용
+                },
                 onAction: (e) => {
-                    handleImages();
+                  handleImages();
                 },
               });
               editor.on('PastePostProcess', (e) => {
@@ -141,7 +183,7 @@ const MyEditor = ({ editorRef, height,setData }) => {
         />
       </div>
       <div className={styles.hidden}>
-        <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*"/>
+        <input type="file" className={styles.upload} name='files' ref={inputRef} onChange={handleOnchange} multiple accept="image/*" />
       </div>
     </div>);
 };

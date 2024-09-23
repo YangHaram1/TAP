@@ -434,7 +434,6 @@ export const EventApply = () => {
     };
 
     // 캐스팅 상태
-    
     const [scheduleCastingList, setScheduleCastingList] = useState([]);
     const [castingData, setCastingData] = useState([]); 
     const [currentSchedule, setCurrentSchedule] = useState(null);
@@ -586,7 +585,7 @@ export const EventApply = () => {
         });
     }
     };
-    //
+    
     const handleCancel = ()=>{
         const userConfirmed = window.confirm("작성을 취소하시겠습니까?");
     
@@ -652,7 +651,11 @@ export const EventApply = () => {
             if(!mainPoster){alert("메인 포스터를 업로드하세요"); return false;}
             if(!noticeContent){ alert("공지안내를 작성하세요." ); return false;}
             if(subCategory == "1" && castingData.length === 0 ){ alert("캐스팅 작성하세요." ); return false;}
-    
+              // 상세내용 (description_content) 확인
+            if (!formData.description_content) {
+                alert("상세내용을 작성하세요.");
+                return false;
+            }
             return true;
         };
     
@@ -677,7 +680,7 @@ export const EventApply = () => {
     
                 await api.post(`/biz/application`, updatedFormData);
                 alert('신청이 완료되었습니다!');
-                // navi('/'); 
+                navi('/waitingapply/registration'); 
                 } catch (error) {
                 console.error('서버에 전송 중 오류 발생:', error);
                 alert('서버에 전송 실패. 다시 시도해 주세요.');
@@ -739,7 +742,7 @@ export const EventApply = () => {
                         <tr>
                             <td>상품명</td>
                             <td>
-                                <input type="text" placeholder="상품명 입력" name="name" 
+                                <input type="text" className={styles.input} placeholder="상품명 입력" name="name" 
                                  disabled={!isCategorySelected || !isSubCategorySelected}
                                 value={formData.name} onChange={handleChange}></input>
                             </td>
@@ -775,7 +778,7 @@ export const EventApply = () => {
                                 <td>
                                     {selectedPlace 
                                         ? selectedTeam 
-                                        : <input type="text" placeholder="장소 선택시 출력됩니다" disabled />  
+                                        : <input type="text" className={styles.input} placeholder="장소 선택시 출력됩니다" disabled />  
                                     }
                                     <span className={styles.Gap}></span>
                                     VS
@@ -813,11 +816,11 @@ export const EventApply = () => {
                             <td>
                                 시작일: <input type="date" name="start_date" value={formData.start_date} 
                                  disabled={!isCategorySelected || !isSubCategorySelected}
-                                onChange={handleChange} className={styles.shortInput}></input>
+                                onChange={handleChange} className={styles.shortInputDate}></input>
                                 <span className={styles.Gap}></span>
                                 종료일: <input type="date" name="end_date" value={formData.end_date} 
                                  disabled={!isCategorySelected || !isSubCategorySelected}
-                                 onChange={handleChange} className={styles.shortInput}></input>
+                                 onChange={handleChange} className={styles.shortInputDate}></input>
                             </td>
                         </tr>
                         <tr>
@@ -900,18 +903,41 @@ export const EventApply = () => {
                                     <br />
                                     {/*  */}
                                     <div className={styles.file_upload_wrapper}>
-                                        <input id="file_upload_1" type="file" style={{display:"block"}}
-                                        ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
-                                        onChange={handleCastingImageChange} />
+                                            {/* <input id="file_upload_1" type="file" style={{display:"block"}}
+                                            ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
+                                            onChange={handleCastingImageChange} /> */}
+
                                         <input
-                                        type="text"
-                                        placeholder="배우 이름"
-                                        ref={actorInputRef}
-                                        value={currentInputs.actorName}
-                                        onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
-                                        className={styles.shortInput}
-                                        />
-                                        <span className={styles.Gap}></span>
+                                                id={`file_upload_${scheduleKey}`} // id를 동적으로 변경
+                                                type="file"
+                                                style={{ display: "none" }} // 파일 업로드 필드를 숨김
+                                                ref={(el) => (fileInputRefs.current[scheduleKey] = el)}
+                                                onChange={handleCastingImageChange}
+                                            />
+                                            {/* 사용자 정의 버튼 */}
+                                            <label 
+                                                htmlFor={`file_upload_${scheduleKey}`} 
+                                                className={styles.custom_file_upload_button}
+                                            >
+                                                파일 선택
+                                            </label>
+                                            {/* 업로드된 파일 이름 표시 (선택 사항) */}
+                                            {castingImage?.file_oriname && (
+                                                <span className={styles.file_name}>{castingImage.file_oriname}</span>
+                                            )}
+
+
+                                        <div style={{ marginTop: "10px" }}>
+                                            <input
+                                            type="text"
+                                            placeholder="배우 이름"
+                                            ref={actorInputRef}
+                                            value={currentInputs.actorName}
+                                            onChange={(e) => handleLocalActorNameChange(scheduleKey, e.target.value)}
+                                            className={styles.shortInput}
+                                            />
+                                            <span className={styles.Gap}></span>
+                                     
                                         <input
                                         type="text"
                                         placeholder="역할"
@@ -921,7 +947,8 @@ export const EventApply = () => {
                                         className={styles.shortInput}
                                         />
                                         <span className={styles.Gap}></span>
-                                        <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가버튼</button>
+                                        <button onClick={() => handleAddLocalCasting(schedule)}  className={styles.btnInput}>추가</button>
+                                    </div>
                                     </div>
                                     <br />
                                     <ul>
@@ -1025,7 +1052,7 @@ export const EventApply = () => {
                             <BizNoticeEditor value={noticeContent} onChange={handleContentChange}/>
                         </td>
                     </tr>
-                    { category === "1" &&  
+                   
                     <tr>
                         <td>메인 포스터</td>
                         <td>
@@ -1045,14 +1072,14 @@ export const EventApply = () => {
                             ) : null}
                         </div>
                         <input id="file_upload"
-                        type="file"
+                        type="file" style={{display:"none"}}
                         placeholder="메인포스터 하나만"
                         onChange={handleMainPosterChange}
                         />
                                
                         </td>
                     </tr>
-                    }
+                    
                     <tr>
                         <td>상세페이지 <p>상세 정보 이미지 및 상세설명 </p></td>
                         <td>

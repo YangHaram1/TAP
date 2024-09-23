@@ -39,10 +39,25 @@ public class SecurityConfig {
 		.authorizeHttpRequests(request->{
 			request.requestMatchers(HttpMethod.POST, "/auth/{id}/{pw}").permitAll();//excludePatternPath
 			request.requestMatchers(HttpMethod.GET,"/board").permitAll();
-			request.requestMatchers(HttpMethod.POST,"/members").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/registerUser").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/id/{id}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/company/name/{name}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/email/{email}").permitAll();
 			request.requestMatchers(HttpMethod.GET,"/members/findId/{name}/{email}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/members/findPw/{id}/{email}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/artlist/{category}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/artlist/openContents/{category}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/artlist/getTap").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/genre/{category}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/detail/{seq}").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/admin/products/event_popup").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/requestEmailVerification/{email}").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/verifyEmail").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/requestPasswordReset/{email}").permitAll();
+			request.requestMatchers(HttpMethod.POST, "/members/verifyCode").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/members/resetPassword").permitAll();
+			request.requestMatchers(HttpMethod.POST,"/company").permitAll();
+
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
 		}) 

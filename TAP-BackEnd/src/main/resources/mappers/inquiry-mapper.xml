@@ -5,6 +5,57 @@
 <mapper namespace="Inquiry">
 	<!-- 회원가입 등록 -->
 	<insert id="insert">
-		insert into inquiry values(inquiry_seq.nextval,#{member_id},#{name},#{email}.#{category},#{title},#{contents},sysdate)
+		insert into inquiry values(inquiry_seq.nextval,#{member_id},#{name},#{email},#{category},#{title},#{contents},sysdate,0)
+		<selectKey resultType="int" order="AFTER" keyProperty="seq">
+			select inquiry_seq.currval from dual
+		</selectKey>
 	</insert>
+	
+	<select id="selectById" resultType="com.tap.inquiry.dto.InquiryDTO">
+		select *from inquiry where member_id = #{id} order by write_date desc
+	</select>
+	
+	<select id="selectBySeq" resultType="com.tap.inquiry.dto.InquiryDTO">
+		select *from inquiry where seq = #{seq}
+	</select>
+	
+	<select id="selectAll" resultType="com.tap.inquiry.dto.InquiryDTO">
+		select a.* from
+		(
+		select inquiry.*, row_number() over (order by write_date desc) as rown 
+		from inquiry where 1=1
+		<if test="category!=''">
+      		and  category = #{category,jdbcType=VARCHAR}
+   		</if>
+   		
+		<if test="status!=''">
+      		and status = ${status}
+   		</if>
+   		
+   		)a 
+   		where rown between ${start} and ${end}
+	</select>
+	
+	<select id="getInquiryCount" resultType="int" >
+		select count(*) from inquiry where 1=1
+		<if test="category!=''">
+      		and  category = #{category,jdbcType=VARCHAR}
+   		</if>
+	 
+		<if test="status!=''">
+      		and status = ${status}
+   		</if>
+   	
+	</select>
+	
+	<update id="updateStatus">
+		  update inquiry 
+    	set status = 
+    	case 
+    		when status = 1 then 0 
+    		else 1 
+    	end 
+    	where seq = ${seq}
+	</update>
+	
 </mapper>

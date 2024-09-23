@@ -13,7 +13,18 @@
 
 }
 
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* 오버레이 색상과 투명도 */
+    z-index: 0; /* 내용 위에 오버레이를 배치 */
+  }
+
 .card{
+    position: relative;
     display: flex;
     flex-direction: column;
     /* width: 100%; */
@@ -23,27 +34,18 @@
     border-radius: 5px;
 }
 
+.card h2{
+    z-index: 1;
+}
+
 .card p{
     margin: 5px;
+    z-index: 1;
 }
 
 .card:hover{
     cursor: pointer;
 }
-
-/* a{
-    margin-left: 10px;
-    color: black;
-    width: 95%;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 5px;
-}
-
-a:hover{
-    cursor: pointer;
-    border-radius: 5px;
-} */
 
 .poster{
     width: 100%;

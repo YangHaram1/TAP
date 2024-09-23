@@ -116,7 +116,7 @@ export const ProductsRegister = () => {
                 <div className={styles.detail_page}>
                     {renderProducts()}
                     {/*  팝업 테스트  */}
-                    {showPopup && <Popup onClose={closePopup} />}
+                    {/* {showPopup && <Popup onClose={closePopup} />} */}
                 </div>
             </div>
         </div>

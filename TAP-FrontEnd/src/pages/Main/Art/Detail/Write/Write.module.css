@@ -63,10 +63,13 @@
 .orderBtns button{
     font-weight: 700;
     background-color: rgba(0,0,0,0);
+    border: 0px;
+    font-size: 14px;
 }
 
 .review_write_box{
-    background-color: rgb(204, 166, 204);
+    /* background-color: rgb(204, 166, 204); */
+    border: 1px solid gray;
     border-radius: 10px;
     height: 100%;
     padding: 20px;
@@ -80,11 +83,16 @@
     display: flex;
 }
 
+.write_header select{
+    width: 300px;
+}
+
+
 .write_title{
     height: 20px;
-    width: 70%;
+    width: 93%;
     margin-bottom: 5px;
-    border: 0px;
+    border: 1px solid lightgray;
 }
 
 .review_write_box textarea{
@@ -92,23 +100,35 @@
     height: 100px;
     resize: none;
     overflow-y: auto;
-    border: 0px;
+    border: 1px solid lightgray;
+    text-indent: 5px;
+    padding-top: 5px;
 }
 
 .write_btn{
     display: flex;
     justify-content: end;
     margin-right: 12px;
+    margin-bottom: 0px;
+}
+
+.write_btn button{
+    border-radius: 5px;
+    background-color: blueviolet;
+    color: white;
+    border: 0px;
+    width: 110px;
+    height: 30px;
 }
 
 .reviews{
-    border:1px solid black;
+    border:1px solid lightgray;
     border-radius: 10px;
     margin-top: 20px;
-    height: 150px;
+    height: 100%;
     width: 97%;
-    background-color: lightcoral;
-    padding: 15px;
+    background-color: rgba(211, 211, 211, 0.252);
+    padding: 12px;
     padding-top: 10px;
     display: flex;
     flex-direction: column;
@@ -118,7 +138,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 30px;
+    height: 100%;
 }
 
 .content{
@@ -134,7 +154,7 @@
 
 
 .review_output_content{
-    height: 110px;
+    height: 90px;
     overflow-y: auto;
 }
 
@@ -147,4 +167,43 @@
     margin: 0px;
 }
 
-.empty{height: 60px; width: 100px;}
+.empty{height: 30px; width: 100px;}
+
+/*====================================================*/
+
+.pagination {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin-top: 30px;
+    justify-content: center;
+    height: 50px;
+  }
+  
+  .pagination li {
+    cursor: pointer;
+    margin: 0 5px;
+  }
+  
+  .pagination a {
+    text-decoration: none;
+    color: blueviolet;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .pagination a:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .pagination .active a {
+    background-color: blueviolet;
+    color: white;
+  }
+  .next {
+    display: none;
+  }
+  .previous {
+    display: none;
+  }

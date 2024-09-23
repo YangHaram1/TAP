@@ -52,8 +52,6 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
     };
 
 
-
-    // 나머지 로직은 동일
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('ko-KR', {
@@ -95,10 +93,13 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                                 className={styles.table_row}
                                 >
                                     <td>신청번호 {product.APPLICATION_SEQ}</td>
-                                    <td> 사업자 </td>
+                                    <td> {product.COMPANY_NAME} </td>
                                     <td className={styles.product_info}>
                                         <div className={styles.product_image_container}>
-                                         
+                                        <img
+                                                src={product.FILES_SYSNAME}
+                                                className={styles.product_image_container}
+                                            />
                                         </div>
                                         <div className={styles.product_details}>
                                             <div className={styles.product_name}>
@@ -126,7 +127,7 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                 </table>
                     </>
                 ) : (
-                    <p>해당 카테고리에 대한 상품이 없습니다.</p>
+                    <p className={styles.no_products}>해당 카테고리에 대한 상품이 없습니다.</p>
                 )}
              
             </div>

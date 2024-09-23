@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminDash">
+<resultMap id="TimestampResultMap" type="java.util.HashMap">
+    	<result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
+    	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
+</resultMap>
+<select id="getId" resultMap="TimestampResultMap">
+	select members.name, company.name as company_name 
+	from members
+    left join company on company.member_id = members.id
+    where id=#{id}
+</select>
+
+<select id="getApplyCountToday" resultType="int">
+SELECT count(*) 
+FROM apply
+where created_at between concat(current_date, '00:00:00')
+AND concat(current_date, '23:59:59')
+AND status='승인 대기'
+</select>
+<select id="getSaleCountToday" resultType="int">
+SELECT count(*) 
+FROM sale
+where sale_approved='승인 대기'
+</select>
+<select id="getDeliveryCountToday" resultType="int">
+SELECT count(*) 
+FROM orders
+where delivery_status='미발송'
+</select>
+
+<!-- 오늘 Done  -->
+<select id="getApprovedCountToday" resultType="int">
+SELECT count(*) 
+FROM apply
+where updated_at between concat(current_date, '00:00:00')
+AND concat(current_date, '23:59:59')
+AND status='승인 완료'
+</select>
+<select id="getSaleApprovedCountToday" resultType="int">
+SELECT count(*) 
+FROM sale
+where sale_approved='승인 완료'
+</select>
+<select id="getDeliveryApprovedCountToday" resultType="int">
+SELECT count(*) 
+FROM orders
+where delivery_status='발송 완료'
+</select>
+
+<select id="getTotalToday" resultType="com.tap.admin.dto.AdminDashDTO">
+SELECT SUM(total_price) AS total_sum, 
+count(*) as total_count
+FROM orders
+</select>
+
+
+
+
+<select id="getOrderCountByCategory" resultMap="TimestampResultMap">
+SELECT 
+    sub_category.sub_category_seq, 
+    sub_category.sub_category_name, 
+    COALESCE(COUNT(orders.order_seq), 0) AS order_count
+FROM 
+    sub_category
+LEFT JOIN apply ON sub_category.sub_category_seq = apply.sub_category_seq
+LEFT JOIN orders ON apply.application_seq = orders.application_seq
+GROUP BY 
+    sub_category.sub_category_seq, 
+    sub_category.sub_category_name
+</select>
+
+</mapper>

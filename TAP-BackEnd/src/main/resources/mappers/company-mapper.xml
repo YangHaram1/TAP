@@ -8,4 +8,13 @@
 		insert into company values(#{member_id},#{address},#{detailed_address},#{name},#{phone},#{registration_number},#{zipcode},sysdate)
 	</insert>
 	
+	<select id="selectById" resultType="com.tap.company.dto.CompanyDTO">
+		select * from company where member_id=#{id}
+	</select>
+	
+	<!-- 회원가입 사업체 이름 중복 검사 -->
+	<select id="checkName" resultType="int">
+		select count(*) from company where name=#{name}
+	</select>
+	
 </mapper>
