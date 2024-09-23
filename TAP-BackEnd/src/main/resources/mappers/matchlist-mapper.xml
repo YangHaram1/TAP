@@ -5,56 +5,61 @@
 <mapper namespace="MatchList">
 
    
-  <select id="getBaseballMatches" resultType="map" parameterType="map">
-SELECT
-    TO_CHAR(a.START_DATE, 'MM-DD HH24:MI') AS START_DATE,  
-    TO_CHAR(a.END_DATE, 'MM-DD HH24:MI') AS END_DATE,     
-    TO_CHAR(a.OPEN_DATE, 'MM-DD HH24:MI') AS OPEN_DATE,    
-    place.PLACE_NAME AS PLACE_NAME,                        
-    home_team.TEAM_NAME AS HOME_TEAM_NAME,
-    home_team.LOGO_IMAGE AS HOME_TEAM_LOGO,            
-    away_team.TEAM_NAME AS AWAY_TEAM_NAME,
-    away_team.LOGO_IMAGE AS AWAY_TEAM_LOGO,
-    a.status
-FROM
-    APPLY a
-LEFT JOIN
-    TEAM home_team ON a.PLACE_SEQ = home_team.PLACE_SEQ
-LEFT JOIN
-    TEAM away_team ON a.AWAY_TEAM_SEQ = away_team.TEAM_SEQ
-LEFT JOIN
-    PLACE place ON a.PLACE_SEQ = place.PLACE_SEQ            
-WHERE
-    a.SUB_CATEGORY_SEQ = 3
-    AND a.status = '승인 완료' 
-ORDER BY
-    a.START_DATE
-  </select>
-
-  <select id="getSoccerMatches" resultType="map">
-SELECT
-    TO_CHAR(a.START_DATE, 'MM-DD HH24:MI') AS START_DATE,  
-    TO_CHAR(a.END_DATE, 'MM-DD HH24:MI') AS END_DATE,     
-    TO_CHAR(a.OPEN_DATE, 'MM-DD HH24:MI') AS OPEN_DATE,    
-    place.PLACE_NAME AS PLACE_NAME,                        
-    home_team.TEAM_NAME AS HOME_TEAM_NAME,
-    home_team.LOGO_IMAGE AS HOME_TEAM_LOGO,            
-    away_team.TEAM_NAME AS AWAY_TEAM_NAME,
-    away_team.LOGO_IMAGE AS AWAY_TEAM_LOGO,
-    a.status
-FROM
-    APPLY a
-LEFT JOIN
-    TEAM home_team ON a.PLACE_SEQ = home_team.PLACE_SEQ
-LEFT JOIN
-    TEAM away_team ON a.AWAY_TEAM_SEQ = away_team.TEAM_SEQ
-LEFT JOIN
-    PLACE place ON a.PLACE_SEQ = place.PLACE_SEQ            
-WHERE
-    a.SUB_CATEGORY_SEQ = 4
-    AND a.status = '승인 완료' 
-ORDER BY
-    a.START_DATE
+<select id="getBaseballMatches" resultType="com.tap.matchlist.dto.MatchListDTO">
+    SELECT
+ 	   a.name,
+         a.application_seq,
+        a.start_date AS startDate,  <!-- 매핑 이름 변경 -->
+        a.end_date AS endDate,      <!-- 매핑 이름 변경 -->
+        a.open_date AS openDate,    <!-- 매핑 이름 변경 -->
+        place.PLACE_NAME AS placeName,  <!-- 필요시 추가 -->
+        home_team.TEAM_NAME AS homeTeamName,  <!-- 매핑 이름 변경 -->
+        home_team.LOGO_IMAGE AS homeTeamLogo,  <!-- 매핑 이름 변경 -->
+        away_team.TEAM_NAME AS awayTeamName,  <!-- 매핑 이름 변경 -->
+        away_team.LOGO_IMAGE AS awayTeamLogo   <!-- 매핑 이름 변경 -->
+        , place.place_seq
+        ,a.max_ticket
+    FROM
+        APPLY a
+    LEFT JOIN
+        TEAM home_team ON a.PLACE_SEQ = home_team.PLACE_SEQ
+    LEFT JOIN
+        TEAM away_team ON a.AWAY_TEAM_SEQ = away_team.TEAM_SEQ
+    LEFT JOIN
+        PLACE place ON a.PLACE_SEQ = place.PLACE_SEQ            
+    WHERE
+        a.SUB_CATEGORY_SEQ = 3
+        AND a.status = '승인 완료' 
+    ORDER BY
+        a.START_DATE
+</select>
+  <select id="getSoccerMatches" resultType="com.tap.matchlist.dto.MatchListDTO">
+    SELECT
+    a.name,
+    a.application_seq,
+        a.start_date AS startDate,  <!-- 매핑 이름 변경 -->
+        a.end_date AS endDate,      <!-- 매핑 이름 변경 -->
+        a.open_date AS openDate,    <!-- 매핑 이름 변경 -->
+        place.PLACE_NAME AS placeName,  <!-- 필요시 추가 -->
+        home_team.TEAM_NAME AS homeTeamName,  <!-- 매핑 이름 변경 -->
+        home_team.LOGO_IMAGE AS homeTeamLogo,  <!-- 매핑 이름 변경 -->
+        away_team.TEAM_NAME AS awayTeamName,  <!-- 매핑 이름 변경 -->
+        away_team.LOGO_IMAGE AS awayTeamLogo   <!-- 매핑 이름 변경 -->
+        , place.place_seq
+        ,a.max_ticket
+    FROM
+        APPLY a
+    LEFT JOIN
+        TEAM home_team ON a.PLACE_SEQ = home_team.PLACE_SEQ
+    LEFT JOIN
+        TEAM away_team ON a.AWAY_TEAM_SEQ = away_team.TEAM_SEQ
+    LEFT JOIN
+        PLACE place ON a.PLACE_SEQ = place.PLACE_SEQ            
+    WHERE
+        a.SUB_CATEGORY_SEQ = 4
+        AND a.status = '승인 완료' 
+    ORDER BY
+        a.START_DATE
   </select>
 
 
