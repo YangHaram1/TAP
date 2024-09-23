@@ -92,5 +92,13 @@ public class MembersDAO {
         params.put("password", newPassword);
         return mybatis.update("Members.updatePasswordByEmail", params);
     }
+    
+    public String checkCoupon(String id) throws Exception {
+    	return mybatis.selectOne("Members.checkCoupon",id);
+    }
+    
+    public int updateCoupon(String id) throws Exception {
+    	return mybatis.update("Members.updateCoupon",id);
+    }
 	
 }
