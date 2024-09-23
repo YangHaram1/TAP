@@ -8,6 +8,7 @@ public class CouponTypeGradeDTO {
 	private String name;
 	private int min_point;
 	private int benefits;
+	private int coupon_order;
 	public int getSeq() {
 		return seq;
 	}
@@ -50,8 +51,14 @@ public class CouponTypeGradeDTO {
 	public void setBenefits(int benefits) {
 		this.benefits = benefits;
 	}
+	public int getCoupon_order() {
+		return coupon_order;
+	}
+	public void setCoupon_order(int coupon_order) {
+		this.coupon_order = coupon_order;
+	}
 	public CouponTypeGradeDTO(int seq, String title, String contents, int discount, String name, int min_point,
-			int benefits) {
+			int benefits, int coupon_order) {
 		super();
 		this.seq = seq;
 		this.title = title;
@@ -60,10 +67,13 @@ public class CouponTypeGradeDTO {
 		this.name = name;
 		this.min_point = min_point;
 		this.benefits = benefits;
+		this.coupon_order = coupon_order;
 	}
 	public CouponTypeGradeDTO() {
 		super();
 	}
+
+	
 	
 	
 	

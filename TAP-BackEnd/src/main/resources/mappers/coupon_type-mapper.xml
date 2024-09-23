@@ -64,7 +64,7 @@
 	<select id="selectAllCouponGrade" resultType="com.tap.coupon.dto.CouponTypeGradeDTO">
 		select c.*, g.name,g.benefits,g.min_point
 			from coupon_type  c
-			join grade g on c.coupon_order =g.grade_order
+			join grade g on c.coupon_order =g.grade_order order by grade_order
 	</select>
 	
 </mapper>
