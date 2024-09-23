@@ -1,6 +1,6 @@
 import { api } from '../../../../../config/config'
 import styles from './List.module.css'
-import { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import ReactPaginate from 'react-paginate'
@@ -11,6 +11,8 @@ import Swal from 'sweetalert2'
 import {
     faMagnifyingGlass,
     faHouseUser,
+    faAngleUp,
+    faChevronDown,
 } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal/Modal'
 const List = () => {
@@ -26,7 +28,9 @@ const List = () => {
     const [list, setList] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [checkAll, setCheckAll] = useState(false)
+    const [check, setCheck] = useState([])
 
+    const [maxList, setMaxList] = useState(10)
     const navi = useNavigate()
     const handleAddClick = () => {
         setIsModalOpen(true)
@@ -50,6 +54,26 @@ const List = () => {
         setCheckAll(allTrue)
         console.log(regexData)
     }, [regexData])
+
+    useEffect(() => {
+        api.get(`/board`).then(resp => {
+            setList(resp.data)
+            setCheck(
+                resp.data.map(() => {
+                    return false
+                })
+            )
+        })
+    })
+
+    const handleCheck = index => {
+        setCheck(prev => {
+            return prev.map((item, i) => {
+                if (i === index) return !item
+                return item
+            })
+        })
+    }
 
     const handlePage = selectedPage => {
         setCpage(selectedPage.selected + 1)
@@ -124,7 +148,15 @@ const List = () => {
             <div className={styles.list}>
                 <div className={styles.header}>
                     <div style={{ flex: 1 }} className={styles.headerConts}>
-                        <div style={{ flex: 1, padding: `10px` }}>No.</div>
+                        <div
+                            style={{
+                                display: `flex`,
+                                flex: 1,
+                                padding: `10px`,
+                            }}
+                        >
+                            No.
+                        </div>
                         <div style={{ display: 'flex', flex: 3 }}>
                             <div style={{ display: 'flex', flex: 1 }}>제목</div>
                             <div style={{ display: 'flex', flex: 1 }}>
@@ -210,41 +242,68 @@ const List = () => {
                         </Modal>
                     )}
                 </div>
-                {list.map((item, index) => {
+                {/* {list.map((item, index) => {
                     const formattedDate = isNaN(new Date(item.write_date))
                         ? 'Invalid date'
                         : format(
                               new Date(item.write_date),
                               'yyyy-MM-dd HH:mm:ss'
                           )
-                    const date = formattedDate.split(' ')
-
+                    const date = formattedDate.split(' ') */}
+                return (
+                {list.map((item, index) => {
+                    if (index >= maxList) {
+                        return ''
+                    }
+                    const currentDate = format(
+                        new Date(item.write_date),
+                        'yyyy-MM-dd'
+                    )
                     return (
-                        <div
-                            className={styles.dto}
-                            key={index}
-                            onClick={() => handleDetail(item)}
-                        >
-                            <div className={styles.status}>
-                                {item.status === 0 ? '답변대기' : '답변완료'}
+                        <React.Fragment key={index}>
+                            <div className={styles.contents}>
+                                <div
+                                    className={styles.showConts}
+                                    onClick={() => {
+                                        handleCheck(index)
+                                    }}
+                                >
+                                    <div className={styles.leftConts}>
+                                        <div className={styles.title}>
+                                            {item.title}
+                                        </div>
+                                        <div className={styles.write_date}>
+                                            {currentDate}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.rightConts}>
+                                        <div className={styles.toggleIcon}>
+                                            <FontAwesomeIcon
+                                                icon={
+                                                    !check[index]
+                                                        ? faChevronDown
+                                                        : faAngleUp
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {check[index] && (
+                                    <div className={styles.hideConts}>
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: item.contents,
+                                            }}
+                                        ></div>
+                                    </div>
+                                )}
                             </div>
-                            <div className={styles.body}>
-                                <div className={styles.title}>
-                                    {item.member_id}
-                                </div>
-                                <div className={styles.category}>
-                                    {item.category}
-                                </div>
-                                <div className={styles.writeDate}>
-                                    {date[0]}
-                                </div>
-                                <div className={styles.writeDate}>
-                                    {date[1]}
-                                </div>
-                            </div>
-                        </div>
+                        </React.Fragment>
                     )
                 })}
+                ) })}
             </div>
         </div>
     )
