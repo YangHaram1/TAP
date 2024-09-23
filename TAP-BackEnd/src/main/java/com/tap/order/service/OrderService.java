@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tap.order.dao.OrderDAO;
+import com.tap.order.dto.BookSeatsDTO;
 import com.tap.order.dto.OrdersDTO;
 import com.tap.order.dto.PlaceAndSectionDTO;
 import com.tap.order.dto.SectionInnerDataDTO;
@@ -38,6 +39,39 @@ public class OrderService {
 	
 	public int getPoint(String id) {
 		return oDao.getPoint(id);
+	}
+	
+	public int checkSeat(Map<String,Object> orderData) {
+		
+		int count=0;
+		//섹션정보
+		int storageSection = Integer.parseInt(orderData.get("storageSection").toString());
+		//좌석정보
+		List<Map<String, Object>> storageSeats = (List) orderData.get("storageSeats");
+	    String date = (String) orderData.get("date");
+	    String time = (String) orderData.get("time");
+	    int seq = Integer.parseInt(orderData.get("seq").toString());
+		
+		for (int i = 0; i < storageSeats.size(); i++) {
+	        Map<String, Object> map = storageSeats.get(i);
+			
+			String seatId = (String) map.get("seatId");
+		    String[] seatParts = seatId.split("-");
+		    
+		    String row = seatParts[0]; // "3"이 row
+		    String col = seatParts[1]; // "7"이 col
+		    map.put("row", row);
+		    map.put("col", col);
+		    map.put("date", date);
+			map.put("time", time);
+			map.put("storageSection",storageSection);
+			map.put("seq", seq);
+			
+			count += oDao.checkSeat(map);
+			System.out.println("좌석 체크하는 중: " + map);
+		}
+		
+		return count;
 	}
 	
 	@Transactional
@@ -118,6 +152,10 @@ public class OrderService {
 	
 	public void insertExcite(Map<String,Object> data) {
 		oDao.insertExcite(data);
+	}
+	
+	public List<BookSeatsDTO> getBookSeats(Map<String,Object> map){
+		return oDao.getBookSeats(map);
 	}
 	
 }

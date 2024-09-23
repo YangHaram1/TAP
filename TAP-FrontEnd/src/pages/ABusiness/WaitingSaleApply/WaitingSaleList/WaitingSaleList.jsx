@@ -74,7 +74,7 @@ export const WaitingSaleList =()=>{
                     <th>공연장 및 일시</th>
                     <th>할인율</th>
                     <th>상태</th>
-                    <th>신청<br/>취소</th>
+                    <th>신청취소</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -116,7 +116,7 @@ export const WaitingSaleList =()=>{
                     <td>
                     {product.STATUS !== '반려' && (
                         <button className={styles.manage_button} onClick={() => handleCancel(product.APPLICATION_SEQ)}>
-                            신청<br/>취소
+                            신청취소
                         </button>
                     )}
                      {product.STATUS === '반려' && (

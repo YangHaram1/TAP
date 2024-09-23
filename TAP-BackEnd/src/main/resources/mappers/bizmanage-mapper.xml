@@ -162,13 +162,11 @@ GROUP BY
     f.files_sysname
 ORDER BY MAX(s.sale_seq) DESC
 </select>
-<update id="cancelSaleRegistration">
-    UPDATE 
-	    	sale 
-	    SET 
-	    	sale_approved = '취소'
+<delete id="cancelSaleRegistration">
+    delete 
+	  	from sale 
 	    WHERE application_seq = #{applicationSeq}
-</update>
+</delete>
 
 <select id="getAllSaleRecentApproved" resultMap="TimestampResultMap">
 SELECT 

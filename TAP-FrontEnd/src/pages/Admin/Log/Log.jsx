@@ -178,7 +178,7 @@ export const Log = () => {
                                 >
                                     <option value="">검색 유형</option>
                                     <option value="name">이름</option>
-                                    <option value="memberId">아이디</option>
+                                    <option value="member_id">아이디</option>
                                 </select>
                                 <input
                                     className={styles.typeInput}

@@ -28,4 +28,11 @@
 <select id="getGrade" resultType="com.tap.grade.dto.GradeDTO">
     select * from grade
 </select>
+
+
+<update id="updateMemberStatus">
+	update members set grade_seq = #{gradeSeq} , enabled = #{enabled}
+    where id= #{orderSeq}
+	</update>
+
 </mapper>

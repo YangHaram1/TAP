@@ -78,6 +78,13 @@ public class AdminDashController {
 		AdminDashDTO dto = AdDashServ.getTotalToday();
 		return ResponseEntity.ok(dto);
 	}
+	// 환불
+	@GetMapping("/getrefund")
+	public ResponseEntity<HashMap<String, Object>> getRefundToday(){
+		
+		return ResponseEntity.ok(AdDashServ.getRefundToday());
+	}
+	
 	// 카테고리 별 주문건수 =======================
 	@GetMapping("/getordercount")
 	public ResponseEntity<List<HashMap<String, Object>>> getOrderCountByCategory(){

@@ -8,29 +8,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Toolti
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 export const Dash=()=>{
     
-    useEffect(()=>{
-        // // 상품등록 건수 | created_at : 오늘, status: '승인 대기' 인 상품등록 건수 
-        // // 상품세일 건수 | sale_approved : '승인 대기' 인 상품세일 건수 
-        // // 배송 준비중 갯수 | delivery_status : '배송 준비중' 
-        // ------------------------------------api.get(`/admin/dash/getapply`)
-        // ------------------------------------api.get(`/admin/dash/getsale`)
-        // api.get(`/admin/dash/getdelivery`)
-        
-        // // 상품 등록 갯수 | updated_at : 오늘인 상품 갯수 
-        // // 상품 세일 승인 갯수 | sale_approved : '승인 완료' 갯수
-        // // 주문 - 배송 | delievery_status: '발송 완료' 갯수
-        // api.get(`/admin/dash/getapplytoday`)
-        // api.get(`/admin/dash/getsaletoday`)
-        // api.get(`/admin/dash/getdeliverytoday`)
-        
-        // // 주문 - 오늘 주문 | order_date : 오늘 + 총 금액
-        // api.get(`/admin/dash/getorder`)
-        // // 주문 | status : '환불' 인 건수 + 총 금액 
-        // api.get(`/admin/dash/getrefund`)
-        // // 카테고리 별 주문 건수  - group by 로 하면 카테고리 별 카운트 가져올 수 있나?
-       
-    })
-
+   
     const [orderCounts, setOrderCounts] = useState([]);
     const [applyTodayCounts, setApplyTodayCounts] = useState('');
     const [saleTodayCounts, setSaleTodayCounts] = useState('');
@@ -41,6 +19,9 @@ export const Dash=()=>{
     const [doneDeliveryCounts, setDoneDeliveryCounts] = useState('');
     // ==== total price ===
     const [totalToday, setTotalToday] = useState([])
+    // ==== refund price ====
+    const [refundAmount, setRefundAmount] = useState([]);
+
     useEffect(() => {
         // 카테고리별 주문 건수 - group by 로 하면 카테고리 별 카운트 가져올 수 있나?
         api.get('admin/dash/getordercount')
@@ -94,6 +75,14 @@ export const Dash=()=>{
                 console.log(resp.data)
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
+
+        // ============== 환불 금액 ===============
+        api.get('/admin/dash/getrefund')
+            .then((resp) => {
+                setRefundAmount(resp.data); // 환불 금액 설정
+                console.log(resp.data);
+            })
+            .catch((error) => console.error('Error fetching refund amount:', error));
     }, []);
 
     // 카테고리별 주문 건수를 그래프로 표현하기 위한 데이터 구성
@@ -170,17 +159,17 @@ export const Dash=()=>{
                                 <tr>
                                     <td>상품신청</td>
                                     <td> {applyTodayCounts} 건</td>
-                                    <td> </td>
+                                    <td> {applyTodayCounts === 0 ? "건수 없음" : "처리 필요"}</td>
                                 </tr>
                                 <tr>
                                     <td>세일신청</td>
                                     <td>{saleTodayCounts} 건</td>
-                                    <td></td>
+                                    <td> {saleTodayCounts === 0 ? "건수 없음" : "처리 필요"}</td>
                                 </tr>
                                 <tr>
                                     <td>배송 준비중</td>
                                     <td>{deliveryTodayCounts} 건</td>
-                                    <td>원</td>
+                                    <td> {deliveryTodayCounts === 0 ? "건수 없음" : "처리 필요"}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -204,17 +193,17 @@ export const Dash=()=>{
                                 <tr>
                                     <td>상품승인</td>
                                     <td> {doneApprovedCounts} 건</td>
-                                    <td> 원</td>
+                                    <td>  {doneApprovedCounts=== 0 ? "건수 없음" : "처리 완료"}</td>
                                 </tr>
                                 <tr>
                                     <td>세일승인</td>
                                     <td>{doneSaleCounts} 건</td>
-                                    <td></td>
+                                    <td>{doneSaleCounts=== 0 ? "건수 없음" : "처리 완료"}</td>
                                 </tr>
                                 <tr>
                                     <td>발송 완료</td>
                                     <td>{doneDeliveryCounts} 건</td>
-                                    <td>원</td>
+                                    <td>{doneDeliveryCounts=== 0 ? "건수 없음" : "전달 완료"} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -222,16 +211,27 @@ export const Dash=()=>{
                 </div>
             </div>
             <div className={styles.row2}>
-            <div className={styles.dollar}>
-                <h2>이번달 총 매출</h2>
-                <div className={styles.total_sum}>{Number(totalToday.total_sum)?.toLocaleString()} 원</div>
-                <div className={styles.total_count_box}>{totalToday.total_count} 건</div>
-            </div>
-
+                <div className={styles.dollar}>
+                    <h2>이번달 총 매출</h2>
+                    <div className={styles.total_sum}>{Number(totalToday.total_sum)?.toLocaleString()} 원</div>
+                    <div className={styles.total_count_box}>{totalToday.total_count} 건</div>
+                </div>
 
                 <div className={styles.order}>
                     <h2>카테고리별 주문 건수</h2>
                     <Bar data={barChartData} options={barChartOptions} />
+                </div>
+            </div>
+
+            <div className={styles.row2}>
+                <div className={styles.refund}>
+                    <h2>이번달 환불 금액</h2>
+                    <div className={styles.total_sum}>
+                    {Number(refundAmount.REFUND_SUM || 0).toLocaleString()} 원
+                    </div>
+                    <div className={styles.total_count_box}>
+                    {refundAmount.REFUND_COUNT || 0} 건
+                    </div>
                 </div>
             </div>
         </div>

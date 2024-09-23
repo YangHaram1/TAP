@@ -41,9 +41,13 @@ AND concat(current_date, '23:59:59')
 AND status='승인 완료'
 </select>
 <select id="getSaleApprovedCountToday" resultType="int">
-SELECT count(*) 
-FROM sale
-where sale_approved='승인 완료'
+SELECT COUNT(*)
+FROM (
+    SELECT application_seq
+    FROM sale
+    WHERE sale_approved = '승인 완료'
+    GROUP BY application_seq
+) 
 </select>
 <select id="getDeliveryApprovedCountToday" resultType="int">
 SELECT count(*) 
@@ -55,9 +59,15 @@ where delivery_status='발송 완료'
 SELECT SUM(total_price) AS total_sum, 
 count(*) as total_count
 FROM orders
+where status='완료'
 </select>
 
-
+<select id="getRefundToday" resultMap="TimestampResultMap">
+SELECT SUM(total_price) AS refund_sum, 
+count(*) as refund_count
+FROM orders
+where status='취소'
+</select>
 
 
 <select id="getOrderCountByCategory" resultMap="TimestampResultMap">

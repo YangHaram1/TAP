@@ -14,17 +14,20 @@
     margin-top: 30px;
     margin-bottom: 10px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     width: 60%;
 }
 
-.btns button{
+.btns button {
     border: 0px;
-    border-bottom: solid rgba(0, 0, 0, 0);
+    border-bottom: 2px solid transparent;
     color: purple;
-    background-color: rgba(250, 235, 215, 0);
+    background-color: transparent;
     font-size: 15px;
     font-weight: 700;
+    padding: 10px 20px;
+    margin-right: 20px;
+    transition: all 0.3s ease;
 }
 
 .btns button:hover{
