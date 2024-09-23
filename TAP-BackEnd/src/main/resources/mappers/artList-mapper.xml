@@ -18,7 +18,7 @@
 		left outer join place p on a.place_seq = p.place_seq
 		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
 		left outer join files f on a.application_seq = f.files_parent_seq 
-		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and sysdate > open_date
+		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and (SYSDATE + INTERVAL '9' HOUR) > open_date
 		order by a.application_seq desc
 	</select>
 	
@@ -37,7 +37,7 @@
 		left outer join place p on a.place_seq = p.place_seq
 		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
 		left outer join files f on a.application_seq = f.files_parent_seq 
-		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and open_date > sysdate
+		where sc.sub_category_seq = #{category} and f.files_type='poster' and a.status='승인 완료' and open_date > (SYSDATE + INTERVAL '9' HOUR)
 		order by a.application_seq desc
 	</select>
 	
@@ -56,7 +56,7 @@
 		left outer join place p on a.place_seq = p.place_seq
 		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
 		left outer join files f on a.application_seq = f.files_parent_seq 
-		where (#{genre} = '0' OR a.genre_seq = #{genre})  and f.files_type='poster' and a.status='승인 완료' and sysdate > open_date and sc.sub_category_seq=#{category}
+		where (#{genre} = '0' OR a.genre_seq = #{genre})  and f.files_type='poster' and a.status='승인 완료' and (SYSDATE + INTERVAL '9' HOUR) > open_date and sc.sub_category_seq=#{category}
 		order by a.application_seq desc
 	</select>
 	
@@ -75,7 +75,7 @@
 		left outer join place p on a.place_seq = p.place_seq
 		left outer join sub_category sc on a.sub_category_seq = sc.sub_category_seq
 		left outer join files f on a.application_seq = f.files_parent_seq 
-		where f.files_type='poster' and a.status='승인 완료' and open_date > sysdate and sub_category_name in ('콘서트', '뮤지컬')
+		where f.files_type='poster' and a.status='승인 완료' and open_date > (SYSDATE + INTERVAL '9' HOUR) and sub_category_name in ('콘서트', '뮤지컬')
 		order by a.start_date
 	</select>
 	

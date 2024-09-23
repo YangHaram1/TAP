@@ -40,7 +40,7 @@
 .poster img{
     width: 95%;
     height: 100%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 5px;
 }
 
