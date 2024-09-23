@@ -6,7 +6,7 @@ const Board = () => {
     return (
         <div className={styles.container}>
             <Routes>
-                <Route path="notice" element={<Notice></Notice>} />
+                <Route path="notice/*" element={<Notice></Notice>} />
             </Routes>
         </div>
     )

@@ -7,7 +7,7 @@ const Notice = () => {
         <div className={styles.container}>
             <Routes>
                 <Route path="" element={<List />}></Route>
-                <Route path="detail/:seq" element={<Detail />}></Route>
+                <Route path="detail/:board_seq" element={<Detail />}></Route>
             </Routes>
         </div>
     )

@@ -13,8 +13,10 @@ import {
     faHouseUser,
     faAngleUp,
     faChevronDown,
+    faSleigh,
 } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal/Modal'
+import SweetAlert from '../../../../../components/SweetAlert/SweetAlert'
 const List = () => {
     const editorRef = useRef(null)
     const [regexData, setRegexData] = useState({
@@ -39,6 +41,32 @@ const List = () => {
         setIsModalOpen(false)
     }
 
+    const handleCheck = index => {
+        setCheck(prev => {
+            const temp = [...prev]
+            temp[index] = !temp[index]
+            return temp
+        })
+    }
+
+    const handleDelete = board_seq => {
+        api.delete(`/board/delete/${board_seq}`).then(resp => {
+            Swal.fire({
+                icon: 'success',
+                title: '공지사항',
+                text: '삭제 되었습니다.',
+            })
+            setList(prev => {
+                return prev.filter((item, index) => {
+                    if (item.board_seq === board_seq) {
+                        return false
+                    }
+                    return true
+                })
+            })
+        })
+    }
+
     //페이지
     const [cpage, setCpage] = useState(1)
     const [page_total_count, setPage_total_count] = useState(1)
@@ -57,6 +85,7 @@ const List = () => {
 
     useEffect(() => {
         api.get(`/board`).then(resp => {
+            console.log(resp.data)
             setList(resp.data)
             setCheck(
                 resp.data.map(() => {
@@ -64,28 +93,28 @@ const List = () => {
                 })
             )
         })
-    })
+    }, [])
 
-    const handleCheck = index => {
-        setCheck(prev => {
-            return prev.map((item, i) => {
-                if (i === index) return !item
-                return item
-            })
-        })
-    }
+    // const handleCheck = index => {
+    //     setCheck(prev => {
+    //         return prev.map((item, i) => {
+    //             if (i === index) return !item
+    //             return item
+    //         })
+    //     })
+    // }
 
     const handlePage = selectedPage => {
         setCpage(selectedPage.selected + 1)
     }
 
     const handleDetail = item => {
-        const seq = item?.seq
-        if (!item || !item.seq) {
-            console.error('Invalid item or seq:', item)
+        const board_seq = item?.board_seq
+        if (!item || !item.board_seq) {
+            console.error('Invalid item or board_seq:', item)
             return
         }
-        navi(`detail/${seq}`)
+        navi(`detail/${board_seq}`)
     }
 
     const handleData = e => {
@@ -150,14 +179,19 @@ const List = () => {
                     <div style={{ flex: 1 }} className={styles.headerConts}>
                         <div
                             style={{
-                                display: `flex`,
-                                flex: 1,
-                                padding: `10px`,
+                                display: 'flex',
+                                flex: 3,
+                                alignItems: `center`,
                             }}
                         >
-                            No.
-                        </div>
-                        <div style={{ display: 'flex', flex: 3 }}>
+                            <div
+                                style={{
+                                    display: `flex`,
+                                    flex: 1,
+                                }}
+                            >
+                                No.
+                            </div>
                             <div style={{ display: 'flex', flex: 1 }}>제목</div>
                             <div style={{ display: 'flex', flex: 1 }}>
                                 작성날짜
@@ -242,6 +276,103 @@ const List = () => {
                         </Modal>
                     )}
                 </div>
+                <div>
+                    <div style={{ flex: 1 }} className={styles.headerConts}>
+                        {list.map((item, index) => {
+                            const formattedDate = isNaN(
+                                new Date(item.write_date)
+                            )
+                                ? 'Invalid date'
+                                : format(
+                                      new Date(item.write_date),
+                                      'yyyy-MM-dd HH:mm:ss'
+                                  )
+                            const date = formattedDate.split(' ')
+
+                            return (
+                                <React.Fragment key={index}>
+                                    <div className={styles.mainContainer}>
+                                        {' '}
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flex: '4',
+                                            }}
+                                            className={styles.dto}
+                                            key={index}
+                                            onClick={() => handleDetail(item)}
+                                        >
+                                            <div
+                                                className={styles.body}
+                                                onClick={() => {
+                                                    return handleCheck(index)
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flex: 1,
+                                                    }}
+                                                >
+                                                    {item.board_seq}
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flex: 1,
+                                                    }}
+                                                >
+                                                    {item.title}
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flex: 1,
+                                                    }}
+                                                >
+                                                    {/* {item.write_date} */}
+                                                    {date[0]}
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flex: 1,
+                                                    }}
+                                                >
+                                                    {date[1]}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flex: 1,
+                                            }}
+                                        >
+                                            <button
+                                                onClick={() => {
+                                                    SweetAlert(
+                                                        'warning',
+                                                        '게시글',
+                                                        '삭제 하시겠습니까?',
+                                                        () =>
+                                                            handleDelete(
+                                                                item.board_seq
+                                                            ),
+                                                        null
+                                                    )
+                                                }}
+                                                className={styles.deleteBtn}
+                                            >
+                                                삭제
+                                            </button>
+                                        </div>
+                                    </div>
+                                </React.Fragment>
+                            )
+                        })}
+                    </div>
+                </div>
                 {/* {list.map((item, index) => {
                     const formattedDate = isNaN(new Date(item.write_date))
                         ? 'Invalid date'
@@ -249,61 +380,7 @@ const List = () => {
                               new Date(item.write_date),
                               'yyyy-MM-dd HH:mm:ss'
                           )
-                    const date = formattedDate.split(' ') */}
-                return (
-                {list.map((item, index) => {
-                    if (index >= maxList) {
-                        return ''
-                    }
-                    const currentDate = format(
-                        new Date(item.write_date),
-                        'yyyy-MM-dd'
-                    )
-                    return (
-                        <React.Fragment key={index}>
-                            <div className={styles.contents}>
-                                <div
-                                    className={styles.showConts}
-                                    onClick={() => {
-                                        handleCheck(index)
-                                    }}
-                                >
-                                    <div className={styles.leftConts}>
-                                        <div className={styles.title}>
-                                            {item.title}
-                                        </div>
-                                        <div className={styles.write_date}>
-                                            {currentDate}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.rightConts}>
-                                        <div className={styles.toggleIcon}>
-                                            <FontAwesomeIcon
-                                                icon={
-                                                    !check[index]
-                                                        ? faChevronDown
-                                                        : faAngleUp
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {check[index] && (
-                                    <div className={styles.hideConts}>
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: item.contents,
-                                            }}
-                                        ></div>
-                                    </div>
-                                )}
-                            </div>
-                        </React.Fragment>
-                    )
-                })}
-                ) })}
+                    const date = formattedDate.split(' ')} */}
             </div>
         </div>
     )
