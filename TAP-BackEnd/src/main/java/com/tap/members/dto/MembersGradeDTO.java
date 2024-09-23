@@ -8,6 +8,7 @@ public class MembersGradeDTO {
 	private String name;
 	private String grade;
 	private String role;
+	private int grade_order;
 	public String getPw() {
 		return pw;
 	}
@@ -32,16 +33,25 @@ public class MembersGradeDTO {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public MembersGradeDTO(String pw, String name, String grade, String role) {
+	public int getGrade_order() {
+		return grade_order;
+	}
+	public void setGrade_order(int grade_order) {
+		this.grade_order = grade_order;
+	}
+	public MembersGradeDTO(String pw, String name, String grade, String role, int grade_order) {
 		super();
 		this.pw = pw;
 		this.name = name;
 		this.grade = grade;
 		this.role = role;
+		this.grade_order = grade_order;
 	}
 	public MembersGradeDTO() {
 		super();
 	}
+	
+	
 	
 	
 }

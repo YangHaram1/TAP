@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.coupon.dto.CouponDTO;
+import com.tap.coupon.dto.CouponTypeGradeDTO;
+import com.tap.coupon.service.CouponService;
+import com.tap.coupon.service.CouponTypeService;
 import com.tap.grade.dto.GradeDTO;
 import com.tap.grade.service.GradeService;
 
@@ -28,6 +31,8 @@ public class GradeController {
 	@Autowired
 	private GradeService serv;
 	
+	@Autowired
+	private CouponTypeService cserv;
 	
 	@PostMapping
 	public ResponseEntity<String> insert(@RequestBody GradeDTO dto ) throws Exception {
@@ -77,6 +82,13 @@ public class GradeController {
 		map.put("keyword", keyword);
 		Map<String, Object> list =serv.selectList(map);
 		
+		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping("/CouponGrade")
+	ResponseEntity<List<CouponTypeGradeDTO>> selectAllCouponGrade() throws Exception {
+		
+		List<CouponTypeGradeDTO> list =cserv.selectAllCouponGrade();
 		return ResponseEntity.ok(list);
 	}
 	

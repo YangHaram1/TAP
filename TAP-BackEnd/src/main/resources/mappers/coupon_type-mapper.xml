@@ -10,7 +10,11 @@
 		</selectKey>
 	</insert>
 	
-	<select id="selectAll" resultType="com.tap.coupon.dto.CouponTypeGrade">
+	<select id="selectByOrder" resultType="com.tap.coupon.dto.CouponTypeDTO">
+		select * from coupon_type where coupon_order &lt;= ${grade_order}
+	</select>
+	
+	<select id="selectAll" resultType="com.tap.coupon.dto.CouponTypeGradeDTO">
 	
 		select a.* from
 		(
@@ -57,5 +61,10 @@
 		delete from coupon_type where seq=${seq}
 	</delete>
 	
+	<select id="selectAllCouponGrade" resultType="com.tap.coupon.dto.CouponTypeGradeDTO">
+		select c.*, g.name,g.benefits,g.min_point
+			from coupon_type  c
+			join grade g on c.coupon_order =g.grade_order
+	</select>
 	
 </mapper>

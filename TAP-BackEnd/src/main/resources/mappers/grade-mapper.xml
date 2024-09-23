@@ -57,7 +57,7 @@
 	
 	
 	<update id="updateByAdd">
-		update grade set grade_order= grade_order +1 where grade_order>= ${grade_order}
+		update grade set grade_order= grade_order +1 where grade_order>= ${grade_order} 
 	</update>
 	
 	<update id="updateByDelete">
