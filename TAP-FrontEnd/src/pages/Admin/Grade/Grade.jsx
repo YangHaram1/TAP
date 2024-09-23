@@ -7,7 +7,7 @@ import { api } from '../../../config/config';
 import Swal from 'sweetalert2';
 import SweetAlert from '../../../components/SweetAlert/SweetAlert';
 
-const Grade =()=>{
+const Grade = () => {
     const [add, setAdd] = useState(false);
     const [list, setList] = useState([{
         seq: 1,
@@ -43,7 +43,7 @@ const Grade =()=>{
 
     const [addForm, setAddForm] = useState(false);
     const [check, setCheck] = useState([]);
-    const [target, setTarget] = useState('');
+    const [target, setTarget] = useState('grade_order');
     const [keyword, setKeyword] = useState('');
 
     const [cpage, setCpage] = useState(1);
@@ -58,10 +58,10 @@ const Grade =()=>{
     }, [list])
 
     useEffect(() => {
-        api.get(`/grade`).then((resp) => {
+        api.get(`/admin/mem/grades`).then((resp) => {
             setGrade(resp.data)
         })
-    }, [])
+    }, [add])
 
     const handlePage = (selectedPage) => {
         setCpage(selectedPage.selected + 1);
@@ -77,22 +77,17 @@ const Grade =()=>{
             return temp;
         })
     }
-    const handleDelete = (seq) => {
-        api.delete(`/coupon/type/${seq}`).then((resp) => {
+    const handleDelete = (item) => {
+        const seq=item.seq;
+        const gradeOrder=item.grade_order
+        api.delete(`/grade/${seq}/${gradeOrder}`).then((resp) => {
             Swal.fire({
                 icon: 'success',
-                title: '쿠폰',
+                title: '등급',
                 text: '삭제 됬습니다.'
             })
-            setList((prev) => {
-                return (
-                    prev.filter((item, index) => {
-                        if (item.seq === seq) {
-                            return false
-                        }
-                        return true;
-                    })
-                )
+            setAdd((prev)=>{
+                return !prev;
             })
         })
     }
@@ -103,7 +98,7 @@ const Grade =()=>{
             const start = cpage * recordCountPerPage - (recordCountPerPage - 1); //1
             const end = cpage * recordCountPerPage; //10
 
-            api.get(`/coupon/type?start=${start}&end=${end}&keyword=${keyword}&target=${target}`).then((resp) => {
+            api.get(`/grade/list?start=${start}&end=${end}&keyword=${keyword}&target=${target}`).then((resp) => {
                 setList(() => {
                     const record_total_count = resp.data.count;//106 10 // 10
                     if (record_total_count % recordCountPerPage === 0) {
@@ -141,7 +136,7 @@ const Grade =()=>{
         <div className={styles.container}>
             <div className={styles.header}>
                 <div style={{ flex: 1 }}>
-                    쿠폰 종류
+                    멤버쉽 관리
                 </div>
                 <select value={recordCountPerPage} onChange={(e) => setRecordCountPerPage(e.target.value)}>
                     <option value={5}>5 </option>
@@ -157,8 +152,7 @@ const Grade =()=>{
                     setTarget(e.target.value);
                     setKeyword('');
                 }} className={styles.select}>
-                    <option value="">유형</option>
-                    <option value="title">제목</option>
+                    <option value="grade_order">등급 순서</option>
                     <option value="grade">등급</option>
                 </select>
                 <div className={styles.searchInput}>
@@ -179,9 +173,16 @@ const Grade =()=>{
                             )
                             :
                             (
-                                <input type="text" placeholder='검색할 단어를 입력해주세요' value={keyword} onChange={(e) => {
-                                    setKeyword(e.target.value)
-                                }} />
+                                <select className={styles.select} value={keyword} onChange={handleChange}>
+                                    <option value="">선택</option>
+                                    {
+                                        grade.map((item, index) => {
+                                            return (
+                                                <option value={item.grade_order}>{item.grade_order}</option>
+                                            )
+                                        })
+                                    }
+                                </select>
                             )
                     }
 
@@ -198,16 +199,16 @@ const Grade =()=>{
                 <div className={styles.header1}>
                     <div style={{ display: 'flex', flex: 1 }}>
                         <div style={{ display: 'flex', flex: 1 }}>
-                            번호
+                            등급 순서
                         </div>
                         <div style={{ display: 'flex', flex: 1 }}>
-                            쿠폰 등급
+                            등급
                         </div>
                         <div style={{ display: 'flex', flex: 1 }}>
-                            이름
+                            조건
                         </div>
                         <div style={{ display: 'flex', flex: 1 }}>
-                            할인
+                            혜택
                         </div>
                         <div style={{ display: 'flex', flex: 0.5 }}>
                             <button className={styles.addBtn} onClick={() => { setAddForm(true) }}>추가</button>
@@ -221,25 +222,25 @@ const Grade =()=>{
                                 <div className={styles.dto} key={index} onClick={() => handleDetail(item)}>
                                     <div className={styles.body} onClick={() => { return handleCheck(index) }}>
                                         <div className={styles.seq}>
-                                            {item.seq}
+                                            {item.grade_order}
                                         </div>
                                         <div className={styles.grade}>
                                             {item.name}
                                         </div>
                                         <div className={styles.title}>
-                                            {item.title}
+                                            {item.min_point}
                                         </div>
                                         <div className={styles.discount}>
-                                            {item.discount}원
+                                            {item.benefits}%
                                         </div>
                                     </div>
                                     <div style={{ display: 'flex', flex: 0.5 }}>
-                                        <button className={styles.deleteBtn} onClick={() => SweetAlert('warning', '쿠폰', '삭제 하시겠습니까?', () => handleDelete(item.seq), null)}>삭제</button>
+                                        <button className={styles.deleteBtn} onClick={() => SweetAlert('warning', '멤버쉽', '삭제 하시겠습니까?', () => handleDelete(item), null)}>삭제</button>
                                     </div>
                                 </div>
-                                {check[index] && (<div dangerouslySetInnerHTML={{ __html: item.contents }} className={styles.contents}>
+                                {/* {check[index] && (<div dangerouslySetInnerHTML={{ __html: item.contents }} className={styles.contents}>
 
-                                </div>)}
+                                </div>)} */}
                             </React.Fragment>
 
                         )
@@ -262,7 +263,7 @@ const Grade =()=>{
                     forcePage={cpage > 0 ? cpage - 1 : 0}
                 />
             </div>
-            {addForm && (<AddForm setAddForm={setAddForm} setAdd={setAdd} grade={grade} />)}
+            {addForm && (<AddForm setAddForm={setAddForm} setAdd={setAdd} grade={grade} setList={setList} setGrade={setGrade} />)}
         </div>
     )
 }

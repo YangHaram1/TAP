@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.tap.coupon.dao.CouponTypeDAO;
 import com.tap.coupon.dto.CouponTypeDTO;
+import com.tap.coupon.dto.CouponTypeGradeDTO;
 
 @Service
 public class CouponTypeService {
@@ -17,11 +18,11 @@ public class CouponTypeService {
 	private CouponTypeDAO ctdao;
 
 	
-	public void insert(CouponTypeDTO dto) {
+	public void insert(CouponTypeDTO dto) throws Exception{
 		ctdao.insert(dto);
 	}
 
-	public Map<String, Object> selectAll(Map<String, Object> map) {
+	public Map<String, Object> selectAll(Map<String, Object> map) throws Exception{
 		Map<String, Object> result =new HashMap<>();
 		result.put("list", ctdao.selectAll(map));
 		result.put("count", ctdao.getCount(map));
@@ -29,8 +30,16 @@ public class CouponTypeService {
 		return result;
 	}
 
-	public int delete(int seq) {
+	public int delete(int seq) throws Exception{
 		return ctdao.delete(seq);
+	}
+
+	public List<CouponTypeDTO> selectByOrder(int grade_order) {
+		return ctdao.selectByOrder(grade_order);
+	}
+	
+	public List<CouponTypeGradeDTO> selectAllCouponGrade(){
+		return ctdao.selectAllCouponGrade();
 	}
 	
 	

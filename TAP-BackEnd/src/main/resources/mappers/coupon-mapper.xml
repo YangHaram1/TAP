@@ -4,9 +4,9 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Coupon">
 	<insert id="insert">
-		insert into coupon_type values(coupon.nextval,${type_seq},#{member_id},#{issue_date},${expire_date})
+		insert into coupon values(coupon_seq.nextval,${type_seq},#{member_id},sysdate,sysdate+30,${state})
 		<selectKey resultType="int" order="AFTER" keyProperty="seq">
-			select coupon.currval from dual
+			select coupon_seq.currval from dual
 		</selectKey>
 	</insert>
 </mapper>

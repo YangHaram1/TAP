@@ -1,6 +1,6 @@
 import styles from './Member.module.css';
 import { useAuthStore } from './../../../../../store/store';
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { api } from '../../../../../config/config'
 import Mybutton from '../../MyButton/Mybutton';
 import Swal from 'sweetalert2';
@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 
 const Member = () => {
-    const { loginID } = useAuthStore();
+    const { loginID, role } = useAuthStore();
     const [user, setUser] = useState({ email: '', phone: '' });
     const [address, setAddress] = useState({});
     const [genderCheck, setGenderCheck] = useState(false);
@@ -32,6 +32,14 @@ const Member = () => {
         console.log(regexData)
     }, [regexData])
 
+    const [company, setCompany] = useState([]);
+    useEffect(() => {
+        if (role === 'ROLE_BIZ') {
+            api.get(`/company`).then((resp) => {
+                setCompany(resp.data);
+            })
+        }
+    }, [])
 
     useEffect(() => {
         api.get(`/members`).then((resp) => {
@@ -250,7 +258,7 @@ const Member = () => {
 
                         </div>
                         <div className={styles.span}>
-                            {!updateCheck.phone&& (data.phone === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.phone ? (<span style={{ color: 'blue' }}>입력이 완료되었습니다.</span>) : (<span>{`ex) 010-1111-1111`}</span>)))}
+                            {!updateCheck.phone && (data.phone === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.phone ? (<span style={{ color: 'blue' }}>입력이 완료되었습니다.</span>) : (<span>{`ex) 010-1111-1111`}</span>)))}
                         </div>
                         <div className={styles.updateBtn}>
                             {updateCheck.phone && (<button onClick={() => handleUpdateCheck(phoneRef)} className={styles.btnUpdate}>수정</button>)}
@@ -265,7 +273,7 @@ const Member = () => {
 
                         </div>
                         <div className={styles.span}>
-                            {!updateCheck.email&&( data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (!regexData.isEmailVerified ? (<span>이메일 인증 해주세요.</span>) : (<span style={{ color: 'blue' }}>이메일 인증이 성공했습니다.</span>)) : (<span>이메일 형식을 맞춰주세요</span>)))}
+                            {!updateCheck.email && (data.email === '' ? <span>형식에 맞게 입력해주세요.</span> : (regexData.email ? (!regexData.isEmailVerified ? (<span>이메일 인증 해주세요.</span>) : (<span style={{ color: 'blue' }}>이메일 인증이 성공했습니다.</span>)) : (<span>이메일 형식을 맞춰주세요</span>)))}
                         </div>
                         <div className={styles.updateBtn}>
                             {updateCheck.email && (<button onClick={() => handleUpdateCheck(emailRef)} className={styles.btnUpdate}>수정</button>)}
@@ -280,15 +288,33 @@ const Member = () => {
                         <input type="checkbox" checked={!genderCheck} className={styles.checkBox} disabled />남자
                         <input type="checkbox" checked={genderCheck} className={styles.checkBox} disabled />여자
                     </div>
-                    <div>
-                        {address.address===undefined?<span>기본 배송지 설정이 없습니다.</span>:address.address}
-                    </div>
-                    <div>
-                        {address.detailed_address===undefined?<span>배송지 관리에서 설정하실 수 있습니다.</span>:address.detailed_address}
-                    </div>
-                    <div>
-                        {address.zipcode}
-                    </div>
+                    {role === 'ROLE_USER' ?
+                        (
+                            <React.Fragment>
+                                <div>
+                                    {address.address === undefined ? <span>기본 배송지 설정이 없습니다.</span> : address.address}
+                                </div>
+                                <div>
+                                    {address.detailed_address === undefined ? <span>배송지 관리에서 설정하실 수 있습니다.</span> : address.detailed_address}
+                                </div>
+                                <div>
+                                    {address.zipcode}
+                                </div>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                <div>
+                                    {company.address === undefined ? <span>기본 배송지 설정이 없습니다.</span> : company.address}
+                                </div>
+                                <div>
+                                    {company.detailed_address === undefined ? <span>배송지 관리에서 설정하실 수 있습니다.</span> : company.detailed_address}
+                                </div>
+                                <div>
+                                    {company.zipcode}
+                                </div>
+                            </React.Fragment>
+                        )}
+
                 </div>
 
             </div>

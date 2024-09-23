@@ -1,6 +1,7 @@
 package com.tap.coupon.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.coupon.dto.CouponDTO;
 import com.tap.coupon.dto.CouponTypeDTO;
+import com.tap.coupon.service.CouponService;
 import com.tap.coupon.service.CouponTypeService;
+import com.tap.members.dto.MembersGradeDTO;
+import com.tap.members.service.MembersService;
 
 @RestController
 @RequestMapping("coupon")
@@ -29,17 +33,22 @@ public class CouponController {
 	@Autowired
 	private CouponTypeService ctserv;
 	
+	@Autowired
+	private MembersService mserv;
 	
-	@PostMapping
-	public ResponseEntity<String> insert(@RequestBody CouponDTO dto,Principal principal) throws Exception {
+	@Autowired
+	private CouponService cserv;
+	
+	@PostMapping("/{couponOrder}")
+	public ResponseEntity<String> insert(Principal principal,@PathVariable int couponOrder) throws Exception {
 		if (principal == null) {
 			System.out.println("principal");
 			return ResponseEntity.ok(null);
 		}
 		String username = principal.getName();
-		dto.setMember_id(username);
 		
-		return ResponseEntity.ok(String.valueOf(dto.getSeq()));
+		boolean check=cserv.insert(username,couponOrder);
+		return ResponseEntity.ok(String.valueOf(check));
 	}
 	
 	
@@ -55,7 +64,7 @@ public class CouponController {
 	}
 	
 	@GetMapping("/type")
-	public ResponseEntity<Map<String, Object>> getType(
+	public ResponseEntity<Map<String, Object>> getTypeAll(
 			@RequestParam(name = "start", required = true, defaultValue = "1") int start,
 			@RequestParam(name = "end", required = true, defaultValue = "5") int end,
 			@RequestParam(name = "target", required = false, defaultValue = "") String target,
@@ -66,6 +75,19 @@ public class CouponController {
 		map.put("target", target);
 		map.put("keyword", keyword);
 		Map<String, Object> list =ctserv.selectAll(map);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping("/type/members")
+	public ResponseEntity<List<CouponTypeDTO>> getType(Principal principal) throws Exception{
+		
+		if (principal == null) {
+			System.out.println("principal");
+			return ResponseEntity.ok(null);
+		}
+		String username =principal.getName();
+		MembersGradeDTO dto=mserv.getMemberInfo(username);
+		
+		List<CouponTypeDTO> list =ctserv.selectByOrder(dto.getGrade_order());	
 		return ResponseEntity.ok(list);
 	}
 	

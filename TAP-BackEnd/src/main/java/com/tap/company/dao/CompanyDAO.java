@@ -27,4 +27,5 @@ public class CompanyDAO {
 	public int checkName(String name) throws Exception{
 		return mybatis.selectOne("Company.checkName",name);
 	}
+
 }

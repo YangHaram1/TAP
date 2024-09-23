@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.artlist.dto.ArtListDTO;
 import com.tap.artlist.service.ArtListService;
+import com.tap.detail.dto.ReviewStarDTO;
 
 @RestController
 @RequestMapping("/artlist")
@@ -50,6 +53,29 @@ public class ArtListController {
 		// map 이용해서 두개 담아야할듯
 		return alServ.getTapList(genre, category);
 		
+	}
+	
+	// main 오픈 예정 공연 출력
+	@GetMapping("/getHomeData")
+	public Map<String, Object> getHomeData() {
+		
+		Map<String,Object> map = new HashMap<>();
+		// 오픈 리스트
+		List<ArtListDTO> openList = alServ.getOpenAllList();
+		// 리뷰 리스트
+		List<ReviewStarDTO> reviewList = alServ.getReviewList(); 
+		// 콘서트 리스트 (일주일 내 예매 많은 순 5개)
+		List<ArtListDTO> concertList = alServ.getArtList("콘서트");
+		// 뮤지컬 리스트 (일주일 내 예매 많은 순 5개)
+		List<ArtListDTO> musicalList = alServ.getArtList("뮤지컬");
+		
+		map.put("openList", openList);
+		map.put("reviewList", reviewList);
+		map.put("concertList", concertList);
+		map.put("musicalList", musicalList);
+		
+		
+		return map;
 	}
 	
 }

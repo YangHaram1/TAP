@@ -44,7 +44,7 @@ const Type = () => {
 
     const [addForm, setAddForm] = useState(false);
     const [check, setCheck] = useState([]);
-    const [target, setTarget] = useState('');
+    const [target, setTarget] = useState('title');
     const [keyword, setKeyword] = useState('');
 
     const [cpage, setCpage] = useState(1);
@@ -158,8 +158,8 @@ const Type = () => {
                     setTarget(e.target.value);
                     setKeyword('');
                 }} className={styles.select}>
-                    <option value="">유형</option>
-                    <option value="title">제목</option>
+                    {/* <option value="">유형</option> */}
+                    <option value="title">이름</option>
                     <option value="grade">등급</option>
                 </select>
                 <div className={styles.searchInput}>

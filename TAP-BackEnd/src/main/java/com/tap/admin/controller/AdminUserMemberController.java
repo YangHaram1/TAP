@@ -39,7 +39,7 @@ public class AdminUserMemberController {
     }
 
     @GetMapping("/grades")
-    public List<GradeDTO> getGrade() {
+    public List<GradeDTO> getGrade() throws Exception{
         return gServ.getGrade();
     }
     
