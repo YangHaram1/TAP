@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.tap.grade.dao.GradeDAO;
 import com.tap.grade.dto.GradeDTO;
+
+import jakarta.transaction.Transactional;
 @Service
 public class GradeService {
 	@Autowired
@@ -32,8 +34,21 @@ public class GradeService {
 		
 		return result;
 	}
-	public int delete(int seq) {
-		return gDao.delete(seq);
+	@Transactional
+	public int delete(int seq,int gradeOrder)  throws Exception{
+		int result =gDao.delete(seq);
+		 gDao.updateByDelete(gradeOrder);
+		return result;
+	}
+	
+	@Transactional
+	public int insert(GradeDTO dto)  throws Exception{
+		gDao.updateByAdd(dto.getGrade_order());
+		return gDao.insert(dto);
+		
+	}
+	public boolean checkName(String name) {
+		return gDao.checkName(name);
 	}
 
 }

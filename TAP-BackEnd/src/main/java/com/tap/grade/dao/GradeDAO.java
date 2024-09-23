@@ -36,4 +36,22 @@ public class GradeDAO {
 		return mybatis.delete("Grade.delete",seq);
 	}
 
+	public int insert(GradeDTO dto) {
+		return mybatis.insert("Grade.insert",dto);
+	}
+
+	public boolean checkName(String name) {
+		return mybatis.selectOne("Grade.checkName",name);
+	}
+
+	public void updateByAdd(int grade_order) {
+		 mybatis.update("Grade.updateByAdd",grade_order);
+		
+	}
+	
+	public int updateByDelete(int grade_order) {
+		 return mybatis.update("Grade.updateByDelete",grade_order);
+		
+	}
+
 }

@@ -61,7 +61,7 @@ const Grade = () => {
         api.get(`/admin/mem/grades`).then((resp) => {
             setGrade(resp.data)
         })
-    }, [])
+    }, [add])
 
     const handlePage = (selectedPage) => {
         setCpage(selectedPage.selected + 1);
@@ -77,22 +77,17 @@ const Grade = () => {
             return temp;
         })
     }
-    const handleDelete = (seq) => {
-        api.delete(`/grade/${seq}`).then((resp) => {
+    const handleDelete = (item) => {
+        const seq=item.seq;
+        const gradeOrder=item.grade_order
+        api.delete(`/grade/${seq}/${gradeOrder}`).then((resp) => {
             Swal.fire({
                 icon: 'success',
                 title: '등급',
                 text: '삭제 됬습니다.'
             })
-            setList((prev) => {
-                return (
-                    prev.filter((item, index) => {
-                        if (item.seq === seq) {
-                            return false
-                        }
-                        return true;
-                    })
-                )
+            setAdd((prev)=>{
+                return !prev;
             })
         })
     }
@@ -240,12 +235,12 @@ const Grade = () => {
                                         </div>
                                     </div>
                                     <div style={{ display: 'flex', flex: 0.5 }}>
-                                        <button className={styles.deleteBtn} onClick={() => SweetAlert('warning', '멤버쉽', '삭제 하시겠습니까?', () => handleDelete(item.seq), null)}>삭제</button>
+                                        <button className={styles.deleteBtn} onClick={() => SweetAlert('warning', '멤버쉽', '삭제 하시겠습니까?', () => handleDelete(item), null)}>삭제</button>
                                     </div>
                                 </div>
-                                {check[index] && (<div dangerouslySetInnerHTML={{ __html: item.contents }} className={styles.contents}>
+                                {/* {check[index] && (<div dangerouslySetInnerHTML={{ __html: item.contents }} className={styles.contents}>
 
-                                </div>)}
+                                </div>)} */}
                             </React.Fragment>
 
                         )
@@ -268,7 +263,7 @@ const Grade = () => {
                     forcePage={cpage > 0 ? cpage - 1 : 0}
                 />
             </div>
-            {addForm && (<AddForm setAddForm={setAddForm} setAdd={setAdd} grade={grade} />)}
+            {addForm && (<AddForm setAddForm={setAddForm} setAdd={setAdd} grade={grade} setList={setList} setGrade={setGrade} />)}
         </div>
     )
 }

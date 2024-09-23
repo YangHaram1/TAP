@@ -1,5 +1,7 @@
 package com.tap.company.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,5 +54,17 @@ public class CompanyController {
 	public ResponseEntity<Integer> selectByName(@PathVariable String name) throws Exception {
 		int checkName = cserv.checkName(name); // 1 or 0
 		return ResponseEntity.ok(checkName);
+	}
+	
+	
+	@GetMapping
+	public ResponseEntity<CompanyDTO> selectById(Principal principal) throws Exception {
+		if (principal == null) {
+			System.out.println("principal");
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		CompanyDTO dto= cserv.getCompanyData(username);
+		return ResponseEntity.ok(dto);
 	}
 }
