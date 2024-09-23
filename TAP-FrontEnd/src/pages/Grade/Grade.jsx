@@ -1,17 +1,41 @@
 import styles from './Grade.module.css';
 import heart from '../../images/heart.png';
-import coupon from '../../images/coupon.png'
-import { useEffect } from 'react';
+import couponImg from '../../images/coupon.png'
+import { useEffect, useState } from 'react';
 import { api } from '../../config/config';
 import { useAuthStore } from './../../store/store';
 import Graph from './Graph/Graph';
+import Swal from 'sweetalert2';
 
 const Grade = () => {
     const { grade, name } = useAuthStore();
-
+    const [coupon, setCoupon] = useState([]);
     useEffect(() => {
-
+        api.get(`/coupon/type/members`).then((resp) => {
+            setCoupon(resp.data)
+        })
     }, [])
+
+    const handleAddCoupon=()=>{
+        const couponOrder=coupon[0].coupon_order;
+        api.post(`/coupon/${couponOrder}`).then((resp)=>{
+            if(resp.date==='true'){
+                Swal.fire({
+                    icon:'success',
+                    title:'쿠폰',
+                    text:'쿠폰 발급 되었습니다.'
+                })
+            }
+            else{
+                Swal.fire({
+                    icon:'error',
+                    title:'쿠폰',
+                    text:'이미 발급 하셨습니다.'
+                }) 
+            }
+           
+        })
+    }
     return (
         <div className={styles.container}>
             <div className={styles.title}>
@@ -46,33 +70,30 @@ const Grade = () => {
             </div>
             <div className={styles.contents}>
                 <div>
-                    <div className={styles.content}>
-                        <div>
-                            <img src={coupon} alt="" />
-                        </div>
-                        <div>
-                            30만원이상 결제시
-                        </div>
-                    </div>
-                    <div className={styles.content}>
-                        <div>
-                            <img src={coupon} alt="" />
-                        </div>
-                        <div>
-                            10만원이상 결제시
-                        </div>
-                    </div>
-                    <div className={styles.content}>
-                        <div>
-                            <img src={coupon} alt="" />
-                        </div>
-                        <div>
-                            제한조건없음
-                        </div>
-                    </div>
+                    {
+                        coupon.map((item, index) => {
+                            return (
+                                <div className={styles.content} key={index}>
+                                    <div>
+                                        <img src={couponImg} alt="" />
+                                    </div>
+                                    <div>
+                                        {item.title}
+                                    </div>
+                                    <div>
+                                       {item.contents}
+                                    </div>
+                                    <div>
+                                        {item.discount}원 할인 쿠폰입니다.
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+
                 </div>
                 <div className={styles.bodyBtn}>
-                    <button>쿠폰 모두 받기</button>
+                    <button onClick={handleAddCoupon}>쿠폰 모두 받기</button>
                 </div>
             </div>
             <div className={styles.coupon}>
@@ -128,7 +149,7 @@ const Grade = () => {
                         - 우수회원 추가 포인트는 최대 5,000P이고 유효기간은 12개월(365일)입니다.
                     </div>
                     <div className={styles.gDetail}>
-                        - 약관에 위배되거나 비정상적인 거래 등의 부정거래 행위로 확인될 경우 
+                        - 약관에 위배되거나 비정상적인 거래 등의 부정거래 행위로 확인될 경우
                         <p>  당사자 동의 없이 적립취소(회수, 미적립 등) 될 수 있습니다.</p>
                     </div>
                     <div className={styles.gDetail}>

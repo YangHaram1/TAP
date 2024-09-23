@@ -34,7 +34,7 @@
 	</select>
 		
 	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
-		select pw,role,m.name as name, g.name as grade from members
+		select pw,role,m.name as name, g.name as grade,g.grade_order from members
 		m
 		join grade g on g.seq=m.grade_seq
 		where id=#{id}
@@ -51,6 +51,10 @@
 	
 	<select id="selectMember" resultType="com.tap.members.dto.MembersDTO">
 		select * from members
+	</select>
+	
+	<select id="checkCoupon" resultType="String">
+		select coupon from members where id=#{id}
 	</select>
 
 	<update id="updateMember">
@@ -78,4 +82,9 @@
         SET pw = #{password}
         WHERE email = #{email}
     </update>
+    
+    <update id="updateCoupon">
+    	update members set coupon ='N' where id= #{id}
+    </update>
+    
 </mapper>
