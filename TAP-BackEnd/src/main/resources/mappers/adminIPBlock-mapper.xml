@@ -5,14 +5,13 @@
 
 <mapper namespace="IPBlock">
     <select id="getBlockedIPs" resultType="com.tap.admin.dto.IPBlockDTO">
-        SELECT 
-            id, 
+        SELECT id, 
             ip, 
             reason, 
-            NVL(blocked_at, CURRENT_TIMESTAMP) as blocked_at,
-            unblocked_at,
-            login_attempts,
-            last_attempt_at
+            blocked_at as blockedAt, 
+            unblocked_at as unblockedAt, 
+            login_attempts as loginAttempts, 
+            last_attempt_at as lastAttemptAt
         FROM ip_block
         WHERE unblocked_at IS NULL
         ORDER BY blocked_at DESC
