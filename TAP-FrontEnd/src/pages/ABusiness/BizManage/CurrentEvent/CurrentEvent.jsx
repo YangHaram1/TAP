@@ -30,6 +30,16 @@ export const CurrentEvent=()=>{
         const weekday = date.toLocaleString('ko-KR', { weekday: 'short' });
         return { year, month, day, weekday };
     };
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        // 원하는 포맷으로 변환 (년-월-일)
+        return date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        weekday: 'short',
+        });
+    };
 
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
@@ -48,72 +58,52 @@ export const CurrentEvent=()=>{
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
-            <table>
-                <thead>
-                <tr>
-                    <th>상품정보</th>
-                    <th>판매 오픈일</th>
-                    <th>공연 기간</th>
-                    <th>공연장</th>
-                    <th>할인신청</th>
-                </tr>
-                </thead>
+            <table  className={styles.table}>
+               
                 <tbody>
                 {filtered.slice(currentPage * PER_PAGE, (currentPage +1) * PER_PAGE).map((product, index) => (
                     <tr key={index}>
-                    <td className={styles.product_info}>
-                        <div className={styles.product_image_container}>
-                        <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
-                        <span className={styles.status_tag}>예매중</span> {/* 상태 표시 */}
-                        </div>
-                        <div className={styles.product_details }>
-                        <div className={styles.product_name}>{product.NAME}</div>
-                        <div className={styles.product_sub_info}>
-                            {product.SUB_CATEGORY_NAME} | {product.AGE_LIMIT} | {product.RUNNING_TIME} 분
-                        </div>
+                        <td>{product.APPLICATION_SEQ}</td>
+                        <td className={styles.product_info}>
+                            <div className={styles.product_image_container}>
+                                <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image_container} />
+                                <span className={styles.status_tag}>예매중</span> {/* 상태 표시 */}
+                            </div>
+                            <div className={styles.product_details }>
+                                <div className={styles.product_name}>{product.NAME}</div>
+                                <div className={styles.product_sub_info}>
+                                    {product.SUB_CATEGORY_NAME} | {product.AGE_LIMIT} | {product.RUNNING_TIME} 분
+                                </div>
+                            </div>
+                        </td>
+                    <td>
+                        <div className={styles.date_group}>                       
+                            {(() => {
+                                const { year, month, day, weekday } = formatDate(product.open_date);
+                                return (
+                                    <>
+                                        <span className={styles.date_year}>{year}</span>
+                                        <span className={styles.date_value}>
+                                            {month} {day}
+                                            <span className={styles.date_weekday}>{weekday}</span>
+                                        </span>
+                                    </>
+                                );
+                            })()}
                         </div>
                     </td>
                     <td>
-                    <div className={styles.date_group}>                       
-                        {(() => {
-                            const { year, month, day, weekday } = formatDate(product.open_date);
-                            return (
-                                <>
-                                    <span className={styles.date_year}>{year}</span>
-                                    <span className={styles.date_value}>
-                                        {month} {day}
-                                        <span className={styles.date_weekday}>{weekday}</span>
-                                    </span>
-                                </>
-                            );
-                        })()}
+                        <div className={styles.date_range}>
+                       
+                               <span className={styles.date_year}> {product.PLACE_NAME} </span>
+                               <br/>
+                              {formatTime(product.start_date)} ~ <br/>
+                              {formatTime(product.end_date)} 
+
+                    
                     </div>
                 </td>
-                <td>
-                    <div className={styles.date_range}>
-                        {(() => {
-                            const start = formatDate(product.start_date);
-                            const end = formatDate(product.end_date);
-                            return (
-                                <>
-                                    <span className={styles.date_year}>{start.year}</span>
-                                    <div className={styles.date_range_values}>
-                                        <span className={styles.date_value}>
-                                            {start.month} {start.day}
-                                            <span className={styles.date_weekday}>{start.weekday}</span>
-                                        </span>
-                                        <span className={styles.date_range_separator}>~</span>
-                                        <span className={styles.date_value}>
-                                            {end.month} {end.day}
-                                            <span className={styles.date_weekday}>{end.weekday}</span>
-                                        </span>
-                                    </div>
-                                </>
-                            );
-                        })()}
-                    </div>
-                </td>
-                    <td className={styles.product_venue}>{product.PLACE_NAME} </td>
+                    {/* <td className={styles.product_venue}>{product.PLACE_NAME} </td> */}
                     <td style={{textAlign:"center"}}>
                         {/* SALE_APPROVED에 따른 조건부 표시 */}
                         {product.SALE_APPROVED === '승인 대기' ? (
@@ -123,7 +113,7 @@ export const CurrentEvent=()=>{
                         ) : (
                             <button className={styles.manage_button}
                                 onClick={() => handleSaleApplyClick(product.APPLICATION_SEQ)}
-                            > <span className={styles.approval_sale}> 할인 신청</span>
+                            > <span className={styles.approval_sale}> 💰 할인 신청</span>
                             </button>
                         )}
                     </td>

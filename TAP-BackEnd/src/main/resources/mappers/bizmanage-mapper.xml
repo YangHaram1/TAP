@@ -176,11 +176,13 @@ SELECT
     a.place_seq, 
     a.start_date, 
     a.end_date, 
+     a.SUB_CATEGORY_SEQ,
+    a.AGE_LIMIT, a.RUNNING_TIME,
     MIN(s.sale_rate) AS sale_rate,
     s.sale_approved,
     p.place_name,
     MAX(s.sale_seq) AS sale_seq,
-    f.files_sysname
+    f.files_sysname   
 FROM apply a
 JOIN sale s 
     ON a.application_seq = s.application_seq
@@ -200,7 +202,9 @@ GROUP BY
     a.end_date, 
     s.sale_approved, 
     p.place_name, 
-    f.files_sysname
+    f.files_sysname,
+    a.SUB_CATEGORY_SEQ,
+    a.AGE_LIMIT, a.RUNNING_TIME
 ORDER BY MAX(s.sale_seq) DESC
 </select>
 </mapper>

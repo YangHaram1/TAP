@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../../config/config';
 import styles from './DetailProducts.module.css'
 export const DetailProduct = () => {
     const { application_seq } = useParams(); // URL에서 application_seq를 가져옴
     const [productDetails, setProductDetails] = useState(null);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -33,9 +35,26 @@ export const DetailProduct = () => {
         });
     };
 
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+
     if (!productDetails) {
         return <p>Loading...</p>;
     }
+
+    const handleBack = () => {
+        navigate(-1);
+        
+    };
 
     return (
         <div className={styles.container}>
@@ -124,6 +143,9 @@ export const DetailProduct = () => {
         ))}
     </table>
 
+        <div className={styles.tolist}>
+            <button onClick={handleBack}>목록으로</button>
+        </div>
        
       
     

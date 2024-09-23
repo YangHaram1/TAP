@@ -33,6 +33,8 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
 
         fetchProducts(); // 컴포넌트가 마운트될 때 데이터 가져오기
     }, [category, tap]); // 카테고리와 상품 상태가 변경될 때마다 다시 API 요청
+
+    
     
     // tap 값에 따라 다른 버튼 텍스트 또는 동작을 설정
     const renderManageButton = (product) => {
@@ -61,6 +63,26 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
             weekday: 'short',
         });
     };
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+    // 요일과 시간만 포맷팅하는 함수
+    const formatDayAndTime = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+           
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
 
     const [currentPage, setCurrentPage] = useState(0);
     const PER_PAGE = 3;
@@ -70,6 +92,9 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
         window.scrollTo(0, 0); // 페이지 변경 시 스크롤 맨 위로 이동
     };
 
+    useEffect(() => {
+        setCurrentPage(0); // 탭이나 카테고리 변경 시 페이지를 처음으로 리셋
+    }, [category, tap]);
     
     // 클릭하면 해당 상품의 application_seq를 포함하여 DetailProduct로 이동
     const handleRowClick = (application_seq) => {
@@ -112,8 +137,16 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                                         </div>
                                     </td>
                                     <td className={styles.product_date}>
-                                        {formatDate(product.start_date)}~ <br />
-                                        {formatDate(product.end_date)}
+                                    <strong>일자:</strong> <br/>{formatDate(product.start_date) === formatDate(product.end_date) 
+                                    ? (
+                                        <>
+                                        {`${formatDate(product.start_date)}`} <br/> 
+                                        {`${formatDayAndTime(product.start_date)}`}
+                                        </>
+                                    )
+                                    : (<>
+                                    {`${formatDate(product.start_date)} ~`} <br/> {`${formatDate(product.end_date)}`}
+                                    </>)}
                                     </td>
                                     <td className={styles.product_venue}>
                                         {product.PLACE_NAME}

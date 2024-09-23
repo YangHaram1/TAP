@@ -5,12 +5,14 @@
   box-shadow: 0px 2px 4px 4px rgba(137, 43, 226, 0.14);
   /* color: #fff; */
   /* height: 100vh; */
-  max-height: 1200px;
+  min-height: 1000px;
+  max-height: 1500px;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
   border-radius: 20px;
   margin-right: 20px;
+  margin-bottom: 30px;
 }
 
 .menuContainer {

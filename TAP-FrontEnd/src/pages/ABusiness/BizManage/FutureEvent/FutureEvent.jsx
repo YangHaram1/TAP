@@ -43,22 +43,14 @@ export const FutureEvent=()=>{
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
-            <table>
-                <thead>
-                <tr>
-                    <th>상품정보</th>
-                    <th>판매 오픈일</th>
-                    <th>일시</th>
-                    <th>공연장</th>
-                    {/* <th>상품관리/수정</th> */}
-                </tr>
-                </thead>
+            <table className={styles.table}>
                 <tbody>
                 {filtered.slice(currentPage * PER_PAGE, (currentPage +1) * PER_PAGE).map((product, index) => (
                     <tr key={index}>
+                        <td>{product.APPLICATION_SEQ}</td>
                     <td className={styles.product_info}>
                         <div className={styles.product_image_container}>
-                        <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
+                        <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image_container} />
                         <span className={styles.status_tag}>판매예정</span> {/* 상태 표시 */}
                         </div>
                         <div className={styles.product_details }>

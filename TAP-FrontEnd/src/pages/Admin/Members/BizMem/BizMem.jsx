@@ -175,6 +175,9 @@ const handleNameSearch = () => {
                     </button>
                 </div>
             </div>
+            <div className={styles.countMem} style={{textAlign:"right"}}>
+                    기업 회원: {filtered.length} 명 (가입대기: {filtered.filter(mem=>mem.ENABLED===0).length} 명)
+            </div>
 
 
             <div className={styles.tableWrapper}>
@@ -213,7 +216,9 @@ const handleNameSearch = () => {
                                 <td>{mem.REGISTRATION_NUMBER}</td>
                                 <td>{formatDate(mem.JOIN_DATE)}</td>
                                 <td>{mem.APPLY_COUNT}</td>
-                                <td>{mem.ENABLED === 1 ? "승인 완료" : "승인 대기"}</td>
+                                <td style={mem.ENABLED !== 1 ? { color: 'purple' , fontWeight:'bold'} : {}}>
+                                    {mem.ENABLED === 1 ? "승인 완료" : "승인 대기"}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

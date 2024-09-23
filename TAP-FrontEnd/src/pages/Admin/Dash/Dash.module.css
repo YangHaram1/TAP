@@ -18,7 +18,7 @@
 
 .toDO, .todayDone {
     width: 45%; /* 두 개의 블록이 나란히 놓이도록 각각 너비를 45%로 설정 */
-    background-color: #f9f9f9; /* 블록 배경색 */
+    background-color: #f9f9f95e; /* 블록 배경색 */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
@@ -29,7 +29,7 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hover 시 그림자 강화 */
 }
 
-.title h2 {
+.title h3 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 22px;
@@ -74,7 +74,7 @@
 .dollar, .order, .refund { /* refund도 동일한 스타일 적용 */
     width: 45%; /* 오늘 총 금액과 막대그래프 부분도 나란히 배치 */
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #f9f9f95e;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -85,7 +85,7 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hover 시 그림자 강화 */
 }
 
-.dollar h2, .refund h2 { /* refund와 dollar의 제목 스타일을 동일하게 적용 */
+.dollar h3, .refund h3 { /* refund와 dollar의 제목 스타일을 동일하게 적용 */
     font-size: 24px;
     color: #6d48b6; /* 보라빛 컬러 */
     margin-bottom: 20px;
@@ -109,7 +109,7 @@
     margin-top: 10px;
 }
 
-.order h2 {
+.order h3 {
     font-size: 24px;
     color: #6d48b6;
     margin-bottom: 20px;

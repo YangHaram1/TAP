@@ -66,7 +66,7 @@ export const WaitingSaleList =()=>{
     return(
         <div className={styles.container}>
             <div className={styles.product_table}>
-            <table>
+            <table className={styles.table}>
                 <thead>
                 <tr>
                     <th>접수<br/>번호</th>
@@ -86,8 +86,8 @@ export const WaitingSaleList =()=>{
                             {product.APPLICATION_SEQ}
                         </td>
                     <td className={styles.product_info}>
-                        <div className={styles.product_image_container} style={{paddingLeft:"40px"}}>
-                        <img src={product.FILES_SYSNAME}  className={styles.product_image} />
+                        <div className={styles.product_image_container} >
+                        <img src={product.FILES_SYSNAME}  className={styles.product_image_container} />
                         </div>
                         <div className={styles.product_details }>
                             <div className={styles.product_name}>{product.NAME}</div>

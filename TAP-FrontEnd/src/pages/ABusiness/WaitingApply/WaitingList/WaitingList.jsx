@@ -72,7 +72,7 @@ export const WaitingList=()=>{
         <div className={styles.container}>
             <div className={styles.product_table}>
            
-            <table>
+            <table className={styles.table}>
                 <thead>
                 <tr>
                     <th>접수번호</th>
@@ -92,7 +92,7 @@ export const WaitingList=()=>{
                         </td>
                         <td className={styles.product_info}>
                             <div className={styles.product_image_container}>
-                            <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image} />
+                            <img src={product.FILES_SYSNAME} alt={product.FILES_ORINAME} className={styles.product_image_container} />
                         </div>
                         <div className={styles.product_details }>
                             <div className={styles.product_name}>{product.NAME}</div>
@@ -102,7 +102,7 @@ export const WaitingList=()=>{
                         </div>
                     </td>
                     <td className={styles.product_date}>
-                        <div className={styles.product_venue}>{product.PLACE_NAME}</div>
+                        <div className={styles.date_year}>{product.PLACE_NAME}</div>
                         {/* <br/> */}
                         {formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}
                     </td>

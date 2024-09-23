@@ -181,3 +181,7 @@
 .buttonsearch span {
   margin-left: 5px; /* 돋보기 아이콘과 텍스트 사이 간격 */
 }
+
+.countMem{
+  margin-bottom: 10px;
+}
