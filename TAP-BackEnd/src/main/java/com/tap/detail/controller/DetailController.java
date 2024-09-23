@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.company.dto.CompanyDTO;
@@ -16,6 +17,7 @@ import com.tap.company.service.CompanyService;
 import com.tap.detail.dto.CastingDTO;
 import com.tap.detail.dto.DescriptionDTO;
 import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.ExciteDTO;
 import com.tap.detail.dto.ReviewStarDTO;
 import com.tap.detail.dto.ScheduleAndCastingDTO;
 import com.tap.detail.dto.SeatsDTO;
@@ -79,8 +81,8 @@ public class DetailController {
 		
 		// 후기
 		List<ReviewStarDTO> reviewList = dServ.getReview(seq);
-		
 		// 기대평
+		List<ExciteDTO> exciteList = dServ.getExcite(seq);
 		
 		map.put("mainData", mainData);
 		map.put("description", description);
@@ -91,7 +93,75 @@ public class DetailController {
 		map.put("times", times);
 		map.put("days", days);
 		map.put("castingAndDate", castingAndDate);
+		map.put("reviewList", reviewList);
+		map.put("exciteList", exciteList);
 		
+		return map;
+		
+	}
+	
+	@GetMapping("/getReviewByKeyword")
+	public Map<String, Object> getReviewByKeyword(@RequestParam int start,@RequestParam int end,@RequestParam String keyword, @RequestParam int seq ){
+		// 키워드별 정렬
+		// 기본값은 최신순
+		// keyword = "review_date, stars"
+		
+		Map<String, Object> search = new HashMap<>();
+		if(keyword.equals("최신순")) {
+			keyword = "r.review_date";
+		}else if(keyword.equals("별점순")) {
+			keyword = "s.stars";
+		}else {
+			keyword = "r.review_date";
+		}
+		search.put("keyword",keyword);
+		search.put("seq", seq);
+		search.put("start", start);
+		search.put("end", end);
+		List<ReviewStarDTO> list = dServ.getReviewByKeyword(search);
+		
+		String table = "review";
+		Map<String, Object> data = new HashMap<>();
+		data.put("table",table);
+		data.put("seq", seq);
+		int count = dServ.getCount(data);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("list",list);
+		map.put("count", count);
+
+		System.out.println("review 요청 들어옴"+keyword);
+		return map;
+		
+	}
+	
+	@GetMapping("/getExciteByKeyword")
+	public Map<String, Object> getExciteByKeyword(@RequestParam int start,@RequestParam int end,@RequestParam String keyword, @RequestParam int seq ){
+
+		Map<String, Object> search = new HashMap<>();
+		if(keyword.equals("최신순")) {
+			keyword = "excite_date";
+//		}else if(keyword.equals("별점순")) {
+//			keyword = "s.stars";
+		}else {
+			keyword = "excite_date";
+		}
+		search.put("keyword",keyword);
+		search.put("seq", seq);
+		search.put("start", start);
+		search.put("end", end);
+		List<ExciteDTO> list = dServ.getExciteByKeyword(search);
+		
+		String table = "excite";
+		Map<String, Object> data = new HashMap<>();
+		data.put("table",table);
+		data.put("seq", seq);
+		int count = dServ.getCount(data);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("list",list);
+		map.put("count", count);
+		System.out.println("excite 요청 들어옴");
 		return map;
 		
 	}

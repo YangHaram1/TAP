@@ -88,7 +88,7 @@
 
 .row{
     display: flex;
-    height: 30px;
+    height: 35px;
 }
 
 .row p{
@@ -137,6 +137,15 @@
     align-items: center;
 }
 
+.main_right_section_img_circle{
+    width: 90%;
+    height: 45%;
+    /* border: 1px solid black; */
+    display: inline;
+    justify-content: center;
+    align-items: center;
+}
+
 .section_btns{
     min-height: 35px;
     height: 120px;
@@ -149,13 +158,16 @@
 
 .section_btns_circle{
     min-height: 35px;
-    height: 120px;
-    max-height: 120px;
+    height: 50px;
+    max-height: 50px;
     border: 1px solid black;
-    width: 35%;
-    /* display: flex;
-    justify-content: center; */
+    width: 30%;
 }
+.row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
 
 .section_btns:hover{
     cursor: pointer;

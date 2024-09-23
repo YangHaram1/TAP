@@ -17,7 +17,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
     const [priceModal, setPriceModal] = useState(false);
 
     const {token} = useAuthStore();
-    const {date, time, seq, setDate, setTime, setStorageSeats, setStorageSection, mainData} = useOrder(); //저장소 데이터
+    const {date, time, seq, setDate, setTime, storageSeats , setStorageSeats, setStorageSection, mainData} = useOrder(); //저장소 데이터
     const [dateList, setDateList] = useState([]);
     const [timeList, setTimeList] = useState([]);
     
@@ -28,6 +28,8 @@ export const BookModal = ({ isOpen, onClose}) =>{
     const [section, setSection] = useState([]); // 1층, 2층
     const [sectionInnerData, setSectionInnerDate] = useState([]);
     const [seatsLevel, setSeatsLevel] = useState([]); // 좌석 등급, 등급별가격 
+
+    const [bookSeats, setBookSeats] = useState([]); // 예약된 좌석
 
     // 등급 추가 시 색깔 지정해줘야 함.
     const getBackgroundColor = (grade) => {
@@ -98,6 +100,20 @@ export const BookModal = ({ isOpen, onClose}) =>{
         // console.log("전체 페이지 닫히는 중",macroModal);
     }
 
+    //============================== 예매 좌석 세팅 ==============================
+
+    useEffect(()=>{
+        api.get(`/order/getBookSeats?date=${date}&time=${time}&seq=${seq}`)
+        .then((resp)=>{
+            console.log(resp.data);
+            setBookSeats(resp.data);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+
+    },[isOpen,date,time,storageSeats])
+
     //======================== 좌석 세팅 ======================
 
     // 우측 상단 섹션(층수) 선택 시 좌측 세부 좌석이 바뀜
@@ -122,6 +138,15 @@ export const BookModal = ({ isOpen, onClose}) =>{
         const seatId = `${row}-${col}`; // 좌석 ID 생성
         const seatGrade = getSeatGrade(row, col);
 
+         // 예매된 좌석인지 확인
+        if (bookSeats.some(bookedSeat => 
+            bookedSeat.book_row === row && 
+            bookedSeat.book_col === col && 
+            bookedSeat.section_seq === selectSection)) {
+            alert("이미 예매된 좌석입니다.");
+            return;
+        }
+
         if (selectedSeats.some(seat => seat.seatId === seatId)) {
             // 이미 선택된 좌석이라면 해제
             setSelectedSeats(selectedSeats.filter(seat => seat.seatId !== seatId));
@@ -140,7 +165,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
 
     useEffect(()=>{
         setSelectedSeats([]);
-    },[selectSection, macroModal]);
+    },[selectSection, macroModal, storageSeats]);
 
     
 
@@ -151,14 +176,26 @@ export const BookModal = ({ isOpen, onClose}) =>{
             for (let j = 0; j < seats.col; j++) {
                 const seatId = `${i + 1}-${j + 1}`;
                 const seatGrade = getSeatGrade(i + 1, j + 1);
+    
+                // 해당 좌석이 이미 예매된 좌석인지 확인
+                const isBooked = bookSeats.some(bookedSeat => 
+                    bookedSeat.book_row === i + 1 && 
+                    bookedSeat.book_col === j + 1 && 
+                    bookedSeat.section_seq === selectSection
+                );
+    
                 const isSelected = selectedSeats.some(seat => seat.seatId === seatId);
-                
+    
                 rowButtons.push(
                     <button
                         key={seatId}
                         className={styles.seat_btn}
-                        style={{ backgroundColor: isSelected ? 'red' : getBackgroundColor(seatGrade) }}
-                        onClick={() => toggleSeatSelection(i + 1, j + 1)}
+                        style={{
+                            backgroundColor: isBooked ? 'gray' : (isSelected ? 'red' : getBackgroundColor(seatGrade)),
+                            cursor: isBooked ? 'not-allowed' : 'pointer'
+                        }}
+                        disabled={isBooked} // 예매된 좌석은 클릭 불가
+                        onClick={() => !isBooked && toggleSeatSelection(i + 1, j + 1)}
                     >
                         {j + 1}
                     </button>
@@ -297,17 +334,24 @@ export const BookModal = ({ isOpen, onClose}) =>{
                             원하시는 좌석을 선택해주세요
                         </div>
                         <div className={styles.main_right_section}>
-                            <div className={styles.main_right_section_img}>
-                            {
-                                shape === '직선형' ?
-                                section.map((section, i)=>{
-                                    return(<button key={i} className={styles.section_btns} onClick={()=>{handleSection(section.section_seq)}}>{section.section_name}</button>);
-                                })
-                                : //원형일 때
-                                section.map((section, i)=>{
-                                    return(<button key={i} className={styles.section_btns_circle} onClick={()=>{handleSection(section.section_seq)}}>{section.section_name}</button>);
-                                })
-                            }
+                            <div className={shape === '직선형' ? styles.main_right_section_img : styles.main_right_section_img_circle}>
+                                {shape === '직선형' ? (
+                                section.map((section, i) => (
+                                    <button key={i} className={styles.section_btns} onClick={() => { handleSection(section.section_seq); }}>
+                                    {section.section_name}
+                                    </button>
+                                ))
+                                ) : (
+                                Array.from({ length: Math.ceil(section.length / 2) }, (_, rowIndex) => (
+                                    <div key={rowIndex} className={styles.row}>
+                                    {section.slice(rowIndex * 2, rowIndex * 2 + 2).map((sec, index) => (
+                                        <button key={index} className={styles.section_btns_circle} onClick={() => { handleSection(sec.section_seq); }}>
+                                        {sec.section_name}
+                                        </button>
+                                    ))}
+                                    </div>
+                                ))
+                                )}
                             </div>
                         </div>
                         <div className={styles.seats_level}>
