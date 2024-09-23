@@ -73,7 +73,7 @@
     letter-spacing: -0.5px; /* 약간의 간격 조정 */
 }
 
-.btn button {
+.tolist button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -95,3 +95,4 @@
     outline: none;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* 포커스 시 외부 그림자 */
 }
+

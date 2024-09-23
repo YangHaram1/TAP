@@ -12,9 +12,11 @@
     /* justify-content: flex-start; /* 요소 간의 간격을 균등하게 분배 */
     /* align-items: center;  */
     padding: 20px 40px;
-    background-color: #f0f4f8;
+    background-color: transparent;
+    /* border:1px solid #a19bf8; */
     border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 4px 4px rgba(195, 184, 206, 0.14);
+    /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); */
     margin-bottom: 20px;
     display: flex;
     justify-content: center;

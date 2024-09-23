@@ -101,8 +101,16 @@ const Login = () => {
                 }
                 setAuth(decoded)
             })
-            .catch(resp => {
-                alert('아이디 또는 패스워드를 확인하세요. ')
+            .catch(error => {
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        alert('이 IP는 차단되었습니다. 관리자에게 문의하세요.')
+                    } else {
+                        alert('아이디 또는 패스워드를 확인하세요.')
+                    }
+                } else {
+                    alert('로그인 중 오류가 발생했습니다.')
+                }
             })
     }
     const handleContainer = e => {

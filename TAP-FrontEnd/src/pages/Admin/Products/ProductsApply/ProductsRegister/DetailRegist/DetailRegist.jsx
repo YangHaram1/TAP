@@ -185,7 +185,7 @@ export const DetailRegist = () => {
                         <button onClick={handleBack}>취소</button>
                     </>
                 ) : tap === 1 ? (
-                    null
+                    <button onClick={handleBack}>목록으로</button>
                 ) : null}
             </div>
           
