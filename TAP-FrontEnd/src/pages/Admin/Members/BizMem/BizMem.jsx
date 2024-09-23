@@ -216,7 +216,9 @@ const handleNameSearch = () => {
                                 <td>{mem.REGISTRATION_NUMBER}</td>
                                 <td>{formatDate(mem.JOIN_DATE)}</td>
                                 <td>{mem.APPLY_COUNT}</td>
-                                <td>{mem.ENABLED === 1 ? "승인 완료" : "승인 대기"}</td>
+                                <td style={mem.ENABLED !== 1 ? { color: 'purple' , fontWeight:'bold'} : {}}>
+                                    {mem.ENABLED === 1 ? "승인 완료" : "승인 대기"}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

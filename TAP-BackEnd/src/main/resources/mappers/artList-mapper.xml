@@ -9,7 +9,7 @@
 		    a.name, 
 		    a.start_date, 
 		    a.end_date, 
-		    a.open_date, 
+		    a.open_date,  
 		    a.status,
 		    p.place_name,
 		    sc.sub_category_name,

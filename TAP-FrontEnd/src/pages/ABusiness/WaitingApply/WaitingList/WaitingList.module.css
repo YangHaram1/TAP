@@ -128,6 +128,14 @@
   background-color: #0056b3;
 }
 
+.date_year {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .product_table {

@@ -69,12 +69,18 @@ export const CompletedSaleApply = () => {
                                         <div className={styles.product_image_container}>
                                             <img src={product.FILES_SYSNAME} alt={product.NAME} className={styles.product_image} />
                                         </div>
-                                        <div className={styles.product_details}>
+                                        <div className={styles.product_details }>
                                             <div className={styles.product_name}>{product.NAME}</div>
+                                            <div className={styles.product_sub_info}>
+                                                {product.SUB_CATEGORY_SEQ === 1 ? '뮤지컬' :
+                                                2? '콘서트' :
+                                                3? '야구' :
+                                                4? '축구':''} | {product.AGE_LIMIT} | {product.RUNNING_TIME === 0 ? '정보 없음' : `${product.RUNNING_TIME}분` } 
+                                            </div>
                                         </div>
                                     </td>
                                     <td className={styles.product_date}>
-                                        <div className={styles.product_venue}>{product.PLACE_NAME}</div>
+                                        <div className={styles.date_year}>{product.PLACE_NAME}</div>
                                         {formatDate(product.start_date)}~ <br />{formatDate(product.end_date)}
                                     </td>
                                     <td className={styles.product_discount}>

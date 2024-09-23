@@ -274,3 +274,10 @@
   visibility: visible;
   opacity: 1;
 }
+
+.date_year {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3px;
+}

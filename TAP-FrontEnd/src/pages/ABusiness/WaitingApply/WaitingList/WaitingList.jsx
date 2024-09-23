@@ -102,7 +102,7 @@ export const WaitingList=()=>{
                         </div>
                     </td>
                     <td className={styles.product_date}>
-                        <div className={styles.product_venue}>{product.PLACE_NAME}</div>
+                        <div className={styles.date_year}>{product.PLACE_NAME}</div>
                         {/* <br/> */}
                         {formatDate(product.start_date)}~ <br/>{formatDate(product.end_date)}
                     </td>
