@@ -240,7 +240,8 @@ export const UserMem = () => {
                             <tr>
                                 <td><input type="checkbox" name='checkedAll' onClick={handleCheckAll} ref={allCheckRef} /></td>
                                 <td>이름</td>
-                                <td>구분</td>
+                                <td>아이디</td>
+                                {/* <td>구분</td> */}
                                 {/* <td>등급</td> */}
                                 <td> <Grade 
                                     grades={grades}
@@ -271,7 +272,8 @@ export const UserMem = () => {
                                             />
                                         </td>
                                         <td>{mem.NAME}</td>
-                                        <td>{mem.C_NAME ? "기업": "일반"}</td>
+                                        <td>{mem.ID}</td>
+                                        {/* <td>{mem.C_NAME ? "기업": "일반"}</td> */}
                                         <td>{mem.G_NAME}</td>
                                         <td>{formatDate(mem.JOIN_DATE)}</td>
                                         <td>{mem.GRADE_SEQ === -1 ? '블랙리스트' : '일반 회원'}</td>

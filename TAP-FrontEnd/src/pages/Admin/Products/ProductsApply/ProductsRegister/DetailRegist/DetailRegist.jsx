@@ -47,6 +47,7 @@ export const DetailRegist = () => {
 
     const handleBack = () => {
         navigate('/products/apply');
+        window.scrollTo(0, 0);
     };
 
     const handleReject = () => {

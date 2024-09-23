@@ -46,6 +46,7 @@ export const DetailSale =()=>{
 
     const handleBack = () => {
         navigate('/products/apply/sale');
+        window.scrollTo(0, 0);
     };
 
     const handleReject = () => {

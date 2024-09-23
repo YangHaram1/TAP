@@ -41,6 +41,7 @@ export const DetailProduct = () => {
 
     const handleBack = () => {
         navigate(-1);
+        
     };
 
     return (
