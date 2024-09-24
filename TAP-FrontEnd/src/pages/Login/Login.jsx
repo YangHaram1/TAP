@@ -105,8 +105,14 @@ const Login = () => {
                 if (error.response) {
                     if (error.response.status === 403) {
                         alert('이 IP는 차단되었습니다. 관리자에게 문의하세요.')
-                    } else {
-                        alert('아이디 또는 패스워드를 확인하세요.')
+                    } else if (error.response.status === 401) {
+                        if (error.response.data === "pending") {
+                            alert('계정이 승인 대기 상태입니다. 관리자에게 문의하세요.');
+                        } else if (error.response.data === "blacklist") {
+                            alert('계정이 블랙리스트 상태입니다. 관리자에게 문의하세요.');
+                        } else {
+                            alert('아이디 또는 패스워드를 확인하세요.');
+                        }
                     }
                 } else {
                     alert('로그인 중 오류가 발생했습니다.')
@@ -132,6 +138,10 @@ const Login = () => {
         return <FindPw></FindPw>
     }
 
+     /** Enter 키를 통한 로그인 **/
+  const handleEnter = (e) => {
+    if(e.key === "Enter") handleLogin();
+  }
     return (
         <div className={styles.container} onClick={handleContainer}>
             {/* <Routes>
@@ -158,6 +168,7 @@ const Login = () => {
                             placeholder="아이디"
                             name="id"
                             className={styles.id}
+                            onKeyDown={handleEnter}
                             value={user.id}
                             onChange={handleChange}
                             onClick={() => {
@@ -187,6 +198,7 @@ const Login = () => {
                             type={showEye ? 'text' : 'password'}
                             placeholder="비밀번호"
                             name="pw"
+                            onKeyDown={handleEnter}
                             value={user.pw}
                             className={styles.pw}
                             onClick={() => {

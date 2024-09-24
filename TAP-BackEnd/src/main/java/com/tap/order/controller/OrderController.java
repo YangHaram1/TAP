@@ -18,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tap.coupon.dto.CouponTypeDTO;
+import com.tap.coupon.service.CouponService;
+import com.tap.coupon.service.CouponTypeService;
 import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.SeatsService;
 import com.tap.members.dto.MembersDTO;
+import com.tap.members.dto.MembersGradeDTO;
 import com.tap.members.service.MembersService;
 import com.tap.order.dto.BookSeatsDTO;
 import com.tap.order.dto.OrdersDTO;
@@ -38,6 +42,8 @@ public class OrderController {
 	private SeatsService sServ;
 	@Autowired
 	private MembersService mServ;
+	@Autowired
+	private CouponTypeService ctServ;
 	
 	@GetMapping("/{placeSeq}")
 	public Map<String,?> getSeatData(@PathVariable int placeSeq){
@@ -140,6 +146,7 @@ public class OrderController {
 	// 주문 테이블에 데이터 넣기
 	@PostMapping("/orderFinal")
 	public ResponseEntity<Void> orderFinal(@RequestBody Map<String,Object> orderData, Principal principal){
+		System.out.println("좌석 넣는 구간 들어왔지요");
 		
 		if (principal == null) {
 			return ResponseEntity.ok(null);
@@ -154,6 +161,8 @@ public class OrderController {
 	    List<Map<String, Object>> storageSeats = (List) orderData.get("storageSeats");
 	    int totalPrice = Integer.parseInt(orderData.get("totalPrice").toString());
 	    String status = (String) orderData.get("status");
+	    int couponSeq = orderData.get("couponSeq") != null ? 
+                Integer.parseInt(orderData.get("couponSeq").toString()) : 0;
 	    
 	    // deliveryStatus와 deliverySeq가 null일 경우 기본값 설정
 	    String deliveryStatus = orderData.get("deliveryStatus") != null ? 
@@ -177,8 +186,10 @@ public class OrderController {
 	            "결제 방법 (pay): " + pay + "\n" +
 	            "수령 방법 (deliveryMethod): " + deliveryMethod + "\n" +
 	            "배송 번호 (deliverySeq): " + deliverySeq + "\n" +
+	            "쿠폰 번호 (couponSeq): " + couponSeq + "\n" +
 	            "------------------------------------");
 	    oServ.insertOrder(orderData);
+	    
 		return ResponseEntity.ok().build();
 		
 	}
@@ -223,5 +234,27 @@ public class OrderController {
 		return ResponseEntity.ok().build();
 	}
 	
+	
+	@GetMapping("/type/members")
+	public ResponseEntity<List<CouponTypeDTO>> getType(Principal principal) throws Exception{
+		
+		System.out.println("쿠폰 받으러 들어왔음!!!!");
+		if (principal == null) {
+			System.out.println("principal");
+			return ResponseEntity.ok(null);
+		}
+		String username =principal.getName();
+		MembersGradeDTO dto = mServ.getMemberInfo(username);
+		
+		System.out.println(username + ":" + dto.getGrade_order());
+		Map<String, Object> map = new HashMap<>();
+		map.put("id",username);
+		map.put("seq", dto.getGrade_order());
+		
+		
+		List<CouponTypeDTO> list = oServ.selectByOrder(map);	
+		
+		return ResponseEntity.ok(list);
+	}
 
 }

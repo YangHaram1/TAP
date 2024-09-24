@@ -10,7 +10,7 @@ export const List = ({genre, category})=>{
     const navi = useNavigate();
 
     useEffect(()=>{
-        console.log("변경테스트", genre, category);
+        // console.log("변경테스트", genre, category);
         setLists([]);
         if(genre ===""){
             genre = 0;
@@ -21,12 +21,12 @@ export const List = ({genre, category})=>{
         }else if(category === "concert"){
             category = 2;
         }else{
-            console.log("잘못된 접근 확인 필요");
+            // console.log("잘못된 접근 확인 필요");
         }
 
         api.get(`/artlist/getTap?genre=${genre}&category=${category}`)
         .then((resp)=>{
-            console.log("장르별 콘텐츠",genre,resp.data);
+            // console.log("장르별 콘텐츠",genre,resp.data);
             setLists(resp.data);
         })
         .catch((err)=>{
@@ -35,7 +35,7 @@ export const List = ({genre, category})=>{
     },[genre, category])
 
     const handleMove = (seq)=>{
-        console.log("상품번호", seq);
+        // console.log("상품번호", seq);
         navi("/detail", { state: { seq } });
       }
 

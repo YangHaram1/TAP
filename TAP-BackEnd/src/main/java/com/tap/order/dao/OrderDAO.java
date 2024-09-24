@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.tap.coupon.dto.CouponTypeDTO;
 import com.tap.order.dto.BookSeatsDTO;
 import com.tap.order.dto.OrdersDTO;
 import com.tap.order.dto.PlaceAndSectionDTO;
@@ -84,6 +85,16 @@ public class OrderDAO {
 	public int checkSeat(Map<String,Object> map) {
 		return mybatis.selectOne("Order.checkSeat", map);
 	}
+	
+	public List<CouponTypeDTO> selectByOrder(Map<String, Object> data){
+		return mybatis.selectList("Order.selectByOrder",data);
+	}
+	
+	public void updateState(int couponSeq) {
+		mybatis.update("Order.updateState", couponSeq);
+	}
+	
+	
 	
 	
 }

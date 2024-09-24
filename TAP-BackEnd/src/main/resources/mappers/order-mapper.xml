@@ -125,4 +125,16 @@
 		where application_seq=#{seq} and status='완료' and book_date=#{date} and book_time=#{time} and book_row= #{row} and book_col=#{col} and section_seq=#{storageSection}
 	</select>
 	
+	<select id="selectByOrder" resultType="com.tap.coupon.dto.CouponTypeDTO">		
+		select * from(
+		select c.seq, ct.title, ct.contents, ct.discount, ct.coupon_order 
+		from coupon_type ct
+		left outer join coupon c on c.type_seq = ct.seq
+		where coupon_order >= ${seq} and state=1 and  expire_date > sysdate and c.member_id = #{id})
+	</select>
+	
+	<update id="updateState">
+		update coupon set state=0 where seq = #{seq}
+	</update>
+	
 </mapper>
