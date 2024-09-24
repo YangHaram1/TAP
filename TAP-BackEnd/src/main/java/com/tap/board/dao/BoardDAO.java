@@ -23,7 +23,7 @@ public class BoardDAO {
 		return mybatis.selectList("Board.selectAll",map);
 	}
 	public int getBoardCount(Map<String, Object> map) {
-		return mybatis.selectOne("Board.getInquiryCount",map);
+		return mybatis.selectOne("Board.getBoardCount",map);
 	}
 	public int insert(BoardDTO dto) {
 		return mybatis.insert("Board.insert",dto);
