@@ -9,4 +9,9 @@
 			select coupon_seq.currval from dual
 		</selectKey>
 	</insert>
+	
+	<select id="selectById" resultType="com.tap.coupon.dto.CouponMemberDTO">
+		select c.*, ct.title,ct.contents,ct.discount from coupon c
+		join coupon_type ct on c.type_seq=ct.seq where member_id= #{id}
+	</select>
 </mapper>

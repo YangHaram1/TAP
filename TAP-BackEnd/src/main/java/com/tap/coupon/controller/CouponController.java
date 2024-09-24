@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.coupon.dto.CouponDTO;
+import com.tap.coupon.dto.CouponMemberDTO;
 import com.tap.coupon.dto.CouponTypeDTO;
 import com.tap.coupon.service.CouponService;
 import com.tap.coupon.service.CouponTypeService;
@@ -61,6 +62,18 @@ public class CouponController {
 		ctserv.insert(dto);
 		
 		return ResponseEntity.ok(String.valueOf(dto.getSeq()));
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<CouponMemberDTO>> getTypeAll(Principal principal) throws Exception {
+
+		if (principal == null) {
+			System.out.println("principal");
+			return ResponseEntity.ok(null);
+		}
+		String username =principal.getName();
+		List<CouponMemberDTO> list =cserv.selectById(username);
+		return ResponseEntity.ok(list);
 	}
 	
 	@GetMapping("/type")

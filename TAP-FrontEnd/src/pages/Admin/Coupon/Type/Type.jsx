@@ -49,7 +49,7 @@ const Type = () => {
 
     const [cpage, setCpage] = useState(1);
     const [page_total_count, setPage_total_count] = useState(1);
-    const [search, setSearch] = useState(false);
+    const [search, setSearch] = useState('');
     const [recordCountPerPage, setRecordCountPerPage] = useState(5);
     const navi_count_per_page = 5;
 
@@ -103,8 +103,8 @@ const Type = () => {
         if (cpage !== 0) {
             const start = cpage * recordCountPerPage - (recordCountPerPage - 1); //1
             const end = cpage * recordCountPerPage; //10
-
-            api.get(`/coupon/type?start=${start}&end=${end}&keyword=${keyword}&target=${target}`).then((resp) => {
+         
+            api.get(`/coupon/type?start=${start}&end=${end}&keyword=${search}&target=${target}`).then((resp) => {
                 setList(() => {
                     const record_total_count = resp.data.count;//106 10 // 10
                     if (record_total_count % recordCountPerPage === 0) {
@@ -157,6 +157,7 @@ const Type = () => {
                 <select value={target} onChange={(e) => {
                     setTarget(e.target.value);
                     setKeyword('');
+                    setSearch('')
                 }} className={styles.select}>
                     {/* <option value="">유형</option> */}
                     <option value="title">이름</option>
@@ -189,9 +190,7 @@ const Type = () => {
                 </div>
                 <div style={{ display: "flex", flex: 0.2 }}>
                     <button className={styles.searchBtn} onClick={() => {
-                        setSearch((prev) => {
-                            return !prev;
-                        })
+                        setSearch(keyword)
                     }}>검색</button>
                 </div>
             </div>

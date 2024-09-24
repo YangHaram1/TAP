@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tap.coupon.dao.CouponDAO;
 import com.tap.coupon.dao.CouponTypeDAO;
 import com.tap.coupon.dto.CouponDTO;
+import com.tap.coupon.dto.CouponMemberDTO;
 import com.tap.coupon.dto.CouponTypeDTO;
 import com.tap.members.dao.MembersDAO;
 
@@ -45,5 +46,10 @@ public class CouponService {
 			return false;
 		}
 	}
+	
+	public List<CouponMemberDTO> selectById(String id) {
+		return cdao.selectById(id);
+	}
+
 
 }

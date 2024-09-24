@@ -57,7 +57,7 @@ const Graph = () => {
                 <div className={styles.empty}>
 
                 </div>
-                {/* {여기부터 중복} */}
+                {/* {여기부터 중복} */} 
                 {
                     list.map((item, index) => {
                         return (
