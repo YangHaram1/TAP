@@ -12,7 +12,7 @@
         a.start_date AS startDate,  <!-- 매핑 이름 변경 -->
         a.end_date AS endDate,      <!-- 매핑 이름 변경 -->
         a.open_date AS openDate,    <!-- 매핑 이름 변경 -->
-        place.PLACE_NAME AS placeName,  <!-- 필요시 추가 -->
+        place.PLACE_NAME AS place_name,  <!-- 필요시 추가 -->
         home_team.TEAM_NAME AS homeTeamName,  <!-- 매핑 이름 변경 -->
         home_team.LOGO_IMAGE AS homeTeamLogo,  <!-- 매핑 이름 변경 -->
         away_team.TEAM_NAME AS awayTeamName,  <!-- 매핑 이름 변경 -->
@@ -44,7 +44,7 @@
         a.start_date AS startDate,  <!-- 매핑 이름 변경 -->
         a.end_date AS endDate,      <!-- 매핑 이름 변경 -->
         a.open_date AS openDate,    <!-- 매핑 이름 변경 -->
-        place.PLACE_NAME AS placeName,  <!-- 필요시 추가 -->
+        place.PLACE_NAME AS place_name,  <!-- 필요시 추가 -->
         home_team.TEAM_NAME AS homeTeamName,  <!-- 매핑 이름 변경 -->
         home_team.LOGO_IMAGE AS homeTeamLogo,  <!-- 매핑 이름 변경 -->
         away_team.TEAM_NAME AS awayTeamName,  <!-- 매핑 이름 변경 -->
