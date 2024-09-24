@@ -10,8 +10,13 @@ import com.tap.search.dto.SearchResultDTO;
 
 @Service
 public class SearchService {
+	
 	@Autowired
-	private SearchDAO sdao;	
+	private SearchDAO sdao;
+
+	public List<SearchResultDTO> searchApply(String query) {
+		return sdao.searchApply(query);
+		}	
 	
 //	public List<SearchResultDTO> searchByQuery(String keyword) {
 //		return sdao.searchByKeyword(keyword);
