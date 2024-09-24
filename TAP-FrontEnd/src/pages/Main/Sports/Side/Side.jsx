@@ -7,21 +7,26 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
   const navigate = useNavigate();
 
   const handleTeamClick = (teamName, teamLogo) => {
-    const homeMatches = baseballMatches.filter(match => 
-      match.homeTeamName === teamName || match.awayTeamName === teamName
-    );
-
-    if (homeMatches.length === 0) {
+    // baseballMatches가 객체일 경우 matches 배열에서 찾기
+    const homeMatch = baseballMatches.matches?.find(match => match.homeTeamName === teamName);
+    
+    if (!homeMatch) {
       console.warn("해당 팀의 경기가 없습니다:", teamName);
       return; // 경기가 없을 경우 함수 종료
     }
 
-    const homeGround = homeMatches[0].placeName || "정보 없음"; // 첫 번째 경기의 장소 정보
+    const homeGround = homeMatch.place_name
+    || "정보 없음"; // placeName으로 수정
+    // matches 배열을 올바르게 가져오기
+    const matches = baseballMatches.matches?.filter(
+      match => match.homeTeamName === teamName || match.awayTeamName === teamName
+    ) || []; // 기본값을 빈 배열로 설정
+
     console.log("홈 구장:", homeGround);
-    console.log("매치들:", homeMatches);
+    console.log("매치들:", matches);
 
     navigate('/teamPage', {
-      state: { teamName, teamLogo, homeGround, matches: homeMatches },
+      state: { teamName, teamLogo, homeGround, matches },
     });
   };
 
@@ -34,23 +39,12 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
   };
 
   const getUniqueTeams = (matches) => {
-    if (!Array.isArray(matches)) {
-      console.warn("matches는 배열이 아닙니다:", matches);
-      return [];
-    }
-
+    if (!Array.isArray(matches)) return []; // matches가 배열이 아닌 경우 빈 배열 반환
     const teamSet = new Set();
-    return matches.flatMap((match) => {
-      const teams = [];
-      if (!teamSet.has(match.homeTeamName)) {
-        teamSet.add(match.homeTeamName);
-        teams.push({ name: match.homeTeamName, logo: match.homeTeamLogo });
-      }
-      if (!teamSet.has(match.awayTeamName)) {
-        teamSet.add(match.awayTeamName);
-        teams.push({ name: match.awayTeamName, logo: match.awayTeamLogo });
-      }
-      return teams;
+    return matches.filter((match) => {
+      const isDuplicate = teamSet.has(match.homeTeamName);
+      teamSet.add(match.homeTeamName);
+      return !isDuplicate;
     });
   };
 
@@ -60,19 +54,23 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
         {/* 야구 메뉴 */}
         <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
-            <button onClick={() => toggleMenu('baseball')}>
+            <a href="javascript:;" onClick={() => toggleMenu('baseball')}>
               야구
               <span className={styles.listBtn}></span>
-            </button>
+            </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'baseball' ? styles.open : ''}`} onClick={preventPropagation}>
-            {getUniqueTeams(baseballMatches).map((team, index) => (
+            {getUniqueTeams(baseballMatches.matches || []).map((match, index) => (
               <li key={index}>
-                <button
-                  onClick={() => handleTeamClick(team.name, team.logo || "로고 정보 없음")}
+                <a
+                  href="javascript:;"
+                  onClick={() => handleTeamClick(
+                    match.homeTeamName,
+                    match.homeTeamLogo // 로고는 match에서 가져옴
+                  )}
                 >
-                  {team.name}
-                </button>
+                  {match.homeTeamName}
+                </a>
               </li>
             ))}
           </ul>
@@ -81,19 +79,23 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
         {/* 축구 메뉴 */}
         <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
-            <button onClick={() => toggleMenu('soccer')}>
+            <a href="javascript:;" onClick={() => toggleMenu('soccer')}>
               축구
               <span className={styles.listBtn}></span>
-            </button>
+            </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'soccer' ? styles.open : ''}`} onClick={preventPropagation}>
-            {getUniqueTeams(soccerMatches).map((team, index) => (
+            {getUniqueTeams(soccerMatches.matches || []).map((match, index) => (
               <li key={index}>
-                <button
-                  onClick={() => handleTeamClick(team.name, team.logo || "로고 정보 없음")}
+                <a
+                  href="javascript:;"
+                  onClick={() => handleTeamClick(
+                    match.homeTeamName,
+                    match.homeTeamLogo // 로고는 match에서 가져옴
+                  )}
                 >
-                  {team.name}
-                </button>
+                  {match.homeTeamName}
+                </a>
               </li>
             ))}
           </ul>
@@ -102,10 +104,10 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
         {/* 스토어 메뉴 */}
         <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
-            <button onClick={() => toggleMenu('store')}>
+            <a href="javascript:;" onClick={() => toggleMenu('store')}>
               스토어
               <span className={styles.listBtn}></span>
-            </button>
+            </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'store' ? styles.open : ''}`} onClick={preventPropagation}>
             <li><a href="https://interparkmdshop.com/category/%ED%82%A4%EC%9B%80%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/29/">키움히어로즈샵</a></li>

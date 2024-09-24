@@ -16,44 +16,48 @@ export const MatchList = () => {
   const [soccerMatches, setSoccerMatches] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
-  const { setDate, setTime, setSeq, setMainData, seatPrices, setSeatPrices } = useOrder();
+  const {setDate, setTime, setSeq,  setMainData, setSeatPrices, setCompany} = useOrder();
   const { token } = useAuthStore();
   const [bookModal, setBookModal] = useState(false);
   const { seq } = location.state || {}; // 전달된 state가 있으면 가져옴
 
   useEffect(() => {
-    // 야구 매치 데이터 가져오기
-    api.get('/matchlist/baseball')
-      .then((resp) => {
-        console.log(resp.data); // 전체 데이터 구조 확인
-        // 매치 배열이 객체 배열 형식으로 왔는지 확인
-        if (Array.isArray(resp.data.matches)) {
-          setBaseballMatches(resp.data.matches);
-          setSeatPrices(resp.data.seats); // 좌석 가격 설정
-        } else {
-          console.warn('Baseball match data is not in expected format:', resp.data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching baseball match data:', error.response ? error.response.data : error.message);
-      });
-
-    // 축구 매치 데이터 가져오기
-    api.get('/matchlist/soccer')
-      .then((resp) => {
-        console.log(resp.data); // 전체 데이터 구조 확인
-        // 매치 배열이 객체 배열 형식으로 왔는지 확인
-        if (Array.isArray(resp.data)) {
-          setSoccerMatches(resp.data);
-        } else {
-          console.warn('Soccer match data is not in expected format:', resp.data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching soccer match data:', error.response ? error.response.data : error.message);
-      });
+    const fetchData = async () => {
+      try {
+        // 야구 매치 데이터 가져오기
+        const baseballResponse = await api.get('/matchlist/baseball');
+        const baseballData = baseballResponse.data;
+        const baseballMatches = Array.isArray(baseballData.matches) ? baseballData.matches : [];
+        
+        // 축구 매치 데이터 가져오기
+        const soccerResponse = await api.get('/matchlist/soccer');
+        const soccerData = soccerResponse.data;
+        const soccerMatches = Array.isArray(soccerData.matches) ? soccerData.matches : [];
+        
+        // 야구와 축구 좌석 가격 통합 처리
+        const allSeatPrices = [...(baseballData.seats || []), ...(soccerData.seats || [])];
+        
+        // company 데이터도 병합 가능
+        const allCompanies = [...(baseballData.company || []), ...(soccerData.company || [])];
+  
+        // 데이터 상태 업데이트
+        setBaseballMatches(baseballMatches);
+        setSoccerMatches(soccerMatches);
+        setSeatPrices(allSeatPrices);
+        setCompany(allCompanies);
+  
+      } catch (error) {
+        console.error('Error fetching match data:', error.response ? error.response.data : error.message);
+      }
+    };
+  
+    fetchData();
   }, [seq]);
-
+  
+  // place_seq에 따른 좌석 가격 필터링 함수
+  const getSeatPricesByPlaceSeq = (placeSeq) => {
+    return setSeatPrices.filter(seat => seat.place_seq === placeSeq);
+  };
   const toggleBaseballTeamSelect = () => {
     setIsBaseballTeamSelectOpen(!isBaseballTeamSelectOpen);
   };
@@ -162,7 +166,7 @@ export const MatchList = () => {
 
       const formattedDate = formatMatchDate(match.startDate);
       const formattedTime = formatMatchTime(match.startDate);
-      setSeatPrices(match.seatPrices || []); // 좌석 정보 추가, 없으면 빈 배열 설정
+     
 
       setDate(formattedDate);
       setTime(formattedTime);
@@ -178,10 +182,11 @@ export const MatchList = () => {
         age_limit: match.age_limit,
         id: match.id,
         status: match.status,
-        sub_category_seq: match.sub_category_seq,
-        seats: match.seats || [],
+        sub_category_seq: match.sub_category_seq
         
       });
+
+
 
       setBookModal(true);
     } else {
@@ -257,17 +262,17 @@ export const MatchList = () => {
         </div>
       </div>
   
-      {/* 축구 섹션 */}
-      <div className={styles.soccerSection}>
-        <div className={styles.sportsTitleFootball}>
-          <span className={styles.baseballText}>
-            축구 <span className={styles.englishText}>| SOCCER</span>
+{/* 축구 섹션 */}
+<div className={styles.soccerSection}>
+        <div className={styles.sportTitle}>
+          <span className={styles.soccerText}>
+            축구 <span className={styles.englishText}>| Soccer</span>
           </span>
           <span className={styles.selectTeamText} onClick={toggleSoccerTeamSelect}>
             구단선택
           </span>
         </div>
-        <div className={`${styles.teamSelect} ${isSoccerTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
+        <div className={`${styles.soccerTeamSelect} ${isSoccerTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
           <div className={styles.teamList}>
             {getHomeTeams(soccerMatches).map((team, index) => (
               <div key={index} className={styles.teamItem} onClick={() => handleTeamClick(team.name, team.logo)}>
@@ -313,6 +318,7 @@ export const MatchList = () => {
           </div>
         </div>
       </div>
+
   
       {/* 예매 모달 */}
       <BookModal isOpen={bookModal} onClose={closeBookModal} />
