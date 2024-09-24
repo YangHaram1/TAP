@@ -57,6 +57,7 @@ public class SecurityConfig {
 			request.requestMatchers(HttpMethod.POST, "/members/verifyCode").permitAll();
 			request.requestMatchers(HttpMethod.POST,"/members/resetPassword").permitAll();
 			request.requestMatchers(HttpMethod.POST,"/company").permitAll();
+			request.requestMatchers(HttpMethod.GET,"/search").permitAll();
 
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
