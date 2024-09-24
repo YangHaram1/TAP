@@ -114,7 +114,7 @@ const Grade = () => {
         }
 
 
-    }, [cpage, add, search])
+    }, [cpage, add, keyword])
 
     useEffect(() => {
         if (cpage === 1) {
@@ -130,6 +130,7 @@ const Grade = () => {
 
     const handleChange = (event) => {
         setKeyword(event.target.value);
+        setCpage(1)
     };
 
     return (
@@ -151,6 +152,7 @@ const Grade = () => {
                 <select value={target} onChange={(e) => {
                     setTarget(e.target.value);
                     setKeyword('');
+                    setCpage(1);
                 }} className={styles.select}>
                     <option value="grade_order">등급 순서</option>
                     <option value="grade">등급</option>
@@ -187,13 +189,13 @@ const Grade = () => {
                     }
 
                 </div>
-                <div style={{ display: "flex", flex: 0.2 }}>
+                {/* <div style={{ display: "flex", flex: 0.2 }}>
                     <button className={styles.searchBtn} onClick={() => {
                         setSearch((prev) => {
                             return !prev;
                         })
                     }}>검색</button>
-                </div>
+                </div> */}
             </div>
             <div className={styles.list}>
                 <div className={styles.header1}>

@@ -1,7 +1,7 @@
 import { api } from '../../../../../config/config'
 import styles from './List.module.css'
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns'
+import { add, format } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import ReactPaginate from 'react-paginate'
 import MyEditor from '../../../../Main/Inquiry/MyEditor/MyEditor'
@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal/Modal'
 import SweetAlert from '../../../../../components/SweetAlert/SweetAlert'
+
 const List = () => {
     const editorRef = useRef(null)
     const [regexData, setRegexData] = useState({
@@ -27,10 +28,14 @@ const List = () => {
         title: '',
         contents: '',
     })
+
     const [list, setList] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [checkAll, setCheckAll] = useState(false)
     const [check, setCheck] = useState([])
+
+    const [target, setTarget] = useState('')
+    const [keyword, setKeyword] = useState('')
 
     const [maxList, setMaxList] = useState(10)
     const navi = useNavigate()
@@ -69,12 +74,48 @@ const List = () => {
 
     //페이지
     const [cpage, setCpage] = useState(1)
+    const [recordCountPerPage, setRecordCountPerPage] = useState(5)
+    const handleCpage = e => {
+        setRecordCountPerPage(e.target.value) // cpage 설정 후 recordCountPerPage 설정
+    }
     const [page_total_count, setPage_total_count] = useState(1)
     const [status, setStatus] = useState('')
-    const [category, setCategory] = useState('')
 
-    const record_count_per_page = 5
+    // const record_count_per_page = 5
     const navi_count_per_page = 5
+    const [search, setSearch] = useState(false)
+    useEffect(() => {
+        if (cpage !== 0) {
+            const start = cpage * recordCountPerPage - (recordCountPerPage - 1) //1
+            const end = cpage * recordCountPerPage //10
+            console.log(end)
+            api.get(
+                `/board/admin?start=${start}&end=${end}&keyword=${search}&target=${target}`
+            ).then(resp => {
+                // console.log(resp)
+                setList(() => {
+                    const record_total_count = resp.data.count //106 10 // 10
+                    if (record_total_count % recordCountPerPage === 0) {
+                        setPage_total_count(
+                            Math.floor(record_total_count / recordCountPerPage)
+                        )
+                    } else {
+                        setPage_total_count(
+                            Math.floor(
+                                record_total_count / recordCountPerPage
+                            ) + 1
+                        )
+                    }
+                    return resp.data.list //10
+                })
+            })
+            window.scrollTo(0, 0)
+        }
+    }, [cpage, add, search])
+
+    const handlePage = selectedPage => {
+        setCpage(selectedPage.selected + 1)
+    }
 
     useEffect(() => {
         const allTrue = Object.values(regexData).every(value => value === true)
@@ -82,18 +123,6 @@ const List = () => {
         setCheckAll(allTrue)
         console.log(regexData)
     }, [regexData])
-
-    useEffect(() => {
-        api.get(`/board`).then(resp => {
-            console.log(resp.data)
-            setList(resp.data)
-            setCheck(
-                resp.data.map(() => {
-                    return false
-                })
-            )
-        })
-    }, [])
 
     // const handleCheck = index => {
     //     setCheck(prev => {
@@ -103,10 +132,6 @@ const List = () => {
     //         })
     //     })
     // }
-
-    const handlePage = selectedPage => {
-        setCpage(selectedPage.selected + 1)
-    }
 
     const handleDetail = item => {
         const board_seq = item?.board_seq
@@ -149,28 +174,61 @@ const List = () => {
             }
         })
     }
+
+    const handleSearch = () => {
+        setSearch(keyword)
+        setCpage(1)
+    }
+    useEffect(() => {
+        if (cpage === 1) {
+            setCpage(0) // 잠시 다른 값으로 설정
+            setTimeout(() => {
+                setCpage(1) // 다시 1로 설정
+            }, 0) // 짧은 지연 후 cpage를 1로 설정하여 상태 변화 유도
+        } else {
+            setCpage(1)
+        }
+    }, [recordCountPerPage])
     return (
         <div className={styles.container}>
             <div className={styles.search}>
                 <select
-                    value={category}
-                    onChange={e => setCategory(e.target.value)}
+                    value={target}
+                    onChange={e => {
+                        setTarget(e.target.value)
+                        setKeyword('')
+                    }}
                     className={styles.select}
                 >
-                    <option value="">유형</option>
-                    <option value="제목">제목</option>
-                    <option value="내용">내용</option>
+                    <option value="">선택</option>
+                    <option value="title">제목</option>
+                    <option value="contents">내용</option>
                 </select>
                 <div className={styles.searchCont}>
                     <input
                         type="search"
                         placeholder="제목 또는 내용으로 검색."
+                        value={keyword}
+                        onChange={e => setKeyword(e.target.value)}
                     />
 
                     <FontAwesomeIcon
                         icon={faMagnifyingGlass}
                         className={styles.faMagnifyingGlass}
+                        onClick={handleSearch}
                     />
+                </div>
+                <div className={styles.header}>
+                    <select
+                        value={recordCountPerPage}
+                        onChange={e => setRecordCountPerPage(e.target.value)}
+                    >
+                        <option value={5}>5 </option>
+                        <option value={10}> 10</option>
+                        <option value={15}> 15</option>
+                        <option value={20}> 20</option>
+                        <option value={25}> 25</option>
+                    </select>
                 </div>
             </div>
 
@@ -371,6 +429,22 @@ const List = () => {
                                 </React.Fragment>
                             )
                         })}
+                        <ReactPaginate
+                            pageCount={page_total_count} // 페이지 총 개수
+                            pageRangeDisplayed={navi_count_per_page} // 현재 페이지를 기준으로 표시할 페이지 범위 수
+                            marginPagesDisplayed={1} // 양쪽 끝에 표시할 페이지 수
+                            onPageChange={handlePage} // 페이지 변경 핸들러
+                            containerClassName={styles.pagination} // 스타일 클래스
+                            activeClassName={styles.active} // 활성 페이지 클래스
+                            initialPage={0} //초기 page 값
+                            previousLabel={'<'} // 이전 페이지 버튼 레이블
+                            previousClassName={styles.previous} // 이전 버튼의 클래스명
+                            nextLabel={'>'} // 다음 페이지 버튼 레이블
+                            nextClassName={styles.next} // 다음 버튼의 클래스명
+                            breakLabel={'...'} // 생략 표시 제거
+                            breakClassName={null} // 생략 표시의 클래스명 제거
+                            forcePage={cpage > 0 ? cpage - 1 : 0}
+                        />
                     </div>
                 </div>
                 {/* {list.map((item, index) => {

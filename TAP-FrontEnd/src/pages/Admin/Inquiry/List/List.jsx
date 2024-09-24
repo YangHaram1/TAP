@@ -5,27 +5,27 @@ import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
-const List = ({recordCountPerPage,cpage,setCpage}) => {
+const List = ({ recordCountPerPage, cpage, setCpage }) => {
     const [list, setList] = useState([]);
     const navi = useNavigate();
 
     //페이지
- 
+
     const [page_total_count, setPage_total_count] = useState(1);
-    const [status,setStatus]= useState('');
-    const [category,setCategory]=useState('');
+    const [status, setStatus] = useState('');
+    const [category, setCategory] = useState('');
 
     //const record_count_per_page = 5;
     const navi_count_per_page = 5;
 
     useEffect(() => {
-        if(cpage!==0){
+        if (cpage !== 0) {
             const start = cpage * recordCountPerPage - (recordCountPerPage - 1); //1
             const end = cpage * recordCountPerPage; //10
-      
+
             api.get(`/inquiry/admin?start=${start}&end=${end}&status=${status}&category=${category}`).then((resp) => {
                 // console.log(resp)
-                setList(()=>{
+                setList(() => {
                     const record_total_count = resp.data.count;//106 10 // 10
                     if (record_total_count % recordCountPerPage === 0) {
                         setPage_total_count(Math.floor(record_total_count / recordCountPerPage));
@@ -38,8 +38,8 @@ const List = ({recordCountPerPage,cpage,setCpage}) => {
             })
             window.scrollTo(0, 0);
         }
-       
-    }, [cpage, status,category])
+
+    }, [cpage, status, category])
 
     const handlePage = (selectedPage) => {
         setCpage(selectedPage.selected + 1);
@@ -57,12 +57,18 @@ const List = ({recordCountPerPage,cpage,setCpage}) => {
     return (
         <div className={styles.container}>
             <div className={styles.search}>
-                <select value={status} onChange={(e) => setStatus(e.target.value)} className={styles.stateSelect}>
+                <select value={status} onChange={(e) => {
+                    setStatus(e.target.value);
+                    setCpage(1)
+                }} className={styles.stateSelect}>
                     <option value="">상태</option>
                     <option value="0">답변대기</option>
                     <option value="1">답변완료</option>
                 </select>
-                <select value={category} onChange={(e) => setCategory(e.target.value)} className={styles.select}>
+                <select value={category} onChange={(e) => {
+                    setCategory(e.target.value);
+                    setCpage(1)
+                }} className={styles.select}>
                     <option value="">유형</option>
                     <option value="예매">예매</option>
                     <option value="할인">할인</option>
@@ -139,7 +145,7 @@ const List = ({recordCountPerPage,cpage,setCpage}) => {
                     nextClassName={styles.next} // 다음 버튼의 클래스명
                     breakLabel={'...'} // 생략 표시 제거
                     breakClassName={null} // 생략 표시의 클래스명 제거
-                    forcePage={cpage>0?cpage-1:0}
+                    forcePage={cpage > 0 ? cpage - 1 : 0}
                 />
             </div>
 

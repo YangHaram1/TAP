@@ -6,7 +6,7 @@ public class SearchResultDTO {
 	private int application_seq;
 	private String name;
 	private Timestamp start_date, end_date, open_date;
-	private String status, place_name, sub_category_name, files_sysname;
+	private String status, place_name, sub_category_name, files_sysname,member_id;
 	public int getApplication_seq() {
 		return application_seq;
 	}
@@ -61,8 +61,15 @@ public class SearchResultDTO {
 	public void setFiles_sysname(String files_sysname) {
 		this.files_sysname = files_sysname;
 	}
+	public String getMember_id() {
+		return member_id;
+	}
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
+	}
 	public SearchResultDTO(int application_seq, String name, Timestamp start_date, Timestamp end_date,
-			Timestamp open_date, String status, String place_name, String sub_category_name, String files_sysname) {
+			Timestamp open_date, String status, String place_name, String sub_category_name, String files_sysname,
+			String member_id) {
 		super();
 		this.application_seq = application_seq;
 		this.name = name;
@@ -73,10 +80,14 @@ public class SearchResultDTO {
 		this.place_name = place_name;
 		this.sub_category_name = sub_category_name;
 		this.files_sysname = files_sysname;
+		this.member_id = member_id;
 	}
 	public SearchResultDTO() {
 		super();
 	}
+	
+	
+	
 	
 	
 	

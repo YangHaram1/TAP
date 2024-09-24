@@ -80,15 +80,14 @@ public class BoardController {
 	ResponseEntity<Map<String,Object>> getAll(
 			@RequestParam(name = "start", required = true, defaultValue = "1") int start,
 			@RequestParam(name = "end", required = true, defaultValue = "5") int end,
-			@RequestParam(name = "status", required = false, defaultValue = "") String status,
-			@RequestParam(name = "category", required = false, defaultValue = "") String category) throws Exception {
+			@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+			@RequestParam(name = "target", required = false, defaultValue = "") String target) throws Exception {
 		Map<String, Object> map= new HashMap<>();
-		System.out.println(status);
-		System.out.println(category);
+		
 		map.put("start", start);
 		map.put("end", end);
-		map.put("status", status);
-		map.put("category", category);
+		map.put("keyword", keyword);
+		map.put("target", target);
 		Map<String, Object> result=bserv.selectAll(map);
 		return ResponseEntity.ok(result);
 		

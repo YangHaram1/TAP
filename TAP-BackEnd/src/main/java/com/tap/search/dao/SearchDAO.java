@@ -18,4 +18,8 @@ public class SearchDAO {
 		return mybatis.selectList("Search.apply",query);
 	}
 
+	public List<SearchResultDTO> myApply(String username) {
+		return mybatis.selectList("Search.myApply",username);
+	}
+
 }

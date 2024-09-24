@@ -38,7 +38,7 @@ export const ModalStatus = ({ onClose, applicationSeq }) => {
                 <button className={styles.close} onClick={onClose}>X</button>
                 </div>
                 <div className="modal">
-                    <p>해당 상품 (application_seq: {applicationSeq})을 반려하시겠습니까?</p>
+                    <p>해당 상품 등록 신청을 반려하시겠습니까?</p>
                     <textarea
                         className={styles.textarea}
                         placeholder="반려 사유를 입력해 주세요."

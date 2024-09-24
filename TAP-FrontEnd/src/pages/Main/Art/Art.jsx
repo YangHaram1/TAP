@@ -15,7 +15,7 @@ export const Art = ({category})=>{
     // 탭에서 선택된 장르
     const [genre, setGenre] = useState('');
 
-    console.log(category); // musical, concert
+    // console.log(category); // musical, concert
     // 메인 캐러셀 이미지 배열
     const [images, setImages] = useState([]);
     // 할인 캐러셀 이미지 배열 (category = musical일 때만 받아오기)
@@ -35,13 +35,13 @@ export const Art = ({category})=>{
             // console.log("콘서트 정보 불러오기");
             category = 2;
         }else{
-            console.log("잘못된 접근 확인 필요");
+            // console.log("잘못된 접근 확인 필요");
         }
 
         // 승인 받은 내역 추출 (추후 데이터 많아지면 오픈 예정 컨텐츠는 제외)
         api.get(`/artlist/${category}`)
         .then((resp)=>{
-            console.log(resp.data);
+            // console.log(resp.data);
             setImages(resp.data);
         })
         .catch((err)=>{
@@ -51,7 +51,7 @@ export const Art = ({category})=>{
         // 오픈 예정 리스트 추출
         api.get(`/artlist/openContents/${category}`)
         .then((resp)=>{
-            console.log(resp.data);
+            // console.log(resp.data);
             setOpenContents(resp.data);
         })
         .catch((err)=>{
