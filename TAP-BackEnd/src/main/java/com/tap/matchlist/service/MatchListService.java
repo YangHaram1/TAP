@@ -7,21 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tap.matchlist.dao.MatchListDAO;
+import com.tap.matchlist.dto.MatchListDTO;
 
 @Service
 public class MatchListService {
     @Autowired
     private MatchListDAO mlDao;
 
-    public List<Map<String, Object>> getBaseballGames() {
-        List<Map<String, Object>> result = mlDao.getBaseballApplications();
-        System.out.println("Baseball Games Service Result: " + result); // 결과 출력
-        return result;
+    public List<MatchListDTO> getBaseballGames() {
+        List<MatchListDTO> games = mlDao.getBaseballApplications();
+        System.out.println("Baseball Games: " + games); // 결과 출력
+        return games;
     }
 
-    public List<Map<String, Object>> getSoccerGames() {
-        List<Map<String, Object>> result = mlDao.getSoccerApplications();
-        System.out.println("Soccer Games Service Result: " + result); // 결과 출력
-        return result;
+    public List<MatchListDTO> getSoccerGames() {
+        return mlDao.getSoccerApplications();
     }
 }

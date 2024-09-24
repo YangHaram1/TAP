@@ -76,7 +76,7 @@ export const AdminSideMenu = () => {
             icon: MdPostAdd ,
             submenus: [
                 { name: '공지사항', link: '/board/notice' },
-                { name: '사용자 기대평 내역', link: '/board/list' },
+                // { name: '사용자 기대평 내역', link: '/board/list' },
             ],
         },
         {
