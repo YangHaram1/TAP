@@ -1,6 +1,6 @@
 import styles from './Header.module.css'
 import { useNavigate } from 'react-router-dom'
-import { useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useAuthStore } from './../../store/store'
 import SweetAlert from './../SweetAlert/SweetAlert'
 import img1 from '../../images/logo192.png'
@@ -11,25 +11,69 @@ import {
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
+import { api } from '../../config/config'
+
 const Header = ({ hasScrolled }) => {
     const navi = useNavigate()
     const { isAuth, logout } = useAuthStore()
-    const [isSearchBox, setIsSearchBox] = useState(false)
-    const searchBoxRef = useRef(null)
-    const inputRef = useRef(null)
     const [inputValue, setInputValue] = useState('')
 
+    /*검색*/
+    const [isSearchBox, setIsSearchBox] = useState(false) // 검색 상자 표시 여부
+    const [searchResults, setSearchResults] = useState([]) // 검색 결과 상태
+    const [query, setQuery] = useState('') // 사용자가 입력한 검색어
+    const searchBoxRef = useRef(null)
+    const inputRef = useRef(null)
+    const [arr, setArr] = useState([]);
+
+    // 검색어가 변경될 떄마다 서버로 요청
+    useEffect(() => {
+        if (query) {
+            api.get(`search?query=${query}`)
+                .then(resp => {
+                    setSearchResults(resp.data)
+                    console.log(resp.data)
+                })
+                .catch(error => {
+                    console.error('검색오류', error)
+                })
+        } else {
+            setSearchResults([])
+        }
+    }, [query])
+
+
+    // 검색어 입력 이벤트
     const handleInputChange = e => {
-        setInputValue(e.target.value)
+        setQuery(e.target.value)
     }
     const clearInput = () => {
         setInputValue('')
     }
-    const handleLogout = () => {
-        sessionStorage.removeItem('token')
-        logout()
-        navi('/')
+    const handleMove = (item) => {
+        const seq = item.application_seq;
+        // console.log("상품번호", seq);
+        navi("/detail", { state: { seq } });
+        setArr((prev) => {
+            return [...prev, `${item.name} - ${item.sub_category_name} - ${item.place_name}`]
+        })
+
     }
+    useEffect(()=>{
+        console.log(arr)
+        if(arr.length>0){
+            const json =JSON.stringify(arr)
+            sessionStorage.setItem("search",json);
+        }
+       
+    },[arr])
+
+    useEffect(()=>{
+        const item =JSON.parse(sessionStorage.getItem("search"));
+        if(item){
+            setArr(item);
+        }
+    },[])
 
     useEffect(() => {
         const handleClick = event => {
@@ -46,6 +90,23 @@ const Header = ({ hasScrolled }) => {
             document.removeEventListener('mousedown', handleClick)
         }
     }, [])
+
+
+
+
+
+
+
+
+
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('token')
+        logout()
+        navi('/')
+    }
+
+
     const handleLogin = () => {
         if (isAuth) {
             SweetAlert(
@@ -70,6 +131,9 @@ const Header = ({ hasScrolled }) => {
         navi('/')
     }
 
+
+
+
     return (
         <div
             className={
@@ -89,6 +153,8 @@ const Header = ({ hasScrolled }) => {
                                 type="search"
                                 placeholder="콘서트, 뮤지컬, 스포츠로 찾아보세요."
                                 ref={inputRef}
+                                value={query}
+                                onChange={handleInputChange}
                                 onClick={() => setIsSearchBox(true)}
                             />
 
@@ -101,7 +167,54 @@ const Header = ({ hasScrolled }) => {
                             <div
                                 className={styles.searchBox}
                                 ref={searchBoxRef}
-                            ></div>
+                            >
+                                <ul className={styles.searchUl}>
+                                    {searchResults.length > 0 ? (
+                                        searchResults.map((item, index) => {
+                                            return (
+                                                <li
+                                                    key={index}
+                                                    onClick={() => handleMove(item)}
+                                                >
+                                                    {item.name} - {item.sub_category_name} - {item.place_name}
+                                                </li>
+                                            )
+                                        })
+                                    ) : (
+                                        <React.Fragment>
+                                            {arr.length > 0 ?
+
+                                                (
+                                                    <React.Fragment>
+                                                        <div>
+                                                            최근 검색한 목록
+                                                        </div>
+                                                        <div className={styles.arr}>
+                                                            {
+
+                                                                arr.map((item, index) => {
+                                                                    return (
+                                                                        <div>
+                                                                            {item}
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    </React.Fragment>
+
+                                                )
+
+                                                :
+
+                                                (<p>검색 결과가 없습니다.</p>)}
+
+
+                                        </React.Fragment>
+
+                                    )}
+                                </ul>
+                            </div>
                         )}
                     </div>
                 </div>
