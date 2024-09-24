@@ -11,16 +11,38 @@ import {
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
+import { api } from '../../config/config'
+
 const Header = ({ hasScrolled }) => {
     const navi = useNavigate()
     const { isAuth, logout } = useAuthStore()
-    const [isSearchBox, setIsSearchBox] = useState(false)
-    const searchBoxRef = useRef(null)
-    const inputRef = useRef(null)
     const [inputValue, setInputValue] = useState('')
 
+    /*검색*/
+    const [isSearchBox, setIsSearchBox] = useState(false) // 검색 상자 표시 여부
+    const [searchResults, setSearchResults] = useState([]) // 검색 결과 상태
+    const [query, setQuery] = useState('') // 사용자가 입력한 검색어
+    const searchBoxRef = useRef(null)
+    const inputRef = useRef(null)
+
+    // 검색어가 변경될 떄마다 서버로 요청
+    useEffect(() => {
+        if (query) {
+            api.get(`search?query=${query}`)
+                .then(resp => {
+                    setSearchResults(resp.data)
+                })
+                .catch(error => {
+                    console.error('검색오류', error)
+                })
+        } else {
+            setSearchResults([])
+        }
+    }, [query])
+
+    // 검색어 입력 이벤트
     const handleInputChange = e => {
-        setInputValue(e.target.value)
+        setQuery(e.target.value)
     }
     const clearInput = () => {
         setInputValue('')
@@ -89,6 +111,8 @@ const Header = ({ hasScrolled }) => {
                                 type="search"
                                 placeholder="콘서트, 뮤지컬, 스포츠로 찾아보세요."
                                 ref={inputRef}
+                                value={query}
+                                onChange={handleInputChange}
                                 onClick={() => setIsSearchBox(true)}
                             />
 
@@ -101,7 +125,24 @@ const Header = ({ hasScrolled }) => {
                             <div
                                 className={styles.searchBox}
                                 ref={searchBoxRef}
-                            ></div>
+                            >
+                                {searchResults.length > 0 ? (
+                                    <ul>
+                                        {searchResults.map((item, index) => {
+                                            ;<li
+                                                key={index}
+                                                onClick={() =>
+                                                    (window.location.href = `/detail/${item.id}`)
+                                                }
+                                            >
+                                                {item.tite} - {item.category}
+                                            </li>
+                                        })}
+                                    </ul>
+                                ) : (
+                                    <p>검색 결과가 없습니다.</p>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
