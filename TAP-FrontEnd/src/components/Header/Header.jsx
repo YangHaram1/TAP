@@ -70,7 +70,7 @@ const Header = ({ hasScrolled }) => {
 
     useEffect(()=>{
         const item =JSON.parse(sessionStorage.getItem("search"));
-        if(item.length){
+        if(item){
             setArr(item);
         }
     },[])
