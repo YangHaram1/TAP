@@ -75,7 +75,7 @@ const Menus = () => {
                                 <Img img={'coupon'} />
                             </div>
                             <div>
-                                쿠폰 관리
+                                쿠폰 및 예매 관리
                             </div>
                         </div>
                         <div className={color.board ? styles.color : styles.menu} onClick={() => handleNavi('board')}>

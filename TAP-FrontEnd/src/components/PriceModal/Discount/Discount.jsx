@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useOrder } from '../../../store/store';
 import styles from './Discount.module.css';
 
-export const Discount = ({tickets, setTickets})=>{
+export const Discount = ({tickets, setTickets,couponList,setSelectedCoupon,setCouponSeq})=>{
 
     const {date, time, seq, storageSection, storageSeats, mainData, seatPrices} = useOrder();
-
+    let zero = null;
     useEffect(()=>{
         setTickets([]);
     },[])
@@ -40,6 +40,13 @@ export const Discount = ({tickets, setTickets})=>{
                 return [...prevTickets, { grade: grade, count: count, price:price }];
             }
         });
+    }
+
+    const handleCoupon = (value, seq) => {
+        console.log("Discount value:", value); // 선택된 할인 금액
+        console.log("Coupon seq:", seq); // 선택된 쿠폰의 seq
+        setSelectedCoupon(value); // 쿠폰 선택 상태 업데이트
+        setCouponSeq(seq);
     }
 
     useEffect(()=>{
@@ -78,17 +85,19 @@ export const Discount = ({tickets, setTickets})=>{
                 <h3>할인 / 쿠폰 <span>(중복 사용 불가)</span></h3>
                 <div className={styles.coupon_box_content}>
                     <div className={styles.coupon_list}>
-                        <input type='radio' name="coupon"/> <label>쿠폰 종류</label>
+                        <input type='radio' name="coupon" value={zero}  onChange={(e) => handleCoupon(e.target.value, 0)}/> 
+                        <label> 쿠폰 미사용 <span style={{color:"red"}}></span></label>
                     </div>
-                    <div className={styles.coupon_list}>
-                        <input type='radio' name="coupon"/> <label>쿠폰 종류</label>
-                    </div>
-                    <div className={styles.coupon_list}>
-                        <input type='radio' name="coupon"/> <label>쿠폰 종류</label>
-                    </div>
-                    <div className={styles.coupon_list}>
-                        <input type='radio' name="coupon" disabled/> <label className={styles.disabledText}>사용불가 쿠폰</label>
-                    </div>
+                    {
+                        couponList.map((coupon)=>{
+                            return(
+                                <div className={styles.coupon_list} key={coupon.seq}>
+                                    <input type='radio' name="coupon" value={coupon.discount} onChange={(e) => handleCoupon(e.target.value, coupon.seq)}/> 
+                                    <label>{coupon.title} <span style={{color:"red"}}> &nbsp; -{coupon.discount.toLocaleString()}원</span></label>
+                                </div>
+                            );
+                        })
+                    }
                 </div>
             </div>
         </div>

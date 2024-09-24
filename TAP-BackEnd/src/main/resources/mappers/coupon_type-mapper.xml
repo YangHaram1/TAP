@@ -31,7 +31,7 @@
    		</if>
    		
 		<if test="target=='grade'">
-      		and b.name =#{keyword,jdbcType=VARCHAR}
+      		and b.name like '%'||#{keyword,jdbcType=VARCHAR}||'%' 
    		</if>
    		)a 
    		where rown between ${start} and ${end}
@@ -53,7 +53,7 @@
    		</if>
    		
 		<if test="target=='grade'">
-      		and a.name =#{keyword,jdbcType=VARCHAR}
+      		and a.name like '%'||#{keyword,jdbcType=VARCHAR}||'%' 
    		</if>
 	</select>
 	

@@ -10,12 +10,29 @@
 	</select>
 	
 	<select id="selectAll" resultType="com.tap.board.dto.BoardDTO">
-
+		select a.* from
+		(
+		select board.*, row_number() over(order by write_date desc) as rown
+		from board where 1=1
+		<if test="target=='title'">
+      		and  title like '%'||#{keyword,jdbcType=VARCHAR}||'%'
+   		</if>
+   		<if test="target=='contents'">
+      		and  contents like '%'|| #{keyword,jdbcType=VARCHAR} ||'%'
+   		</if>
+		)a
+		where rown between ${start} and ${end}
 	</select>
 	<select id="getBoardCount" resultType="int" >
-
-   	
+		select count(*) from board where 1=1
+		<if test="target=='title'">
+      		and  title like '%'||#{keyword,jdbcType=VARCHAR}||'%'
+   		</if>
+   		<if test="target=='contents'">
+      		and  contents like '%'|| #{keyword,jdbcType=VARCHAR} ||'%'
+   		</if>
 	</select>
+	
 	<delete id="delete">
 		delete from board where board_seq=${seq}
 	</delete>

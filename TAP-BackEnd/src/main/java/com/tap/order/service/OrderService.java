@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tap.coupon.dto.CouponTypeDTO;
 import com.tap.order.dao.OrderDAO;
 import com.tap.order.dto.BookSeatsDTO;
 import com.tap.order.dto.OrdersDTO;
@@ -106,7 +107,6 @@ public class OrderService {
 	    String bookSeq = orderSeq + "-" + currentDate + "-" + seq; // ex: "1001-240921-1040"
 	    System.out.println("생성된 bookSeq: " + bookSeq);
 	    
-	    
 	    for (int i = 0; i < storageSeats.size(); i++) {
 	    	
 	        Map<String, Object> map = storageSeats.get(i);
@@ -136,6 +136,11 @@ public class OrderService {
 	    int updatePoint = point-totalPrice;
 	    oDao.updatePoint(updatePoint, id);
 	    
+	    // 4. 쿠폰 사용시 쿠폰 상태 없데이트 하기
+	    int couponSeq = orderData.get("couponSeq") != null ? 
+                Integer.parseInt(orderData.get("couponSeq").toString()) : 0;
+	    oDao.updateState(couponSeq);
+
 	}
 	
 	public List<OrdersDTO> getOrder(Map<String,Object> map){
@@ -156,6 +161,10 @@ public class OrderService {
 	
 	public List<BookSeatsDTO> getBookSeats(Map<String,Object> map){
 		return oDao.getBookSeats(map);
+	}
+	
+	public List<CouponTypeDTO> selectByOrder(Map<String, Object> data){
+		return oDao.selectByOrder(data);
 	}
 	
 }

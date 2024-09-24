@@ -28,12 +28,16 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
     const [check, setCheck] = useState(false);
 
     const [inputBrith, setinputBirth] = useState("");
+    const [couponList,setCouponList] = useState([]);
+    const [selectedCoupon, setSelectedCoupon] = useState(null); // 선택된 쿠폰 가격
+    const [couponSeq, setCouponSeq] = useState(0);
 
     useEffect(()=>{
         console.log("탭확인", tap);
         console.log("가격확인",seatPrices);
+        console.log("쿠폰확인",selectedCoupon);
         // onBookClose();
-    },[tap])
+    },[tap, selectedCoupon])
 
     const handleClosePriceModal = ()=>{
         onClose();
@@ -140,6 +144,7 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
                         pay:payMethod, // 결제방법 (포인트, 카카오)
                         deliveryMethod:deliveryMethod, // 배송방법(현장결재, 배송)
                         deliverySeq:deliverySeq, //배송지번호
+                        couponSeq:couponSeq
                     }
 
                     // 예약 되어있는 좌석 중 동일 좌석이 있는지 한번 더 확인 
@@ -194,13 +199,30 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
 //================================= 가격/ 할인 선택============================
 
     useEffect(()=>{
+        api.get(`/order/type/members`)
+        .then((resp)=>{
+            console.log(resp);
+            console.log("쿠폰 데이터 확인 필요~~~~~",resp.data);
+            setCouponList(resp.data);
+        })
+        .catch((err)=>{console.log(err)})
+    },[seq, storageSeats])
+
+    useEffect(()=>{
         const complexCount = tickets.reduce((acc, ticket) => acc + (parseInt(ticket.count, 10) * parseInt(ticket.price, 10)), 0);
         console.log(complexCount);
         setTicketTotalPrice(complexCount);
     },[tickets])
 
+    let insertDelivery = 0;
+    if(deliveryMethod === 'post'){
+        insertDelivery = 3200;
+    }else{
+        insertDelivery = 0;
+    }
+
     useEffect(()=>{
-        let sum = ticketTotalPrice + tax + delivery_tax;
+        let sum = ticketTotalPrice + tax + insertDelivery - selectedCoupon;
         setTotalPrice(sum);
         console.log(sum);
     },[ticketTotalPrice])
@@ -237,7 +259,7 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
                     <div className={styles.main}>
                         <div className={styles.main_left}>
                            {
-                            tap === 1 ? <Discount tickets={tickets} setTickets={setTickets}/> 
+                            tap === 1 ? <Discount tickets={tickets} setTickets={setTickets} couponList={couponList} setSelectedCoupon={setSelectedCoupon} setCouponSeq= {setCouponSeq}/> 
                             : tap === 2 ? <OrderCheck inputBrith={inputBrith} setinputBirth={setinputBirth} delivery_tax={delivery_tax}/> 
                             : tap === 3 ? <Pay/> 
                             : tap === 4 ? <Cancle setCheck={setCheck}/> 
@@ -305,7 +327,7 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
                                         </tr>
                                         <tr>
                                             <td>할인</td>
-                                            <td style={{color:"red"}}>{/*-7,000원*/}</td>
+                                            <td style={{color:"red", width:"150px"}}>{selectedCoupon === null ? "0원" : selectedCoupon === '0' ? "0원": <p> - {selectedCoupon.toLocaleString()}원</p>}</td>
                                         </tr>
                                         <tr>
                                             <td>취소기한</td>
