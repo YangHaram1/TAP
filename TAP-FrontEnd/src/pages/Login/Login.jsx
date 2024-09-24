@@ -132,6 +132,10 @@ const Login = () => {
         return <FindPw></FindPw>
     }
 
+     /** Enter 키를 통한 로그인 **/
+  const handleEnter = (e) => {
+    if(e.key === "Enter") handleLogin();
+  }
     return (
         <div className={styles.container} onClick={handleContainer}>
             {/* <Routes>
@@ -158,6 +162,7 @@ const Login = () => {
                             placeholder="아이디"
                             name="id"
                             className={styles.id}
+                            onKeyDown={handleEnter}
                             value={user.id}
                             onChange={handleChange}
                             onClick={() => {
@@ -187,6 +192,7 @@ const Login = () => {
                             type={showEye ? 'text' : 'password'}
                             placeholder="비밀번호"
                             name="pw"
+                            onKeyDown={handleEnter}
                             value={user.pw}
                             className={styles.pw}
                             onClick={() => {
