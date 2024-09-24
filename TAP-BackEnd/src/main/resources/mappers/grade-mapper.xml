@@ -28,7 +28,7 @@
       		and  grade_order =${keyword}
    		</if>
 		<if test="target=='grade'">
-      		and name = #{keyword,jdbcType=VARCHAR}
+      		and name like '%'||#{keyword,jdbcType=VARCHAR}||'%'
    		</if>
    		)a 
    		where rown between ${start} and ${end}
@@ -42,7 +42,7 @@
       		and  grade_order =${keyword}
    		</if>
 		<if test="target=='grade'">
-      		and name = #{keyword,jdbcType=VARCHAR}
+      		and name like '%'||#{keyword,jdbcType=VARCHAR}||'%'
    		</if>
 	</select>
 	
