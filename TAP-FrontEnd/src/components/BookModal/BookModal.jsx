@@ -103,6 +103,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
     //============================== 예매 좌석 세팅 ==============================
 
     useEffect(()=>{
+        if(token !== null){
         api.get(`/order/getBookSeats?date=${date}&time=${time}&seq=${seq}`)
         .then((resp)=>{
             console.log(resp.data);
@@ -111,6 +112,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         .catch((err)=>{
             console.log(err);
         })
+    }
 
     },[isOpen,date,time,storageSeats])
 

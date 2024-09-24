@@ -67,6 +67,34 @@ public class DetailService {
 	public int getCount(Map<String, Object> data) {
 		return dDao.getCount(data);
 	}
+	
+	public int getTotalLikes(int seq) {
+		return dDao.getTotalLikes(seq);
+	}
+	
+	public boolean getIsLike(Map<String, Object> data) {
+		return dDao.getIsLike(data);
+	}
+	
+	public void inputLike(Map<String, Object> data) {
+		dDao.inputLike(data);
+	}
+	
+	public void deleteLike(Map<String, Object> data) {
+		dDao.deleteLike(data);
+	}
+	
+	public List<Integer> getUserLikedReviews(Map<String, Object> data){
+		return dDao.getUserLikedReviews(data);
+	}
+	
+	public void updateReviewLikes(Map<String, Object> data) {
+		dDao.updateReviewLikes(data);
+	}
+	
+	public void deleteReviewLikes(Map<String, Object> data) {
+		dDao.deleteReviewLikes(data);
+	}
 
 
 }

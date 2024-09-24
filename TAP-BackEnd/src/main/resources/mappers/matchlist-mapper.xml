@@ -18,7 +18,11 @@
         away_team.TEAM_NAME AS awayTeamName,  <!-- 매핑 이름 변경 -->
         away_team.LOGO_IMAGE AS awayTeamLogo   <!-- 매핑 이름 변경 -->
         , place.place_seq
-        ,a.max_ticket
+        ,a.max_ticket,
+         a.age_limit,
+         a.id,
+         a.status,
+          a.sub_category_seq
     FROM
         APPLY a
     LEFT JOIN
@@ -46,7 +50,9 @@
         away_team.TEAM_NAME AS awayTeamName,  <!-- 매핑 이름 변경 -->
         away_team.LOGO_IMAGE AS awayTeamLogo   <!-- 매핑 이름 변경 -->
         , place.place_seq
-        ,a.max_ticket
+        ,a.max_ticket,
+        a.age_limit,
+        a.sub_category_seq
     FROM
         APPLY a
     LEFT JOIN
