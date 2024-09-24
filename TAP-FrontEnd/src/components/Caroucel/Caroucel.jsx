@@ -84,9 +84,9 @@ export const Caroucel = ({category, images})=>{
               //   disableSwipe={true} // 스와이프 가능 유무
               >
                 {
-                  images.map((image)=>{
+                  images.map((image, index)=>{
                     return(
-                    <div key={image.application_seq} onClick={()=>{handleMove(`${image.application_seq}`)}} style={{ height: settings.height, background: `url(${image.files_sysname}) no-repeat center/cover`, color:'white' }} className={styles.card}>
+                    <div key={index} onClick={()=>{handleMove(`${image.application_seq}`)}} style={{ height: settings.height, background: `url(${image.files_sysname}) no-repeat center/cover`, color:'white' }} className={styles.card}>
                         <div className={styles.overlay}></div> {/* 오버레이 추가 */}
                         <h2 style={{overflow:"hidden",whiteSpace: "nowrap",textOverflow: "ellipsis", maxWidth: "300px" }}>{image.name}</h2>
                         <p>{image.place_name}</p>
