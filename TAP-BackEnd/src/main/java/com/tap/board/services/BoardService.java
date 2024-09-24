@@ -25,7 +25,7 @@ public class BoardService {
 	public Map<String, Object> selectAll(Map<String, Object> map) {
 		Map<String, Object> result =new HashMap<>();
 		result.put("list", bdao.selectAll(map));
-//		result.put("count", bdao.getInquiryCount(map));
+		result.put("count", bdao.getBoardCount(map));
 		
 		return result;
 	}
