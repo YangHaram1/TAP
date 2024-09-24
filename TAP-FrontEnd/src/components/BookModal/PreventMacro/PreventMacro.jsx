@@ -29,6 +29,7 @@ export const PreventMacro = ({onClose})=>{
             alert("다시 입력해주세요");
             const randomAlphabets = getRandomAlphabets();
             setRandomWord(randomAlphabets);
+            setCheckWord("");
         }
     }
 
@@ -44,7 +45,7 @@ export const PreventMacro = ({onClose})=>{
                 <p style={{margin:"5px"}}>부정예매방지를 위해 아래의 문자를 입력해주세요.</p>
                 <p style={{margin:"5px"}}>인증 후 좌석을 선택할 수 있습니다.</p>
                 <div className={styles.checkword}>{randomWord}</div>
-                <input className={styles.inputword} type='text' placeholder='문자를 입력해주세요' onChange={handleText}></input>
+                <input className={styles.inputword} type='text' placeholder='문자를 입력해주세요' onChange={handleText} value={checkWord||''}></input>
                 <button onClick={handleClick}>입력완료</button>
             </div>
         </div>

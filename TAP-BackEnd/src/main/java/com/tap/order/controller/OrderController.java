@@ -48,6 +48,7 @@ public class OrderController {
 	@GetMapping("/{placeSeq}")
 	public Map<String,?> getSeatData(@PathVariable int placeSeq){
 		
+		System.out.println("장소 번호"+placeSeq);
 		Map map = new HashMap<>();
 		
 		// 섹션 정보 (총 좌석수, 섹션이름, 공연장 모양, 섹션별 행, 열)

@@ -52,7 +52,7 @@ export const List = ({genre, category})=>{
                                 <div className={styles.poster}>
                                     <img src={list.files_sysname}></img>
                                 </div>
-                                <p style={{fontSize:"18px", fontWeight:"600"}}>{list.name}</p>
+                                <p style={{fontSize:"18px", fontWeight:"600", height:"50px", overflow:"hidden",whiteSpace: "nowrap",textOverflow: "ellipsis", maxWidth: "250px" }}>{list.name}</p>
                                 <p style={{marginBottom:"0"}}>{list.place_name}</p>
                                 <p style={{marginTop:"0"}}>
                                     {format(new Date(list.start_date), 'yyyy.MM.dd')} - 

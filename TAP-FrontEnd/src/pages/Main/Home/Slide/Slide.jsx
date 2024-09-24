@@ -7,10 +7,9 @@ import { url } from '../../../../config/config'
 import banner1 from '../../../../images/banner1.webp'
 import banner2 from '../../../../images/banner2.webp'
 import banner3 from '../../../../images/banner3.webp'
-// import banner4 from '../../../../images/banner1.webp'
-// import banner5 from '../../../../images/background2.jpg'
-// import banner6 from '../../../../images/background3.jpg'
-// import banner7 from '../../../../images/background4.jpg'
+import banner4 from '../../../../images/banner4.webp'
+import banner5 from '../../../../images/banner5.webp'
+import banner6 from '../../../../images/banner6.webp'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,9 +22,9 @@ const Slide = () => {
         { img: banner1, seq:1040},
         { img: banner2, seq:1073}, // 추후 해당하는 시퀀스로 바꿔주기
         { img: banner3, seq:1074}, // 추후 해당하는 시퀀스로 바꿔주기
-        // { img: banner4 },
-        // { img: banner5 },
-        // { img: banner6 },
+        { img: banner4, seq:1077},
+        { img: banner5, seq:1075},
+        { img: banner6, seq:1078},
         // { img: banner7 },
     ])
     const [img, setImg] = useState()
