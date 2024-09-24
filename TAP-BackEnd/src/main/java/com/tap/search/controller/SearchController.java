@@ -19,8 +19,6 @@ public class SearchController {
 	@Autowired
 	private SearchService serv;
 	
-	@Autowired
-	private ArtListService aserv;
 	
 	@GetMapping
 	public ResponseEntity<List<SearchResultDTO>> search(@RequestParam("query") String query) {
