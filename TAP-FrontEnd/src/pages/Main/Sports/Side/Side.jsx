@@ -7,25 +7,40 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
   const navigate = useNavigate();
 
   const handleTeamClick = (teamName, teamLogo) => {
-    const homeMatch = baseballMatches.find(match => match.homeTeamName === teamName);
-    
-    if (!homeMatch) {
+    // baseballMatches가 객체일 경우 matches 배열에서 찾기
+    const homeBaseballMatch = baseballMatches.matches?.find(match => match.homeTeamName === teamName);
+    const homeSoccerMatch = soccerMatches.matches?.find(match => match.homeTeamName === teamName); // 축구 경기 찾기
+  
+    // 경기가 없는 경우 경고 메시지 출력
+    if (!homeBaseballMatch && !homeSoccerMatch) {
       console.warn("해당 팀의 경기가 없습니다:", teamName);
       return; // 경기가 없을 경우 함수 종료
     }
-
-    const homeGround = homeMatch.placeName || "정보 없음"; // placeName으로 수정
-    const matches = baseballMatches.filter(
+  
+    // 홈 구장 정보 설정
+    const homeGround = homeBaseballMatch?.place_name || homeSoccerMatch?.place_name || "정보 없음"; // 홈 구장 가져오기
+  
+    // 야구 경기 필터링
+    const baseballMatchesFiltered = baseballMatches.matches?.filter(
       match => match.homeTeamName === teamName || match.awayTeamName === teamName
-    );
-
+    ) || []; // 기본값을 빈 배열로 설정
+  
+    // 축구 경기 필터링
+    const soccerMatchesFiltered = soccerMatches.matches?.filter(
+      match => match.homeTeamName === teamName || match.awayTeamName === teamName
+    ) || []; // 기본값을 빈 배열로 설정
+  
+    // 모든 경기를 통합
+    const matches = [...baseballMatchesFiltered, ...soccerMatchesFiltered];
+  
     console.log("홈 구장:", homeGround);
     console.log("매치들:", matches);
-
+  
     navigate('/teamPage', {
       state: { teamName, teamLogo, homeGround, matches },
     });
   };
+  
 
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);
@@ -36,6 +51,7 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
   };
 
   const getUniqueTeams = (matches) => {
+    if (!Array.isArray(matches)) return []; // matches가 배열이 아닌 경우 빈 배열 반환
     const teamSet = new Set();
     return matches.filter((match) => {
       const isDuplicate = teamSet.has(match.homeTeamName);
@@ -56,7 +72,7 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
             </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'baseball' ? styles.open : ''}`} onClick={preventPropagation}>
-            {getUniqueTeams(baseballMatches).map((match, index) => (
+            {getUniqueTeams(baseballMatches.matches || []).map((match, index) => (
               <li key={index}>
                 <a
                   href="javascript:;"
@@ -81,7 +97,7 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
             </a>
           </p>
           <ul className={`${styles.subMenu} ${openMenu === 'soccer' ? styles.open : ''}`} onClick={preventPropagation}>
-            {getUniqueTeams(soccerMatches).map((match, index) => (
+            {getUniqueTeams(soccerMatches.matches || []).map((match, index) => (
               <li key={index}>
                 <a
                   href="javascript:;"

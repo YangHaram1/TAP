@@ -13,7 +13,7 @@ public class MatchListDTO {
    private Timestamp startDate;
    private Timestamp endDate;
    private Timestamp openDate;
-   private String placeName;
+   private String place_name;
    private String homeTeamLogo;
    private String awayTeamLogo;
    private String name;
@@ -77,11 +77,11 @@ public Timestamp getOpenDate() {
 public void setOpenDate(Timestamp openDate) {
 	this.openDate = openDate;
 }
-public String getPlaceName() {
-	return placeName;
+public String getPlace_name() {
+	return place_name;
 }
-public void setPlaceName(String placeName) {
-	this.placeName = placeName;
+public void setPlaceName(String place_name) {
+	this.place_name = place_name;
 }
 public String getHomeTeamLogo() {
 	return homeTeamLogo;
@@ -120,7 +120,7 @@ public void setAge_limit(String age_limit) {
 	this.age_limit = age_limit;
 }
 public MatchListDTO(int application_seq, String homeTeamName, String awayTeamName, Timestamp startDate,
-		Timestamp endDate, Timestamp openDate, String placeName, String homeTeamLogo, String awayTeamLogo, String name,
+		Timestamp endDate, Timestamp openDate, String place_name, String homeTeamLogo, String awayTeamLogo, String name,
 		int max_ticket, int place_seq, String age_limit,String id, String status,int sub_category_seq) {
 	super();
 	this.application_seq = application_seq;
@@ -129,7 +129,7 @@ public MatchListDTO(int application_seq, String homeTeamName, String awayTeamNam
 	this.startDate = startDate;
 	this.endDate = endDate;
 	this.openDate = openDate;
-	this.placeName = placeName;
+	this.place_name = place_name;
 	this.homeTeamLogo = homeTeamLogo;
 	this.awayTeamLogo = awayTeamLogo;
 	this.name = name;

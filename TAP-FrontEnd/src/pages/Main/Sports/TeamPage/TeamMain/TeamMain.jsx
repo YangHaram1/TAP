@@ -76,7 +76,8 @@ export const TeamMain = ({ matches, selectedTeam }) => {
               </div>
 
               <div className={styles.ground}>
-                <span>{match.placeName || '경기장'}</span>
+                <span>{match.place_name
+ || '경기장'}</span>
               </div>
 
               <div className={styles.btns}>
