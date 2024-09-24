@@ -289,7 +289,73 @@ export const Write = ({category, list})=> {
             })
 
             window.location.reload();
+    }
 
+    //============================= 댓글 공감 ===================================
+
+    const [likedReviews, setLikedReviews] = useState(new Set()); // 공감한 리뷰 ID를 저장할 Set
+
+    useEffect(()=>{
+        console.log(likedReviews,"좋아요 댓글 번호!!!!!!")
+    },[likedReviews])
+
+    useEffect(() => {
+        // 예: 서버에서 사용자가 공감한 review_seq 리스트를 반환하는 API
+        api.get(`/detail/getUserLikedReviews/${seq}`)
+            .then((resp) => {
+                console.log(resp.data);
+                const likedReviewSeqs = resp.data; // 공감한 review_seq 배열
+                setLikedReviews(new Set(likedReviewSeqs)); // 받아온 공감 리스트를 Set에 저장
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [category]); // 빈 배열: 컴포넌트가 마운트될 때 한 번만 실행
+
+    const handleLikeToggle = (review_seq, currentLikeCount) => {
+
+        const isLiked = likedReviews.has(review_seq);
+    
+        const apiCall = isLiked 
+            ? api.delete(`/detail/deleteReviewLikes/${review_seq}`)
+            : api.post(`/detail/updateReviewLikes/${review_seq}`);
+        
+        apiCall
+            .then((resp) => {
+                // 성공적으로 요청 후 상태 업데이트
+                setLikedReviews((prev) => {
+                    const newSet = new Set(prev);
+                    if (isLiked) {
+                        newSet.delete(review_seq); // 공감 취소
+                    } else {
+                        newSet.add(review_seq); // 공감
+                    }
+                    return newSet;
+                });
+    
+                // 공감 수를 즉시 업데이트
+                setLists((prevData) => 
+                    prevData.map((item) => 
+                        item.review_seq === review_seq 
+                        ? { ...item, like_count: isLiked ? item.like_count - 1 : item.like_count + 1 }
+                        : item
+                    )
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const handleLogin = () =>{
+        Swal.fire(
+                    { 
+                      icon: 'warning',
+                      title: '로그인 후 댓글 관심 등록 설정 변경이 가능합니다.',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }
+                );
     }
 
     return (
@@ -414,7 +480,21 @@ export const Write = ({category, list})=> {
                                                 const date = new Date(data.review_date);
                                                 return isNaN(date) ? "Invalid Date"+ data.review_date+"1" : format(date, 'yyyy.MM.dd');
                                             })()}
-                                             &nbsp; | 공감 10 
+                                             &nbsp; | 공감 &nbsp;
+                                             { token !== null ?
+                                                <>
+                                                <span onClick={() => handleLikeToggle(data.review_seq, data.like_count)} >
+                                                    { likedReviews.has(data.review_seq) 
+                                                        ? <FontAwesomeIcon style={{color:"red"}} icon={solidHeart}/>
+                                                        : <FontAwesomeIcon style={{color:"red"}} icon={regularHeart}/>
+                                                    }
+                                                </span>&nbsp;(<span style={{fontWeight:"700"}}>{data.like_count}</span>)
+                                                </>
+                                                :<>
+                                                 <span onClick={handleLogin}><FontAwesomeIcon style={{color:"red"}} icon={regularHeart}/></span>
+                                                 &nbsp;(<span style={{fontWeight:"700"}}>{data.like_count}</span>)
+                                                </>
+                                            }
                                         {/* {data.member_id.substring(0,3)}** | {format(new Date(data.review_date), 'yyyy.MM.dd')} | 공감 10 */}
                                     </div>
                                 </div> 

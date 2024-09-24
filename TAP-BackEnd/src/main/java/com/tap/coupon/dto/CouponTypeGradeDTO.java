@@ -7,7 +7,7 @@ public class CouponTypeGradeDTO {
 	private int discount;
 	private String name;
 	private int min_point;
-	private int benefits;
+	private int benefits; 
 	private int coupon_order;
 	public int getSeq() {
 		return seq;

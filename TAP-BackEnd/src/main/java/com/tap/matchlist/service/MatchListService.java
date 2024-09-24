@@ -23,4 +23,5 @@ public class MatchListService {
     public List<MatchListDTO> getSoccerGames() {
         return mlDao.getSoccerApplications();
     }
+    
 }

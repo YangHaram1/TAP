@@ -1,13 +1,18 @@
 package com.tap.detail.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,6 +88,8 @@ public class DetailController {
 		List<ReviewStarDTO> reviewList = dServ.getReview(seq);
 		// 기대평
 		List<ExciteDTO> exciteList = dServ.getExcite(seq);
+		// 관심수
+		int totalLikes = dServ.getTotalLikes(seq);
 		
 		map.put("mainData", mainData);
 		map.put("description", description);
@@ -95,6 +102,7 @@ public class DetailController {
 		map.put("castingAndDate", castingAndDate);
 		map.put("reviewList", reviewList);
 		map.put("exciteList", exciteList);
+		map.put("totalLikes",totalLikes);
 		
 		return map;
 		
@@ -165,6 +173,129 @@ public class DetailController {
 		return map;
 		
 	}
+	
+	@GetMapping("/getLikes/{seq}")
+	public Map<String, Object> getLikes(@PathVariable int seq, Principal principal){
+		
+		Map<String, Object> map = new HashMap<>();
+		int totalLikes = dServ.getTotalLikes(seq);
+		map.put("totalLikes",totalLikes);
+		
+		if (principal == null) {
+			
+			return map;
+		}
+		String username = principal.getName();
+		System.out.println("getpoint id 확인 "+username);
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("id",username);
+		data.put("seq", seq);
+		
+		boolean isLike = dServ.getIsLike(data);
+		map.put("isLike", isLike);
+		
+		return map;
+		
+	}
+	
+	@PostMapping("/inputLike/{seq}")
+	public ResponseEntity<Void> inputLike(@PathVariable int seq, Principal principal){
+		
+		System.out.println("seq"+seq);
+		Map<String, Object> map = new HashMap<>();
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		System.out.println("getpoint id 확인 "+username);
+		
+		map.put("id",username);
+		map.put("seq", seq);
+		
+		dServ.inputLike(map);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@DeleteMapping("/deleteLike/{seq}")
+	public ResponseEntity<Void> deleteLike(@PathVariable int seq, Principal principal){
+		System.out.println("seq"+seq);
+		Map<String, Object> map = new HashMap<>();
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		System.out.println("getpoint id 확인 "+username);
+		
+		map.put("id",username);
+		map.put("seq", seq);
+		
+		dServ.deleteLike(map);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	// 댓글에서 공감이 되어있는 목록 출력
+	@GetMapping("/getUserLikedReviews/{seq}")
+	public ResponseEntity<List<Integer>> getUserLikedReviews(@PathVariable int seq, Principal principal) {
+		
+		System.out.println("작품 번호 seq"+seq);
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+	    
+	    String username = principal.getName();
+	    
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("id",username);
+		map.put("seq", seq);
+	    
+	    // 예시: 사용자가 공감한 리뷰 ID를 리스트로 반환
+	    List<Integer> likedReviewIds = dServ.getUserLikedReviews(map);
+	    
+	    System.out.println(ResponseEntity.ok(likedReviewIds));
+	    return ResponseEntity.ok(likedReviewIds); // List<Integer>를 JSON 배열로 반환
+	}
+	
+	// 댓글 공감 추가
+	@PostMapping("/updateReviewLikes/{review_seq}")
+	public ResponseEntity<Void> updateReviewLikes(@PathVariable int review_seq,Principal principal){
+		
+		System.out.println("추가 댓글 seq"+review_seq);
+		Map<String, Object> map = new HashMap<>();
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		
+		map.put("id",username);
+		map.put("seq", review_seq);
+		
+		dServ.updateReviewLikes(map);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	// 댓글 공감 삭제
+	@DeleteMapping("/deleteReviewLikes/{review_seq}")
+	public ResponseEntity<Void> deleteReviewLikes(@PathVariable int review_seq, Principal principal){
+		
+		System.out.println("삭제 댓글 seq"+review_seq);
+		Map<String, Object> map = new HashMap<>();
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		
+		map.put("id",username);
+		map.put("seq", review_seq);
+		
+		dServ.deleteReviewLikes(map);
+		
+		return ResponseEntity.ok().build();
+	}
+	
 	
 	
 
