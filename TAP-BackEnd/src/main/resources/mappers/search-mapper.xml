@@ -13,4 +13,17 @@
 		where a.name like '%' ||#{query,jdbcType=VARCHAR} ||'%'
 
 	</select>
+	
+	<select id="myApply" resultType="com.tap.search.dto.SearchResultDTO">
+	
+		<!--이름 - 카테고리명 - 장소-->
+		select * from 
+		(select * from apply a
+		join sub_category sc on a.sub_category_seq = sc.sub_category_seq)a
+		join place p on a.place_seq = p.place_seq
+        join orders o on a.application_seq= o.application_seq 
+		where member_id=#{id}
+
+	</select>
+
 </mapper>

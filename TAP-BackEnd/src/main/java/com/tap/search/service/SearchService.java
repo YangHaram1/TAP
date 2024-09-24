@@ -16,7 +16,11 @@ public class SearchService {
 
 	public List<SearchResultDTO> searchApply(String query) {
 		return sdao.searchApply(query);
-		}	
+		}
+
+	public List<SearchResultDTO> myApply(String username) {
+		return sdao.myApply(username);
+	}	
 	
 //	public List<SearchResultDTO> searchByQuery(String keyword) {
 //		return sdao.searchByKeyword(keyword);

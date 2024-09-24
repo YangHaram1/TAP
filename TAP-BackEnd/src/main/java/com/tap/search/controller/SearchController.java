@@ -1,5 +1,6 @@
 package com.tap.search.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,17 @@ public class SearchController {
 	public ResponseEntity<List<SearchResultDTO>> search(@RequestParam("query") String query) {
 
 		List<SearchResultDTO> list =serv.searchApply(query);
+		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping("/myApply")
+	public ResponseEntity<List<SearchResultDTO>> searchApply(Principal principal) {
+		if (principal == null) {
+			return ResponseEntity.ok(null);
+		}
+		String username = principal.getName();
+		
+		List<SearchResultDTO> list =serv.myApply(username);
 		return ResponseEntity.ok(list);
 	}
 }
