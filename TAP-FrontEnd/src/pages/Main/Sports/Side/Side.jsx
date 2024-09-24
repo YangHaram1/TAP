@@ -1,46 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Side.module.css'; // CSS 모듈 임포트
+import { useOrder } from '../../../../store/store'; // useOrder 임포트
 
-export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
+export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPrices = [], soccerSeatPrices = [] }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
+  
+  // useOrder 훅에서 필요한 값과 함수를 가져옴
+  const { setDate, setTime, setSeq, setMainData, setSeatPrices } = useOrder();
+
+  // useEffect로 데이터 확인
+  useEffect(() => {
+    console.log("baseballSeatPrices:", baseballSeatPrices);
+    console.log("soccerSeatPrices:", soccerSeatPrices);
+  }, [baseballSeatPrices, soccerSeatPrices]);
 
   const handleTeamClick = (teamName, teamLogo) => {
-    // baseballMatches가 객체일 경우 matches 배열에서 찾기
-    const homeBaseballMatch = baseballMatches.matches?.find(match => match.homeTeamName === teamName);
-    const homeSoccerMatch = soccerMatches.matches?.find(match => match.homeTeamName === teamName); // 축구 경기 찾기
-  
-    // 경기가 없는 경우 경고 메시지 출력
-    if (!homeBaseballMatch && !homeSoccerMatch) {
-      console.warn("해당 팀의 경기가 없습니다:", teamName);
-      return; // 경기가 없을 경우 함수 종료
-    }
-  
-    // 홈 구장 정보 설정
-    const homeGround = homeBaseballMatch?.place_name || homeSoccerMatch?.place_name || "정보 없음"; // 홈 구장 가져오기
-  
-    // 야구 경기 필터링
+    // 야구 및 축구 경기 필터링
     const baseballMatchesFiltered = baseballMatches.matches?.filter(
       match => match.homeTeamName === teamName || match.awayTeamName === teamName
-    ) || []; // 기본값을 빈 배열로 설정
-  
-    // 축구 경기 필터링
+    ) || [];
+
     const soccerMatchesFiltered = soccerMatches.matches?.filter(
       match => match.homeTeamName === teamName || match.awayTeamName === teamName
-    ) || []; // 기본값을 빈 배열로 설정
-  
+    ) || [];
+
     // 모든 경기를 통합
     const matches = [...baseballMatchesFiltered, ...soccerMatchesFiltered];
-  
-    console.log("홈 구장:", homeGround);
-    console.log("매치들:", matches);
-  
+
+    // 홈 구장 정보 설정
+    const homeGround = baseballMatchesFiltered[0]?.place_name || soccerMatchesFiltered[0]?.place_name || "정보 없음";
+
+    // 야구와 축구 좌석 가격을 통합 (필터링하지 않고 그대로 사용)
+    const allSeatPrices = [...baseballSeatPrices, ...soccerSeatPrices];
+
+    // 좌석 가격 로그 확인
+    console.log("좌석 가격들 (allSeatPrices):", allSeatPrices);
+    if (allSeatPrices === undefined) {
+      console.warn("allSeatPrices가 undefined입니다. 데이터가 제대로 전달되지 않았습니다.");
+    } else if (allSeatPrices.length === 0) {
+      console.warn("좌석 가격 정보가 비어 있습니다.");
+    } else {
+      allSeatPrices.forEach((seat, index) => {
+        console.log(`좌석 ${index}:`, seat);
+      });
+    }
+
+    // useOrder로 불러온 함수를 사용하여 필요한 데이터를 설정
+    setSeatPrices(allSeatPrices); // 모든 좌석 가격 정보를 설정
+
+    // 메인 데이터 설정
+    setMainData({
+      setDate,
+      setSeq,
+      setTime,
+      teamName,
+      teamLogo,
+      homeGround,
+      matches,
+      seatPrices: allSeatPrices, // 전체 좌석 가격 정보
+    });
+
+    // teamPage로 seatPrices를 함께 전달
     navigate('/teamPage', {
-      state: { teamName, teamLogo, homeGround, matches },
+      state: {
+        teamName,
+        teamLogo,
+        homeGround,
+        matches,
+        seatPrices: allSeatPrices, // 전체 좌석 가격 정보 전달
+      },
     });
   };
-  
 
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);

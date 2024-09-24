@@ -100,5 +100,9 @@ public class MembersDAO {
     public int updateCoupon(String id) throws Exception {
     	return mybatis.update("Members.updateCoupon",id);
     }
+    
+    public String getEmailById(String id) throws Exception{
+    	return mybatis.selectOne("Members.getEmailById",id);
+    }
 	
 }
