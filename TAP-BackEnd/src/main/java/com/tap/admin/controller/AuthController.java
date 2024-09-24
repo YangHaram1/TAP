@@ -76,9 +76,9 @@ public class AuthController {
 			// 비밀번호 검증
 			boolean check = pe.matches(pw, dto.getPw());
 			if (check) {
-
+				System.out.println("grade는? "+ dto.getGrade());
 				if (dto.getGrade().equals("pending")) {
-
+					System.out.println("대기일때");
 					// 로그인 실패 로그 기록 (인증 권한 없음)
 					AdminLogDTO logDto = new AdminLogDTO();
 					logDto.setMemberId(id);
@@ -87,8 +87,21 @@ public class AuthController {
 					logDto.setLocalLogtime(localLogTime);
 					logDto.setLogStatus("로그인 실패: 인증 권한 없음");
 					adminLogService.insertLog(logDto);
+					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("pending");
 
-				} else {
+				}	if(dto.getGrade().equals("blacklist")) {
+					// 로그인 실패 로그 기록 (인증 권한 없음)
+					System.out.println("블랙일때");
+					AdminLogDTO logDto = new AdminLogDTO();
+					logDto.setMemberId(id);
+					logDto.setName(dto.getName());
+					logDto.setClientIp(clientIp);
+					logDto.setLocalLogtime(localLogTime);
+					logDto.setLogStatus("로그인 실패: 인증 권한 없음");
+					adminLogService.insertLog(logDto);
+					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("blacklist");
+				}
+				else {
 					String token = jwt.createToken(id, dto.getRole(), dto.getName(), dto.getGrade());
 					jwt.verify(token);
 

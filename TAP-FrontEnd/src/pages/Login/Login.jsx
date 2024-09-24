@@ -105,8 +105,14 @@ const Login = () => {
                 if (error.response) {
                     if (error.response.status === 403) {
                         alert('이 IP는 차단되었습니다. 관리자에게 문의하세요.')
-                    } else {
-                        alert('아이디 또는 패스워드를 확인하세요.')
+                    } else if (error.response.status === 401) {
+                        if (error.response.data === "pending") {
+                            alert('계정이 승인 대기 상태입니다. 관리자에게 문의하세요.');
+                        } else if (error.response.data === "blacklist") {
+                            alert('계정이 블랙리스트 상태입니다. 관리자에게 문의하세요.');
+                        } else {
+                            alert('아이디 또는 패스워드를 확인하세요.');
+                        }
                     }
                 } else {
                     alert('로그인 중 오류가 발생했습니다.')
