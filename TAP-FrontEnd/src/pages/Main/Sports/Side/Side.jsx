@@ -8,27 +8,39 @@ export const Side = ({ baseballMatches = [], soccerMatches = [] }) => {
 
   const handleTeamClick = (teamName, teamLogo) => {
     // baseballMatches가 객체일 경우 matches 배열에서 찾기
-    const homeMatch = baseballMatches.matches?.find(match => match.homeTeamName === teamName);
-    
-    if (!homeMatch) {
+    const homeBaseballMatch = baseballMatches.matches?.find(match => match.homeTeamName === teamName);
+    const homeSoccerMatch = soccerMatches.matches?.find(match => match.homeTeamName === teamName); // 축구 경기 찾기
+  
+    // 경기가 없는 경우 경고 메시지 출력
+    if (!homeBaseballMatch && !homeSoccerMatch) {
       console.warn("해당 팀의 경기가 없습니다:", teamName);
       return; // 경기가 없을 경우 함수 종료
     }
-
-    const homeGround = homeMatch.place_name
-    || "정보 없음"; // placeName으로 수정
-    // matches 배열을 올바르게 가져오기
-    const matches = baseballMatches.matches?.filter(
+  
+    // 홈 구장 정보 설정
+    const homeGround = homeBaseballMatch?.place_name || homeSoccerMatch?.place_name || "정보 없음"; // 홈 구장 가져오기
+  
+    // 야구 경기 필터링
+    const baseballMatchesFiltered = baseballMatches.matches?.filter(
       match => match.homeTeamName === teamName || match.awayTeamName === teamName
     ) || []; // 기본값을 빈 배열로 설정
-
+  
+    // 축구 경기 필터링
+    const soccerMatchesFiltered = soccerMatches.matches?.filter(
+      match => match.homeTeamName === teamName || match.awayTeamName === teamName
+    ) || []; // 기본값을 빈 배열로 설정
+  
+    // 모든 경기를 통합
+    const matches = [...baseballMatchesFiltered, ...soccerMatchesFiltered];
+  
     console.log("홈 구장:", homeGround);
     console.log("매치들:", matches);
-
+  
     navigate('/teamPage', {
       state: { teamName, teamLogo, homeGround, matches },
     });
   };
+  
 
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);

@@ -35,8 +35,9 @@ export const MatchList = () => {
         const soccerMatches = Array.isArray(soccerData.matches) ? soccerData.matches : [];
         
         // 야구와 축구 좌석 가격 통합 처리
-        const allSeatPrices = [...(baseballData.seats || []), ...(soccerData.seats || [])];
-        
+        const allSeatPrices = [...(soccerData.seats || []), ...(baseballData.seats || [])];
+        console.log('Baseball Seats:', baseballData.seats);
+console.log('Soccer Seats:', soccerData.seats);
         // company 데이터도 병합 가능
         const allCompanies = [...(baseballData.company || []), ...(soccerData.company || [])];
   
@@ -82,21 +83,36 @@ export const MatchList = () => {
   };
 
   const handleTeamClick = (teamName, teamLogo) => {
+    // 야구 경기 확인
     const homeMatch = baseballMatches.find(match => match.homeTeamName === teamName);
+    // 축구 경기 확인
+    const homeMatchs = soccerMatches.find(match => match.homeTeamName === teamName);
     
-    if (!homeMatch) {
+    // 두 경기가 모두 없을 경우 경고 메시지 출력
+    if (!homeMatch && !homeMatchs) {
       console.warn("해당 팀의 경기가 없습니다:", teamName);
       return; // 경기가 없을 경우 함수 종료
     }
-    
-    const homeGround = homeMatch.place_name || "정보 없음"; // placeName으로 수정
-    const matches = baseballMatches.filter(
+  
+    // 홈 구장 정보 설정
+    const homeGround = homeMatch ? homeMatch.place_name : homeMatchs ? homeMatchs.place_name : "정보 없음"; 
+  
+    // 야구 경기 필터링
+    const baseballMatchesFiltered = baseballMatches.filter(
       match => match.homeTeamName === teamName || match.awayTeamName === teamName
     );
-
+  
+    // 축구 경기 필터링
+    const soccerMatchesFiltered = soccerMatches.filter(
+      match => match.homeTeamName === teamName || match.awayTeamName === teamName
+    );
+  
+    // 모든 경기를 통합
+    const matches = [...baseballMatchesFiltered, ...soccerMatchesFiltered];
+  
     console.log("홈 구장:", homeGround);
     console.log("매치들:", matches);
-
+  
     navigate('/teamPage', {
       state: { teamName, teamLogo, homeGround, matches },
     });
@@ -264,60 +280,60 @@ export const MatchList = () => {
   
 {/* 축구 섹션 */}
 <div className={styles.soccerSection}>
-        <div className={styles.sportTitle}>
-          <span className={styles.soccerText}>
-            축구 <span className={styles.englishText}>| Soccer</span>
-          </span>
-          <span className={styles.selectTeamText} onClick={toggleSoccerTeamSelect}>
-            구단선택
-          </span>
+  <div className={styles.sportTitle}>
+    <span className={styles.soccerText}>
+      축구 <span className={styles.englishText}>| SOCCER</span>
+    </span>
+    <span className={styles.selectTeamText} onClick={toggleSoccerTeamSelect}>
+      구단선택
+    </span>
+  </div>
+  <div className={`${styles.teamSelect} ${isSoccerTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
+    <div className={styles.teamList}>
+      {getHomeTeams(soccerMatches).map((team, index) => (
+        <div key={index} className={styles.teamItem} onClick={() => handleTeamClick(team.name, team.logo)}>
+          <img src={team.logo} alt={team.name} className={styles.teamLogo} />
+          <span>{team.name}</span>
         </div>
-        <div className={`${styles.soccerTeamSelect} ${isSoccerTeamSelectOpen ? styles.slideDown : styles.slideUp}`}>
-          <div className={styles.teamList}>
-            {getHomeTeams(soccerMatches).map((team, index) => (
-              <div key={index} className={styles.teamItem} onClick={() => handleTeamClick(team.name, team.logo)}>
-                <img src={team.logo} alt={team.name} className={styles.teamLogo} />
-                <span>{team.name}</span>
+      ))}
+    </div>
+  </div>
+  <div className={styles.matchSelect}>
+    <div className={styles.itemWrap}>
+      {sortedSoccerMatches.map((match, index) => (
+        <div key={index} className={styles.matchCard}>
+          <div className={styles.matchContent}>
+            <div className={styles.teamMatch}>
+              <div className={styles.team1}>
+                <img src={match.homeTeamLogo} alt="팀 1" className={styles.teamLogo} />
+                <div className={styles.teamName}>{match.homeTeamName}</div>
               </div>
-            ))}
+              <div className={styles.vsText}>VS</div>
+              <div className={styles.team2}>
+                <img src={match.awayTeamLogo} alt="팀 2" className={styles.teamLogo} />
+                <div className={styles.teamName}>{match.awayTeamName}</div>
+              </div>
+            </div>
+            <div className={styles.matchDate}>
+              <span>{formatMatchDate(match.startDate)}</span>
+              <span className={styles.matchTime}>{formatMatchTime(match.startDate)}</span>
+            </div>
+            <div className={styles.matchLocation}>
+              <span>장소: {match.place_name}</span>
+            </div>
+          </div>
+          <div className={styles.matchBtn}>
+            {isOpenNow(match.openDate) ? (
+              <button onClick={() => isBookModalOpen(match)}>예매하기</button>
+            ) : (
+              <span className={styles.openScheduled}>{formatOpenDate(match.openDate)} 오픈 예정</span>
+            )}
           </div>
         </div>
-        <div className={styles.matchSelect}>
-          <div className={styles.itemWrap}>
-            {sortedSoccerMatches.map((match, index) => (
-              <div key={index} className={styles.matchCard}>
-                <div className={styles.matchContent}>
-                  <div className={styles.teamMatch}>
-                    <div className={styles.team1}>
-                      <img src={match.homeTeamLogo} alt="팀 1" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.homeTeamName}</div>
-                    </div>
-                    <div className={styles.vsText}>VS</div>
-                    <div className={styles.team2}>
-                      <img src={match.awayTeamLogo} alt="팀 2" className={styles.teamLogo} />
-                      <div className={styles.teamName}>{match.awayTeamName}</div>
-                    </div>
-                  </div>
-                  <div className={styles.matchDate}>
-                    <span>{formatMatchDate(match.startDate)}</span>
-                    <span className={styles.matchTime}>{formatMatchTime(match.startDate)}</span>
-                  </div>
-                  <div className={styles.matchLocation}>
-                    <span>장소: {match.place_name}</span>
-                  </div>
-                </div>
-                <div className={styles.matchBtn}>
-                  {isOpenNow(match.openDate) ? (
-                    <button onClick={() => isBookModalOpen(match)}>예매하기</button>
-                  ) : (
-                    <span className={styles.openScheduled}>{formatOpenDate(match.openDate)} 오픈 예정</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
 
   
       {/* 예매 모달 */}
