@@ -20,9 +20,9 @@ const Slide = () => {
     const navi = useNavigate();
 
     const [slide, setSlide] = useState([
-        { img: banner1, seq:1040 },
-        { img: banner2, seq:1063}, // 추후 해당하는 시퀀스로 바꿔주기
-        { img: banner3, seq:1064}, // 추후 해당하는 시퀀스로 바꿔주기
+        { img: banner1, seq:1040},
+        { img: banner2, seq:1073}, // 추후 해당하는 시퀀스로 바꿔주기
+        { img: banner3, seq:1074}, // 추후 해당하는 시퀀스로 바꿔주기
         // { img: banner4 },
         // { img: banner5 },
         // { img: banner6 },

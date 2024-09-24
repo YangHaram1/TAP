@@ -41,8 +41,13 @@ export const Detail = ()=>{
     const {setDate, setTime, setSeq, date, time, mainData, setMainData, seatPrices, setSeatPrices,company, setCompany} = useOrder();
     const [reviewData, setReviewData] = useState([]);
     const [exciteData,setExciteData] = useState([]);
+    const [basicLike, setBasicLike] = useState(false); 
+    const [isLike, setIsLike] = useState(false); 
+    const [totalLikes, setTotalLikes] = useState(0);
 
     const btnsRef = useRef(null);
+    // 첫 렌더링 여부를 확인하기 위한 플래그
+    const isFirstRender = useRef(true);
     // const [bottomOffset, setBottomOffset] = useState(5); // 초기값 5vh
     const checktoday = new Date();
     let openDate =( mainData !== null ? new Date(new Date(mainData.open_date).getTime() - 9 * 60 * 60 * 1000) : '');
@@ -68,13 +73,38 @@ export const Detail = ()=>{
             setCastingAndDate(processedData);
             setReviewData(resp.data.reviewList);
             setExciteData(resp.data.exciteList);
+            setTotalLikes(resp.data.totalLikes);
             setSeq(seq);
         })
         .catch((err)=>{
             console.log(err);
         })
 
-    },[seq])
+        if(token !== null){
+            api.get(`/detail/getLikes/${seq}`)
+            .then((resp)=>{
+                // console.log("관심 등록 데이터 받아오기",resp.data);
+                setTotalLikes(resp.data.totalLikes);
+                setBasicLike(resp.data.isLike);
+                setIsLike(resp.data.isLike); // 최초에 서버로부터 받은 관심 상태로 초기화
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+        }
+
+    },[seq, isLike])
+
+    // useEffect(()=>{
+    //     api.get(`/detail/getLikes/${seq}`)
+    //         .then((resp)=>{
+    //             // console.log("관심 등록 데이터 받아오기",resp.data);
+    //             setTotalLikes(resp.data.totalLikes);
+    //         })
+    //         .catch((err)=>{
+    //             console.log(err);
+    //         })
+    // },[isLike])
 
     const scrollToBtns = () => {
         if (btnsRef.current) {
@@ -254,6 +284,76 @@ export const Detail = ()=>{
        setShowPopup(false); // 팝업 닫기
      };
 
+
+     //================= 공연 관심 등록 ================================
+
+     const handleLike = () => {
+        if (token !== null) {
+            const updatedLikeStatus = !isLike; // 현재 상태의 반대값
+    
+            // 상태 업데이트
+            setIsLike(updatedLikeStatus);
+    
+            // API 호출
+            if (updatedLikeStatus) {
+                // 관심 등록
+                api.post(`/detail/inputLike/${seq}`)
+                    .then((resp) => {
+                        setTotalLikes(prev => prev + 1); // 관심 등록 수 증가
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${mainData.name}가 관심 공연으로 설정 되었습니다.`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        // 이전 상태로 되돌리기
+                        setIsLike(!updatedLikeStatus);
+                    });
+            } else {
+                // 관심 등록 취소
+                api.delete(`/detail/deleteLike/${seq}`)
+                    .then((resp) => {
+                        setTotalLikes(prev => prev - 1); // 관심 등록 수 감소
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${mainData.name}가 관심 공연에서 삭제 되었습니다.`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        // 이전 상태로 되돌리기
+                        setIsLike(!updatedLikeStatus);
+                    });
+            }
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: '로그인 후 작품 관심 등록 설정 변경이 가능합니다.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (token !== null) {
+            api.get(`/detail/getLikes/${seq}`)
+                .then((resp) => {
+                    setTotalLikes(resp.data.totalLikes);
+                    setBasicLike(resp.data.isLike);
+                    setIsLike(resp.data.isLike); // 최초에 서버로부터 받은 관심 상태로 초기화
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [seq, token]); // seq와 token에 따라 의존성 변경
+
     return(
         <div className={styles.container} ref={btnsRef}>
             <div className={styles.left}>
@@ -263,13 +363,23 @@ export const Detail = ()=>{
                         <div className={styles.header_data}>
                             <div className={styles.header_data_left}>
                                 <img src={mainData.files_sysname} alt="상품 이미지" />
-                                <div className={styles.likes}>
-                                    {'like' === 'like'
-                                        ? <FontAwesomeIcon icon={regularHeart} />
-                                        : <FontAwesomeIcon icon={solidHeart} />
-                                    }
-                                    &nbsp; 관심등록
-                                </div>
+                                {
+                                    token !== null ? 
+                                    <div className={styles.likes}>
+                                        <span onClick={handleLike}>
+                                        {
+                                            isLike === false
+                                            ? <FontAwesomeIcon style={{color:"red"}} icon={regularHeart}/>
+                                            : <FontAwesomeIcon  style={{color:"red"}} icon={solidHeart}/>
+                                        }
+                                        </span>&nbsp; 관심등록수 (<span style={{fontWeight:"700"}}>{totalLikes}</span>)
+                                    </div>
+                                    :
+                                    <div className={styles.likes}>
+                                        <span onClick={handleLike}><FontAwesomeIcon style={{color:"red"}} icon={regularHeart} /></span>
+                                        &nbsp; 관심등록수 (<span style={{fontWeight:"700"}}>{totalLikes}</span>)
+                                    </div>
+                                }
                             </div>
                             <div className={styles.header_data_right}>
                                 <div className={styles.datas}>

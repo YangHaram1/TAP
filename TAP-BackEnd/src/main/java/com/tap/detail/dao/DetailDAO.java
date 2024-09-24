@@ -63,5 +63,33 @@ public class DetailDAO {
 	public int getCount(Map<String, Object> data) {
 		return mybatis.selectOne("Detail.getCount",data);
 	}
+	
+	public int getTotalLikes(int seq) {
+		return mybatis.selectOne("Detail.getTotalLikes",seq);
+	}
+	
+	public boolean getIsLike(Map<String, Object> data) {
+		return mybatis.selectOne("Detail.getIsLike",data);
+	}
+	
+	public void inputLike(Map<String, Object> data) {
+		mybatis.insert("Detail.inputLike",data);
+	}
+	
+	public void deleteLike(Map<String, Object> data) {
+		mybatis.delete("Detail.deleteLike",data);
+	}
+	
+	public List<Integer> getUserLikedReviews(Map<String, Object> data) {
+		return mybatis.selectList("Detail.getUserLikedReviews",data);
+	}
+	
+	public void updateReviewLikes(Map<String, Object> data) {
+		mybatis.insert("Detail.updateReviewLikes",data);
+	}
+	
+	public void deleteReviewLikes(Map<String, Object> data) {
+		mybatis.delete("Detail.deleteReviewLikes",data);
+	}
 
 }

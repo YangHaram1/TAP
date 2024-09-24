@@ -411,7 +411,7 @@ const Home = () => {
                                             </div>
                                             <div className={styles.userInfo}>
                                                 <div className={styles.userId}>
-                                                    {item.member_id}
+                                                    {item.member_id.substring(0,3)}**
                                                 </div>
                                                 <div>
                                                     {renderStars(item.stars)}

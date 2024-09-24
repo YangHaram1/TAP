@@ -131,6 +131,7 @@
 			r.review, 
 			r.review_date, 
 			s.stars,
+			COALESCE(rl.like_count, 0) AS like_count,
             ROW_NUMBER() OVER (
 				<if test="keyword != null">
                     ORDER BY ${keyword} DESC
@@ -141,9 +142,14 @@
 			) as rown  
 		from review r 
 			left outer join stars s on r.review_seq = s.review_seq
+			 LEFT OUTER JOIN (
+		        SELECT review_seq, COUNT(*) AS like_count
+		        FROM review_like
+		        GROUP BY review_seq
+		    ) rl ON r.review_seq = rl.review_seq
 			where r.application_seq=#{seq}
 			order by r.REVIEW_DATE desc
-		)
+		) subquery
 		where rown between #{start} and #{end}
 		order by rown
 	</select>
@@ -165,5 +171,43 @@
 	<select id="getCount" resultType="int">
 	   select count(*) from ${table} where application_seq=#{seq}
 	</select>
+	
+	<select id="getTotalLikes" resultType="int">
+	   select count(*) from likes where application_seq=#{seq}
+	</select>
+	
+	<select id="getIsLike" resultType="boolean">
+	   select count(*) from likes where member_id=#{id} and application_seq=#{seq}
+	</select>
+	
+	<insert id="inputLike">
+		insert into likes 
+		(like_seq, member_id, application_seq)
+		values
+		(like_seq.nextval, #{id},#{seq})
+	</insert>
+	
+	<delete id="deleteLike">
+		delete from likes where member_id=#{id} and application_seq=#{seq}
+	</delete>
+	
+	<select id="getUserLikedReviews" resultType="int">
+		select rl.review_seq from review_like rl
+		left outer join review r on r.review_seq = rl.review_seq 
+		where rl.member_id=#{id} and r.application_seq = #{seq}
+	</select>
+	
+	<insert id="updateReviewLikes">
+		insert into review_like 
+		(review_like_seq, member_id, review_seq)
+		values
+		(review_like_seq.nextval, #{id},#{seq})
+	</insert>
+	
+	<delete id="deleteReviewLikes">
+		delete from review_like where member_id=#{id} and review_seq=#{seq}
+	</delete>
+	
+	
 	
 </mapper>
