@@ -14,7 +14,10 @@
 .scroll {
     box-shadow: 0 4px 4px 4px rgba(0, 0, 0, 0.2);
 }
-
+.searchUl{
+    padding-top: 10px;
+    margin-top: 20px;
+}
 .containerfix {
     width: 70vw;
     height: 100px;
