@@ -32,7 +32,11 @@
 	<select id="findPw" resultType="String">
 		select id from members where id=#{id} and email=#{email}
 	</select>
-		
+    <select id="getEmailById" resultType="String" parameterType="String">
+        SELECT email
+        FROM members
+        WHERE id = #{id}
+    </select>
 	<select id="getMemberInfo" resultType="com.tap.members.dto.MembersGradeDTO">
 		select pw,role,m.name as name, g.name as grade,g.grade_order from members
 		m

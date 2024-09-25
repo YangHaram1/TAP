@@ -73,7 +73,7 @@ public class MatchListController {
 
             // 응답할 데이터 구조를 만듭니다.
             response.put("matches", matches);
-            response.put("seats", seats);
+            response.put("baseballSeats", seats);
             response.put("members", memberDataList);
             response.put("company", companyDataList);
 
@@ -102,6 +102,11 @@ public class MatchListController {
                 // 이미 조회한 place_seq는 제외
                 if (!uniquePlaceSeqs.contains(placeSeq)) {
                     List<SeatsDTO> seatPrices = sServ.getPrice(placeSeq);
+                    if (seatPrices.isEmpty()) {
+                        System.out.println("No seat prices found for place_seq: " + placeSeq);
+                    } else {
+                        System.out.println("Seat prices for place_seq " + placeSeq + ": " + seatPrices);
+                    }
                     seats.addAll(seatPrices);
                     uniquePlaceSeqs.add(placeSeq); // 조회된 place_seq를 추가
                 }
@@ -122,7 +127,7 @@ public class MatchListController {
 
             // 응답할 데이터 구조를 만듭니다.
             response.put("matches", matches);
-            response.put("seats", seats);
+            response.put("soccerSeats", seats);
             response.put("members", memberDataList);
             response.put("company", companyDataList);
 
@@ -132,4 +137,5 @@ public class MatchListController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }
