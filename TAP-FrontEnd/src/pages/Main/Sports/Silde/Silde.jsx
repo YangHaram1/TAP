@@ -1,46 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { LeftSilder } from './Silder/LeftSilder';
-import { RightSilder } from './Silder/RightSilder';
+import React, { useState } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import styles from './Silde.module.css';
 
-export const Silde = ({ images = [], interval = 3000, onImageClick = () => {} }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export const Silde = ({ images }) => {  // onImageClick 제거
+  const [slide] = useState(images);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentIndex(prevIndex => 
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-    }, interval);
+  const CustomPaging = i => (
+    <div className={styles.dotBox}>
+      <div className={styles.customDot}>
+        <img src={slide[i]} alt={`Thumbnail ${i + 1}`} />
+      </div>
+    </div>
+  );
 
-    return () => clearInterval(intervalId);
-  }, [interval, images.length]);
-
-  const handleImageClick = (index) => {
-    setCurrentIndex(index);
-    onImageClick(index);
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    customPaging: CustomPaging,
   };
 
   return (
-    <div className={styles.silderContainer}>
-      <div className={styles.sliderWrapper}>
-        <div className={styles.leftSilderContainer}>
-          <LeftSilder 
-            images={images}
-            interval={interval}
-            onImageClick={handleImageClick}
-            currentIndex={currentIndex}
-          />
-        </div>
-        <div className={styles.rightSilderContainer}>
-          <RightSilder 
-            images={images}
-            interval={interval}
-            onImageClick={handleImageClick}
-            currentIndex={currentIndex}
-          />
-        </div>
-      </div>
+    <div className={styles.container}>
+      <Slider {...settings} className={styles.slider}>
+        {slide.map((item, index) => (
+          <div key={index}>
+            <img src={item} alt={`Slide ${index + 1}`} />
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 };
