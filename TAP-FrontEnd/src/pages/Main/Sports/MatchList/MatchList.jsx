@@ -70,7 +70,7 @@ export const MatchList = () => {
     console.log("filteredSeats:", filteredSeats);  // 필터링된 좌석 정보 확인
 
     setSeatPrices(filteredSeats); // 좌석 정보를 상태로 설정 (useOrder의 setSeatPrices)
-    setSeatPricesState(filteredSeats); // 로컬 seatPrices 상태 업데이트
+    // setSeatPricesState(filteredSeats); // 로컬 seatPrices 상태 업데이트
     return filteredSeats;
   };
 
