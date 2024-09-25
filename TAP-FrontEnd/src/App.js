@@ -110,7 +110,8 @@ function App() {
     //웹소켓 전체 관리
     useEffect(() => {
         if (isAuth) {
-            websocketRef.current = new WebSocket(`${host}/chatWebsocket?token=${token}`);
+            const url = host.replace(/^https?:/, '')
+            websocketRef.current = new WebSocket(`wss://${url}/chatWebsocket?token=${token}`);
         }
         if (websocketRef.current != null) {
             websocketRef.current.onopen = () => {
