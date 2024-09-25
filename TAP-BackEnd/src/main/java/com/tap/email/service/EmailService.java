@@ -50,7 +50,14 @@ public class EmailService {
         List<Map<String, Object>> storageSeats = (List<Map<String, Object>>) orderData.get("storageSeats");
         emailContent.append("<li><strong>선택된 좌석:</strong> ");
         for (Map<String, Object> seat : storageSeats) {
-            emailContent.append(seat.get("seatNumber")).append(" ");
+            String grade = (String) seat.get("grade");
+            String row = seat.get("row").toString();
+            String col = seat.get("col").toString();
+            
+            emailContent.append("등급: ").append(grade)
+                        .append(", 행: ").append(row)
+                        .append(", 열: ").append(col)
+                        .append("\n");  // 각 좌석 정보는 줄바꿈하여 표시
         }
         emailContent.append("</li>");
         emailContent.append("</ul>");
