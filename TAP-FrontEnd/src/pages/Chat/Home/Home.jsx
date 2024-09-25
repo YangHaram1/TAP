@@ -33,14 +33,14 @@ const Home = () => {
                 <p>아래 버튼을 <span>클릭</span>해주세요</p>
             </div>
             <div className={styles.contents}>
-                <div className={styles.content} onClick={()=>{setChatNavi('ai')}}>
+                {/* <div className={styles.content} onClick={()=>{setChatNavi('ai')}}>
                     <div className={styles.img}>
                         <img src={ai} alt="" />
                     </div>
                     <div className={styles.detail}>
                         Tap집사랑 상담하기
                     </div>
-                </div>
+                </div> */}
                 <div className={styles.content} onClick={handleChat}>
                     <div className={styles.img}>
                         <img src={chat} alt="" />

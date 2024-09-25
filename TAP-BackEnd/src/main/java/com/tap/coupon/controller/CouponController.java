@@ -49,7 +49,14 @@ public class CouponController {
 		String username = principal.getName();
 		
 		boolean check=cserv.insert(username,couponOrder);
-		return ResponseEntity.ok(String.valueOf(check));
+		
+		if(check) {
+			return ResponseEntity.ok("true");
+		}
+		else {
+			return ResponseEntity.ok("false");
+		}
+		
 	}
 	
 	

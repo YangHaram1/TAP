@@ -17,6 +17,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 10px;
 }
 .logo img{
     width: 250px;
@@ -47,8 +48,8 @@
     cursor: pointer;
 }
 .content img{
-    width: 60%;
-    height: 70%;
+    width: 50%;
+    height: 100%;
 }
 .img{
     display: flex;
