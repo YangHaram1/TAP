@@ -163,6 +163,7 @@ public class OrderController {
 		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		    }
 		int seq = Integer.parseInt(orderData.get("seq").toString());
+		String name = (String) orderData.get("name");
 	    String date = (String) orderData.get("date");
 	    String time = (String) orderData.get("time");
 	    int storageSection = Integer.parseInt(orderData.get("storageSection").toString());
@@ -180,7 +181,7 @@ public class OrderController {
 	    
 	    String pay = (String) orderData.get("pay");
 	    String deliveryMethod = (String) orderData.get("deliveryMethod");		
-		
+	    orderData.put("name", name);
 	    System.out.println("주문 데이터 확인: \n" +
 	            "------------------------------------\n" +
 	            "상품 번호 (seq): " + seq + "\n" +
@@ -195,6 +196,7 @@ public class OrderController {
 	            "수령 방법 (deliveryMethod): " + deliveryMethod + "\n" +
 	            "배송 번호 (deliverySeq): " + deliverySeq + "\n" +
 	            "쿠폰 번호 (couponSeq): " + couponSeq + "\n" +
+	            "상품 이름 (name): " + name + "\n"+
 	            "------------------------------------");
 	    oServ.insertOrder(orderData);
 	    

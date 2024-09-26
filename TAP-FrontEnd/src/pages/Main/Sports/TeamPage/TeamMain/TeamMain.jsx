@@ -15,10 +15,7 @@ export const TeamMain = () => {
   const { setSeatPrices, setDate, setTime, setSeq, setMainData } = useOrder();
 
   useEffect(() => {
-    console.log('Received matches:', matches);
-    console.log('Selected Team:', selectedTeam);
-    console.log('Seat Prices:', seatPrices);
-    console.log('setSeatPrices',setSeatPrices);
+
   }, [matches, selectedTeam, seatPrices,setSeatPrices]);
 
   const formatMatchDate = (startDate) => {
@@ -69,7 +66,7 @@ export const TeamMain = () => {
   
     // 좌석 가격을 설정
     if (seatPrices) {
-      console.log('Setting seatPrices for booking:', seatPrices);
+     
       setSeatPrices(seatPrices);
     }
   
@@ -146,13 +143,17 @@ export const TeamMain = () => {
                 <span>{match.place_name || '경기장'}</span>
               </div>
 
-              <div className={styles.btns}>
-                {isOpenNow(match.openDate) ? (
-                  <button onClick={() => isBookModalOpen(match)}>예매하기</button>
-                ) : (
-                  <span className={styles.openScheduled}>{getOpenStatusMessage(match.openDate)}</span>
-                )}
-              </div>
+              <div className={styles.matchBtns}>
+  {isOpenNow(match.openDate) ? (
+    <button className={styles.matchBtn} onClick={() => isBookModalOpen(match)}>
+      예매하기
+    </button>
+  ) : (
+    <button className={styles.matchBtn} >
+      {formatOpenDate(match.openDate)} 오픈 예정
+    </button>
+  )}
+</div>
             </div>
           ))}
 

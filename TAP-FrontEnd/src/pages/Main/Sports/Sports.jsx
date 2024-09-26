@@ -33,7 +33,7 @@ export const Sports = () => {
         setBaseballMatches(baseballResponse.data);
         setSoccerMatches(soccerResponse.data);
       } catch (error) {
-        console.error('Error fetching match data:', error);
+
       }
     };
 

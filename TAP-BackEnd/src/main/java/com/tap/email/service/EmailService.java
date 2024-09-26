@@ -22,8 +22,8 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("kps10011@naver.com"); // 발신자 주소 설정
         message.setTo(to);
-        message.setSubject("Email Verification Code");
-        message.setText("Your verification code is: " + verificationCode);
+        message.setSubject("비밀번호 찾기 인증번호입니다.");
+        message.setText("인증번호 : " + verificationCode);
         mailSender.send(message);
     }
     public void sendOrderConfirmationEmail(String to, Map<String, Object> orderData) throws MessagingException {
@@ -41,7 +41,7 @@ public class EmailService {
         emailContent.append("<h2>주문해 주셔서 감사합니다!</h2>");
         emailContent.append("<p>주문 상세 정보:</p>");
         emailContent.append("<ul>");
-        emailContent.append("<li><strong>상품 번호 (Seq):</strong> ").append(orderData.get("seq")).append("</li>");
+        emailContent.append("<li><strong>상품 이름 :</strong> ").append(orderData.get("name")).append("</li>");
         emailContent.append("<li><strong>날짜:</strong> ").append(orderData.get("date")).append("</li>");
         emailContent.append("<li><strong>시간:</strong> ").append(orderData.get("time")).append("</li>");
         emailContent.append("<li><strong>좌석 구역:</strong> ").append(orderData.get("storageSection")).append("</li>");
@@ -54,10 +54,8 @@ public class EmailService {
             String row = seat.get("row").toString();
             String col = seat.get("col").toString();
             
-            emailContent.append("등급: ").append(grade)
-                        .append(", 행: ").append(row)
-                        .append(", 열: ").append(col)
-                        .append("\n");  // 각 좌석 정보는 줄바꿈하여 표시
+            emailContent.append("좌석 등급: ").append(grade).
+            append(row).append("행 ").append(col).append("열").append("\n");  // 좌석 정보를 "행 열" 형식으로 줄바꿈하여 표시
         }
         emailContent.append("</li>");
         emailContent.append("</ul>");
