@@ -142,7 +142,8 @@ export const PriceModal = ({ isOpen, onClose, onBookClose})=>{
                         pay:payMethod, // 결제방법 (포인트, 카카오)
                         deliveryMethod:deliveryMethod, // 배송방법(현장결재, 배송)
                         deliverySeq:deliverySeq, //배송지번호
-                        couponSeq:couponSeq
+                        couponSeq:couponSeq,
+                        name:mainData.name
                     }
 
                     // 예약 되어있는 좌석 중 동일 좌석이 있는지 한번 더 확인 
