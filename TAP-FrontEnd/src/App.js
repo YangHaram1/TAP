@@ -111,7 +111,7 @@ function App() {
     useEffect(() => {
         if (isAuth) {
             const url = host.replace(/^https?:/, '')
-            websocketRef.current = new WebSocket(`wss://${url}/chatWebsocket?token=${token}`);
+            websocketRef.current = new WebSocket(`ws://${url}/chatWebsocket?token=${token}`);
         }
         if (websocketRef.current != null) {
             websocketRef.current.onopen = () => {
