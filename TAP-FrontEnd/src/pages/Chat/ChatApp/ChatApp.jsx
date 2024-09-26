@@ -78,6 +78,7 @@ const ChatApp = () => {
                     setStyles(userstyles);
 
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
+                        console.log(resp.data)
                         setChats(resp.data);
 
                     })

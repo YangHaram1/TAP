@@ -298,13 +298,15 @@ const isBookModalOpen = async (match) => {
                     <span>장소: {match.place_name}</span>
                   </div>
                 </div>
-                <div className={styles.matchBtn}>
-                  {isOpenNow(match.openDate) ? (
-                    <button onClick={() => isBookModalOpen(match)}>예매하기</button>
-                  ) : (
-                    <span className={styles.openScheduled}>{formatOpenDate(match.openDate)} 오픈 예정</span>
-                  )}
-                </div>
+                <div className={styles.matchBtns}>
+  {isOpenNow(match.openDate) ? (
+    <button className={styles.matchBtn} onClick={() => isBookModalOpen(match)}>
+      예매하기
+    </button>
+  ) : (
+    <span className={styles.matchBtn}>{formatOpenDate(match.openDate)} 오픈 예정</span>
+  )}
+</div>
               </div>
             ))}
           </div>
@@ -356,13 +358,15 @@ const isBookModalOpen = async (match) => {
                     <span>장소: {match.place_name}</span>
                   </div>
                 </div>
-                <div className={styles.matchBtn}>
-                  {isOpenNow(match.openDate) ? (
-                    <button onClick={() => isBookModalOpen(match)}>예매하기</button>
-                  ) : (
-                    <span className={styles.openScheduled}>{formatOpenDate(match.openDate)} 오픈 예정</span>
-                  )}
-                </div>
+                   <div className={styles.matchBtns}>
+  {isOpenNow(match.openDate) ? (
+    <button className={styles.matchBtn} onClick={() => isBookModalOpen(match)}>
+      예매하기
+    </button>
+  ) : (
+    <span className={styles.matchBtn}>{formatOpenDate(match.openDate)} 오픈 예정</span>
+  )}
+</div>
               </div>
             ))}
           </div>

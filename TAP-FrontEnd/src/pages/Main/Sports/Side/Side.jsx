@@ -1,75 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Side.module.css'; // CSS 모듈 임포트
-import { useOrder } from '../../../../store/store'; // useOrder 임포트
+import styles from './Side.module.css';
+import { useOrder } from '../../../../store/store';
 
-export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPrices = [], soccerSeatPrices = [] }) => {
+export const Side = ({ baseballMatches = {}, soccerMatches = {}, baseballSeats = [], soccerSeats = [] }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
-  
-  // useOrder 훅에서 필요한 값과 함수를 가져옴
-  const { setDate, setTime, setSeq, setMainData, setSeatPrices } = useOrder();
+  const { setSeatPrices } = useOrder();
 
-  // useEffect로 데이터 확인
   useEffect(() => {
-    console.log("baseballSeatPrices:", baseballSeatPrices);
-    console.log("soccerSeatPrices:", soccerSeatPrices);
-  }, [baseballSeatPrices, soccerSeatPrices]);
+    console.log("Baseball Seats: ", baseballSeats);
+    console.log("Soccer Seats: ", soccerSeats);
+  }, [baseballSeats, soccerSeats]);
 
   const handleTeamClick = (teamName, teamLogo) => {
-    // 야구 및 축구 경기 필터링
-    const baseballMatchesFiltered = baseballMatches.matches?.filter(
-      match => match.homeTeamName === teamName || match.awayTeamName === teamName
-    ) || [];
+    const homeMatch = baseballMatches.matches.find(match => match.homeTeamName === teamName);
+    const awayMatch = soccerMatches.matches.find(match => match.homeTeamName === teamName);
 
-    const soccerMatchesFiltered = soccerMatches.matches?.filter(
+    // Determine the home ground based on matches
+    const homeGround = homeMatch ? homeMatch.place_name : awayMatch ? awayMatch.place_name : "정보 없음";
+    
+    // Filter matches for the selected team
+    const baseballMatchesFiltered = baseballMatches.matches.filter(
       match => match.homeTeamName === teamName || match.awayTeamName === teamName
-    ) || [];
+    );
+    const soccerMatchesFiltered = soccerMatches.matches.filter(
+      match => match.homeTeamName === teamName || match.awayTeamName === teamName
+    );
 
-    // 모든 경기를 통합
     const matches = [...baseballMatchesFiltered, ...soccerMatchesFiltered];
 
-    // 홈 구장 정보 설정
-    const homeGround = baseballMatchesFiltered[0]?.place_name || soccerMatchesFiltered[0]?.place_name || "정보 없음";
+    // Find seat prices for baseball and soccer
+    const baseballSeatPricesFiltered = baseballSeats.filter(seat =>
+      baseballMatchesFiltered.some(match => seat.place_seq === match.place_seq)
+    );
 
-    // 야구와 축구 좌석 가격을 통합 (필터링하지 않고 그대로 사용)
-    const allSeatPrices = [...baseballSeatPrices, ...soccerSeatPrices];
+    const soccerSeatPricesFiltered = soccerSeats.filter(seat =>
+      soccerMatchesFiltered.some(match => seat.place_seq === match.place_seq)
+    );
 
-    // 좌석 가격 로그 확인
-    console.log("좌석 가격들 (allSeatPrices):", allSeatPrices);
-    if (allSeatPrices === undefined) {
-      console.warn("allSeatPrices가 undefined입니다. 데이터가 제대로 전달되지 않았습니다.");
-    } else if (allSeatPrices.length === 0) {
-      console.warn("좌석 가격 정보가 비어 있습니다.");
-    } else {
-      allSeatPrices.forEach((seat, index) => {
-        console.log(`좌석 ${index}:`, seat);
-      });
-    }
+    // Combine both seat prices
+    const combinedSeatPrices = [...baseballSeatPricesFiltered, ...soccerSeatPricesFiltered];
 
-    // useOrder로 불러온 함수를 사용하여 필요한 데이터를 설정
-    setSeatPrices(allSeatPrices); // 모든 좌석 가격 정보를 설정
+    // Set the combined seat prices in the global state
+    setSeatPrices(combinedSeatPrices);
 
-    // 메인 데이터 설정
-    setMainData({
-      setDate,
-      setSeq,
-      setTime,
-      teamName,
-      teamLogo,
-      homeGround,
-      matches,
-      seatPrices: allSeatPrices, // 전체 좌석 가격 정보
-    });
-
-    // teamPage로 seatPrices를 함께 전달
+    // Navigate to the TeamPage with all necessary data
     navigate('/teamPage', {
       state: {
         teamName,
         teamLogo,
         homeGround,
         matches,
-        seatPrices: allSeatPrices, // 전체 좌석 가격 정보 전달
+        seatPrices: combinedSeatPrices, // Ensure the seat prices are passed correctly
       },
     });
   };
@@ -83,7 +66,7 @@ export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPri
   };
 
   const getUniqueTeams = (matches) => {
-    if (!Array.isArray(matches)) return []; // matches가 배열이 아닌 경우 빈 배열 반환
+    if (!Array.isArray(matches)) return [];
     const teamSet = new Set();
     return matches.filter((match) => {
       const isDuplicate = teamSet.has(match.homeTeamName);
@@ -95,7 +78,6 @@ export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPri
   return (
     <div className={styles.side}>
       <ul className={styles.menuWrap}>
-        {/* 야구 메뉴 */}
         <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
             <a href="javascript:;" onClick={() => toggleMenu('baseball')}>
@@ -110,7 +92,7 @@ export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPri
                   href="javascript:;"
                   onClick={() => handleTeamClick(
                     match.homeTeamName,
-                    match.homeTeamLogo // 로고는 match에서 가져옴
+                    match.homeTeamLogo
                   )}
                 >
                   {match.homeTeamName}
@@ -120,7 +102,6 @@ export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPri
           </ul>
         </li>
 
-        {/* 축구 메뉴 */}
         <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
             <a href="javascript:;" onClick={() => toggleMenu('soccer')}>
@@ -135,7 +116,7 @@ export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPri
                   href="javascript:;"
                   onClick={() => handleTeamClick(
                     match.homeTeamName,
-                    match.homeTeamLogo // 로고는 match에서 가져옴
+                    match.homeTeamLogo
                   )}
                 >
                   {match.homeTeamName}
@@ -145,7 +126,6 @@ export const Side = ({ baseballMatches = [], soccerMatches = [], baseballSeatPri
           </ul>
         </li>
 
-        {/* 스토어 메뉴 */}
         <li className={`${styles.menuList} ${styles.childBtn}`}>
           <p>
             <a href="javascript:;" onClick={() => toggleMenu('store')}>
