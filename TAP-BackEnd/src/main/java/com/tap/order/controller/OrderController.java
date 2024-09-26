@@ -124,7 +124,7 @@ public class OrderController {
 	}
 	
 	@GetMapping("/getBookSeats")
-	public List<BookSeatsDTO> getBookSeats(@RequestParam int seq,@RequestParam String date ,@RequestParam String time ){
+	public List<BookSeatsDTO> getBookSeats(@RequestParam(value = "seq", defaultValue = "0") int seq,@RequestParam String date ,@RequestParam String time ){
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("date",date);

@@ -74,7 +74,6 @@ const MyEditor = ({ editorRef, height }) => {
 
 
       }
-      console.log(array);
 
       fileRef.current.value = '';
 

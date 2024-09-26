@@ -87,10 +87,9 @@ const Login = () => {
             .post(`/auth/${id}/${pw}`)
             .then(resp => {
                 navi(-1)
-                console.log(resp)
                 const token = resp.data
                 const decoded = jwtDecode(token)
-                console.log(decoded)
+       
 
                 sessionStorage.setItem('token', token) // 인증 확인 용도
                 login(token)

@@ -189,7 +189,7 @@ const AddForm = ({ setAddForm,setAdd,grade}) => {
                             {
                                 grade.map((item, index) => {
                                     return (
-                                        <option value={item.grade_order}>{item.name}</option>
+                                        <option value={item.grade_order} key={index}>{item.name}</option>
                                     )
                                 })
                             }

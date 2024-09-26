@@ -14,9 +14,7 @@ export const AdminHeader = ({hasScrolled}) => {
     
     useEffect(()=>{
         api.get(`admin/dash/getID`).then((resp)=>{
-            console.log(resp.data)
-            console.log(resp.data.NAME)
-            console.log(resp.data.COMPANY_NAME)
+         
             setName(resp.data.NAME);
             setBizName(resp.data.COMPANY_NAME);
         }

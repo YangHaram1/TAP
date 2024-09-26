@@ -88,11 +88,11 @@ const List = () => {
         if (cpage !== 0) {
             const start = cpage * recordCountPerPage - (recordCountPerPage - 1) //1
             const end = cpage * recordCountPerPage //10
-            console.log(end)
+        
             api.get(
                 `/board/admin?start=${start}&end=${end}&keyword=${search}&target=${target}`
             ).then(resp => {
-                // console.log(resp)
+            
                 setList(() => {
                     const record_total_count = resp.data.count //106 10 // 10
                     if (record_total_count % recordCountPerPage === 0) {
@@ -121,7 +121,7 @@ const List = () => {
         const allTrue = Object.values(regexData).every(value => value === true)
 
         setCheckAll(allTrue)
-        console.log(regexData)
+
     }, [regexData])
 
     // const handleCheck = index => {
@@ -156,7 +156,7 @@ const List = () => {
     }
     const handleConfirm = () => {
         api.post(`/board`, data).then(resp => {
-            console.log(resp)
+       
             if (resp) {
                 setIsModalOpen(false)
                 setData('')

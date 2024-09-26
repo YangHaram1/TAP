@@ -22,7 +22,6 @@ export const IPBlockManagement = () => {
             const resp = await api.get(`/admin/ip-block/list`, {
                 params: { page: currentPage, size: PER_PAGE }
             });
-            console.log("block 데이터:", resp.data.list);
             setBlockedIPs(resp.data.list);
             setFilteredIPs(resp.data.list);
             setTotalPages(resp.data.pages);

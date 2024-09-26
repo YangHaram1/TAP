@@ -66,7 +66,7 @@ public class SecurityConfig {
 
 			//request.requestMatchers("/messages").hasRole("ROLE_ADMIN"); 이런식으로 권한 검사
 			request.anyRequest().authenticated(); //SecurityContextHolder 안에 Authentication 이 있어야함
-		}) 
+		})
 		.addFilterBefore(JwtFilter, UsernamePasswordAuthenticationFilter.class); //모든 경로는 필터를 거친다
 		return http.build();
 	}

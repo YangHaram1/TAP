@@ -33,7 +33,6 @@ export const Log = () => {
         const params = { page: page + 1, size: 10 };
         api.get(`/admin/logs`, { params })
             .then((resp) => {
-                console.log("넘어오는 데이터", resp);
                 setLoglist(resp.data.list);
                 setFiltered(resp.data.list);
                 setTotalPages(resp.data.pages);
@@ -62,7 +61,7 @@ export const Log = () => {
     
         api.get(`/admin/logs/search`, { params })
             .then((resp) => {
-                console.log(resp.data)
+           
                 setFiltered(resp.data.list);
                 setTotalPages(resp.data.pages);
                 setIsLoading(false);
@@ -121,7 +120,7 @@ export const Log = () => {
     };
 
     const handleSearch = () => {
-        console.log("검색 버튼 클릭");
+
         const today = format(startOfDay(new Date()), 'yyyy-MM-dd');
 
         if ((specificStartDate === '' || specificEndDate === '') && (searchType === '' && selectStatus === '')) {

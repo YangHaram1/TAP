@@ -9,7 +9,6 @@ const List = () => {
     useEffect(() => {
         api.get(`coupon`).then((resp) => {
             setList(resp.data);
-            console.log(resp.data)
         })
     }, [])
     return (

@@ -25,11 +25,11 @@ const Graph = () => {
         // }
         api.get(`/grade/CouponGrade`).then((resp) => {
             setCoupon(resp.data);
-            console.log(resp.data)
+        
         })
         api.get(`/grade`).then((resp) => {
             setList(resp.data);
-            console.log(resp.data)
+         
         })
      
     }, [])
