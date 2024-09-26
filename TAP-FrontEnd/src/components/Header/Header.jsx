@@ -32,7 +32,6 @@ const Header = ({ hasScrolled }) => {
             api.get(`search?query=${query}`)
                 .then(resp => {
                     setSearchResults(resp.data)
-                    console.log(resp.data)
                 })
                 .catch(error => {
                     console.error('검색오류', error)

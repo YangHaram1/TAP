@@ -16,7 +16,7 @@ export const CompletedApply =()=>{
         api.get(`/biz/registration/recent`).then((resp)=>{
             setEvents(resp.data); // 상품들 세팅하기
             setFiltered(resp.data); // 검색될때 사용할 filtered 상태
-            console.log(resp.data);
+            // console.log(resp.data);
         });
 
     },[])
@@ -28,7 +28,7 @@ export const CompletedApply =()=>{
         );
         if (confirmClear) {
             alert("apfhd");
-            console.log()
+            // console.log()
         //    api.delete(`biz/registration/${상품번호}`).then((resp)=>{
         //     console.log(resp.data);
         //    })

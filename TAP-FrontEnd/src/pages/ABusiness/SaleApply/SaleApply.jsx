@@ -25,11 +25,8 @@ export const SaleApply = () => {
             const response = await api.get(`/biz/application/products?nameOrNumber=${applicationSeq}`);
             if (response) {
                 setSelectedProduct(response.data);
-
-                // 해당 상품의 좌석 정보 필터링
-                // const filteredSeats = response.data.filter(item => item.APPLICATION_SEQ === applicationSeq);
                 setSeatInfo(response.data.list);
-                console.log(response.data)
+                
             }
         } catch (error) {
             console.error('상품 데이터 가져오기 실패:', error);
@@ -63,7 +60,7 @@ export const SaleApply = () => {
 
     // 제출 핸들러
     const handleSubmit = async () => {
-        console.log(discountedPrices)
+        // console.log(discountedPrices)
         try {
             await api.post(`/biz/application/sale`, discountedPrices);
             alert('신청이 완료되었습니다!');

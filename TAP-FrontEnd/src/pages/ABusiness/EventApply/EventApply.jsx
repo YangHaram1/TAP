@@ -91,7 +91,7 @@ export const EventApply = () => {
         });
         api.get(`/biz/application/seats`).then(resp=>{
             setSeats(resp.data);
-            console.log(resp.data)
+            // console.log(resp.data)
         })
 
         // api.get(`/biz/application/description`).then((resp) => {
@@ -294,7 +294,7 @@ export const EventApply = () => {
     }, [scheduleList]);
 
     useEffect(() => {
-        console.log("Updated formData:", formData);
+        // console.log("Updated formData:", formData);
     }, [formData, totalSchedule, scheduleExceptList]);
    
    
@@ -453,7 +453,7 @@ export const EventApply = () => {
             fileData.append('file',file);
             api.post(`/file/${selectedSubCategory}`, fileData)
             .then((response) => {
-                console.log("결과 ", response);
+                // console.log("결과 ", response);
                 setCastingImage({file_oriname: file.name, file_sysname: response.data})
             })
             .catch((error) => {
@@ -541,7 +541,7 @@ export const EventApply = () => {
 
 
     useEffect(()=>{
-        console.log(castingData)
+        // console.log(castingData)
     },[castingData])
     
     const handleRemoveCasting = (scheduleDay, scheduleTime, indexToRemove) => {
@@ -566,8 +566,8 @@ export const EventApply = () => {
     
     const handleMainPosterChange = (event) => {
         const file = event.target.files[0];
-        console.log(file.name);
-        console.log(subCategoryName);
+        // console.log(file.name);
+        // console.log(subCategoryName);
 
 
       if (file) {
@@ -577,7 +577,7 @@ export const EventApply = () => {
 
         api.post(`/file/${selectedSubCategory}`, fileData)
         .then((response) => {
-            console.log("결과 ", response);
+            // console.log("결과 ", response);
             setMainPoster({files_oriname: file.name, files_sysname: response.data}); // 업로드 성공 후 상태 업데이트
         })
         .catch((error) => {
@@ -591,12 +591,12 @@ export const EventApply = () => {
     
         if (userConfirmed) {
             // 사용자가 "확인"을 클릭한 경우
-            console.log("작성이 취소되었습니다.");
+            // console.log("작성이 취소되었습니다.");
             // 취소 처리를 여기서 수행하세요
             navi('/'); 
         } else {
             // 사용자가 "취소"를 클릭한 경우
-            console.log("작성이 계속됩니다.");
+            // console.log("작성이 계속됩니다.");
             // 계속하기 처리를 여기서 수행하세요
         }
     };

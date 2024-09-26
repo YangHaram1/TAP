@@ -12,7 +12,7 @@ export const PastEvent=()=>{
         api.get(`/biz/registration/past`).then((resp)=>{
             setEvents(resp.data); // 상품들 세팅하기
             setFiltered(resp.data); // 검색될때 사용할 filtered 상태
-            console.log(resp.data);
+            // console.log(resp.data);
         });
 
         // 신청대기중, 
