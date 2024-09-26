@@ -136,7 +136,7 @@ export const Orders = () => {
 
     // 페이지네이션 설정
     const [currentPage, setCurrentPage] = useState(0);
-    const PER_PAGE = 4;
+    const PER_PAGE = 6;
     const pageCount = Math.ceil(filtered.length / PER_PAGE);
 
     const handlePageChange = ({ selected }) => {
@@ -191,6 +191,9 @@ export const Orders = () => {
                     발송 처리
                 </button>
             </div>
+            <div className={styles.countorder} style={{marginBottom:"10px" , textAlign:"end"}}>
+                <span>미발송 건: {filtered.filter(order=> order.DELIVERY_STATUS=== '미발송').length} 건</span>
+            </div>
             <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                     <thead>
@@ -207,7 +210,7 @@ export const Orders = () => {
                                 <select value={orderStatus} onChange={handleOrderStatusChange} className={styles.select}> 
                                     <option value="">주문 상태</option>
                                     <option value="완료">완료</option>
-                                    <option value="환불">환불</option>
+                                    <option value="취소">환불</option>
                                 </select>
                             </th>
                             <th>

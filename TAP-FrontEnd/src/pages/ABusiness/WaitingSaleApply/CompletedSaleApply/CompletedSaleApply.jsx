@@ -87,17 +87,17 @@ export const CompletedSaleApply = () => {
                                         {product.SALE_RATE}%
                                     </td>
                                     <td className={styles.product_status}>
-                                        {product.SALE_APPROVED !== '반려' ? (
+                                        {product.SALE_APPROVED !== '승인 반려' ? (
                                             <span className={`${styles.status} ${styles[`status-${product.SALE_APPROVED.toLowerCase().replace(' ', '-')}`]}`}>
                                                 {product.SALE_APPROVED}
                                             </span>
                                         ) : (
                                             <div className={styles.rejectReason}>
                                                 <span className={`${styles.tooltipIcon} ${styles['status-rejected']}`}>
-                                                    반려 <FaLightbulb size={20} />
+                                                   승인 반려 <FaLightbulb size={20} />
                                                 </span>
                                                 <div className={styles.tooltipText}>
-                                                    반려 이유: {product.REJECT_REASON}
+                                                    반려 이유: {product.SALE_REJECTED_REASON}
                                                 </div>
                                             </div>
                                         )}

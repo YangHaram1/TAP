@@ -114,7 +114,7 @@
 		FROM apply
 		JOIN sale ON sale.application_seq = apply.application_seq
 		WHERE sub_category_seq = #{category}
-		and sale.sale_approved = '승인 완료'
+		and sale.sale_approved != '승인 대기'
 	</select>
 	<select id="getWaitingSaleByCategory" resultMap="TimestampResultMap">
 	WITH RankedSales AS (
@@ -208,6 +208,7 @@
 		and files.files_type = 'poster'
 		AND APPLY.sub_category_seq = #{category}
 		 AND APPLY.updated_at >= ADD_MONTHS(SYSDATE, -3)
+		 order by apply.application_seq desc
 	</select>
 	
 	

@@ -7,7 +7,7 @@
 
    <insert id="insertLog" parameterType="com.tap.admin.dto.AdminLogDTO">
        INSERT INTO log (log_seq, client_ip, local_logtime, log_status, member_id, name)
-       VALUES (log_sequence.nextval, #{client_ip, jdbcType=VARCHAR}, #{local_logtime, jdbcType=TIMESTAMP}, #{log_status, jdbcType=VARCHAR}, #{member_id, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR})
+       VALUES (log_sequence.nextval, #{client_ip, jdbcType=VARCHAR}, #{local_logtime}, #{log_status, jdbcType=VARCHAR}, #{member_id, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR})
    </insert>
 
     <select id="getAllLog" resultType="com.tap.admin.dto.AdminLogDTO">

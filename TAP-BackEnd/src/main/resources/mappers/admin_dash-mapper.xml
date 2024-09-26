@@ -21,6 +21,16 @@ where created_at between concat(current_date, '00:00:00')
 AND concat(current_date, '23:59:59')
 AND status='승인 대기'
 </select>
+<!-- 배포환경에서 오류가 나는 이유!!!!
+<select id="getApplyCountToday" resultType="int">
+    SELECT count(*) 
+    FROM apply
+    WHERE created_at BETWEEN TRUNC(SYSDATE) 
+    AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
+    AND status = '승인 대기'
+</select>  
+-->
+
 <select id="getSaleCountToday" resultType="int">
 SELECT count(*) 
 FROM sale
@@ -40,6 +50,18 @@ where updated_at between concat(current_date, '00:00:00')
 AND concat(current_date, '23:59:59')
 AND status='승인 완료'
 </select>
+
+<!-- 배포환경에서 오류가 나는 이유 수정!!!!
+<select id="getApprovedCountToday" resultType="int">
+SELECT count(*) 
+FROM apply
+    WHERE updated_at BETWEEN TRUNC(SYSDATE) 
+    AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
+    AND status = '승인 완료'
+</select>  
+-->
+
+
 <select id="getSaleApprovedCountToday" resultType="int">
 SELECT COUNT(*)
 FROM (

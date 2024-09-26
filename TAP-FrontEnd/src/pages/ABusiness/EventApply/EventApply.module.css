@@ -2,17 +2,18 @@
 .container {
     width: 95%;
     height: 98.5%;
-    background-color: #f3f0ff; /* 부드러운 보라빛 배경 */
+    background-color: #f3f0ff27; /* 부드러운 보라빛 배경 */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 살짝 입체감 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    /* 살짝 입체감 */
 }
 
 /* 헤더 스타일 */
 .header {
     padding: 20px;
     border-bottom: 2px solid #d1c4e9; /* 연보라 경계선 */
-    background-color: #7e57c2; /* 보라색 헤더 */
+    background-color: #7e57c283; /* 보라색 헤더 */
     color: #fff; /* 흰색 텍스트 */
     border-radius: 8px 8px 0 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */

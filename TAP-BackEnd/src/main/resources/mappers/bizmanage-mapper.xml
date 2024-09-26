@@ -180,6 +180,7 @@ SELECT
     a.AGE_LIMIT, a.RUNNING_TIME,
     MIN(s.sale_rate) AS sale_rate,
     s.sale_approved,
+    s.sale_rejected_reason,
     p.place_name,
     MAX(s.sale_seq) AS sale_seq,
     f.files_sysname   
@@ -201,6 +202,7 @@ GROUP BY
     a.start_date, 
     a.end_date, 
     s.sale_approved, 
+    s.sale_rejected_reason,
     p.place_name, 
     f.files_sysname,
     a.SUB_CATEGORY_SEQ,

@@ -176,7 +176,7 @@ const handleNameSearch = () => {
                 </div>
             </div>
             <div className={styles.countMem} style={{textAlign:"right"}}>
-                    기업 회원: {filtered.length} 명 (가입대기: {filtered.filter(mem=>mem.ENABLED===0).length} 명)
+                    기업 회원: {bizMems.length} 명 (가입대기: {filtered.filter(mem=>mem.ENABLED===0).length} 명)
             </div>
 
 

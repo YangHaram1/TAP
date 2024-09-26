@@ -23,7 +23,7 @@ export const ModalSale = ({ onClose, applicationSeq }) => {
             if (response.status === 200) {
                 alert("상품이 성공적으로 반려되었습니다.");
                 onClose();  // 모달 닫기
-                navigate('/products/apply'); 
+                navigate('-1'); 
             }
         } catch (error) {
             console.error('Error rejecting product:', error);
