@@ -19,10 +19,6 @@ const Home = () => {
         })
     }
 
-    useEffect(()=>{
-        console.log(chatSeq)
-    },[chatSeq])
-
     return (
         <div className={styles.container}>
             <div className={styles.logo}>

@@ -11,17 +11,16 @@ export const PreventMacro = ({onClose})=>{
     useEffect(()=>{
         const randomAlphabets = getRandomAlphabets();
         setRandomWord(randomAlphabets);
-        console.log("매크로방지문자:",randomAlphabets);
+   
     },[])
 
     const handleText = (e)=>{
-        console.log(e.target.value);
         setCheckWord(e.target.value);
     }
 
     const handleClick = ()=>{
         
-        console.log("입력확인",randomWord, checkWord);
+
 
         if(randomWord === checkWord){
             onClose();

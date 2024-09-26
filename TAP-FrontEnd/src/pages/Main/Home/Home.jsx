@@ -38,7 +38,6 @@ const Home = () => {
     useState(()=>{
         api.get(`/artlist/getHomeData`)
         .then((resp)=>{
-            console.log("홈 목록",resp.data);
             setOepnList(resp.data.openList);
             setReviewList(resp.data.reviewList);
             setConcertList(resp.data.concertList);

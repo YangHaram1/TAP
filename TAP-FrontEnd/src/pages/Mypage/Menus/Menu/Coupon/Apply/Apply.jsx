@@ -8,7 +8,6 @@ const Apply = () => {
     useEffect(() => {
         api.get(`/search/myApply`).then((resp) => {
             setList(resp.data)
-            console.log(resp.data)
         })
     }, [])
     return (
@@ -34,7 +33,7 @@ const Apply = () => {
             {
                 list.map((item, index) => {
                     return (
-                        <div className={styles.contents}>
+                        <div className={styles.contents} key={index}>
                             <div>
                                 {item.name}
                             </div>

@@ -55,7 +55,7 @@ public class FilesController {
 			dto.setFiles_oriname(file.getOriginalFilename());
 			dto.setFiles_sysname(sysname);
 //			fserv.upload(dto);
-			return ResponseEntity.ok("http://storage.googleapis.com/exam-attachment-study/" + sysname);
+			return ResponseEntity.ok("https://storage.googleapis.com/exam-attachment-study/" + sysname);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body("Faled to upload");

@@ -13,7 +13,7 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
 
     useEffect(() => {
         const fetchProducts = async () => {
-            console.log(category)
+           
             try {
                 let productList = '';
                 if (tap === 0) {
@@ -23,7 +23,7 @@ export const RegisterByCategory =({ category, categoryName, tap })=>{
                 } 
 
                 const response = await api.get(productList);
-                console.log(response.data)
+            
                 setProducts(response.data);
                 setFiltered(response.data);
             } catch (error) {

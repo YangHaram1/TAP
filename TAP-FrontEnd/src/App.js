@@ -111,7 +111,7 @@ function App() {
     useEffect(() => {
         if (isAuth) {
             const url = host.replace(/^https?:/, '')
-            websocketRef.current = new WebSocket(`wss://${url}/chatWebsocket?token=${token}`);
+            websocketRef.current = new WebSocket(`ws://${url}/chatWebsocket?token=${token}`);
         }
         if (websocketRef.current != null) {
             websocketRef.current.onopen = () => {
@@ -119,10 +119,10 @@ function App() {
                 setOnmessage(); //연결되면 chatapp쪽 onmessage 함수 셋팅
             }
             websocketRef.current.onclose = () => {
-                console.log('Disconnected from WebSocket');
+                // console.log('Disconnected from WebSocket');
                 if (maxRetries < 10) {
                     setWebSocketCheck();
-                    console.log("websocket 재연결 시도")
+                    // console.log("websocket 재연결 시도")
                 }
                 setMaxRetries((prev) => {
                     return prev + 1;
@@ -130,10 +130,10 @@ function App() {
             };
 
             websocketRef.current.onerror = (error) => {
-                console.log('WebSocket error observed:', error);
+                // console.log('WebSocket error observed:', error);
                 if (maxRetries < 10) {
                     setWebSocketCheck();
-                    console.log("websocket 재연결 시도")
+                    // console.log("websocket 재연결 시도")
                 }
                 setMaxRetries((prev) => {
                     return prev + 1;

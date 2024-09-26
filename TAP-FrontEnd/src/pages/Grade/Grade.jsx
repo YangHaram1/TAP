@@ -19,7 +19,6 @@ const Grade = () => {
     const handleAddCoupon=()=>{
         const couponOrder=coupon[0].coupon_order;
         api.post(`/coupon/${couponOrder}`).then((resp)=>{
-            console.log(resp.data)
             if(resp.data){
                 Swal.fire({
                     icon:'success',

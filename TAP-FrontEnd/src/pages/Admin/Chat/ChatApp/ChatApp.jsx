@@ -8,7 +8,6 @@ const ChatApp = () => {
 
     useEffect(() => {
         setChatNavi('admin')
-        console.log(`admin`)
     }, [])
 
     return (

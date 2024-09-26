@@ -33,7 +33,7 @@ export const ProductsCurrent = ({ category, categoryName, tap }) => {
           }
     
           const response = await api.get(productList);
-          console.log(response.data);
+      
           setProducts(response.data);
           setFiltered(response.data);
         } catch (error) {

@@ -167,7 +167,7 @@ const Grade = () => {
                                     {
                                         grade.map((item, index) => {
                                             return (
-                                                <option value={item.name}>{item.name}</option>
+                                                <option value={item.name} key={index}>{item.name}</option>
                                             )
                                         })
                                     }
@@ -180,7 +180,7 @@ const Grade = () => {
                                     {
                                         grade.map((item, index) => {
                                             return (
-                                                <option value={item.grade_order}>{item.grade_order}</option>
+                                                <option value={item.grade_order}  key={index}>{item.grade_order}</option>
                                             )
                                         })
                                     }
@@ -189,13 +189,6 @@ const Grade = () => {
                     }
 
                 </div>
-                {/* <div style={{ display: "flex", flex: 0.2 }}>
-                    <button className={styles.searchBtn} onClick={() => {
-                        setSearch((prev) => {
-                            return !prev;
-                        })
-                    }}>검색</button>
-                </div> */}
             </div>
             <div className={styles.list}>
                 <div className={styles.header1}>
@@ -220,8 +213,8 @@ const Grade = () => {
                 {
                     list.map((item, index) => {
                         return (
-                            <React.Fragment>
-                                <div className={styles.dto} key={index} onClick={() => handleDetail(item)}>
+                            <React.Fragment  key={index}>
+                                <div className={styles.dto} onClick={() => handleDetail(item)}>
                                     <div className={styles.body} onClick={() => { return handleCheck(index) }}>
                                         <div className={styles.seq}>
                                             {item.grade_order}
