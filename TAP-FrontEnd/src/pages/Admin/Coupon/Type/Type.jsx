@@ -173,7 +173,7 @@ const Type = () => {
                                     {
                                         grade.map((item, index) => {
                                             return (
-                                                <option value={item.name}>{item.name}</option>
+                                                <option value={item.name} key={index}>{item.name}</option>
                                             )
                                         })
                                     }
@@ -217,8 +217,8 @@ const Type = () => {
                 {
                     list.map((item, index) => {
                         return (
-                            <React.Fragment>
-                                <div className={styles.dto} key={index} onClick={() => handleDetail(item)}>
+                            <React.Fragment key={index}>
+                                <div className={styles.dto}  onClick={() => handleDetail(item)}>
                                     <div className={styles.body} onClick={() => { return handleCheck(index) }}>
                                         <div className={styles.seq}>
                                             {item.seq}

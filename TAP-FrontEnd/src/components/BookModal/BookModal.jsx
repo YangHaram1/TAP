@@ -45,6 +45,22 @@ export const BookModal = ({ isOpen, onClose}) =>{
                 return 'lightblue';
             case '스탠딩석':
                 return 'forestGreen';
+                case '외야1층':
+                return 'sandybrown';
+            case '외야2층':
+                return 'silver';
+            case '내야응원석':
+                return 'plum';
+            case '내야일반석':
+                return 'lightblue';
+            case '홈팀일반석':
+                return 'forestGreen';
+                case '홈팀응원석':
+                    return 'sandybrown';
+                case '원정일반석':
+                    return 'silver';
+                case '원정응원석':
+                    return 'plum';
             default:
                 return 'lightgray';
         }
@@ -55,7 +71,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         if(mainData !== null){
         api.get(`/order/${mainData.place_seq}`)
         .then((resp)=>{
-            console.log("좌석 예약 정보",resp.data, mainData);
+        
             // 상태 값이 변경될 때만 업데이트
             
                 setMaxTicket(mainData.max_ticket);
@@ -106,7 +122,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         if(token !== null){
         api.get(`/order/getBookSeats?date=${date}&time=${time}&seq=${seq}`)
         .then((resp)=>{
-            console.log(resp.data);
+          
             setBookSeats(resp.data);
         })
         .catch((err)=>{
@@ -158,7 +174,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
                 setSelectedSeats([...selectedSeats, { seatId, grade: seatGrade }]);
             }else{
                 alert("최대 예매수를 초과하였습니다.");
-                console.log(selectedSeats);
+              
             }
         }
     };
@@ -231,8 +247,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         if(seq !== null){
             api.get(`/order/getDate?seq=${seq}`)
         .then((resp)=>{
-            console.log("상품번호",seq);
-            console.log(resp.data.dateList);
+ 
             setDateList(resp.data.dateList);
         })
         .catch((err)=>{
@@ -247,8 +262,7 @@ export const BookModal = ({ isOpen, onClose}) =>{
         if(seq !== null && date !== null){
         api.get(`/order/getTime?date=${date}&seq=${seq}`)
         .then((resp)=>{
-            console.log("날짜 받고있는중",resp.data);
-            console.log(resp.data);
+         
             setTimeList(resp.data);
         })
         .catch((err)=>{

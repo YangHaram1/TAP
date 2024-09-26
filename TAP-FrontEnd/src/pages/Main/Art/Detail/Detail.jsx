@@ -53,14 +53,10 @@ export const Detail = ()=>{
     let openDate =( mainData !== null ? new Date(new Date(mainData.open_date).getTime() - 9 * 60 * 60 * 1000) : '');
 
     useEffect(()=>{
-        console.log(checktoday, openDate);
-    },[])
-    
-    useEffect(()=>{
         // alert(seq+"번 상품 상세정보입니다.");
         api.get(`/detail/${seq}`)
         .then((resp)=>{
-            console.log("상품 상세정보 확인",resp.data);
+    
             setMainData(resp.data.mainData); //메인 상품 정보
             setDescription(resp.data.description); // 공지사항, 상세정보 사항
             setSeatPrices(resp.data.seats); // 좌석별 가격
@@ -170,7 +166,7 @@ export const Detail = ()=>{
         const selectedinputStr = format(selectedDate, 'yyyy-MM-dd (EEE)',{locale:ko});
         const sysdateStr = format(new Date(), 'yyyy-MM-dd (EEE)',{locale:ko});
         if(sysdateStr !== selectedinputStr){
-            console.log("날짜 데이터 저장되는 중");
+    
             setDate(selectedinputStr);
         }
 
@@ -217,7 +213,7 @@ export const Detail = ()=>{
                     }
                 );
             }else{
-                console.log("데이터 확인",date, time);
+          
                 setBookModal(true);
             }
             

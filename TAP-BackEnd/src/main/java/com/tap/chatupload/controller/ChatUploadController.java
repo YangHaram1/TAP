@@ -63,7 +63,7 @@ public class ChatUploadController {
 				dto.setMember_id(username);
 				dto.setGroup_seq(group_seq);
 				dto.setCode(0);
-				String url = "http://storage.googleapis.com/exam-attachment-study/" + sysname;
+				String url = "https://storage.googleapis.com/exam-attachment-study/" + sysname;
 				cserv.insert(dto);
 				result.add(url);
 			}

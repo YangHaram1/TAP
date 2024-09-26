@@ -12,7 +12,7 @@ export const Pay = ()=>{
         if(payMethod === 'point'){
             api.get(`/order/getPoint`)
             .then((resp)=>{
-                console.log(resp.data);
+            
                 setPoint(resp.data);
             })
             .catch((err)=>{

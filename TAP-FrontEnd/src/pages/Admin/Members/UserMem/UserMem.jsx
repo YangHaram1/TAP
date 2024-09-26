@@ -24,7 +24,7 @@ export const UserMem = () => {
             const resp = await api.get(`/admin/mem/selectAll`);
             setUserMems(resp.data);
             setFilteredUserMems(resp.data);
-            console.log(resp.data)
+        
         } catch (error) {
             console.error(error);
         }
@@ -34,7 +34,7 @@ export const UserMem = () => {
         try {
             const resp = await api.get(`/admin/mem/grades`);
             setGrades(resp.data);
-            console.log(resp.data)
+        
         } catch (error) {
             console.error(error);
         }
@@ -44,7 +44,7 @@ export const UserMem = () => {
 
     const handleGradeChange = (e) => {
         const newGrade = e.target.value;
-        console.log(newGrade)
+
         setSelectedGrade(newGrade);
         filterUserMemsByGrade(newGrade); // 선택된 등급으로 필터링
         resetCheckboxes(); 
@@ -52,7 +52,7 @@ export const UserMem = () => {
 
     const filterUserMemsByGrade = (grade) => {
         const gradeName = grades.find(g => g.seq === parseInt(grade))?.name;
-        console.log(gradeName)
+    
         const filtered = userMems.filter(mem =>
             gradeName ? mem.G_NAME === gradeName : true
         );

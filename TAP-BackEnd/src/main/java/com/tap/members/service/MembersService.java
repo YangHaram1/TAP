@@ -110,5 +110,8 @@ public class MembersService implements UserDetailsService{
 		return dao.updateDeliverySeq(username,deliverySeq);
 		
 	}
+	public String getEmailById (String id) throws Exception {
+		return dao.getEmailById(id);
+	}
 
 }

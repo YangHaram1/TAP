@@ -38,7 +38,7 @@ export const BizMem = () => {
             const resp = await api.get(`/admin/bizmem`);
             setBizMems(resp.data);
             setFiltered(resp.data);
-            console.log(resp.data)
+          
         } catch (error) {
             alert("데이터를 가져오는 중 오류가 발생했습니다.");
         }
@@ -113,7 +113,7 @@ const applyFilters = () => {
 
     // 가입 상태 필터 적용
     if (shippingStatus) {
-        console.log("현재 상태 필터:", shippingStatus);
+     
         filteredOrders = filteredOrders.filter(mem => mem.ENABLED == shippingStatus);
     }
 

@@ -1,29 +1,93 @@
 import React, { useState, useEffect } from 'react';
+import { parseISO, format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import Swal from 'sweetalert2';
+import { useOrder } from '../../../../../store/store';
+import { BookModal } from '../../../../../components/BookModal/BookModal';
+import { useLocation } from 'react-router-dom'; // useLocation 추가
 import styles from './TeamMain.module.css';
 
-export const TeamMain = ({ matches, selectedTeam }) => {
+export const TeamMain = () => {
+  const location = useLocation();
+  const { matches, teamName: selectedTeam, seatPrices } = location.state || {};  // 전달된 state에서 데이터 가져오기
   const [maxList, setMaxList] = useState(5);
+  const [bookModal, setBookModal] = useState(false);
+  const { setSeatPrices, setDate, setTime, setSeq, setMainData } = useOrder();
 
   useEffect(() => {
-    console.log(matches);
-  }, [matches]);
 
-  // 현재 날짜와 시간을 비교하는 함수
-  const isOpenNow = (openDate) => {
-    const today = new Date();
-    const openDateObj = new Date(openDate);
-    return openDateObj <= today;
+  }, [matches, selectedTeam, seatPrices,setSeatPrices]);
+
+  const formatMatchDate = (startDate) => {
+    const date = parseISO(startDate);
+    return format(date, 'yyyy-MM-dd (eee)', { locale: ko });
   };
 
-  // 오픈 예정 메시지를 반환하는 함수
+  const formatMatchTime = (startDate) => {
+    const date = parseISO(startDate);
+    return format(date, 'HH:mm', { locale: ko });
+  };
+
+  const formatOpenDate = (openDate) => {
+    const date = parseISO(openDate);
+    return format(date, 'yyyy-MM-dd (eee)', { locale: ko });
+  };
+
+  const isOpenNow = (openDate) => {
+    const now = new Date();
+    return new Date(openDate) <= now;
+  };
+
   const getOpenStatusMessage = (openDate) => {
     const today = new Date();
     const openDateObj = new Date(openDate);
-
     if (openDateObj > today) {
       return `${openDateObj.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })} ${openDateObj.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })} 오픈 예정`;
     }
     return null;
+  };
+
+  const isBookModalOpen = async (match) => {
+    if (!match || !match.name || !match.place_name) {
+      await Swal.fire({
+        icon: 'warning',
+        title: '경기 정보를 불러올 수 없습니다.',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+  
+    const formattedDate = formatMatchDate(match.startDate);
+    const formattedTime = formatMatchTime(match.startDate);
+    setDate(formattedDate);
+    setTime(formattedTime);
+    setSeq(match.application_seq);
+  
+    // 좌석 가격을 설정
+    if (seatPrices) {
+     
+      setSeatPrices(seatPrices);
+    }
+  
+    // 나머지 경기 정보 설정
+    setMainData({
+      name: match.name || '정보 없음',
+      place_name: match.place_name || '정보 없음',
+      place_seq: match.place_seq,
+      max_ticket: match.max_ticket,
+      start_date: match.startDate,
+      end_date: match.endDate,
+      age_limit: match.age_limit,
+      id: match.id,
+      status: match.status,
+      sub_category_seq: match.sub_category_seq
+    });
+  
+    setBookModal(true); // 모달 열기
+  };
+  const closeBookModal = () => {
+    setBookModal(false);
   };
 
   return (
@@ -31,7 +95,7 @@ export const TeamMain = ({ matches, selectedTeam }) => {
       <h2>경기 일정</h2>
       <div className={styles.scheduleTable}>
         {matches
-          .filter(match => match.homeTeamName === selectedTeam) // 홈 팀 경기만 필터링
+          ?.filter(match => match.homeTeamName === selectedTeam)
           .slice(0, maxList)
           .map((match, index) => (
             <div key={index} className={styles.timeSchedule}>
@@ -76,36 +140,32 @@ export const TeamMain = ({ matches, selectedTeam }) => {
               </div>
 
               <div className={styles.ground}>
-                <span>{match.placeName || '경기장'}</span>
+                <span>{match.place_name || '경기장'}</span>
               </div>
 
-              <div className={styles.btns}>
-                <a
-                  href="#"
-                  className={`${styles.BtnColor_Y} ${styles.btn1}`}
-                  onClick={() => {
-                    if (isOpenNow(match.openDate)) {
-                      alert('예매하기 기능 미구현');
-                    } else {
-                      alert(getOpenStatusMessage(match.openDate));
-                    }
-                  }}
-                >
-                  {isOpenNow(match.openDate) ? '예매하기' : getOpenStatusMessage(match.openDate)}
-                </a>
-              </div>
+              <div className={styles.matchBtns}>
+  {isOpenNow(match.openDate) ? (
+    <button className={styles.matchBtn} onClick={() => isBookModalOpen(match)}>
+      예매하기
+    </button>
+  ) : (
+    <button className={styles.matchBtn} >
+      {formatOpenDate(match.openDate)} 오픈 예정
+    </button>
+  )}
+</div>
             </div>
           ))}
 
-        {matches.filter(match => match.homeTeamName === selectedTeam).length > maxList && (
-          <div
-            className={styles.more}
-            onClick={() => setMaxList(prev => prev + 5)}
-          >
+        {matches?.filter(match => match.homeTeamName === selectedTeam).length > maxList && (
+          <div className={styles.more} onClick={() => setMaxList(prev => prev + 5)}>
             더보기
           </div>
         )}
       </div>
+
+      {/* BookModal 추가 */}
+      <BookModal isOpen={bookModal} onClose={closeBookModal} />
     </div>
   );
 };

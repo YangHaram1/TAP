@@ -8,7 +8,6 @@ export const Place =({inputBrith,setinputBirth})=>{
     const {user} = useUserData();
 
     const handleBirth = (e)=>{
-        console.log("생일 입력",e.target.value);
         setinputBirth(e.target.value);
     }
 

@@ -7,22 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tap.coupon.dto.CouponTypeDTO;
-import com.tap.coupon.service.CouponService;
 import com.tap.coupon.service.CouponTypeService;
 import com.tap.detail.dto.SeatsDTO;
 import com.tap.detail.service.SeatsService;
+import com.tap.email.service.EmailService;
 import com.tap.members.dto.MembersDTO;
 import com.tap.members.dto.MembersGradeDTO;
 import com.tap.members.service.MembersService;
@@ -44,10 +43,12 @@ public class OrderController {
 	private MembersService mServ;
 	@Autowired
 	private CouponTypeService ctServ;
-	
+	@Autowired
+	private EmailService emailService;
 	@GetMapping("/{placeSeq}")
 	public Map<String,?> getSeatData(@PathVariable int placeSeq){
 		
+		System.out.println("장소 번호"+placeSeq);
 		Map map = new HashMap<>();
 		
 		// 섹션 정보 (총 좌석수, 섹션이름, 공연장 모양, 섹션별 행, 열)
@@ -123,7 +124,7 @@ public class OrderController {
 	}
 	
 	@GetMapping("/getBookSeats")
-	public List<BookSeatsDTO> getBookSeats(@RequestParam int seq,@RequestParam String date ,@RequestParam String time ){
+	public List<BookSeatsDTO> getBookSeats(@RequestParam(value = "seq", defaultValue = "0") int seq,@RequestParam String date ,@RequestParam String time ){
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("date",date);
@@ -145,16 +146,24 @@ public class OrderController {
 	
 	// 주문 테이블에 데이터 넣기
 	@PostMapping("/orderFinal")
-	public ResponseEntity<Void> orderFinal(@RequestBody Map<String,Object> orderData, Principal principal){
+	public ResponseEntity<Void> orderFinal(@RequestBody Map<String,Object> orderData, Principal principal) throws Exception{
 		System.out.println("좌석 넣는 구간 들어왔지요");
+		
+		
 		
 		if (principal == null) {
 			return ResponseEntity.ok(null);
 		}
 		String username = principal.getName();
 		orderData.put("id", username);
-		
+		 String email = mServ.getEmailById(username);  // userService에서 이메일 조회
+		    
+		    if (email == null || email.isEmpty()) {
+		        System.out.println("이메일 주소를 찾을 수 없습니다.");
+		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		    }
 		int seq = Integer.parseInt(orderData.get("seq").toString());
+		String name = (String) orderData.get("name");
 	    String date = (String) orderData.get("date");
 	    String time = (String) orderData.get("time");
 	    int storageSection = Integer.parseInt(orderData.get("storageSection").toString());
@@ -172,7 +181,7 @@ public class OrderController {
 	    
 	    String pay = (String) orderData.get("pay");
 	    String deliveryMethod = (String) orderData.get("deliveryMethod");		
-		
+	    orderData.put("name", name);
 	    System.out.println("주문 데이터 확인: \n" +
 	            "------------------------------------\n" +
 	            "상품 번호 (seq): " + seq + "\n" +
@@ -187,9 +196,12 @@ public class OrderController {
 	            "수령 방법 (deliveryMethod): " + deliveryMethod + "\n" +
 	            "배송 번호 (deliverySeq): " + deliverySeq + "\n" +
 	            "쿠폰 번호 (couponSeq): " + couponSeq + "\n" +
+	            "상품 이름 (name): " + name + "\n"+
 	            "------------------------------------");
 	    oServ.insertOrder(orderData);
 	    
+	    
+	    emailService.sendOrderConfirmationEmail(email, orderData);
 		return ResponseEntity.ok().build();
 		
 	}

@@ -34,10 +34,10 @@ const Popup = ({ onClose, application_seq }) => {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 오늘 날짜 저장
 
     if (loginID && isAuth) {
-      console.log("로컬 로그인 o", loginID);
+  
       localStorage.setItem(`hidePopup_${loginID}_${application_seq}`, today); // 로그인 사용자는 loginID 기반으로 저장
     } else {
-      console.log("로컬 로그인 x");
+   
       localStorage.setItem(`hidePopup_guest_${application_seq}`, today); // 비로그인 사용자는 guest로 저장
     }
 

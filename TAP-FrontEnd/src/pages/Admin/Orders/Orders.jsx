@@ -35,7 +35,7 @@ export const Orders = () => {
         api.get(`admin/orders`).then((resp) => {
             setOrders(resp.data);
             setFiltered(resp.data);
-            console.log(resp.data)
+          
         });
     };
     useEffect(() => {

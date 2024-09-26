@@ -11,6 +11,7 @@
 }
 .contents{
     display: flex;
+    font-size: 10px;
 }
 .contents div{
     display: flex;

@@ -23,7 +23,7 @@ export const TeamPage = () => {
         setBaseballMatches(baseballResponse.data);
         setSoccerMatches(soccerResponse.data);
       } catch (error) {
-        console.error('Error fetching match data:', error);
+    
       }
     };
 

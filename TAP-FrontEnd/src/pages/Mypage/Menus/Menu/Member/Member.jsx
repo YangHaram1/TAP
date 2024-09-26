@@ -28,8 +28,8 @@ const Member = () => {
 
     useEffect(() => {
         const allTrue = Object.values(regexData).every(value => value === true);
-        setCheckAll(allTrue)
-        console.log(regexData)
+        setCheckAll(allTrue)   
+        
     }, [regexData])
 
     const [company, setCompany] = useState([]);

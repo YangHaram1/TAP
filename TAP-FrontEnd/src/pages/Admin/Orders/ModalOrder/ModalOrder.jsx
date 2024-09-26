@@ -7,7 +7,7 @@ export const ModalOrder = ({ resetCheckboxes, checkedOrders, onClose, fetchOrder
 
     // 주문 상태 변경 요청 함수
     const updateOrderStatus = async () => {
-        console.log('선택된 주문 번호:', checkedOrders); // checkedOrders 값 확인
+      
 
         try {
             // 선택된 주문 번호를 서버로 전송하여 상태를 "발송 완료"로 업데이트

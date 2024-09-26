@@ -29,7 +29,7 @@ const ChatApp = () => {
     // WebSocket 연결을 설정하는 useEffect
     useEffect(() => {
         if (isAuth && ws.current != null) {
-            console.log("chatapp")
+          //  console.log("chatapp")
             ws.current.onmessage = (e) => {
                 let chat = JSON.parse(e.data);
                 const { chatSeq } = useCheckList.getState();
@@ -60,7 +60,6 @@ const ChatApp = () => {
                 }
                 else {
                     alert("에러입니다")
-                    console.log(chat.group_seq)
                 }
 
 
@@ -78,12 +77,13 @@ const ChatApp = () => {
                     setStyles(userstyles);
 
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
+                        console.log(resp.data)
                         setChats(resp.data);
 
                     })
                 }
                 else if (chatNavi === 'admin' &&role==='ROLE_ADMIN') {
-                    console.log('admin chat')
+                 
                     setStyles(adminStyles);
                     api.get(`/chat/${chatSeq}`).then(resp => {//채팅목록 가저오기
                         setChats(resp.data);
@@ -100,7 +100,7 @@ const ChatApp = () => {
 
     const notify = useCallback((item) => {
         const { maxCount, count, increment, decrement } = useNotification.getState();
-        console.log("알림")
+
         let title;
         if (role === 'ROLE_ADMIN') {
             title = `${item.member_id}님한테 상담메세지가 왔습니다`;
@@ -109,7 +109,7 @@ const ChatApp = () => {
             title = '관리자 답변이 왔습니다.'
         }
         if (count < maxCount) {
-            console.log("알림");
+    
             toast.info(`${title}`, {
                 position: "top-right", // 오른쪽 위에 표시
                 autoClose: 5000, // 5초 후 자동으로 닫힘
@@ -129,7 +129,7 @@ const ChatApp = () => {
     const handleToastOnclick = (item) => {
         setChatNavi((prev) => {
             if(role==='ROLE_USER'){
-                console.log(`on click toast:${item.group_seq} `);
+                // console.log(`on click toast:${item.group_seq} `);
                 if (isAuth) {
                     dragRef.current.style.visibility = "visible";
                     chatAppRef.current.style.display = "flex";

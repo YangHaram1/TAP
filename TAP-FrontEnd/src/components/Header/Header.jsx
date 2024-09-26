@@ -63,15 +63,14 @@ const Header = ({ hasScrolled }) => {
 
     // 최근 검색 목록
     useEffect(() => {
-        console.log(arr)
         if (arr.length > 0) {
             const json = JSON.stringify(arr) // 세션 스토리지에 배열 저장하려면 json으로 처리
-            sessionStorage.setItem('search', json)
+            localStorage.setItem('search', json)
         }
     }, [arr])
 
     useEffect(() => {
-        const item = JSON.parse(sessionStorage.getItem('search'))
+        const item = JSON.parse(localStorage.getItem('search'))
         if (item) {
             setArr(item)
         }

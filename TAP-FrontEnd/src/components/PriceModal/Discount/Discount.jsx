@@ -43,15 +43,12 @@ export const Discount = ({tickets, setTickets,couponList,setSelectedCoupon,setCo
     }
 
     const handleCoupon = (value, seq) => {
-        console.log("Discount value:", value); // 선택된 할인 금액
-        console.log("Coupon seq:", seq); // 선택된 쿠폰의 seq
+     
         setSelectedCoupon(value); // 쿠폰 선택 상태 업데이트
         setCouponSeq(seq);
     }
 
-    useEffect(()=>{
-        console.log("티켓 가격 수량 보기", tickets);
-    },[tickets])
+
 
     return(
         <div className={styles.container}>

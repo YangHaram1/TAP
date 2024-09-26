@@ -4,12 +4,12 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AdminDash">
 <resultMap id="TimestampResultMap" type="java.util.HashMap">
-    	<result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
-    	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
+       <result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
+       <result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
 </resultMap>
 <select id="getId" resultMap="TimestampResultMap">
-	select members.name, company.name as company_name 
-	from members
+   select members.name, company.name as company_name 
+   from members
     left join company on company.member_id = members.id
     where id=#{id}
 </select>

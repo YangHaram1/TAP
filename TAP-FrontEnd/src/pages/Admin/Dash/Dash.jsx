@@ -27,44 +27,43 @@ export const Dash=()=>{
         api.get('admin/dash/getordercount')
             .then((resp) => {
                 setOrderCounts(resp.data); // API에서 받은 데이터를 상태에 저장
-                console.log(resp.data)
             })
             .catch((error) => console.error('Error fetching order counts:', error));
         api.get(`/admin/dash/getapply`)
             .then((resp)=>{
                 setApplyTodayCounts(resp.data)
-                console.log(resp.data)
+        
             })
             .catch((error) => console.error('Error fetching Today counts:', error));
         api.get(`/admin/dash/getsale`)
             .then((resp)=>{
                 setSaleTodayCounts(resp.data)
-                console.log(resp.data)
+           
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
         api.get(`/admin/dash/getdelivery`)
             .then((resp)=>{
                 setDeliveryTodayCounts(resp.data)
-                console.log(resp.data)
+               
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
         // ==============오늘 처리한 일 ===============
         api.get(`/admin/dash/getapprovedtoday`)
             .then((resp)=>{
                 setDoneApprovedCounts(resp.data)
-                console.log(resp.data)
+         
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
         api.get(`/admin/dash/getsaleapprovedtoday`)
             .then((resp)=>{
                 setDoneSaleCounts(resp.data)
-                console.log(resp.data)
+         
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
         api.get(`/admin/dash/getdeliverytoday`)
             .then((resp)=>{
                 setDoneDeliveryCounts(resp.data)
-                console.log(resp.data)
+          
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
         
@@ -72,7 +71,7 @@ export const Dash=()=>{
         api.get(`/admin/dash/gettotaltoday`)
             .then((resp)=>{
                 setTotalToday(resp.data)
-                console.log(resp.data)
+            
             })
             .catch((error) => console.error('Error fetching Sale Today counts:', error));
 
@@ -80,7 +79,7 @@ export const Dash=()=>{
         api.get('/admin/dash/getrefund')
             .then((resp) => {
                 setRefundAmount(resp.data); // 환불 금액 설정
-                console.log(resp.data);
+            
             })
             .catch((error) => console.error('Error fetching refund amount:', error));
     }, []);
