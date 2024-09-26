@@ -4,16 +4,17 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AdminDash">
 <resultMap id="TimestampResultMap" type="java.util.HashMap">
-    	<result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
-    	<result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
+       <result property="join_date" column="join_date" javaType="java.sql.Timestamp" />
+       <result property="order_date" column="order_date" javaType="java.sql.Timestamp" />
 </resultMap>
 <select id="getId" resultMap="TimestampResultMap">
-	select members.name, company.name as company_name 
-	from members
+   select members.name, company.name as company_name 
+   from members
     left join company on company.member_id = members.id
     where id=#{id}
 </select>
 
+<!-- 배포환경에서 오류가 나는 이유!!!!
 <select id="getApplyCountToday" resultType="int">
 SELECT count(*) 
 FROM apply
@@ -21,6 +22,17 @@ where created_at between concat(current_date, '00:00:00')
 AND concat(current_date, '23:59:59')
 AND status='승인 대기'
 </select>
+-->
+
+<select id="getApplyCountToday" resultType="int">
+    SELECT count(*) 
+    FROM apply
+    WHERE created_at BETWEEN TRUNC(SYSDATE) 
+    AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
+    AND status = '승인 대기'
+</select>  
+
+
 <select id="getSaleCountToday" resultType="int">
 SELECT count(*) 
 FROM sale
@@ -33,6 +45,7 @@ where delivery_status='미발송'
 </select>
 
 <!-- 오늘 Done  -->
+<!-- 배포환경에서 오류가 나는 이유 수정!!!!
 <select id="getApprovedCountToday" resultType="int">
 SELECT count(*) 
 FROM apply
@@ -40,6 +53,18 @@ where updated_at between concat(current_date, '00:00:00')
 AND concat(current_date, '23:59:59')
 AND status='승인 완료'
 </select>
+-->
+
+<select id="getApprovedCountToday" resultType="int">
+SELECT count(*) 
+FROM apply
+    WHERE updated_at BETWEEN TRUNC(SYSDATE) 
+    AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
+    AND status = '승인 완료'
+</select>  
+
+
+
 <select id="getSaleApprovedCountToday" resultType="int">
 SELECT COUNT(*)
 FROM (
