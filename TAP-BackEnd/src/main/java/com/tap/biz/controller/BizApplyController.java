@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,10 @@ import com.tap.biz.dto.TestClobDTO;
 import com.tap.biz.dto.TotalScheduleDTO;
 import com.tap.biz.services.BizApplyService;
 import com.tap.biz.services.BizService;
+import com.tap.detail.dto.DetailDTO;
+import com.tap.detail.dto.SeatsDTO;
+import com.tap.detail.service.DetailService;
+import com.tap.detail.service.SeatsService;
 import com.tap.files.dto.FilesDTO;
 import com.tap.members.service.MembersService;
 
@@ -33,6 +38,10 @@ public class BizApplyController {
 	private MembersService mserv;
 	@Autowired
 	private BizApplyService bizApServ;
+	@Autowired
+	private DetailService dServ;
+	@Autowired
+	private SeatsService sServ;
 	
 	@GetMapping("/category")
 	public ResponseEntity<List<HashMap<String, Object>>> getAllCategory(){
@@ -73,7 +82,7 @@ public class BizApplyController {
 	
 	// 세일신청할때 상품명 가져오기 -- 내가 등록한 상품만 가져와야함..(principle 사용하기_
 	@GetMapping("/products")
-    public ResponseEntity<List<HashMap<String, Object>>> getProductByName(Principal principal, @RequestParam String nameOrNumber) {
+    public Map<String, Object> getProductByName(Principal principal, @RequestParam String nameOrNumber) {
 		if (principal == null) {
 			System.out.println("principal");
 			return null;
@@ -81,15 +90,29 @@ public class BizApplyController {
 		String username = principal.getName();
 		UserDetails user = mserv.loadUserByUsername(username);
 		String id = user.getUsername();
+		int seq =Integer.parseInt(nameOrNumber); // 상품 번호
+		DetailDTO mainData = dServ.getDetailData(seq);
+		String name = mainData.getName(); // 상품 이름
+		
+		int placeSeq = mainData.getPlace_seq(); // 장소번호
+		List<SeatsDTO> list = sServ.getPrice(placeSeq); // 장소번호에 대한 등급별 가격
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("list", list);
+		map.put("seq", seq);
+		map.put("name", name);
+		
 		System.out.println("아이디 : " + user.getUsername());
 		System.out.println("name " + nameOrNumber);
-		return ResponseEntity.ok(bizServ.getProductByName(nameOrNumber, user.getUsername()));
+		return map;
     }
 	
 	// 세일 신청하기 
 	@PostMapping("/sale")
 	public ResponseEntity<List<HashMap<String, Object>>> insertSale(
 	    @RequestBody List<HashMap<String, Object>> saleDataList) {
+		System.out.println(saleDataList);
 	    bizServ.createSale(saleDataList);
 	    // 처리 후 응답 반환
 	    return ResponseEntity.ok(saleDataList);

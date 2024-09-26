@@ -23,13 +23,13 @@ export const SaleApply = () => {
     const fetchProductData = async (applicationSeq) => {
         try {
             const response = await api.get(`/biz/application/products?nameOrNumber=${applicationSeq}`);
-            if (response.data) {
-                const product = response.data.find(item => item.APPLICATION_SEQ === applicationSeq);
-                setSelectedProduct(product);
+            if (response) {
+                setSelectedProduct(response.data);
 
                 // 해당 상품의 좌석 정보 필터링
-                const filteredSeats = response.data.filter(item => item.APPLICATION_SEQ === applicationSeq);
-                setSeatInfo(filteredSeats);
+                // const filteredSeats = response.data.filter(item => item.APPLICATION_SEQ === applicationSeq);
+                setSeatInfo(response.data.list);
+                console.log(response.data)
             }
         } catch (error) {
             console.error('상품 데이터 가져오기 실패:', error);
@@ -44,9 +44,9 @@ export const SaleApply = () => {
         }
         if (seatInfo.length > 0 && discountRate) {
             const calculatedPrices = seatInfo.map((item) => ({
-                application_seq: item.APPLICATION_SEQ,
-                place_seat_level: item.PLACE_SEAT_LEVEL,
-                discountedPrice: (item.PRICE_SEAT * (1 - discountRate / 100)).toFixed(0), // 할인 가격 계산
+                application_seq: applicationSeq,
+                place_seat_level: item.place_seat_level,
+                discountedPrice: (item.price_seat * (1 - discountRate / 100)).toFixed(0), // 할인 가격 계산
                 discountRate: discountRate,
             }));
             setDiscountedPrices(calculatedPrices);
@@ -63,6 +63,7 @@ export const SaleApply = () => {
 
     // 제출 핸들러
     const handleSubmit = async () => {
+        console.log(discountedPrices)
         try {
             await api.post(`/biz/application/sale`, discountedPrices);
             alert('신청이 완료되었습니다!');
@@ -84,7 +85,7 @@ export const SaleApply = () => {
                         <tbody>
                             <tr>
                                 <td>선택된 상품</td>
-                                <td>{selectedProduct.NAME} (번호: {selectedProduct.APPLICATION_SEQ})</td>
+                                <td>{selectedProduct.name} (번호: {selectedProduct.seq})</td>
                             </tr>
                             <tr>
                                 <td>좌석 등급 및 가격</td>
@@ -92,7 +93,7 @@ export const SaleApply = () => {
                                     <ul>
                                         {seatInfo.map((seat, index) => (
                                             <li key={index}>
-                                                {seat.PLACE_SEAT_LEVEL}: {Number(seat.PRICE_SEAT)?.toLocaleString()}원
+                                                {seat.place_seat_level}: {seat.price_seat.toLocaleString()}원
                                             </li>
                                         ))}
                                     </ul>
