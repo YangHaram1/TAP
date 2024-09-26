@@ -45,6 +45,22 @@ export const BookModal = ({ isOpen, onClose}) =>{
                 return 'lightblue';
             case '스탠딩석':
                 return 'forestGreen';
+                case '외야1층':
+                return 'sandybrown';
+            case '외야2층':
+                return 'silver';
+            case '내야응원석':
+                return 'plum';
+            case '내야일반석':
+                return 'lightblue';
+            case '홈팀일반석':
+                return 'forestGreen';
+                case '홈팀응원석':
+                    return 'sandybrown';
+                case '원정일반석':
+                    return 'silver';
+                case '원정응원석':
+                    return 'plum';
             default:
                 return 'lightgray';
         }
