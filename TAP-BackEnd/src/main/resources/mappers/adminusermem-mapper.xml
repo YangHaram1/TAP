@@ -15,7 +15,7 @@
         ORDER BY m.join_date desc
 	</select> 
 <select id="searchUserMem" resultMap="memberResultMap">
-    SELECT m.name AS name, g.name AS grade, m.join_date, m.enabled
+    SELECT m.name AS name, g.name AS grade, m.join_date, m.enabled, m.id
     FROM members m
     LEFT JOIN grade g ON m.grade_seq = g.seq
     WHERE m.role = 'ROLE_USER'

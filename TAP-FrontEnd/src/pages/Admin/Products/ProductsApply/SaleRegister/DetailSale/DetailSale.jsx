@@ -65,7 +65,7 @@ export const DetailSale =()=>{
 
                 if (response.status === 200) {
                     alert("상품이 성공적으로 승인되었습니다.");
-                    navigate('/products/apply/sale');
+                    navigate('-1');
                 }
             } catch (error) {
                 console.error('Error approving product:', error);
